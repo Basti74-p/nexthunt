@@ -74,6 +74,11 @@ import Jagdgaeste from './pages/Jagdgaeste';
 import Personal from './pages/Personal';
 import Aufgaben from './pages/Aufgaben';
 import Oeffentlichkeit from './pages/Oeffentlichkeit';
+import Revier from './pages/Revier';
+import Wildmanagement from './pages/Wildmanagement';
+import Strecke from './pages/Strecke';
+import JagdkalenderMain from './pages/JagdkalenderMain';
+import Personen from './pages/Personen';
 import __Layout from './Layout.jsx';
 
 
@@ -105,6 +110,11 @@ export const PAGES = {
     "Personal": Personal,
     "Aufgaben": Aufgaben,
     "Oeffentlichkeit": Oeffentlichkeit,
+    "Revier": Revier,
+    "Wildmanagement": Wildmanagement,
+    "Strecke": Strecke,
+    "JagdkalenderMain": JagdkalenderMain,
+    "Personen": Personen,
 }
 
 export const pagesConfig = {
