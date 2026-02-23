@@ -114,8 +114,8 @@ function NavItem({ item, currentPage, depth = 0 }) {
           depth > 0 ? "pl-8" : ""
         } ${
           isActive
-            ? "bg-[#0F2F23] text-white shadow-sm"
-            : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+            ? "bg-[#22c55e] text-[#1a1f2e] shadow-sm"
+            : "text-gray-400 hover:bg-[#2d3a4f] hover:text-gray-200"
         }`}
       >
         <item.icon className="w-4 h-4 shrink-0" />
@@ -127,7 +127,7 @@ function NavItem({ item, currentPage, depth = 0 }) {
   return (
     <div>
       <div className={`flex items-center rounded-xl text-sm font-medium transition-all duration-150 ${
-        isActive ? "bg-[#0F2F23] text-white" : childIsActive ? "text-[#0F2F23] bg-[#0F2F23]/5" : "text-gray-700 hover:bg-gray-100"
+        isActive ? "bg-[#22c55e] text-[#1a1f2e]" : childIsActive ? "text-[#22c55e] bg-[#22c55e]/10" : "text-gray-300 hover:bg-[#2d3a4f]"
       }`}>
         {item.page ? (
           <Link to={createPageUrl(item.page)} className="flex items-center gap-3 px-3 py-2.5 flex-1">
@@ -148,7 +148,7 @@ function NavItem({ item, currentPage, depth = 0 }) {
         </button>
       </div>
       {open && (
-        <div className="mt-0.5 ml-3 space-y-0.5 border-l-2 border-gray-100 pl-2">
+        <div className="mt-0.5 ml-3 space-y-0.5 border-l-2 border-[#2d3a4f] pl-2">
           {item.children.map(child => (
             <NavItem key={child.page} item={child} currentPage={currentPage} depth={depth + 1} />
           ))}
