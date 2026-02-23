@@ -46,7 +46,7 @@ function LayoutInner({ children, currentPageName }) {
   if (isMobile && !mobilePages.includes(currentPageName) && currentPageName !== "PlatformAdmin") {
     // Redirect to mobile map on mobile
     return (
-      <div className="min-h-screen bg-[#F7F7F8]">
+      <div className="min-h-screen bg-[#2d2d2d]">
         <MobileNav currentPage={currentPageName} />
         <main className="pt-14 pb-20 px-4">
           {children}
@@ -57,7 +57,7 @@ function LayoutInner({ children, currentPageName }) {
 
   if (isMobile) {
     return (
-      <div className="min-h-screen bg-[#F7F7F8]">
+      <div className="min-h-screen bg-[#2d2d2d]">
         <MobileNav currentPage={currentPageName} />
         <main className="pt-14 pb-20 px-4">
           {children}
