@@ -12,8 +12,8 @@
 }
 
 body {
-  background: var(--nh-bg);
-  color: #e5e7eb;
+  background: #2d2d2d;
+  color: #b3b3b3;
   font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
@@ -31,25 +31,25 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 12%;
-    --foreground: 0 0% 80%;
-    --card: 0 0% 18%;
-    --card-foreground: 0 0% 80%;
-    --popover: 0 0% 18%;
-    --popover-foreground: 0 0% 80%;
-    --primary: 142 72% 29%;
-    --primary-foreground: 0 0% 12%;
-    --secondary: 0 0% 25%;
-    --secondary-foreground: 0 0% 80%;
-    --muted: 0 0% 25%;
-    --muted-foreground: 210 16% 70%;
-    --accent: 0 0% 25%;
-    --accent-foreground: 142 72% 29%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 12%;
-    --border: 0 0% 25%;
-    --input: 0 0% 25%;
-    --ring: 142 72% 29%;
+    --background: 0 0% 16%;
+     --foreground: 0 0% 70%;
+     --card: 0 0% 20%;
+     --card-foreground: 0 0% 70%;
+     --popover: 0 0% 20%;
+     --popover-foreground: 0 0% 70%;
+     --primary: 142 71% 45%;
+     --primary-foreground: 0 0% 100%;
+     --secondary: 0 0% 28%;
+     --secondary-foreground: 0 0% 70%;
+     --muted: 0 0% 28%;
+     --muted-foreground: 0 0% 55%;
+     --accent: 0 0% 28%;
+     --accent-foreground: 142 71% 45%;
+     --destructive: 0 84% 60%;
+     --destructive-foreground: 0 0% 12%;
+     --border: 0 0% 30%;
+     --input: 0 0% 30%;
+     --ring: 142 71% 45%;
     --radius: 0.75rem;
   }
 }
