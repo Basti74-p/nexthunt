@@ -68,7 +68,7 @@ function LayoutInner({ children, currentPageName }) {
 
   // Desktop mode
   return (
-    <div className="min-h-screen bg-[#2d2d2d]">
+    <div className="min-h-screen bg-[#3a3a3a]">
       <DesktopSidebar currentPage={currentPageName} />
       <main className="ml-64 p-8">
         {children}
