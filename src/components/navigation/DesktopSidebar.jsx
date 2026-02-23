@@ -83,6 +83,11 @@ const NAV = [
     icon: Globe,
     module: "oeffentlichkeit",
   },
+  {
+    label: "Support",
+    page: "SupportTickets",
+    icon: LifeBuoy,
+  },
 ];
 
 function NavItem({ item, currentPage, depth = 0 }) {
