@@ -127,7 +127,7 @@ function NavItem({ item, currentPage, depth = 0 }) {
   return (
     <div>
       <div className={`flex items-center rounded-xl text-sm font-medium transition-all duration-150 ${
-        isActive ? "bg-[#22c55e] text-[#1a1f2e]" : childIsActive ? "text-[#22c55e] bg-[#22c55e]/10" : "text-gray-300 hover:bg-[#2d3a4f]"
+        isActive ? "bg-[#22c55e] text-[#1e1e1e]" : childIsActive ? "text-[#22c55e] bg-[#22c55e]/10" : "text-gray-300 hover:bg-[#2d2d2d]"
       }`}>
         {item.page ? (
           <Link to={createPageUrl(item.page)} className="flex items-center gap-3 px-3 py-2.5 flex-1">
@@ -148,7 +148,7 @@ function NavItem({ item, currentPage, depth = 0 }) {
         </button>
       </div>
       {open && (
-        <div className="mt-0.5 ml-3 space-y-0.5 border-l-2 border-[#2d3a4f] pl-2">
+        <div className="mt-0.5 ml-3 space-y-0.5 border-l-2 border-[#2d2d2d] pl-2">
           {item.children.map(child => (
             <NavItem key={child.page} item={child} currentPage={currentPage} depth={depth + 1} />
           ))}
@@ -162,9 +162,9 @@ export default function DesktopSidebar({ currentPage }) {
   const { user, tenant, isPlatformAdmin } = useAuth();
 
   return (
-    <aside className="w-64 h-screen bg-[#232d3f] border-r border-[#2d3a4f] flex flex-col fixed left-0 top-0 z-40">
+    <aside className="w-64 h-screen bg-[#1e1e1e] border-r border-[#2d2d2d] flex flex-col fixed left-0 top-0 z-40">
       {/* Logo */}
-      <div className="px-6 py-5 border-b border-[#2d3a4f]">
+      <div className="px-6 py-5 border-b border-[#2d2d2d]">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 bg-[#22c55e] rounded-xl flex items-center justify-center">
             <TreePine className="w-5 h-5 text-[#1a1f2e]" />
@@ -187,8 +187,8 @@ export default function DesktopSidebar({ currentPage }) {
               to={createPageUrl("SystemAdmin")}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
                 ["SystemAdmin","SystemAdminTenants","SystemAdminSupport"].includes(currentPage)
-                  ? "bg-[#22c55e] text-[#1a1f2e]"
-                  : "text-gray-400 hover:bg-[#2d3a4f]"
+                  ? "bg-[#22c55e] text-[#1e1e1e]"
+                  : "text-gray-400 hover:bg-[#2d2d2d]"
               }`}
             >
               <Shield className="w-4 h-4" />
@@ -204,9 +204,9 @@ export default function DesktopSidebar({ currentPage }) {
       </nav>
 
       {/* User */}
-      <div className="px-3 py-4 border-t border-[#2d3a4f]">
+      <div className="px-3 py-4 border-t border-[#2d2d2d]">
         <div className="flex items-center gap-3 px-3 py-2">
-          <div className="w-8 h-8 rounded-full bg-[#22c55e] flex items-center justify-center text-[#1a1f2e] text-xs font-bold">
+          <div className="w-8 h-8 rounded-full bg-[#22c55e] flex items-center justify-center text-[#1e1e1e] text-xs font-bold">
             {user?.full_name?.[0]?.toUpperCase() || "U"}
           </div>
           <div className="flex-1 min-w-0">
@@ -215,7 +215,7 @@ export default function DesktopSidebar({ currentPage }) {
           </div>
           <button
             onClick={() => base44.auth.logout()}
-            className="p-1.5 rounded-lg hover:bg-[#2d3a4f] text-gray-500 hover:text-gray-300 transition-colors"
+            className="p-1.5 rounded-lg hover:bg-[#2d2d2d] text-gray-500 hover:text-gray-300 transition-colors"
           >
             <LogOut className="w-4 h-4" />
           </button>

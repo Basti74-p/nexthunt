@@ -1,10 +1,9 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --nh-bg: #1a2320;
+  --nh-bg: #1e1e1e;
   --nh-accent: #22c55e;
   --nh-accent-light: #16a34a;
   --nh-green-50: #1a2e1a;
@@ -31,24 +30,24 @@ body {
 
 @layer base {
   :root {
-    --background: 217 26% 14%;
+    --background: 0 0% 12%;
     --foreground: 210 40% 96%;
-    --card: 217 32% 19%;
+    --card: 0 0% 18%;
     --card-foreground: 210 40% 96%;
-    --popover: 217 32% 19%;
+    --popover: 0 0% 18%;
     --popover-foreground: 210 40% 96%;
     --primary: 142 72% 29%;
-    --primary-foreground: 217 32% 17%;
-    --secondary: 217 32% 27%;
+    --primary-foreground: 0 0% 12%;
+    --secondary: 0 0% 25%;
     --secondary-foreground: 210 40% 96%;
-    --muted: 217 32% 27%;
+    --muted: 0 0% 25%;
     --muted-foreground: 210 16% 70%;
-    --accent: 217 32% 27%;
+    --accent: 0 0% 25%;
     --accent-foreground: 142 72% 29%;
     --destructive: 0 84% 60%;
-    --destructive-foreground: 217 32% 17%;
-    --border: 217 32% 27%;
-    --input: 217 32% 27%;
+    --destructive-foreground: 0 0% 12%;
+    --border: 0 0% 25%;
+    --input: 0 0% 25%;
     --ring: 142 72% 29%;
     --radius: 0.75rem;
   }
