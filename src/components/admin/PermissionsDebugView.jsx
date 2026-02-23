@@ -12,8 +12,8 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 
 const MENU_ITEMS = [
-  { id: "dashboard", label: "Dashboard", icon: Home, module: null },
-  { id: "reviere", label: "Reviere", icon: Map, module: null },
+  { id: "dashboard", label: "Dashboard", icon: Home, module: "dashboard" },
+  { id: "reviere", label: "Reviere", icon: Map, module: "reviere" },
   { id: "wildmanagement", label: "Wildmanagement", icon: Target, module: "wildmanagement" },
   { id: "strecke", label: "Strecke", icon: Layers, module: "strecke" },
   { id: "wildkammer", label: "Wildkammer", icon: Layers, module: "wildkammer" },
@@ -126,12 +126,17 @@ function UserDebugCard({ userEmail }) {
       const isContactEmailOwner = tenant?.contact_email === user.email && !tenantMember;
 
       const tenantFeatures = tenant ? {
+        feature_dashboard: tenant.feature_dashboard !== false,
+        feature_reviere: tenant.feature_reviere !== false,
         feature_map: tenant.feature_map !== false,
         feature_sightings: tenant.feature_sightings !== false,
         feature_strecke: tenant.feature_strecke !== false,
         feature_wildkammer: tenant.feature_wildkammer === true,
+        feature_kalender: tenant.feature_kalender !== false,
+        feature_personen: tenant.feature_personen !== false,
         feature_tasks: tenant.feature_tasks !== false,
         feature_driven_hunt: tenant.feature_driven_hunt === true,
+        feature_einrichtungen: tenant.feature_einrichtungen !== false,
         feature_public_portal: tenant.feature_public_portal === true,
         feature_wildmarken: tenant.feature_wildmarken === true,
       } : {};
@@ -237,11 +242,11 @@ function UserDebugCard({ userEmail }) {
       wildmanagement: tenantFeatures.feature_sightings !== false,
       strecke: tenantFeatures.feature_strecke !== false,
       wildkammer: tenantFeatures.feature_wildkammer === true,
-      kalender: true,
+      kalender: tenantFeatures.feature_kalender !== false,
       aufgaben: tenantFeatures.feature_tasks !== false,
-      personen: true,
+      personen: tenantFeatures.feature_personen !== false,
       oeffentlichkeit: tenantFeatures.feature_public_portal === true,
-      einrichtungen: true,
+      einrichtungen: tenantFeatures.feature_einrichtungen !== false,
     };
 
     const licensed = licenseMap[item.module];
