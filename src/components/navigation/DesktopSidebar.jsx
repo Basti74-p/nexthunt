@@ -104,19 +104,27 @@ function NavItem({ item, currentPage, depth = 0 }) {
 
   return (
     <div>
-      <button
-        onClick={() => setOpen(!open)}
-        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
-          childIsActive ? "text-[#0F2F23] bg-[#0F2F23]/5" : "text-gray-700 hover:bg-gray-100"
-        }`}
-      >
-        <item.icon className="w-4 h-4 shrink-0" />
-        <span className="flex-1 text-left">{item.label}</span>
-        {open
-          ? <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
-          : <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
-        }
-      </button>
+      <div className={`flex items-center rounded-xl text-sm font-medium transition-all duration-150 ${
+        isActive ? "bg-[#0F2F23] text-white" : childIsActive ? "text-[#0F2F23] bg-[#0F2F23]/5" : "text-gray-700 hover:bg-gray-100"
+      }`}>
+        {item.page ? (
+          <Link to={createPageUrl(item.page)} className="flex items-center gap-3 px-3 py-2.5 flex-1">
+            <item.icon className="w-4 h-4 shrink-0" />
+            <span>{item.label}</span>
+          </Link>
+        ) : (
+          <span className="flex items-center gap-3 px-3 py-2.5 flex-1">
+            <item.icon className="w-4 h-4 shrink-0" />
+            <span>{item.label}</span>
+          </span>
+        )}
+        <button onClick={() => setOpen(!open)} className="px-2 py-2.5">
+          {open
+            ? <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
+            : <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
+          }
+        </button>
+      </div>
       {open && (
         <div className="mt-0.5 ml-3 space-y-0.5 border-l-2 border-gray-100 pl-2">
           {item.children.map(child => (
