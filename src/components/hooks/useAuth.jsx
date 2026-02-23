@@ -72,7 +72,8 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const isPlatformAdmin = user?.role === "platform_admin";
+  const SYSTEM_ADMIN_EMAILS = ["sebastianpedde2@gmail.com"];
+  const isPlatformAdmin = user?.role === "platform_admin" || user?.role === "admin" || SYSTEM_ADMIN_EMAILS.includes(user?.email);
   const isTenantOwner = tenantMember?.role === "tenant_owner";
   const isTenantMember = !!tenantMember || !!user?.tenant_id;
 
