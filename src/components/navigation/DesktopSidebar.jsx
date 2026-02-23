@@ -162,17 +162,17 @@ export default function DesktopSidebar({ currentPage }) {
   const { user, tenant, isPlatformAdmin } = useAuth();
 
   return (
-    <aside className="w-64 h-screen bg-white border-r border-gray-100 flex flex-col fixed left-0 top-0 z-40">
+    <aside className="w-64 h-screen bg-[#232d3f] border-r border-[#2d3a4f] flex flex-col fixed left-0 top-0 z-40">
       {/* Logo */}
-      <div className="px-6 py-5 border-b border-gray-50">
+      <div className="px-6 py-5 border-b border-[#2d3a4f]">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-[#0F2F23] rounded-xl flex items-center justify-center">
-            <TreePine className="w-5 h-5 text-white" />
+          <div className="w-9 h-9 bg-[#22c55e] rounded-xl flex items-center justify-center">
+            <TreePine className="w-5 h-5 text-[#1a1f2e]" />
           </div>
           <div>
-            <h1 className="text-lg font-bold text-[#0F2F23] tracking-tight">NextHunt</h1>
+            <h1 className="text-lg font-bold text-[#22c55e] tracking-tight">NextHunt</h1>
             {tenant && (
-              <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">{tenant.name}</p>
+              <p className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">{tenant.name}</p>
             )}
           </div>
         </div>
@@ -182,19 +182,19 @@ export default function DesktopSidebar({ currentPage }) {
       <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto nh-scrollbar">
         {isPlatformAdmin && (
           <div className="mb-3">
-            <p className="px-3 mb-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Platform</p>
+            <p className="px-3 mb-1.5 text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Platform</p>
             <Link
               to={createPageUrl("SystemAdmin")}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
                 ["SystemAdmin","SystemAdminTenants","SystemAdminSupport"].includes(currentPage)
-                  ? "bg-[#0F2F23] text-white"
-                  : "text-gray-600 hover:bg-gray-100"
+                  ? "bg-[#22c55e] text-[#1a1f2e]"
+                  : "text-gray-400 hover:bg-[#2d3a4f]"
               }`}
             >
               <Shield className="w-4 h-4" />
               System-Administration
             </Link>
-            <div className="my-3 border-t border-gray-100" />
+            <div className="my-3 border-t border-[#2d3a4f]" />
           </div>
         )}
 
@@ -204,18 +204,18 @@ export default function DesktopSidebar({ currentPage }) {
       </nav>
 
       {/* User */}
-      <div className="px-3 py-4 border-t border-gray-50">
+      <div className="px-3 py-4 border-t border-[#2d3a4f]">
         <div className="flex items-center gap-3 px-3 py-2">
-          <div className="w-8 h-8 rounded-full bg-[#0F2F23] flex items-center justify-center text-white text-xs font-bold">
+          <div className="w-8 h-8 rounded-full bg-[#22c55e] flex items-center justify-center text-[#1a1f2e] text-xs font-bold">
             {user?.full_name?.[0]?.toUpperCase() || "U"}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">{user?.full_name || "User"}</p>
-            <p className="text-[10px] text-gray-400 truncate">{user?.email}</p>
+            <p className="text-sm font-medium text-gray-100 truncate">{user?.full_name || "User"}</p>
+            <p className="text-[10px] text-gray-500 truncate">{user?.email}</p>
           </div>
           <button
             onClick={() => base44.auth.logout()}
-            className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+            className="p-1.5 rounded-lg hover:bg-[#2d3a4f] text-gray-500 hover:text-gray-300 transition-colors"
           >
             <LogOut className="w-4 h-4" />
           </button>
