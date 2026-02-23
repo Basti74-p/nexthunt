@@ -10,6 +10,7 @@ import {
 import { useAuth } from "../hooks/useAuth";
 import { base44 } from "@/api/base44Client";
 
+// module key maps to canAccess() key. undefined = always visible
 const NAV = [
   {
     label: "Dashboard",
@@ -21,8 +22,8 @@ const NAV = [
     page: "Revier",
     icon: TreePine,
     children: [
-      { label: "Karte", page: "Reviere", icon: Map },
-      { label: "Jagdeinrichtungen", page: "Jagdeinrichtungen", icon: Building },
+      { label: "Karte", page: "Reviere", icon: Map, module: "map" },
+      { label: "Jagdeinrichtungen", page: "Jagdeinrichtungen", icon: Building, module: "einrichtungen" },
       { label: "Abteilungen", page: "Abteilungen", icon: Layers },
     ],
   },
@@ -30,59 +31,70 @@ const NAV = [
     label: "Wildmanagement",
     page: "Wildmanagement",
     icon: Eye,
+    module: "wildmanagement",
     children: [
-      { label: "Rotwild", page: "WildRotwild", icon: TreePine },
-      { label: "Schwarzwild", page: "WildSchwarzwild", icon: TreePine },
-      { label: "Rehwild", page: "WildRehwild", icon: TreePine },
-      { label: "Wolf", page: "WildWolf", icon: TreePine },
+      { label: "Rotwild", page: "WildRotwild", icon: TreePine, module: "wildmanagement" },
+      { label: "Schwarzwild", page: "WildSchwarzwild", icon: TreePine, module: "wildmanagement" },
+      { label: "Rehwild", page: "WildRehwild", icon: TreePine, module: "wildmanagement" },
+      { label: "Wolf", page: "WildWolf", icon: TreePine, module: "wildmanagement" },
     ],
   },
   {
     label: "Strecke",
     page: "Strecke",
     icon: Crosshair,
+    module: "strecke",
     children: [
-      { label: "Abschussplan", page: "StreckeAbschussplan", icon: Crosshair },
-      { label: "Wildkammer", page: "StreckeWildkammer", icon: Archive },
-      { label: "Wildverkauf", page: "StreckeWildverkauf", icon: Truck },
-      { label: "Archiv", page: "StreckeArchiv", icon: Archive },
+      { label: "Abschussplan", page: "StreckeAbschussplan", icon: Crosshair, module: "strecke" },
+      { label: "Wildkammer", page: "StreckeWildkammer", icon: Archive, module: "wildkammer" },
+      { label: "Wildverkauf", page: "StreckeWildverkauf", icon: Truck, module: "strecke" },
+      { label: "Archiv", page: "StreckeArchiv", icon: Archive, module: "strecke" },
     ],
   },
   {
     label: "Jagdkalender",
     page: "JagdkalenderMain",
     icon: Calendar,
+    module: "kalender",
     children: [
-      { label: "Jagdmonitor", page: "Jagdkalender", icon: Radio },
-      { label: "Jagdgäste", page: "Jagdgaeste", icon: UserCheck },
-      { label: "Personal", page: "Personal", icon: UserCog },
+      { label: "Jagdmonitor", page: "Jagdkalender", icon: Radio, module: "kalender" },
+      { label: "Jagdgäste", page: "Jagdgaeste", icon: UserCheck, module: "kalender" },
+      { label: "Personal", page: "Personal", icon: UserCog, module: "kalender" },
     ],
   },
   {
     label: "Personen",
     page: "Personen",
     icon: Users,
+    module: "personen",
     children: [
-      { label: "Berechtigungen", page: "TenantMembers", icon: Shield },
+      { label: "Berechtigungen", page: "TenantMembers", icon: Shield, module: "personen" },
     ],
   },
   {
     label: "Aufgaben",
     page: "Aufgaben",
     icon: ListTodo,
+    module: "aufgaben",
   },
   {
     label: "Öffentlichkeit",
     page: "Oeffentlichkeit",
     icon: Globe,
+    module: "oeffentlichkeit",
   },
 ];
 
 function NavItem({ item, currentPage, depth = 0 }) {
+  const { canAccess, isPlatformAdmin } = useAuth();
   const isActive = item.page && currentPage === item.page;
   const hasChildren = item.children && item.children.length > 0;
   const childIsActive = hasChildren && item.children.some(c => c.page === currentPage);
   const [open, setOpen] = useState(childIsActive);
+
+  // Permission check (platform admin always sees everything)
+  const allowed = isPlatformAdmin || !item.module || canAccess(item.module);
+  if (!allowed) return null;
 
   if (!hasChildren) {
     return (
