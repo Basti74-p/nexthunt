@@ -9,6 +9,9 @@
   --nh-accent-light: #16a34a;
   --nh-green-50: #1a2e1a;
   --nh-green-100: #2d5a2d;
+  --foreground: 0 0% 90%;
+  --card-foreground: 0 0% 90%;
+  --popover-foreground: 0 0% 90%;
 }
 
 body {
