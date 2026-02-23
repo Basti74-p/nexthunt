@@ -4,10 +4,12 @@ import { useQuery } from "@tanstack/react-query";
 import { 
   User, Building2, Shield, Eye, EyeOff, CheckCircle2, XCircle, 
   AlertCircle, ChevronRight, Search, Loader2, Map, Target, Calendar,
-  Users as UsersIcon, Layers, FileText, Globe, Home
+  Users as UsersIcon, Layers, FileText, Globe, Home, Edit2, Save, RefreshCw
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { toast } from "sonner";
 
 const MENU_ITEMS = [
   { id: "dashboard", label: "Dashboard", icon: Home, module: null },
@@ -52,6 +54,10 @@ function ReasonChip({ reason, type = "error" }) {
 function UserDebugCard({ userEmail }) {
   const [debugData, setDebugData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [editMode, setEditMode] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [editedTenantFeatures, setEditedTenantFeatures] = useState({});
+  const [editedUserPermissions, setEditedUserPermissions] = useState({});
 
   useEffect(() => {
     loadDebugData();
@@ -163,10 +169,60 @@ function UserDebugCard({ userEmail }) {
         tenantFeatures,
         userPermissions,
       });
+      setEditedTenantFeatures(tenantFeatures);
+      setEditedUserPermissions(userPermissions);
     } catch (error) {
       setDebugData({ error: error.message });
     }
     setLoading(false);
+  };
+
+  const handleSaveChanges = async () => {
+    setSaving(true);
+    try {
+      const updates = [];
+
+      // Update Tenant features if changed
+      if (tenant && JSON.stringify(editedTenantFeatures) !== JSON.stringify(debugData.tenantFeatures)) {
+        await base44.entities.Tenant.update(tenant.id, {
+          feature_map: editedTenantFeatures.feature_map,
+          feature_sightings: editedTenantFeatures.feature_sightings,
+          feature_strecke: editedTenantFeatures.feature_strecke,
+          feature_wildkammer: editedTenantFeatures.feature_wildkammer,
+          feature_tasks: editedTenantFeatures.feature_tasks,
+          feature_driven_hunt: editedTenantFeatures.feature_driven_hunt,
+          feature_public_portal: editedTenantFeatures.feature_public_portal,
+          feature_wildmarken: editedTenantFeatures.feature_wildmarken,
+        });
+        updates.push("Tenant Features");
+      }
+
+      // Update TenantMember permissions if changed
+      if (tenantMember && JSON.stringify(editedUserPermissions) !== JSON.stringify(debugData.userPermissions)) {
+        await base44.entities.TenantMember.update(tenantMember.id, {
+          perm_wildmanagement: editedUserPermissions.perm_wildmanagement,
+          perm_strecke: editedUserPermissions.perm_strecke,
+          perm_wildkammer: editedUserPermissions.perm_wildkammer,
+          perm_kalender: editedUserPermissions.perm_kalender,
+          perm_aufgaben: editedUserPermissions.perm_aufgaben,
+          perm_personen: editedUserPermissions.perm_personen,
+          perm_oeffentlichkeit: editedUserPermissions.perm_oeffentlichkeit,
+          perm_einrichtungen: editedUserPermissions.perm_einrichtungen,
+        });
+        updates.push("User Permissions");
+      }
+
+      if (updates.length > 0) {
+        toast.success(`Gespeichert: ${updates.join(", ")}`);
+        await loadDebugData(); // Reload to show updated data
+        setEditMode(false);
+      } else {
+        toast.info("Keine Änderungen zum Speichern");
+      }
+    } catch (error) {
+      toast.error(`Fehler beim Speichern: ${error.message}`);
+    }
+    setSaving(false);
   };
 
   if (loading) {
@@ -188,6 +244,10 @@ function UserDebugCard({ userEmail }) {
 
   const { user, tenant, tenantMember, tenantSource, isPlatformAdmin, isTenantOwner, isContactEmailOwner, tenantFeatures, userPermissions } = debugData;
 
+  // Use edited values for real-time preview
+  const displayFeatures = editMode ? editedTenantFeatures : tenantFeatures;
+  const displayPermissions = editMode ? editedUserPermissions : userPermissions;
+
   // Calculate menu visibility
   const menuAnalysis = MENU_ITEMS.map(item => {
     if (isPlatformAdmin) {
@@ -198,20 +258,20 @@ function UserDebugCard({ userEmail }) {
       return { ...item, visible: true, reason: "Basis-Menü (keine Module-Prüfung)" };
     }
 
-    // Check license
+    // Check license (use display values for real-time preview)
     const licenseMap = {
-      wildmanagement: tenantFeatures.feature_sightings !== false,
-      strecke: tenantFeatures.feature_strecke !== false,
-      wildkammer: tenantFeatures.feature_wildkammer === true,
+      wildmanagement: displayFeatures.feature_sightings !== false,
+      strecke: displayFeatures.feature_strecke !== false,
+      wildkammer: displayFeatures.feature_wildkammer === true,
       kalender: true,
-      aufgaben: tenantFeatures.feature_tasks !== false,
+      aufgaben: displayFeatures.feature_tasks !== false,
       personen: true,
-      oeffentlichkeit: tenantFeatures.feature_public_portal === true,
+      oeffentlichkeit: displayFeatures.feature_public_portal === true,
       einrichtungen: true,
     };
 
     const licensed = licenseMap[item.module];
-    const hasPermission = userPermissions[`perm_${item.module}`] === true;
+    const hasPermission = displayPermissions[`perm_${item.module}`] === true;
 
     if (!tenant) {
       return { ...item, visible: false, reason: "Kein Tenant gefunden" };
@@ -292,7 +352,10 @@ function UserDebugCard({ userEmail }) {
       {/* Menu Visibility Analysis */}
       <div className="bg-slate-800 rounded-xl p-5 border border-slate-700">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-white">Menü-Sichtbarkeit (Effective)</h3>
+          <div className="flex items-center gap-3">
+            <h3 className="text-sm font-semibold text-white">Menü-Sichtbarkeit (Effective)</h3>
+            {editMode && <span className="text-xs px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">Live-Vorschau</span>}
+          </div>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5">
               <Eye className="w-4 h-4 text-emerald-400" />
@@ -342,18 +405,74 @@ function UserDebugCard({ userEmail }) {
         </div>
       </div>
 
+      {/* Actions */}
+      <div className="flex items-center justify-between gap-3">
+        <Button
+          onClick={() => loadDebugData()}
+          variant="outline"
+          className="border-slate-600 text-slate-300 hover:bg-slate-800"
+          disabled={saving}
+        >
+          <RefreshCw className="w-4 h-4 mr-2" />
+          Neu laden
+        </Button>
+        <div className="flex items-center gap-2">
+          {editMode ? (
+            <>
+              <Button
+                onClick={() => {
+                  setEditMode(false);
+                  setEditedTenantFeatures(tenantFeatures);
+                  setEditedUserPermissions(userPermissions);
+                }}
+                variant="outline"
+                className="border-slate-600 text-slate-300 hover:bg-slate-800"
+                disabled={saving}
+              >
+                Abbrechen
+              </Button>
+              <Button
+                onClick={handleSaveChanges}
+                className="bg-emerald-600 hover:bg-emerald-700"
+                disabled={saving}
+              >
+                {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+                Speichern
+              </Button>
+            </>
+          ) : (
+            <Button
+              onClick={() => setEditMode(true)}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
+              <Edit2 className="w-4 h-4 mr-2" />
+              Bearbeiten
+            </Button>
+          )}
+        </div>
+      </div>
+
       {/* Feature Flags */}
       {tenant && (
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-slate-800 rounded-xl p-5 border border-slate-700">
             <h3 className="text-sm font-semibold text-white mb-3">Tenant Feature Flags</h3>
             <div className="space-y-2">
-              {Object.entries(tenantFeatures).map(([key, value]) => (
-                <div key={key} className="flex items-center justify-between py-1.5 border-b border-slate-700 last:border-0">
+              {Object.entries(displayFeatures).map(([key, value]) => (
+                <div key={key} className="flex items-center justify-between py-2 border-b border-slate-700 last:border-0">
                   <span className="text-xs text-slate-400">{key}</span>
-                  <span className={`text-xs font-semibold ${value ? "text-emerald-400" : "text-red-400"}`}>
-                    {value ? "✓ Enabled" : "✗ Disabled"}
-                  </span>
+                  {editMode ? (
+                    <Switch
+                      checked={value}
+                      onCheckedChange={(checked) => 
+                        setEditedTenantFeatures(prev => ({ ...prev, [key]: checked }))
+                      }
+                    />
+                  ) : (
+                    <span className={`text-xs font-semibold ${value ? "text-emerald-400" : "text-red-400"}`}>
+                      {value ? "✓ Enabled" : "✗ Disabled"}
+                    </span>
+                  )}
                 </div>
               ))}
             </div>
@@ -362,13 +481,22 @@ function UserDebugCard({ userEmail }) {
           <div className="bg-slate-800 rounded-xl p-5 border border-slate-700">
             <h3 className="text-sm font-semibold text-white mb-3">User Permissions</h3>
             <div className="space-y-2">
-              {Object.keys(userPermissions).length > 0 ? (
-                Object.entries(userPermissions).map(([key, value]) => (
-                  <div key={key} className="flex items-center justify-between py-1.5 border-b border-slate-700 last:border-0">
+              {Object.keys(displayPermissions).length > 0 ? (
+                Object.entries(displayPermissions).map(([key, value]) => (
+                  <div key={key} className="flex items-center justify-between py-2 border-b border-slate-700 last:border-0">
                     <span className="text-xs text-slate-400">{key}</span>
-                    <span className={`text-xs font-semibold ${value ? "text-emerald-400" : "text-red-400"}`}>
-                      {value ? "✓ Granted" : "✗ Denied"}
-                    </span>
+                    {editMode && tenantMember ? (
+                      <Switch
+                        checked={value}
+                        onCheckedChange={(checked) => 
+                          setEditedUserPermissions(prev => ({ ...prev, [key]: checked }))
+                        }
+                      />
+                    ) : (
+                      <span className={`text-xs font-semibold ${value ? "text-emerald-400" : "text-red-400"}`}>
+                        {value ? "✓ Granted" : "✗ Denied"}
+                      </span>
+                    )}
                   </div>
                 ))
               ) : (
