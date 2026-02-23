@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --nh-bg: #F7F7F8;
+  --nh-accent: #0F2F23;
+  --nh-accent-light: #1a4a36;
+  --nh-green-50: #f0fdf4;
+  --nh-green-100: #dcfce7;
+}
+
+body {
+  background: var(--nh-bg);
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.nh-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.nh-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.nh-scrollbar::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 97%;
+    --foreground: 150 50% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 150 50% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 150 50% 10%;
+    --primary: 155 52% 12%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 150 10% 94%;
+    --secondary-foreground: 150 50% 10%;
+    --muted: 150 10% 94%;
+    --muted-foreground: 150 5% 45%;
+    --accent: 150 10% 94%;
+    --accent-foreground: 150 50% 10%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 150 10% 90%;
+    --input: 150 10% 90%;
+    --ring: 155 52% 12%;
+    --radius: 0.75rem;
+  }
+}
