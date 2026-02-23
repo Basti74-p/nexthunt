@@ -144,14 +144,16 @@ export function AuthProvider({ children }) {
     if (isPlatformAdmin) return true;
     const tf = tenantFeatures;
     const licenseMap = {
+      dashboard: tf.feature_dashboard !== false,
+      reviere: tf.feature_reviere !== false,
       wildmanagement: tf.feature_sightings !== false,
       strecke: tf.feature_strecke !== false,
       wildkammer: tf.feature_wildkammer === true,
-      kalender: true,
+      kalender: tf.feature_kalender !== false,
       aufgaben: tf.feature_tasks !== false,
-      personen: true,
+      personen: tf.feature_personen !== false,
       oeffentlichkeit: tf.feature_public_portal === true,
-      einrichtungen: true,
+      einrichtungen: tf.feature_einrichtungen !== false,
       map: tf.feature_map !== false,
     };
     const licensed = licenseMap[module] !== false;
