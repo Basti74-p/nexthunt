@@ -58,7 +58,7 @@ export default function Reviere() {
         description="Legen Sie Ihr erstes Revier an, um die Verwaltung zu starten."
         action={
         canManage &&
-        <Button onClick={() => setDialogOpen(true)} className="bg-[#0F2F23] hover:bg-[#1a4a36] text-white rounded-xl gap-2">
+        <Button onClick={() => setDialogOpen(true)} className="bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-xl gap-2">
                 <Plus className="w-4 h-4" /> Revier anlegen
               </Button>
 
@@ -119,7 +119,7 @@ export default function Reviere() {
             <Button
               onClick={() => createMutation.mutate({ ...form, size_ha: form.size_ha ? Number(form.size_ha) : undefined })}
               disabled={!form.name || createMutation.isPending}
-              className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl">
+              className="w-full bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-xl">
 
               {createMutation.isPending ? "Erstellen..." : "Revier erstellen"}
             </Button>
