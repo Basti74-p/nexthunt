@@ -23,7 +23,7 @@ export default function Revier() {
   const { data: reviere = [], isLoading } = useQuery({
     queryKey: ["reviere", tenant?.id],
     queryFn: () => base44.entities.Revier.filter({ tenant_id: tenant?.id }),
-    enabled: !!tenant?.id,
+    enabled: !!tenant?.id
   });
 
   const createMutation = useMutation({
@@ -32,16 +32,16 @@ export default function Revier() {
       queryClient.invalidateQueries({ queryKey: ["reviere"] });
       setDialogOpen(false);
       setForm({ name: "", region: "", size_ha: "", notes: "" });
-    },
+    }
   });
 
   const canManage = isTenantOwner || isPlatformAdmin;
 
   const quickLinks = [
-    { label: "Karte", page: "Reviere", icon: Map, desc: "Revierkarte und Grenzen" },
-    { label: "Jagdeinrichtungen", page: "Jagdeinrichtungen", icon: Building, desc: "Hochsitze, Kirrungen, etc." },
-    { label: "Abteilungen", page: "Abteilungen", icon: Layers, desc: "Reviereinteilung" },
-  ];
+  { label: "Karte", page: "Reviere", icon: Map, desc: "Revierkarte und Grenzen" },
+  { label: "Jagdeinrichtungen", page: "Jagdeinrichtungen", icon: Building, desc: "Hochsitze, Kirrungen, etc." },
+  { label: "Abteilungen", page: "Abteilungen", icon: Layers, desc: "Reviereinteilung" }];
+
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -49,19 +49,19 @@ export default function Revier() {
         title="Revier"
         subtitle={`${reviere.length} Revier${reviere.length !== 1 ? "e" : ""} verwaltet`}
         actions={
-          canManage && (
-            <Button onClick={() => setDialogOpen(true)} className="bg-[#0F2F23] hover:bg-[#1a4a36] text-white rounded-xl gap-2">
+        canManage &&
+        <Button onClick={() => setDialogOpen(true)} className="bg-[#0F2F23] hover:bg-[#1a4a36] text-white rounded-xl gap-2">
               <Plus className="w-4 h-4" /> Neues Revier
             </Button>
-          )
-        }
-      />
+
+        } />
+
 
       {/* Quick Links */}
       <div className="grid grid-cols-3 gap-3 mb-8">
-        {quickLinks.map(({ label, page, icon: Icon, desc }) => (
-          <Link key={page} to={createPageUrl(page)}
-            className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3 hover:border-[#0F2F23]/20 hover:shadow-md transition-all group">
+        {quickLinks.map(({ label, page, icon: Icon, desc }) =>
+        <Link key={page} to={createPageUrl(page)}
+        className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3 hover:border-[#0F2F23]/20 hover:shadow-md transition-all group">
             <div className="w-10 h-10 rounded-xl bg-[#0F2F23]/5 flex items-center justify-center">
               <Icon className="w-5 h-5 text-[#0F2F23]" />
             </div>
@@ -70,19 +70,19 @@ export default function Revier() {
               <p className="text-xs text-gray-400">{desc}</p>
             </div>
           </Link>
-        ))}
+        )}
       </div>
 
       {/* Reviere List */}
-      {reviere.length === 0 && !isLoading ? (
-        <EmptyState icon={TreePine} title="Keine Reviere vorhanden" description="Legen Sie Ihr erstes Revier an."
-          action={canManage && <Button onClick={() => setDialogOpen(true)} className="bg-[#0F2F23] hover:bg-[#1a4a36] text-white rounded-xl gap-2"><Plus className="w-4 h-4" /> Revier anlegen</Button>}
-        />
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {reviere.map((r) => (
-            <Link key={r.id} to={createPageUrl(`RevierDetail?id=${r.id}`)}
-              className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:border-[#0F2F23]/20 hover:shadow-md transition-all group">
+      {reviere.length === 0 && !isLoading ?
+      <EmptyState icon={TreePine} title="Keine Reviere vorhanden" description="Legen Sie Ihr erstes Revier an."
+      action={canManage && <Button onClick={() => setDialogOpen(true)} className="bg-[#0F2F23] hover:bg-[#1a4a36] text-white rounded-xl gap-2"><Plus className="w-4 h-4" /> Revier anlegen</Button>} /> :
+
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {reviere.map((r) =>
+        <Link key={r.id} to={createPageUrl(`RevierDetail?id=${r.id}`)}
+        className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:border-[#0F2F23]/20 hover:shadow-md transition-all group">
               <div className="flex items-start justify-between mb-4">
                 <div className="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center">
                   <TreePine className="w-5 h-5 text-emerald-600" />
@@ -98,13 +98,13 @@ export default function Revier() {
                 Öffnen <ArrowRight className="w-3 h-3" />
               </div>
             </Link>
-          ))}
+        )}
         </div>
-      )}
+      }
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
-          <DialogHeader><DialogTitle>Neues Revier</DialogTitle></DialogHeader>
+        <DialogContent className="bg-[#e8e8e8] text-slate-950 p-6 fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border border-[#555555] shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg">
+          <DialogHeader><DialogTitle className="text-gray-950 text-lg font-semibold tracking-tight leading-none">Neues Revier</DialogTitle></DialogHeader>
           <div className="space-y-4 mt-4">
             <div><Label>Name *</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
             <div className="grid grid-cols-2 gap-4">
@@ -113,12 +113,12 @@ export default function Revier() {
             </div>
             <div><Label>Notizen</Label><Textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></div>
             <Button onClick={() => createMutation.mutate({ ...form, size_ha: form.size_ha ? Number(form.size_ha) : undefined })}
-              disabled={!form.name || createMutation.isPending} className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl">
+            disabled={!form.name || createMutation.isPending} className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl">
               {createMutation.isPending ? "Erstellen..." : "Revier erstellen"}
             </Button>
           </div>
         </DialogContent>
       </Dialog>
-    </div>
-  );
+    </div>);
+
 }
