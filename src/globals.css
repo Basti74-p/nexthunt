@@ -39,23 +39,23 @@ body, button, input, textarea, select, label, p, span, div, a, h1, h2, h3, h4, h
 @layer base {
   :root {
     --background: 0 0% 16%;
-     --foreground: 0 0% 70%;
-     --card: 0 0% 20%;
-     --card-foreground: 0 0% 70%;
-     --popover: 0 0% 20%;
-     --popover-foreground: 0 0% 70%;
+     --foreground: 0 0% 90%;
+     --card: 0 0% 23%;
+     --card-foreground: 0 0% 90%;
+     --popover: 0 0% 23%;
+     --popover-foreground: 0 0% 90%;
      --primary: 142 71% 45%;
      --primary-foreground: 0 0% 100%;
      --secondary: 0 0% 28%;
-     --secondary-foreground: 0 0% 70%;
+     --secondary-foreground: 0 0% 90%;
      --muted: 0 0% 28%;
-     --muted-foreground: 0 0% 55%;
+     --muted-foreground: 0 0% 70%;
      --accent: 0 0% 28%;
      --accent-foreground: 142 71% 45%;
      --destructive: 0 84% 60%;
      --destructive-foreground: 0 0% 12%;
-     --border: 0 0% 30%;
-     --input: 0 0% 30%;
+     --border: 0 0% 35%;
+     --input: 0 0% 25%;
      --ring: 142 71% 45%;
     --radius: 0.75rem;
   }
