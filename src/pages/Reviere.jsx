@@ -23,7 +23,7 @@ export default function Reviere() {
   const { data: reviere = [], isLoading } = useQuery({
     queryKey: ["reviere", tenant?.id],
     queryFn: () => base44.entities.Revier.filter({ tenant_id: tenant?.id }),
-    enabled: !!tenant?.id,
+    enabled: !!tenant?.id
   });
 
   const createMutation = useMutation({
@@ -32,7 +32,7 @@ export default function Reviere() {
       queryClient.invalidateQueries({ queryKey: ["reviere"] });
       setDialogOpen(false);
       setForm({ name: "", region: "", size_ha: "", notes: "" });
-    },
+    }
   });
 
   const canManage = isTenantOwner || isPlatformAdmin;
@@ -43,35 +43,35 @@ export default function Reviere() {
         title="Reviere"
         subtitle={`${reviere.length} Revier${reviere.length !== 1 ? "e" : ""} verwaltet`}
         actions={
-          canManage && (
-            <Button onClick={() => setDialogOpen(true)} className="bg-[#0F2F23] hover:bg-[#1a4a36] text-white rounded-xl gap-2">
+        canManage &&
+        <Button onClick={() => setDialogOpen(true)} className="bg-[#22c55e] text-[#000000] px-4 py-2 text-sm font-medium rounded-xl inline-flex items-center justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-9 hover:bg-[#1a4a36] gap-2">
               <Plus className="w-4 h-4" /> Neues Revier
             </Button>
-          )
-        }
-      />
 
-      {reviere.length === 0 && !isLoading ? (
-        <EmptyState
-          icon={TreePine}
-          title="Keine Reviere vorhanden"
-          description="Legen Sie Ihr erstes Revier an, um die Verwaltung zu starten."
-          action={
-            canManage && (
-              <Button onClick={() => setDialogOpen(true)} className="bg-[#0F2F23] hover:bg-[#1a4a36] text-white rounded-xl gap-2">
+        } />
+
+
+      {reviere.length === 0 && !isLoading ?
+      <EmptyState
+        icon={TreePine}
+        title="Keine Reviere vorhanden"
+        description="Legen Sie Ihr erstes Revier an, um die Verwaltung zu starten."
+        action={
+        canManage &&
+        <Button onClick={() => setDialogOpen(true)} className="bg-[#0F2F23] hover:bg-[#1a4a36] text-white rounded-xl gap-2">
                 <Plus className="w-4 h-4" /> Revier anlegen
               </Button>
-            )
-          }
-        />
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {reviere.map((r) => (
-            <Link
-              key={r.id}
-              to={createPageUrl(`RevierDetail?id=${r.id}`)}
-              className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:border-[#0F2F23]/20 hover:shadow-md transition-all group"
-            >
+
+        } /> :
+
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {reviere.map((r) =>
+        <Link
+          key={r.id}
+          to={createPageUrl(`RevierDetail?id=${r.id}`)}
+          className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:border-[#0F2F23]/20 hover:shadow-md transition-all group">
+
               <div className="flex items-start justify-between mb-4">
                 <div className="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center">
                   <TreePine className="w-5 h-5 text-emerald-600" />
@@ -80,18 +80,18 @@ export default function Reviere() {
               </div>
               <h3 className="text-lg font-semibold text-gray-900 group-hover:text-[#0F2F23] transition-colors">{r.name}</h3>
               <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
-                {r.region && (
-                  <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{r.region}</span>
-                )}
+                {r.region &&
+            <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{r.region}</span>
+            }
                 {r.size_ha && <span>{r.size_ha} ha</span>}
               </div>
               <div className="mt-4 flex items-center gap-1 text-xs text-[#0F2F23] font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                 Öffnen <ArrowRight className="w-3 h-3" />
               </div>
             </Link>
-          ))}
+        )}
         </div>
-      )}
+      }
 
       {/* Create Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -119,13 +119,13 @@ export default function Reviere() {
             <Button
               onClick={() => createMutation.mutate({ ...form, size_ha: form.size_ha ? Number(form.size_ha) : undefined })}
               disabled={!form.name || createMutation.isPending}
-              className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl"
-            >
+              className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl">
+
               {createMutation.isPending ? "Erstellen..." : "Revier erstellen"}
             </Button>
           </div>
         </DialogContent>
       </Dialog>
-    </div>
-  );
+    </div>);
+
 }
