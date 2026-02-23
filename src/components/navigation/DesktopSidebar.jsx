@@ -5,7 +5,7 @@ import {
   LayoutDashboard, Map, TreePine, Settings, Shield,
   LogOut, ChevronDown, ChevronRight, Building, Users,
   Crosshair, Calendar, ListTodo, Globe, BookUser, Eye,
-  Layers, Truck, Archive, Radio, UserCheck, UserCog, LifeBuoy
+  Layers, Truck, Archive, Radio, UserCheck, UserCog, LifeBuoy, Tag
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { base44 } from "@/api/base44Client";
@@ -72,23 +72,28 @@ const NAV = [
     ],
   },
   {
-    label: "Aufgaben",
-    page: "Aufgaben",
-    icon: ListTodo,
-    module: "aufgaben",
+   label: "Aufgaben",
+   page: "Aufgaben",
+   icon: ListTodo,
+   module: "aufgaben",
   },
   {
-    label: "Öffentlichkeit",
-    page: "Oeffentlichkeit",
-    icon: Globe,
-    module: "oeffentlichkeit",
+   label: "Wildmarken",
+   page: "Wildmarken",
+   icon: Tag,
   },
   {
-    label: "Support",
-    page: "SupportTickets",
-    icon: LifeBuoy,
+   label: "Öffentlichkeit",
+   page: "Oeffentlichkeit",
+   icon: Globe,
+   module: "oeffentlichkeit",
   },
-];
+  {
+   label: "Support",
+   page: "SupportTickets",
+   icon: LifeBuoy,
+  },
+  ];
 
 function NavItem({ item, currentPage, depth = 0 }) {
   const { canAccess, isPlatformAdmin } = useAuth();
