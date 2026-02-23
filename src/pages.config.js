@@ -53,6 +53,12 @@ import Reviere from './pages/Reviere';
 import TenantMembers from './pages/TenantMembers';
 import Persons from './pages/Persons';
 import TenantSettings from './pages/TenantSettings';
+import RevierDetail from './pages/RevierDetail';
+import MobileMap from './pages/MobileMap';
+import MobileSightings from './pages/MobileSightings';
+import MobileStrecke from './pages/MobileStrecke';
+import MobileTasks from './pages/MobileTasks';
+import MobileMonitor from './pages/MobileMonitor';
 import __Layout from './Layout.jsx';
 
 
@@ -63,6 +69,12 @@ export const PAGES = {
     "TenantMembers": TenantMembers,
     "Persons": Persons,
     "TenantSettings": TenantSettings,
+    "RevierDetail": RevierDetail,
+    "MobileMap": MobileMap,
+    "MobileSightings": MobileSightings,
+    "MobileStrecke": MobileStrecke,
+    "MobileTasks": MobileTasks,
+    "MobileMonitor": MobileMonitor,
 }
 
 export const pagesConfig = {
