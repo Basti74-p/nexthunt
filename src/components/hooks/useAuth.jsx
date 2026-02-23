@@ -27,12 +27,22 @@ export function AuthProvider({ children }) {
       }
 
       // Primary: tenant_id on user object
-      // Fallback: look up tenant via TenantMember email match
+      // Fallback 1: look up tenant via TenantMember email match
+      // Fallback 2: look up tenant where user is the contact_email (owner)
       let tid = me.tenant_id;
+      let isContactEmailOwner = false;
+      
       if (!tid) {
         const memberRecords = await base44.entities.TenantMember.filter({ user_email: me.email });
         if (memberRecords.length > 0) {
           tid = memberRecords[0].tenant_id;
+        } else {
+          // Check if user email matches a tenant's contact_email (owner scenario)
+          const ownerTenants = await base44.entities.Tenant.filter({ contact_email: me.email });
+          if (ownerTenants.length > 0) {
+            tid = ownerTenants[0].id;
+            isContactEmailOwner = true;
+          }
         }
       }
 
@@ -72,6 +82,20 @@ export function AuthProvider({ children }) {
             perm_oeffentlichkeit: isOwner || m.perm_oeffentlichkeit === true,
             perm_einrichtungen: isOwner || m.perm_einrichtungen !== false,
             allowed_reviere: isOwner ? [] : (m.allowed_reviere || []), // empty = all
+          });
+        } else if (isContactEmailOwner) {
+          // User is tenant owner via contact_email but no TenantMember exists yet
+          // Grant full permissions (same as tenant_owner)
+          setUserPermissions({
+            perm_wildmanagement: true,
+            perm_strecke: true,
+            perm_wildkammer: true,
+            perm_kalender: true,
+            perm_aufgaben: true,
+            perm_personen: true,
+            perm_oeffentlichkeit: true,
+            perm_einrichtungen: true,
+            allowed_reviere: [],
           });
         }
       }
