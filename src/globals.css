@@ -4,7 +4,7 @@
 @tailwind utilities;
 
 :root {
-  --nh-bg: #1a1f2e;
+  --nh-bg: #1a2320;
   --nh-accent: #22c55e;
   --nh-accent-light: #16a34a;
   --nh-green-50: #1a2e1a;
@@ -31,24 +31,24 @@ body {
 
 @layer base {
   :root {
-    --background: 217 26% 12%;
+    --background: 155 20% 12%;
     --foreground: 210 40% 96%;
-    --card: 217 32% 17%;
+    --card: 155 25% 17%;
     --card-foreground: 210 40% 96%;
-    --popover: 217 32% 17%;
+    --popover: 155 25% 17%;
     --popover-foreground: 210 40% 96%;
     --primary: 142 72% 29%;
-    --primary-foreground: 217 32% 17%;
-    --secondary: 217 32% 27%;
+    --primary-foreground: 155 25% 17%;
+    --secondary: 155 25% 27%;
     --secondary-foreground: 210 40% 96%;
-    --muted: 217 32% 27%;
+    --muted: 155 25% 27%;
     --muted-foreground: 210 16% 70%;
-    --accent: 217 32% 27%;
+    --accent: 155 25% 27%;
     --accent-foreground: 142 72% 29%;
     --destructive: 0 84% 60%;
-    --destructive-foreground: 217 32% 17%;
-    --border: 217 32% 27%;
-    --input: 217 32% 27%;
+    --destructive-foreground: 155 25% 17%;
+    --border: 155 25% 27%;
+    --input: 155 25% 27%;
     --ring: 142 72% 29%;
     --radius: 0.75rem;
   }
