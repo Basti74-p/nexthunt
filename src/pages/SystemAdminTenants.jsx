@@ -13,12 +13,17 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Building2, Plus, Pencil, Search, Users, LifeBuoy } from "lucide-react";
 
 const FEATURES = [
+  { key: "feature_dashboard", label: "Dashboard" },
+  { key: "feature_reviere", label: "Reviere" },
   { key: "feature_map", label: "Karte" },
   { key: "feature_sightings", label: "Sichtungen / Wildmanagement" },
   { key: "feature_strecke", label: "Strecke" },
   { key: "feature_wildkammer", label: "Wildkammer" },
+  { key: "feature_kalender", label: "Jagdkalender" },
   { key: "feature_tasks", label: "Aufgaben" },
+  { key: "feature_personen", label: "Personen" },
   { key: "feature_driven_hunt", label: "Gesellschaftsjagd" },
+  { key: "feature_einrichtungen", label: "Jagdeinrichtungen" },
   { key: "feature_public_portal", label: "Öffentliches Portal" },
   { key: "feature_wildmarken", label: "Wildmarken" },
 ];
@@ -83,9 +88,9 @@ export default function SystemAdminTenants() {
     setEditing({
       name: "", contact_person: "", contact_email: "", phone: "", address: "",
       status: "active", plan: "starter",
-      feature_map: true, feature_sightings: true, feature_strecke: true,
-      feature_wildkammer: false, feature_tasks: true, feature_driven_hunt: false,
-      feature_public_portal: false, feature_wildmarken: false,
+      feature_dashboard: true, feature_reviere: true, feature_map: true, feature_sightings: true, feature_strecke: true,
+      feature_wildkammer: false, feature_kalender: true, feature_tasks: true, feature_personen: true,
+      feature_driven_hunt: false, feature_einrichtungen: true, feature_public_portal: false, feature_wildmarken: false,
     });
     setDialogOpen(true);
   };
