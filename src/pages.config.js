@@ -59,6 +59,21 @@ import MobileSightings from './pages/MobileSightings';
 import MobileStrecke from './pages/MobileStrecke';
 import MobileTasks from './pages/MobileTasks';
 import MobileMonitor from './pages/MobileMonitor';
+import Jagdeinrichtungen from './pages/Jagdeinrichtungen';
+import Abteilungen from './pages/Abteilungen';
+import WildRotwild from './pages/WildRotwild';
+import WildSchwarzwild from './pages/WildSchwarzwild';
+import WildRehwild from './pages/WildRehwild';
+import WildWolf from './pages/WildWolf';
+import StreckeAbschussplan from './pages/StreckeAbschussplan';
+import StreckeWildkammer from './pages/StreckeWildkammer';
+import StreckeWildverkauf from './pages/StreckeWildverkauf';
+import StreckeArchiv from './pages/StreckeArchiv';
+import Jagdkalender from './pages/Jagdkalender';
+import Jagdgaeste from './pages/Jagdgaeste';
+import Personal from './pages/Personal';
+import Aufgaben from './pages/Aufgaben';
+import Oeffentlichkeit from './pages/Oeffentlichkeit';
 import __Layout from './Layout.jsx';
 
 
@@ -75,6 +90,21 @@ export const PAGES = {
     "MobileStrecke": MobileStrecke,
     "MobileTasks": MobileTasks,
     "MobileMonitor": MobileMonitor,
+    "Jagdeinrichtungen": Jagdeinrichtungen,
+    "Abteilungen": Abteilungen,
+    "WildRotwild": WildRotwild,
+    "WildSchwarzwild": WildSchwarzwild,
+    "WildRehwild": WildRehwild,
+    "WildWolf": WildWolf,
+    "StreckeAbschussplan": StreckeAbschussplan,
+    "StreckeWildkammer": StreckeWildkammer,
+    "StreckeWildverkauf": StreckeWildverkauf,
+    "StreckeArchiv": StreckeArchiv,
+    "Jagdkalender": Jagdkalender,
+    "Jagdgaeste": Jagdgaeste,
+    "Personal": Personal,
+    "Aufgaben": Aufgaben,
+    "Oeffentlichkeit": Oeffentlichkeit,
 }
 
 export const pagesConfig = {
