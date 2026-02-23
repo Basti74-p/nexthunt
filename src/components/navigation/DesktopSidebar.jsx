@@ -5,7 +5,7 @@ import {
   LayoutDashboard, Map, TreePine, Settings, Shield,
   LogOut, ChevronDown, ChevronRight, Building, Users,
   Crosshair, Calendar, ListTodo, Globe, BookUser, Eye,
-  Layers, Truck, Archive, Radio, UserCheck, UserCog
+  Layers, Truck, Archive, Radio, UserCheck, UserCog, LifeBuoy
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { base44 } from "@/api/base44Client";
