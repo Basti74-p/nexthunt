@@ -101,27 +101,34 @@ export function AuthProvider({ children }) {
   /**
    * Check if the user has a specific module permission.
    * tenant_owner and platform_admin always have full access.
-   * Also checks license-level feature flags from tenant.
+   * If no tenantMember record found but tenant is loaded, default to allowing access
+   * (owner scenario where TenantMember record may not have been created yet).
    */
   const hasPermission = (perm) => {
     if (isPlatformAdmin || isTenantOwner) return true;
+    // If tenant is loaded but no member record exists yet, allow access (owner fallback)
+    if (tenant && !tenantMember) return true;
     return userPermissions[perm] === true;
   };
 
   /**
-   * Combined check: license enabled AND user has permission.
+   * Combined check: license enabled (from Tenant feature flags) AND user has permission.
+   * Important: undefined feature flags default to true (opt-out model) except
+   * for features that are explicitly opt-in (wildkammer, driven_hunt, public_portal, wildmarken).
    */
   const canAccess = (module) => {
+    if (isPlatformAdmin) return true;
+    const tf = tenantFeatures;
     const licenseMap = {
-      wildmanagement: tenantFeatures.feature_sightings,
-      strecke: tenantFeatures.feature_strecke,
-      wildkammer: tenantFeatures.feature_wildkammer,
+      wildmanagement: tf.feature_sightings !== false,
+      strecke: tf.feature_strecke !== false,
+      wildkammer: tf.feature_wildkammer === true,
       kalender: true,
-      aufgaben: tenantFeatures.feature_tasks,
+      aufgaben: tf.feature_tasks !== false,
       personen: true,
-      oeffentlichkeit: tenantFeatures.feature_public_portal,
+      oeffentlichkeit: tf.feature_public_portal === true,
       einrichtungen: true,
-      map: tenantFeatures.feature_map,
+      map: tf.feature_map !== false,
     };
     const licensed = licenseMap[module] !== false;
     return licensed && hasPermission(`perm_${module}`);
