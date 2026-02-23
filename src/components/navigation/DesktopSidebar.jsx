@@ -60,23 +60,21 @@ export default function DesktopSidebar({ currentPage, selectedRevier }) {
           Reviere
         </Link>
 
-        {(isTenantOwner || isPlatformAdmin) && (
-          <>
-            <p className="px-3 mt-6 mb-2 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Verwaltung</p>
-            <Link to={createPageUrl("TenantMembers")} className={navLinkClass("TenantMembers")}>
-              <Users className="w-4 h-4" />
-              Mitglieder
-            </Link>
-            <Link to={createPageUrl("Persons")} className={navLinkClass("Persons")}>
-              <Users className="w-4 h-4" />
-              Adressbuch
-            </Link>
-            <Link to={createPageUrl("TenantSettings")} className={navLinkClass("TenantSettings")}>
-              <Settings className="w-4 h-4" />
-              Einstellungen
-            </Link>
-          </>
-        )}
+        <>
+          <p className="px-3 mt-6 mb-2 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Verwaltung</p>
+          <Link to={createPageUrl("TenantMembers")} className={navLinkClass("TenantMembers")}>
+            <Users className="w-4 h-4" />
+            Mitglieder
+          </Link>
+          <Link to={createPageUrl("Persons")} className={navLinkClass("Persons")}>
+            <Users className="w-4 h-4" />
+            Adressbuch
+          </Link>
+          <Link to={createPageUrl("TenantSettings")} className={navLinkClass("TenantSettings")}>
+            <Settings className="w-4 h-4" />
+            Einstellungen
+          </Link>
+        </>
       </nav>
 
       {/* User */}
