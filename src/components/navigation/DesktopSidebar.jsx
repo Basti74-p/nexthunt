@@ -174,15 +174,15 @@ export default function DesktopSidebar({ currentPage }) {
           <div className="mb-3">
             <p className="px-3 mb-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Platform</p>
             <Link
-              to={createPageUrl("PlatformAdmin")}
+              to={createPageUrl("SystemAdmin")}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                currentPage === "PlatformAdmin"
+                ["SystemAdmin","SystemAdminTenants","SystemAdminSupport"].includes(currentPage)
                   ? "bg-[#0F2F23] text-white"
                   : "text-gray-600 hover:bg-gray-100"
               }`}
             >
               <Shield className="w-4 h-4" />
-              Administration
+              System-Administration
             </Link>
             <div className="my-3 border-t border-gray-100" />
           </div>

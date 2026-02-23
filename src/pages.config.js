@@ -82,6 +82,7 @@ import Personen from './pages/Personen';
 import SystemAdmin from './pages/SystemAdmin';
 import SystemAdminTenants from './pages/SystemAdminTenants';
 import SystemAdminSupport from './pages/SystemAdminSupport';
+import SupportTickets from './pages/SupportTickets';
 import __Layout from './Layout.jsx';
 
 
@@ -121,6 +122,7 @@ export const PAGES = {
     "SystemAdmin": SystemAdmin,
     "SystemAdminTenants": SystemAdminTenants,
     "SystemAdminSupport": SystemAdminSupport,
+    "SupportTickets": SupportTickets,
 }
 
 export const pagesConfig = {
