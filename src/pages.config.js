@@ -47,82 +47,82 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
+import Abteilungen from './pages/Abteilungen';
+import Aufgaben from './pages/Aufgaben';
 import Dashboard from './pages/Dashboard';
-import PlatformAdmin from './pages/PlatformAdmin';
-import Reviere from './pages/Reviere';
-import TenantMembers from './pages/TenantMembers';
-import Persons from './pages/Persons';
-import TenantSettings from './pages/TenantSettings';
-import RevierDetail from './pages/RevierDetail';
+import Jagdeinrichtungen from './pages/Jagdeinrichtungen';
+import Jagdgaeste from './pages/Jagdgaeste';
+import Jagdkalender from './pages/Jagdkalender';
+import JagdkalenderMain from './pages/JagdkalenderMain';
 import MobileMap from './pages/MobileMap';
+import MobileMonitor from './pages/MobileMonitor';
 import MobileSightings from './pages/MobileSightings';
 import MobileStrecke from './pages/MobileStrecke';
 import MobileTasks from './pages/MobileTasks';
-import MobileMonitor from './pages/MobileMonitor';
-import Jagdeinrichtungen from './pages/Jagdeinrichtungen';
-import Abteilungen from './pages/Abteilungen';
-import WildRotwild from './pages/WildRotwild';
-import WildSchwarzwild from './pages/WildSchwarzwild';
-import WildRehwild from './pages/WildRehwild';
-import WildWolf from './pages/WildWolf';
+import Oeffentlichkeit from './pages/Oeffentlichkeit';
+import Personal from './pages/Personal';
+import Personen from './pages/Personen';
+import Persons from './pages/Persons';
+import PlatformAdmin from './pages/PlatformAdmin';
+import Revier from './pages/Revier';
+import RevierDetail from './pages/RevierDetail';
+import Reviere from './pages/Reviere';
+import Strecke from './pages/Strecke';
 import StreckeAbschussplan from './pages/StreckeAbschussplan';
+import StreckeArchiv from './pages/StreckeArchiv';
 import StreckeWildkammer from './pages/StreckeWildkammer';
 import StreckeWildverkauf from './pages/StreckeWildverkauf';
-import StreckeArchiv from './pages/StreckeArchiv';
-import Jagdkalender from './pages/Jagdkalender';
-import Jagdgaeste from './pages/Jagdgaeste';
-import Personal from './pages/Personal';
-import Aufgaben from './pages/Aufgaben';
-import Oeffentlichkeit from './pages/Oeffentlichkeit';
-import Revier from './pages/Revier';
-import Wildmanagement from './pages/Wildmanagement';
-import Strecke from './pages/Strecke';
-import JagdkalenderMain from './pages/JagdkalenderMain';
-import Personen from './pages/Personen';
-import SystemAdmin from './pages/SystemAdmin';
-import SystemAdminTenants from './pages/SystemAdminTenants';
-import SystemAdminSupport from './pages/SystemAdminSupport';
 import SupportTickets from './pages/SupportTickets';
+import SystemAdmin from './pages/SystemAdmin';
+import SystemAdminSupport from './pages/SystemAdminSupport';
+import SystemAdminTenants from './pages/SystemAdminTenants';
+import TenantMembers from './pages/TenantMembers';
+import TenantSettings from './pages/TenantSettings';
+import WildRehwild from './pages/WildRehwild';
+import WildRotwild from './pages/WildRotwild';
+import WildSchwarzwild from './pages/WildSchwarzwild';
+import WildWolf from './pages/WildWolf';
+import Wildmanagement from './pages/Wildmanagement';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "Abteilungen": Abteilungen,
+    "Aufgaben": Aufgaben,
     "Dashboard": Dashboard,
-    "PlatformAdmin": PlatformAdmin,
-    "Reviere": Reviere,
-    "TenantMembers": TenantMembers,
-    "Persons": Persons,
-    "TenantSettings": TenantSettings,
-    "RevierDetail": RevierDetail,
+    "Jagdeinrichtungen": Jagdeinrichtungen,
+    "Jagdgaeste": Jagdgaeste,
+    "Jagdkalender": Jagdkalender,
+    "JagdkalenderMain": JagdkalenderMain,
     "MobileMap": MobileMap,
+    "MobileMonitor": MobileMonitor,
     "MobileSightings": MobileSightings,
     "MobileStrecke": MobileStrecke,
     "MobileTasks": MobileTasks,
-    "MobileMonitor": MobileMonitor,
-    "Jagdeinrichtungen": Jagdeinrichtungen,
-    "Abteilungen": Abteilungen,
-    "WildRotwild": WildRotwild,
-    "WildSchwarzwild": WildSchwarzwild,
-    "WildRehwild": WildRehwild,
-    "WildWolf": WildWolf,
+    "Oeffentlichkeit": Oeffentlichkeit,
+    "Personal": Personal,
+    "Personen": Personen,
+    "Persons": Persons,
+    "PlatformAdmin": PlatformAdmin,
+    "Revier": Revier,
+    "RevierDetail": RevierDetail,
+    "Reviere": Reviere,
+    "Strecke": Strecke,
     "StreckeAbschussplan": StreckeAbschussplan,
+    "StreckeArchiv": StreckeArchiv,
     "StreckeWildkammer": StreckeWildkammer,
     "StreckeWildverkauf": StreckeWildverkauf,
-    "StreckeArchiv": StreckeArchiv,
-    "Jagdkalender": Jagdkalender,
-    "Jagdgaeste": Jagdgaeste,
-    "Personal": Personal,
-    "Aufgaben": Aufgaben,
-    "Oeffentlichkeit": Oeffentlichkeit,
-    "Revier": Revier,
-    "Wildmanagement": Wildmanagement,
-    "Strecke": Strecke,
-    "JagdkalenderMain": JagdkalenderMain,
-    "Personen": Personen,
-    "SystemAdmin": SystemAdmin,
-    "SystemAdminTenants": SystemAdminTenants,
-    "SystemAdminSupport": SystemAdminSupport,
     "SupportTickets": SupportTickets,
+    "SystemAdmin": SystemAdmin,
+    "SystemAdminSupport": SystemAdminSupport,
+    "SystemAdminTenants": SystemAdminTenants,
+    "TenantMembers": TenantMembers,
+    "TenantSettings": TenantSettings,
+    "WildRehwild": WildRehwild,
+    "WildRotwild": WildRotwild,
+    "WildSchwarzwild": WildSchwarzwild,
+    "WildWolf": WildWolf,
+    "Wildmanagement": Wildmanagement,
 }
 
 export const pagesConfig = {

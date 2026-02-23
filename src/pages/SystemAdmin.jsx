@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAuth } from "@/components/hooks/useAuth";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import AdminLayout from "@/components/admin/AdminLayout";
 import AccessDenied from "@/components/ui/AccessDenied";
-import { Building2, Users, LifeBuoy, TrendingUp, CheckCircle2, AlertCircle, Clock } from "lucide-react";
+import PermissionsDebugView from "@/components/admin/PermissionsDebugView";
+import { Building2, Users, LifeBuoy, TrendingUp, CheckCircle2, AlertCircle, Clock, Bug } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 function StatCard({ icon: Icon, label, value, sub, color = "emerald" }) {
   const colors = {
@@ -29,6 +31,7 @@ function StatCard({ icon: Icon, label, value, sub, color = "emerald" }) {
 
 export default function SystemAdmin() {
   const { isPlatformAdmin } = useAuth();
+  const [showDebugView, setShowDebugView] = useState(false);
 
   const { data: tenants = [] } = useQuery({
     queryKey: ["sa-tenants"],
@@ -61,10 +64,26 @@ export default function SystemAdmin() {
   return (
     <AdminLayout currentPage="SystemAdmin">
       <div className="max-w-5xl mx-auto space-y-8">
-        <div>
-          <h1 className="text-2xl font-bold text-white">System-Dashboard</h1>
-          <p className="text-slate-400 text-sm mt-1">Plattform-Übersicht NextHunt</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-white">System-Dashboard</h1>
+            <p className="text-slate-400 text-sm mt-1">Plattform-Übersicht NextHunt</p>
+          </div>
+          <Button
+            onClick={() => setShowDebugView(!showDebugView)}
+            variant={showDebugView ? "default" : "outline"}
+            className={showDebugView ? "bg-emerald-600 hover:bg-emerald-700" : "border-slate-600 text-slate-300 hover:bg-slate-800"}
+          >
+            <Bug className="w-4 h-4 mr-2" />
+            {showDebugView ? "Dashboard anzeigen" : "Debug View"}
+          </Button>
         </div>
+
+        {showDebugView ? (
+          <PermissionsDebugView />
+        ) : (
+          <>
+        
 
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
