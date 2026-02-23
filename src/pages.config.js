@@ -79,6 +79,9 @@ import Wildmanagement from './pages/Wildmanagement';
 import Strecke from './pages/Strecke';
 import JagdkalenderMain from './pages/JagdkalenderMain';
 import Personen from './pages/Personen';
+import SystemAdmin from './pages/SystemAdmin';
+import SystemAdminTenants from './pages/SystemAdminTenants';
+import SystemAdminSupport from './pages/SystemAdminSupport';
 import __Layout from './Layout.jsx';
 
 
@@ -115,6 +118,9 @@ export const PAGES = {
     "Strecke": Strecke,
     "JagdkalenderMain": JagdkalenderMain,
     "Personen": Personen,
+    "SystemAdmin": SystemAdmin,
+    "SystemAdminTenants": SystemAdminTenants,
+    "SystemAdminSupport": SystemAdminSupport,
 }
 
 export const pagesConfig = {
