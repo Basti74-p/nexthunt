@@ -18,6 +18,7 @@ const NAV = [
   },
   {
     label: "Revier",
+    page: "Revier",
     icon: TreePine,
     children: [
       { label: "Karte", page: "Reviere", icon: Map },
@@ -27,6 +28,7 @@ const NAV = [
   },
   {
     label: "Wildmanagement",
+    page: "Wildmanagement",
     icon: Eye,
     children: [
       { label: "Rotwild", page: "WildRotwild", icon: TreePine },
@@ -37,6 +39,7 @@ const NAV = [
   },
   {
     label: "Strecke",
+    page: "Strecke",
     icon: Crosshair,
     children: [
       { label: "Abschussplan", page: "StreckeAbschussplan", icon: Crosshair },
@@ -47,6 +50,7 @@ const NAV = [
   },
   {
     label: "Jagdkalender",
+    page: "JagdkalenderMain",
     icon: Calendar,
     children: [
       { label: "Jagdmonitor", page: "Jagdkalender", icon: Radio },
@@ -56,6 +60,7 @@ const NAV = [
   },
   {
     label: "Personen",
+    page: "Personen",
     icon: Users,
     children: [
       { label: "Berechtigungen", page: "TenantMembers", icon: Shield },
