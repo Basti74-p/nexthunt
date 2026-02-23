@@ -20,12 +20,22 @@ export function AuthProvider({ children }) {
       const me = await base44.auth.me();
       setUser(me);
 
-      if (me.role === "platform_admin") {
+      const SYSTEM_ADMIN_EMAILS_CHECK = ["sebastianpedde2@gmail.com"];
+      if (me.role === "platform_admin" || me.role === "admin" || SYSTEM_ADMIN_EMAILS_CHECK.includes(me.email)) {
         setLoading(false);
         return;
       }
 
-      const tid = me.tenant_id;
+      // Primary: tenant_id on user object
+      // Fallback: look up tenant via TenantMember email match
+      let tid = me.tenant_id;
+      if (!tid) {
+        const memberRecords = await base44.entities.TenantMember.filter({ user_email: me.email });
+        if (memberRecords.length > 0) {
+          tid = memberRecords[0].tenant_id;
+        }
+      }
+
       if (tid) {
         const [tenants, members] = await Promise.all([
           base44.entities.Tenant.filter({ id: tid }),
