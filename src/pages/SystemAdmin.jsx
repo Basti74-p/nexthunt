@@ -83,19 +83,17 @@ export default function SystemAdmin() {
           <PermissionsDebugView />
         ) : (
           <>
-        
+            {/* Stats */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <StatCard icon={Building2} label="Kunden gesamt" value={tenants.length} color="emerald" />
+              <StatCard icon={CheckCircle2} label="Aktiv" value={active} color="emerald" />
+              <StatCard icon={AlertCircle} label="Gesperrt" value={suspended} color="red" />
+              <StatCard icon={LifeBuoy} label="Offene Tickets" value={openTickets} sub={`${inProgress} in Bearbeitung`} color="amber" />
+            </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard icon={Building2} label="Kunden gesamt" value={tenants.length} color="emerald" />
-          <StatCard icon={CheckCircle2} label="Aktiv" value={active} color="emerald" />
-          <StatCard icon={AlertCircle} label="Gesperrt" value={suspended} color="red" />
-          <StatCard icon={LifeBuoy} label="Offene Tickets" value={openTickets} sub={`${inProgress} in Bearbeitung`} color="amber" />
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Plan breakdown */}
-          <div className="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Plan breakdown */}
+              <div className="bg-slate-800 rounded-2xl p-5 border border-slate-700">
             <h2 className="text-sm font-semibold text-slate-300 mb-4">Pakete</h2>
             <div className="space-y-3">
               {planBreakdown.map(({ plan, count }) => (
@@ -110,11 +108,11 @@ export default function SystemAdmin() {
                   <span className="text-sm font-semibold text-white w-6 text-right">{count}</span>
                 </div>
               ))}
-            </div>
-          </div>
+              </div>
+              </div>
 
-          {/* Ticket summary */}
-          <div className="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+              {/* Ticket summary */}
+              <div className="bg-slate-800 rounded-2xl p-5 border border-slate-700">
             <h2 className="text-sm font-semibold text-slate-300 mb-4">Support-Tickets</h2>
             <div className="space-y-2">
               {[
@@ -126,13 +124,13 @@ export default function SystemAdmin() {
                   <span className="text-sm text-slate-400">{label}</span>
                   <span className={`text-sm font-bold ${color}`}>{value}</span>
                 </div>
-              ))}
+                ))}
+              </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        {/* Recent tenants */}
-        <div className="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+            {/* Recent tenants */}
+            <div className="bg-slate-800 rounded-2xl p-5 border border-slate-700">
           <h2 className="text-sm font-semibold text-slate-300 mb-4">Zuletzt angelegte Kunden</h2>
           <div className="space-y-2">
             {recentTenants.map(t => (
@@ -147,11 +145,11 @@ export default function SystemAdmin() {
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${t.status === "active" ? "bg-emerald-500/10 text-emerald-400" : "bg-red-500/10 text-red-400"}`}>
                   {t.status === "active" ? "Aktiv" : "Gesperrt"}
                 </span>
-              </div>
-            ))}
-          </div>
-        </div>
-        </>
+                </div>
+              ))}
+            </div>
+            </div>
+          </>
         )}
       </div>
     </AdminLayout>
