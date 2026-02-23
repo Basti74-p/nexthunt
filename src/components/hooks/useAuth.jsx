@@ -68,36 +68,47 @@ export function AuthProvider({ children }) {
         }
 
         if (members.length > 0) {
-          const m = members[0];
-          setTenantMember(m);
-          // tenant_owner gets all permissions by default
-          const isOwner = m.role === "tenant_owner";
-          setUserPermissions({
-            perm_wildmanagement: isOwner || m.perm_wildmanagement !== false,
-            perm_strecke: isOwner || m.perm_strecke !== false,
-            perm_wildkammer: isOwner || m.perm_wildkammer === true,
-            perm_kalender: isOwner || m.perm_kalender !== false,
-            perm_aufgaben: isOwner || m.perm_aufgaben !== false,
-            perm_personen: isOwner || m.perm_personen === true,
-            perm_oeffentlichkeit: isOwner || m.perm_oeffentlichkeit === true,
-            perm_einrichtungen: isOwner || m.perm_einrichtungen !== false,
-            allowed_reviere: isOwner ? [] : (m.allowed_reviere || []), // empty = all
-          });
-        } else if (isContactEmailOwner) {
-          // User is tenant owner via contact_email but no TenantMember exists yet
-          // Grant full permissions (same as tenant_owner)
-          setUserPermissions({
-            perm_wildmanagement: true,
-            perm_strecke: true,
-            perm_wildkammer: true,
-            perm_kalender: true,
-            perm_aufgaben: true,
-            perm_personen: true,
-            perm_oeffentlichkeit: true,
-            perm_einrichtungen: true,
-            allowed_reviere: [],
-          });
-        }
+                  const m = members[0];
+                  setTenantMember(m);
+                  // tenant_owner gets all permissions by default
+                  const isOwner = m.role === "tenant_owner";
+                  setUserPermissions({
+                    perm_wildmanagement: isOwner || m.perm_wildmanagement !== false,
+                    perm_strecke: isOwner || m.perm_strecke !== false,
+                    perm_wildkammer: isOwner || m.perm_wildkammer === true,
+                    perm_kalender: isOwner || m.perm_kalender !== false,
+                    perm_aufgaben: isOwner || m.perm_aufgaben !== false,
+                    perm_personen: isOwner || m.perm_personen === true,
+                    perm_oeffentlichkeit: isOwner || m.perm_oeffentlichkeit === true,
+                    perm_einrichtungen: isOwner || m.perm_einrichtungen !== false,
+                    allowed_reviere: isOwner ? [] : (m.allowed_reviere || []), // empty = all
+                  });
+                } else if (isContactEmailOwner) {
+                  // User is tenant owner via contact_email but no TenantMember exists yet
+                  // Create a virtual tenant_member object to indicate ownership
+                  setTenantMember({
+                    role: "tenant_owner",
+                    perm_wildmanagement: true,
+                    perm_strecke: true,
+                    perm_wildkammer: true,
+                    perm_kalender: true,
+                    perm_aufgaben: true,
+                    perm_personen: true,
+                    perm_oeffentlichkeit: true,
+                    perm_einrichtungen: true,
+                  });
+                  setUserPermissions({
+                    perm_wildmanagement: true,
+                    perm_strecke: true,
+                    perm_wildkammer: true,
+                    perm_kalender: true,
+                    perm_aufgaben: true,
+                    perm_personen: true,
+                    perm_oeffentlichkeit: true,
+                    perm_einrichtungen: true,
+                    allowed_reviere: [],
+                  });
+                }
       }
     } catch (e) {
       console.error("Auth error", e);
