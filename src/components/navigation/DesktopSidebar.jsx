@@ -70,6 +70,7 @@ const NAV = [
   },
   {
     label: "Karte",
+    page: "Karte",
     icon: Map,
     module: "einrichtungen",
     children: [
