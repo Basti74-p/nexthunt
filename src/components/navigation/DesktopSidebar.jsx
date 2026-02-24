@@ -201,45 +201,7 @@ function TenantSwitcher() {
   );
 }
 
-function RevierSubNav() {
-  const { tenantFeatures } = useAuth();
-  const [location, setLocation] = useState(window.location.search);
 
-  useEffect(() => {
-    const onPop = () => setLocation(window.location.search);
-    window.addEventListener("popstate", onPop);
-    return () => window.removeEventListener("popstate", onPop);
-  }, []);
-
-  const urlParams = new URLSearchParams(location);
-  const revierId = urlParams.get("id");
-  const activeTab = urlParams.get("tab") || "overview";
-
-  if (!revierId) return null;
-
-  const tabs = REVIER_TABS.filter(
-    (t) => t.feature === null || tenantFeatures[t.feature] !== false
-  );
-
-  return (
-    <div className="mt-1 ml-3 space-y-0.5 border-l-2 border-[#2d2d2d] pl-2">
-      {tabs.map(({ key, label, icon: Icon }) => (
-        <Link
-          key={key}
-          to={createPageUrl(`RevierDetail?id=${revierId}&tab=${key}`)}
-          className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-all ${
-            activeTab === key
-              ? "bg-[#22c55e] text-[#1e1e1e]"
-              : "text-gray-400 hover:bg-[#2d2d2d] hover:text-gray-200"
-          }`}
-        >
-          <Icon className="w-3.5 h-3.5 shrink-0" />
-          {label}
-        </Link>
-      ))}
-    </div>
-  );
-}
 
 export default function DesktopSidebar({ currentPage }) {
   const { user, tenant, isPlatformAdmin } = useAuth();
