@@ -54,6 +54,7 @@ import Jagdeinrichtungen from './pages/Jagdeinrichtungen';
 import Jagdgaeste from './pages/Jagdgaeste';
 import Jagdkalender from './pages/Jagdkalender';
 import JagdkalenderMain from './pages/JagdkalenderMain';
+import Karte from './pages/Karte';
 import MobileMap from './pages/MobileMap';
 import MobileMonitor from './pages/MobileMonitor';
 import MobileSightings from './pages/MobileSightings';
@@ -83,7 +84,6 @@ import WildRotwild from './pages/WildRotwild';
 import WildSchwarzwild from './pages/WildSchwarzwild';
 import WildWolf from './pages/WildWolf';
 import Wildmanagement from './pages/Wildmanagement';
-import Karte from './pages/Karte';
 import __Layout from './Layout.jsx';
 
 
@@ -95,6 +95,7 @@ export const PAGES = {
     "Jagdgaeste": Jagdgaeste,
     "Jagdkalender": Jagdkalender,
     "JagdkalenderMain": JagdkalenderMain,
+    "Karte": Karte,
     "MobileMap": MobileMap,
     "MobileMonitor": MobileMonitor,
     "MobileSightings": MobileSightings,
@@ -124,7 +125,6 @@ export const PAGES = {
     "WildSchwarzwild": WildSchwarzwild,
     "WildWolf": WildWolf,
     "Wildmanagement": Wildmanagement,
-    "Karte": Karte,
 }
 
 export const pagesConfig = {

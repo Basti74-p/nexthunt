@@ -6,7 +6,8 @@ import RevierMapCore from "@/components/map/RevierMapCore";
 import EinrichtungenLayer from "@/components/map/layers/EinrichtungenLayer";
 import WildmanagementLayer from "@/components/map/layers/WildmanagementLayer";
 import BoundaryDrawer, { BoundaryDrawerControls } from "@/components/map/BoundaryDrawer";
-import { Building2, Eye, Map as MapIcon } from "lucide-react";
+import EinrichtungForm from "@/components/map/EinrichtungForm";
+import { Building2, Eye, Map as MapIcon, Plus } from "lucide-react";
 
 const LAYERS = [
   { id: "einrichtungen", label: "Jagdeinrichtungen", icon: Building2 },
