@@ -56,7 +56,7 @@ export default function Karte() {
       try {
         const gj = JSON.parse(r.boundary_geojson);
         const coords = gj.coordinates[0].map(([lng, lat]) => [lat, lng]);
-        return { revierId: r.id, revierName: r.name, coords };
+        return { revierId: r.id, revierName: r.name, coords, color: gj.color || "#22c55e" };
       } catch { return null; }
     })
     .filter(Boolean);
