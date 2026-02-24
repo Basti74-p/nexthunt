@@ -95,12 +95,9 @@ export default function RevierDetail() {
         </div>
       </div>
 
-      {/* Tabs as sidebar-style vertical nav + content */}
-      <div className="flex gap-6">
-        <RevierTabs activeTab={activeTab} onTabChange={setActiveTab} />
-        <div className="flex-1 min-w-0">
-          {renderTab()}
-        </div>
+      {/* Content */}
+      <div>
+        {renderTab()}
       </div>
     </div>
   );
