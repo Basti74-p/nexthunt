@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 
 export default function Dashboard() {
   const { user, tenant, tenantFeatures } = useAuth();
+  const [showBoundaryHelp, setShowBoundaryHelp] = useState(false);
 
   const { data: reviere = [] } = useQuery({
     queryKey: ["reviere", tenant?.id],
