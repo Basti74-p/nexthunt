@@ -67,35 +67,33 @@ export default function RevierDetail() {
   };
 
   return (
-    <div className="-m-8">
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
-      <div className="bg-white border-b border-gray-100 px-8 py-5">
-        <div className="flex items-center gap-4 max-w-6xl mx-auto">
-          <Link
-            to={createPageUrl("Reviere")}
-            className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 transition-colors"
-          >
-            <ChevronLeft className="w-4 h-4" /> Reviere
-          </Link>
-          <div className="w-px h-6 bg-gray-200" />
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
-              <TreePine className="w-5 h-5 text-emerald-600" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-gray-900">{revier.name}</h1>
-              <p className="text-xs text-gray-500">{revier.region ? `${revier.region} • ` : ""}{revier.size_ha ? `${revier.size_ha} ha` : ""}</p>
-            </div>
+      <div className="flex items-center gap-4 mb-6">
+        <Link
+          to={createPageUrl("Reviere")}
+          className="flex items-center gap-1 text-sm text-gray-400 hover:text-gray-200 transition-colors"
+        >
+          <ChevronLeft className="w-4 h-4" /> Reviere
+        </Link>
+        <div className="w-px h-6 bg-gray-600" />
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-emerald-900/40 flex items-center justify-center">
+            <TreePine className="w-5 h-5 text-emerald-400" />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold text-gray-100">{revier.name}</h1>
+            <p className="text-xs text-gray-500">{revier.region ? `${revier.region} • ` : ""}{revier.size_ha ? `${revier.size_ha} ha` : ""}</p>
           </div>
         </div>
       </div>
 
-      {/* Tabs */}
-      <RevierTabs activeTab={activeTab} onTabChange={setActiveTab} />
-
-      {/* Content */}
-      <div className="p-8 max-w-6xl mx-auto">
-        {renderTab()}
+      {/* Tabs as sidebar-style vertical nav + content */}
+      <div className="flex gap-6">
+        <RevierTabs activeTab={activeTab} onTabChange={setActiveTab} />
+        <div className="flex-1 min-w-0">
+          {renderTab()}
+        </div>
       </div>
     </div>
   );
