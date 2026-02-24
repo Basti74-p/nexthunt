@@ -124,6 +124,15 @@ export default function Revier() {
         <DialogContent>
           <DialogHeader><DialogTitle>Neues Revier</DialogTitle></DialogHeader>
           <div className="space-y-4 mt-4">
+            {isPlatformAdmin && (
+              <div>
+                <Label>Tenant *</Label>
+                <select value={selectedTenantId} onChange={(e) => setSelectedTenantId(e.target.value)} className="w-full h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
+                  <option value="">Tenant auswählen...</option>
+                  {allTenants.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                </select>
+              </div>
+            )}
             <div><Label>Name *</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Reviername" /></div>
             <div className="grid grid-cols-2 gap-4">
               <div><Label>Region</Label><Input value={form.region} onChange={(e) => setForm({ ...form, region: e.target.value })} placeholder="z.B. Harz" /></div>
