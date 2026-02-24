@@ -69,6 +69,15 @@ const NAV = [
     ],
   },
   {
+    label: "Karte",
+    page: "Jagdeinrichtungen",
+    icon: Map,
+    module: "einrichtungen",
+    children: [
+      { label: "Jagdeinrichtungen", page: "Jagdeinrichtungen", icon: Building, module: "einrichtungen" },
+    ],
+  },
+  {
    label: "Aufgaben",
    page: "Aufgaben",
    icon: ListTodo,
