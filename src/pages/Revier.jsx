@@ -103,15 +103,15 @@ export default function Revier() {
       }
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-[#1f1f1f] text-slate-950 p-6 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border border-[#555555] shadow-lg duration-200 sm:rounded-lg">
-          <DialogHeader><DialogTitle className="text-gray-950 text-lg font-semibold tracking-tight leading-none">Neues Revier</DialogTitle></DialogHeader>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Neues Revier</DialogTitle></DialogHeader>
           <div className="space-y-4 mt-4">
-            <div><Label>Name *</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="bg-transparent text-gray-950 px-3 py-1 text-base rounded-md flex h-9 w-full border border-gray-600 shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-gray-100 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm" /></div>
+            <div><Label>Name *</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Reviername" /></div>
             <div className="grid grid-cols-2 gap-4">
-              <div><Label>Region</Label><Input value={form.region} onChange={(e) => setForm({ ...form, region: e.target.value })} className="bg-transparent text-gray-950 px-3 py-1 text-base rounded-md flex h-9 w-full border border-gray-600 shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-gray-100 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm" /></div>
-              <div><Label>Größe (ha)</Label><Input type="number" value={form.size_ha} onChange={(e) => setForm({ ...form, size_ha: e.target.value })} className="bg-transparent text-gray-950 px-3 py-1 text-base rounded-md flex h-9 w-full border border-gray-600 shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-gray-100 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm" /></div>
+              <div><Label>Region</Label><Input value={form.region} onChange={(e) => setForm({ ...form, region: e.target.value })} placeholder="z.B. Harz" /></div>
+              <div><Label>Größe (ha)</Label><Input type="number" value={form.size_ha} onChange={(e) => setForm({ ...form, size_ha: e.target.value })} placeholder="z.B. 500" /></div>
             </div>
-            <div><Label>Notizen</Label><Textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} className="bg-transparent text-gray-950 px-3 py-2 text-base rounded-md flex min-h-[60px] w-full border border-gray-600 shadow-sm placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm" /></div>
+            <div><Label>Notizen</Label><Textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Optionale Bemerkungen" /></div>
             <Button onClick={() => createMutation.mutate({ ...form, size_ha: form.size_ha ? Number(form.size_ha) : undefined })}
             disabled={!form.name || createMutation.isPending} className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl">
               {createMutation.isPending ? "Erstellen..." : "Revier erstellen"}
