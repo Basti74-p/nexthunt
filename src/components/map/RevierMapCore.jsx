@@ -31,7 +31,7 @@ L.Icon.Default.mergeOptions({
 const MAP_STYLES = [
   {
     id: "osm",
-    label: "Standard",
+    label: "OpenStreetMap",
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   },
@@ -43,7 +43,7 @@ const MAP_STYLES = [
   },
   {
     id: "topo",
-    label: "Topografisch",
+    label: "Jagdkarte (OpenTopo)",
     url: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
     attribution: '&copy; <a href="https://opentopomap.org">OpenTopoMap</a>',
   },
