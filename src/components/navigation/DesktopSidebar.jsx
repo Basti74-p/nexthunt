@@ -18,14 +18,9 @@ const NAV = [
     icon: LayoutDashboard,
   },
   {
-    label: "Revier",
-    page: "Revier",
+    label: "Reviere",
+    page: "Reviere",
     icon: TreePine,
-    children: [
-      { label: "Karte", page: "Reviere", icon: Map, module: "map" },
-      { label: "Jagdeinrichtungen", page: "Jagdeinrichtungen", icon: Building, module: "einrichtungen" },
-      { label: "Abteilungen", page: "Abteilungen", icon: Layers },
-    ],
   },
   {
     label: "Wildmanagement",
