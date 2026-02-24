@@ -3,9 +3,15 @@ import { base44 } from "@/api/base44Client";
 
 const AuthContext = createContext(null);
 
+// Persist selected tenant for platform admins across navigation
+const ADMIN_TENANT_KEY = "nh_admin_selected_tenant";
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [tenant, setTenant] = useState(null);
+  const [adminSelectedTenant, setAdminSelectedTenant] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(ADMIN_TENANT_KEY)) || null; } catch { return null; }
+  });
   const [tenantMember, setTenantMember] = useState(null);
   const [tenantFeatures, setTenantFeatures] = useState({});
   const [userPermissions, setUserPermissions] = useState({});
