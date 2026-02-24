@@ -168,6 +168,7 @@ export default function Karte() {
                 points={drawnPoints}
                 onPoint={(p) => setDrawnPoints(prev => [...prev, p])}
                 boundaries={boundaries}
+                previewColor={boundaryColor}
               />
             </RevierMapCore>
 
