@@ -25,6 +25,7 @@ export default function Karte() {
   const [showAssign, setShowAssign] = useState(false);
   const [assignRevierId, setAssignRevierId] = useState("");
   const [saving, setSaving] = useState(false);
+  const [boundaryColor, setBoundaryColor] = useState("#22c55e");
   // boundaries state passed from BoundaryDrawer via ref pattern – we use queryClient to reload reviere
   const [boundariesState, setBoundariesState] = useState([]);
 
