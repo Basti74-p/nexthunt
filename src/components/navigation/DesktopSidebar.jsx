@@ -201,9 +201,17 @@ function TenantSwitcher() {
   );
 }
 
-function RevierSubNav({ currentPage }) {
+function RevierSubNav() {
   const { tenantFeatures } = useAuth();
-  const urlParams = new URLSearchParams(window.location.search);
+  const [location, setLocation] = useState(window.location.search);
+
+  useEffect(() => {
+    const onPop = () => setLocation(window.location.search);
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+
+  const urlParams = new URLSearchParams(location);
   const revierId = urlParams.get("id");
   const activeTab = urlParams.get("tab") || "overview";
 
