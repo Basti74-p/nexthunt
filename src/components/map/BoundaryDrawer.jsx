@@ -1,22 +1,21 @@
 /**
- * BoundaryDrawer – Zeichnet Reviergrenzen auf der Karte und speichert sie als GeoJSON am Revier.
- * Wird als Layer in RevierMapCore verwendet.
+ * BoundaryDrawer – Zeichnet Reviergrenzen auf der Karte (Polygon-Layer + Klick-Capture).
+ * State wird vom Parent (Karte.js) verwaltet und via Props übergeben.
  */
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { useMap, Polygon, Marker, Polyline, useMapEvents } from "react-leaflet";
+import React from "react";
+import { Polygon, Marker, Polyline, useMapEvents } from "react-leaflet";
 import L from "leaflet";
-import { base44 } from "@/api/base44Client";
 import { Pencil, Trash2, Save, X, Check, MapPin } from "lucide-react";
 
 const VERTEX_ICON = L.divIcon({
   className: "",
-  html: `<div style="width:10px;height:10px;background:white;border:2px solid #22c55e;border-radius:50%;cursor:pointer;"></div>`,
+  html: `<div style="width:10px;height:10px;background:white;border:2px solid #22c55e;border-radius:50%;"></div>`,
   iconSize: [10, 10],
   iconAnchor: [5, 5],
 });
 
-// Zeichenmodus – fängt Klicks auf der Karte ab
-function DrawingCapture({ onPoint, active }) {
+// Captures map clicks when drawing
+function DrawingCapture({ active, onPoint }) {
   useMapEvents({
     click(e) {
       if (active) onPoint([e.latlng.lat, e.latlng.lng]);
@@ -25,102 +24,14 @@ function DrawingCapture({ onPoint, active }) {
   return null;
 }
 
-export default function BoundaryDrawer({ reviere = [], onSaved }) {
-  const map = useMap();
-  const [drawing, setDrawing] = useState(false);
-  const [points, setPoints] = useState([]);
-  const [saved, setSaved] = useState(false);
-  const [showAssign, setShowAssign] = useState(false);
-  const [selectedRevierId, setSelectedRevierId] = useState("");
-  const [saving, setSaving] = useState(false);
-
-  // Load existing boundaries
-  const [boundaries, setBoundaries] = useState(() => {
-    return reviere
-      .filter(r => r.boundary_geojson)
-      .map(r => {
-        try {
-          const gj = JSON.parse(r.boundary_geojson);
-          const coords = gj.coordinates[0].map(([lng, lat]) => [lat, lng]);
-          return { revierId: r.id, revierName: r.name, coords };
-        } catch { return null; }
-      })
-      .filter(Boolean);
-  });
-
-  // Reload when reviere changes
-  useEffect(() => {
-    setBoundaries(
-      reviere
-        .filter(r => r.boundary_geojson)
-        .map(r => {
-          try {
-            const gj = JSON.parse(r.boundary_geojson);
-            const coords = gj.coordinates[0].map(([lng, lat]) => [lat, lng]);
-            return { revierId: r.id, revierName: r.name, coords };
-          } catch { return null; }
-        })
-        .filter(Boolean)
-    );
-  }, [reviere]);
-
-  const startDrawing = () => {
-    setDrawing(true);
-    setPoints([]);
-    setSaved(false);
-    map.getContainer().style.cursor = "crosshair";
-  };
-
-  const cancelDrawing = () => {
-    setDrawing(false);
-    setPoints([]);
-    setShowAssign(false);
-    map.getContainer().style.cursor = "";
-  };
-
-  const undoLast = () => {
-    setPoints(prev => prev.slice(0, -1));
-  };
-
-  const finishDrawing = () => {
-    if (points.length < 3) return;
-    setDrawing(false);
-    setShowAssign(true);
-    map.getContainer().style.cursor = "";
-    if (reviere.length === 1) setSelectedRevierId(reviere[0].id);
-  };
-
-  const handleSave = async () => {
-    if (!selectedRevierId || points.length < 3) return;
-    setSaving(true);
-    // Build GeoJSON polygon (close the ring)
-    const coords = [...points, points[0]].map(([lat, lng]) => [lng, lat]);
-    const geojson = JSON.stringify({
-      type: "Polygon",
-      coordinates: [coords],
-    });
-    await base44.entities.Revier.update(selectedRevierId, { boundary_geojson: geojson });
-    setSaving(false);
-    setShowAssign(false);
-    setPoints([]);
-    // Add to local boundaries
-    const revier = reviere.find(r => r.id === selectedRevierId);
-    setBoundaries(prev => [
-      ...prev.filter(b => b.revierId !== selectedRevierId),
-      { revierId: selectedRevierId, revierName: revier?.name || "", coords: points },
-    ]);
-    onSaved?.();
-  };
-
-  const deleteBoundary = async (revierId) => {
-    await base44.entities.Revier.update(revierId, { boundary_geojson: null });
-    setBoundaries(prev => prev.filter(b => b.revierId !== revierId));
-    onSaved?.();
-  };
-
+/**
+ * BoundaryDrawer – inside MapContainer
+ * Props: reviere, drawing, points, onPoint, boundaries
+ */
+export default function BoundaryDrawer({ drawing, points = [], onPoint, boundaries = [] }) {
   return (
     <>
-      {/* Existing boundaries */}
+      {/* Existing saved boundaries */}
       {boundaries.map(b => (
         <Polygon
           key={b.revierId}
@@ -129,26 +40,32 @@ export default function BoundaryDrawer({ reviere = [], onSaved }) {
         />
       ))}
 
-      {/* Current drawing */}
+      {/* Current drawing preview */}
       {points.length >= 2 && (
-        <Polyline positions={[...points, points[0]]} pathOptions={{ color: "#22c55e", weight: 2, dashArray: "5 5" }} />
+        <Polyline
+          positions={[...points, points[0]]}
+          pathOptions={{ color: "#22c55e", weight: 2, dashArray: "5 5", opacity: 0.8 }}
+        />
       )}
       {points.map((p, i) => (
         <Marker key={i} position={p} icon={VERTEX_ICON} />
       ))}
 
-      {/* Drawing capture */}
-      <DrawingCapture active={drawing} onPoint={(p) => setPoints(prev => [...prev, p])} />
-
-      {/* UI Controls – rendered outside map via portal-like absolute div */}
+      <DrawingCapture active={drawing} onPoint={onPoint} />
     </>
   );
 }
 
-// Separate UI panel rendered inside the parent (not inside MapContainer)
-export function BoundaryDrawerControls({ drawing, points, onStart, onFinish, onUndo, onCancel, showAssign, reviere, selectedRevierId, onSelectRevier, onSave, saving, boundaries, onDeleteBoundary }) {
+/**
+ * BoundaryDrawerControls – outside MapContainer (absolute positioned panel)
+ */
+export function BoundaryDrawerControls({
+  drawing, points, onStart, onFinish, onUndo, onCancel,
+  showAssign, reviere, selectedRevierId, onSelectRevier, onSave, saving,
+  boundaries, onDeleteBoundary,
+}) {
   return (
-    <div className="absolute bottom-16 left-3 z-[1000] flex flex-col gap-2 max-w-[260px]">
+    <div className="absolute bottom-16 left-3 z-[1000] flex flex-col gap-2 w-64">
       {!drawing && !showAssign && (
         <div className="flex flex-col gap-1.5">
           <button
@@ -158,11 +75,11 @@ export function BoundaryDrawerControls({ drawing, points, onStart, onFinish, onU
             <Pencil className="w-3.5 h-3.5 text-[#22c55e]" />
             Reviergrenze einzeichnen
           </button>
-          {/* List of existing boundaries */}
+
           {boundaries.length > 0 && (
             <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
               <div className="px-3 py-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider border-b border-gray-50">
-                Eingezeichnete Grenzen
+                Gespeicherte Grenzen
               </div>
               {boundaries.map(b => (
                 <div key={b.revierId} className="flex items-center justify-between px-3 py-1.5 hover:bg-gray-50">
@@ -183,7 +100,9 @@ export function BoundaryDrawerControls({ drawing, points, onStart, onFinish, onU
             <MapPin className="w-3.5 h-3.5 text-[#22c55e]" />
             <span className="text-sm font-medium text-gray-700">Grenze zeichnen</span>
           </div>
-          <p className="text-xs text-gray-500">{points.length} Punkte gesetzt. Auf die Karte klicken um Punkte hinzuzufügen.</p>
+          <p className="text-xs text-gray-500">
+            {points.length} Punkte gesetzt. Auf die Karte klicken um Punkte hinzuzufügen.
+          </p>
           <div className="flex gap-2">
             <button
               disabled={points.length === 0}
@@ -223,7 +142,10 @@ export function BoundaryDrawerControls({ drawing, points, onStart, onFinish, onU
             ))}
           </select>
           <div className="flex gap-2">
-            <button onClick={onCancel} className="flex-1 text-xs px-2 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50">
+            <button
+              onClick={onCancel}
+              className="flex-1 text-xs px-2 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50"
+            >
               Abbrechen
             </button>
             <button
