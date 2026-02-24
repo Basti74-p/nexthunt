@@ -83,7 +83,8 @@ export default function Karte() {
   };
 
   // Boundary drawing handlers
-  const handleStart = () => { setDrawing(true); setDrawnPoints([]); };
+  const handleStart = () => { setDrawing(true); setDrawnPoints([]); document.querySelector('.leaflet-container').style.cursor = 'crosshair'; };
+  const _origCancel = handleCancel;
   const handleFinish = () => {
     if (drawnPoints.length < 3) return;
     setDrawing(false);
