@@ -20,7 +20,15 @@ import RevierPublic from "@/components/revier/RevierPublic";
 export default function RevierDetail() {
   const urlParams = new URLSearchParams(window.location.search);
   const revierId = urlParams.get("id");
-  const [activeTab, setActiveTab] = useState("overview");
+  const activeTab = urlParams.get("tab") || "overview";
+
+  const setActiveTab = (tab) => {
+    const params = new URLSearchParams(window.location.search);
+    params.set("tab", tab);
+    window.history.pushState({}, "", `?${params.toString()}`);
+    // force re-render
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  };
 
   const { data: revier, isLoading } = useQuery({
     queryKey: ["revier", revierId],
