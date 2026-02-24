@@ -189,7 +189,7 @@ export function AuthProvider({ children }) {
     <AuthContext.Provider
       value={{
         user,
-        tenant,
+        tenant: activeTenant,
         tenantMember,
         tenantFeatures,
         userPermissions,
@@ -201,6 +201,8 @@ export function AuthProvider({ children }) {
         canAccessRevier,
         hasPermission,
         reload: loadUser,
+        switchTenant,
+        adminSelectedTenant,
       }}
     >
       {children}
