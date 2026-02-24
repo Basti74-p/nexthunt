@@ -146,7 +146,7 @@ export default function Karte() {
             </select>
           )}
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Layer:</span>
             {LAYERS.map(l => (
               <button
@@ -162,6 +162,13 @@ export default function Karte() {
                 {l.label}
               </button>
             ))}
+            <button
+              onClick={() => { setFormCoords({ lat: null, lng: null }); setShowEinrichtungForm(true); }}
+              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl bg-[#22c55e] text-black font-medium hover:bg-[#16a34a] transition-all"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              Einrichtung
+            </button>
           </div>
         </div>
       </div>
