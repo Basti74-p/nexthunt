@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/components/hooks/useAuth";
 import RevierMapCore from "@/components/map/RevierMapCore";
 import EinrichtungenLayer from "@/components/map/layers/EinrichtungenLayer";
 import WildmanagementLayer from "@/components/map/layers/WildmanagementLayer";
+import BoundaryDrawer, { BoundaryDrawerControls } from "@/components/map/BoundaryDrawer";
 import { Building2, Eye, Map as MapIcon } from "lucide-react";
 
 const LAYERS = [
@@ -14,14 +15,50 @@ const LAYERS = [
 
 export default function Karte() {
   const { tenant } = useAuth();
+  const queryClient = useQueryClient();
   const [activeLayers, setActiveLayers] = useState(new Set(["einrichtungen", "sichtungen"]));
   const [selectedRevierId, setSelectedRevierId] = useState(null);
+
+  // Boundary drawer state
+  const [drawing, setDrawing] = useState(false);
+  const [drawnPoints, setDrawnPoints] = useState([]);
+  const [showAssign, setShowAssign] = useState(false);
+  const [assignRevierId, setAssignRevierId] = useState("");
+  const [saving, setSaving] = useState(false);
+  // boundaries state passed from BoundaryDrawer via ref pattern – we use queryClient to reload reviere
+  const [boundariesState, setBoundariesState] = useState([]);
 
   const { data: reviere = [] } = useQuery({
     queryKey: ["reviere", tenant?.id],
     queryFn: () => base44.entities.Revier.filter({ tenant_id: tenant.id }),
     enabled: !!tenant?.id,
+    onSuccess: (data) => {
+      // Rebuild boundaries
+      const b = data
+        .filter(r => r.boundary_geojson)
+        .map(r => {
+          try {
+            const gj = JSON.parse(r.boundary_geojson);
+            const coords = gj.coordinates[0].map(([lng, lat]) => [lat, lng]);
+            return { revierId: r.id, revierName: r.name, coords };
+          } catch { return null; }
+        })
+        .filter(Boolean);
+      setBoundariesState(b);
+    },
   });
+
+  // Also compute boundaries from reviere directly
+  const boundaries = reviere
+    .filter(r => r.boundary_geojson)
+    .map(r => {
+      try {
+        const gj = JSON.parse(r.boundary_geojson);
+        const coords = gj.coordinates[0].map(([lng, lat]) => [lat, lng]);
+        return { revierId: r.id, revierName: r.name, coords };
+      } catch { return null; }
+    })
+    .filter(Boolean);
 
   const selectedRevier = reviere.find(r => r.id === selectedRevierId) || reviere[0] || null;
 
@@ -45,6 +82,33 @@ export default function Karte() {
     });
   };
 
+  // Boundary drawing handlers
+  const handleStart = () => { setDrawing(true); setDrawnPoints([]); };
+  const handleFinish = () => {
+    if (drawnPoints.length < 3) return;
+    setDrawing(false);
+    setShowAssign(true);
+    if (reviere.length === 1) setAssignRevierId(reviere[0].id);
+  };
+  const handleUndo = () => setDrawnPoints(prev => prev.slice(0, -1));
+  const handleCancel = () => { setDrawing(false); setDrawnPoints([]); setShowAssign(false); setAssignRevierId(""); };
+  const handleSave = async () => {
+    if (!assignRevierId || drawnPoints.length < 3) return;
+    setSaving(true);
+    const coords = [...drawnPoints, drawnPoints[0]].map(([lat, lng]) => [lng, lat]);
+    const geojson = JSON.stringify({ type: "Polygon", coordinates: [coords] });
+    await base44.entities.Revier.update(assignRevierId, { boundary_geojson: geojson });
+    setSaving(false);
+    setShowAssign(false);
+    setDrawnPoints([]);
+    setAssignRevierId("");
+    queryClient.invalidateQueries(["reviere", tenant?.id]);
+  };
+  const handleDeleteBoundary = async (revierId) => {
+    await base44.entities.Revier.update(revierId, { boundary_geojson: null });
+    queryClient.invalidateQueries(["reviere", tenant?.id]);
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between flex-wrap gap-3">
@@ -54,7 +118,6 @@ export default function Karte() {
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
-          {/* Revier selector */}
           {reviere.length > 1 && (
             <select
               value={selectedRevier?.id || ""}
@@ -67,7 +130,6 @@ export default function Karte() {
             </select>
           )}
 
-          {/* Layer toggles */}
           <div className="flex items-center gap-2">
             <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Layer:</span>
             {LAYERS.map(l => (
@@ -90,10 +152,36 @@ export default function Karte() {
 
       {selectedRevier ? (
         <>
-          <RevierMapCore revier={selectedRevier} height="calc(100vh - 180px)">
-            {activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} />}
-            {activeLayers.has("sichtungen") && <WildmanagementLayer items={wildmanagement} />}
-          </RevierMapCore>
+          <div className="relative">
+            <RevierMapCore revier={selectedRevier} height="calc(100vh - 180px)">
+              {activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} />}
+              {activeLayers.has("sichtungen") && <WildmanagementLayer items={wildmanagement} />}
+              <BoundaryDrawer
+                reviere={reviere}
+                drawing={drawing}
+                points={drawnPoints}
+                onPoint={(p) => setDrawnPoints(prev => [...prev, p])}
+                boundaries={boundaries}
+              />
+            </RevierMapCore>
+
+            <BoundaryDrawerControls
+              drawing={drawing}
+              points={drawnPoints}
+              onStart={handleStart}
+              onFinish={handleFinish}
+              onUndo={handleUndo}
+              onCancel={handleCancel}
+              showAssign={showAssign}
+              reviere={reviere}
+              selectedRevierId={assignRevierId}
+              onSelectRevier={setAssignRevierId}
+              onSave={handleSave}
+              saving={saving}
+              boundaries={boundaries}
+              onDeleteBoundary={handleDeleteBoundary}
+            />
+          </div>
           <p className="text-xs text-gray-500 text-center">
             {einrichtungen.filter(e => e.latitude).length} Einrichtungen · {wildmanagement.filter(w => w.latitude).length} Sichtungen · {selectedRevier.name}
           </p>
