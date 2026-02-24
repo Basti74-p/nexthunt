@@ -118,6 +118,13 @@ export default function Karte() {
     queryClient.invalidateQueries(["reviere", tenant?.id]);
   };
 
+  const handleMapClick = (e) => {
+    if (e.latlng) {
+      setFormCoords({ lat: e.latlng.lat, lng: e.latlng.lng });
+      setShowEinrichtungForm(true);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between flex-wrap gap-3">
