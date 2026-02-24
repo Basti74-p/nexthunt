@@ -211,12 +211,21 @@ export default function Karte() {
           <p className="text-xs text-gray-500 text-center">
             {einrichtungen.filter(e => e.latitude).length} Einrichtungen · {wildmanagement.filter(w => w.latitude).length} Sichtungen · {selectedRevier.name}
           </p>
-        </>
-      ) : (
-        <div className="flex items-center justify-center h-64 text-gray-500">
+
+          <EinrichtungForm
+           isOpen={showEinrichtungForm}
+           onClose={() => setShowEinrichtungForm(false)}
+           revierId={selectedRevier?.id}
+           tenantId={tenant?.id}
+           lat={formCoords.lat}
+           lng={formCoords.lng}
+          />
+          </>
+          ) : (
+          <div className="flex items-center justify-center h-64 text-gray-500">
           Kein Revier verfügbar
-        </div>
-      )}
-    </div>
-  );
-}
+          </div>
+          )}
+          </div>
+          );
+          }
