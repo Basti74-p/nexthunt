@@ -59,10 +59,19 @@ export default function BoundaryDrawer({ drawing, points = [], onPoint, boundari
 /**
  * BoundaryDrawerControls – outside MapContainer (absolute positioned panel)
  */
+const COLORS = [
+  { hex: "#22c55e", label: "Grün" },
+  { hex: "#ef4444", label: "Rot" },
+  { hex: "#3b82f6", label: "Blau" },
+  { hex: "#f59e0b", label: "Orange" },
+  { hex: "#a855f7", label: "Lila" },
+  { hex: "#ffffff", label: "Weiß" },
+];
+
 export function BoundaryDrawerControls({
   drawing, points, onStart, onFinish, onUndo, onCancel,
   showAssign, reviere, selectedRevierId, onSelectRevier, onSave, saving,
-  boundaries, onDeleteBoundary,
+  boundaries, onDeleteBoundary, boundaryColor, onColorChange,
 }) {
   return (
     <div className="absolute bottom-16 left-3 z-[1000] flex flex-col gap-2 w-64">
