@@ -27,11 +27,19 @@ export default function Revier() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (data) => base44.entities.Revier.create({ ...data, tenant_id: tenant.id, status: "active" }),
+    mutationFn: (data) => {
+      const tid = tenant?.id;
+      if (!tid) throw new Error("Kein Tenant gefunden");
+      return base44.entities.Revier.create({ ...data, tenant_id: tid, status: "active" });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reviere"] });
       setDialogOpen(false);
       setForm({ name: "", region: "", size_ha: "", notes: "" });
+    },
+    onError: (err) => {
+      console.error("Fehler beim Erstellen:", err);
+      alert("Fehler: " + err.message);
     }
   });
 
