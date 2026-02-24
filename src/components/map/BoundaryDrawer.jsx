@@ -44,7 +44,7 @@ export default function BoundaryDrawer({ drawing, points = [], onPoint, boundari
       {points.length >= 2 && (
         <Polyline
           positions={[...points, points[0]]}
-          pathOptions={{ color: previewColor || "#22c55e", weight: 2, dashArray: "5 5", opacity: 0.8 }}
+          pathOptions={{ color: boundaryColor || "#22c55e", weight: 2, dashArray: "5 5", opacity: 0.8 }}
         />
       )}
       {points.map((p, i) => (
