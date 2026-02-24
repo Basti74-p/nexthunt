@@ -102,7 +102,7 @@ export default function Karte() {
     if (!assignRevierId || drawnPoints.length < 3) return;
     setSaving(true);
     const coords = [...drawnPoints, drawnPoints[0]].map(([lat, lng]) => [lng, lat]);
-    const geojson = JSON.stringify({ type: "Polygon", coordinates: [coords] });
+    const geojson = JSON.stringify({ type: "Polygon", coordinates: [coords], color: boundaryColor });
     await base44.entities.Revier.update(assignRevierId, { boundary_geojson: geojson });
     setSaving(false);
     setShowAssign(false);
