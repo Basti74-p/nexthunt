@@ -140,7 +140,7 @@ export default function Revier() {
             </div>
             <div><Label>Notizen</Label><Textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Optionale Bemerkungen" /></div>
             <Button onClick={() => createMutation.mutate({ ...form, size_ha: form.size_ha ? Number(form.size_ha) : undefined })}
-            disabled={!form.name || createMutation.isPending} className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl">
+            disabled={!form.name || createMutation.isPending || (isPlatformAdmin && !selectedTenantId)} className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl">
               {createMutation.isPending ? "Erstellen..." : "Revier erstellen"}
             </Button>
           </div>
