@@ -187,6 +187,8 @@ export default function Karte() {
               saving={saving}
               boundaries={boundaries}
               onDeleteBoundary={handleDeleteBoundary}
+              boundaryColor={boundaryColor}
+              onColorChange={setBoundaryColor}
             />
           </div>
           <p className="text-xs text-gray-500 text-center">
