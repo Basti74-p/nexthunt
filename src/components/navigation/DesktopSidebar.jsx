@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import {
-  LayoutDashboard, Map, TreePine, Settings, Shield,
-  LogOut, ChevronDown, ChevronRight, Building, Users,
-  Crosshair, Calendar, ListTodo, Globe, BookUser, Eye,
-  Layers, Truck, Archive, Radio, UserCheck, UserCog, LifeBuoy, Tag, ChevronsUpDown
+  LayoutDashboard, TreePine, Shield,
+  LogOut, ChevronDown, ChevronRight, Users,
+  Crosshair, Calendar, ListTodo, Globe, Eye,
+  Truck, Archive, Radio, UserCheck, UserCog, LifeBuoy, Tag, ChevronsUpDown, Map, Building
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { base44 } from "@/api/base44Client";
