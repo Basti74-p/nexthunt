@@ -140,6 +140,27 @@ export function BoundaryDrawerControls({
             <Check className="w-3.5 h-3.5 text-[#22c55e]" />
             <span className="text-sm font-medium text-gray-700">Revier zuweisen</span>
           </div>
+          <div>
+            <div className="text-xs text-gray-500 mb-1.5">Grenzfarbe</div>
+            <div className="flex gap-1.5 flex-wrap items-center">
+              {COLORS.map(c => (
+                <button
+                  key={c.hex}
+                  title={c.label}
+                  onClick={() => onColorChange(c.hex)}
+                  className="w-5 h-5 rounded-full border-2 transition-transform hover:scale-110"
+                  style={{ background: c.hex, borderColor: boundaryColor === c.hex ? "#1a1a1a" : "#d1d5db" }}
+                />
+              ))}
+              <input
+                type="color"
+                value={boundaryColor}
+                onChange={e => onColorChange(e.target.value)}
+                title="Eigene Farbe"
+                className="w-5 h-5 rounded cursor-pointer border border-gray-300 p-0"
+              />
+            </div>
+          </div>
           <select
             value={selectedRevierId}
             onChange={e => onSelectRevier(e.target.value)}
