@@ -123,20 +123,50 @@ export default function Dashboard() {
       </div>
 
       {/* Open Tasks */}
-      {aufgaben.length > 0 && (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Offene Aufgaben</h2>
-          <div className="space-y-2">
-            {aufgaben.slice(0, 5).map((a) => (
-              <div key={a.id} className="flex items-center gap-3 p-3 rounded-xl bg-gray-50">
-                <div className="w-2 h-2 rounded-full bg-amber-400" />
-                <span className="text-sm text-gray-700 flex-1">{a.title}</span>
-                {a.due_date && <span className="text-xs text-gray-400">{a.due_date}</span>}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
+       {aufgaben.length > 0 && (
+         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+           <h2 className="text-lg font-semibold text-gray-900 mb-4">Offene Aufgaben</h2>
+           <div className="space-y-2">
+             {aufgaben.slice(0, 5).map((a) => (
+               <div key={a.id} className="flex items-center gap-3 p-3 rounded-xl bg-gray-50">
+                 <div className="w-2 h-2 rounded-full bg-amber-400" />
+                 <span className="text-sm text-gray-700 flex-1">{a.title}</span>
+                 {a.due_date && <span className="text-xs text-gray-400">{a.due_date}</span>}
+               </div>
+             ))}
+           </div>
+         </div>
+       )}
+
+       {/* Boundary Drawing Help Dialog */}
+       <Dialog open={showBoundaryHelp} onOpenChange={setShowBoundaryHelp}>
+         <DialogContent>
+           <DialogHeader>
+             <DialogTitle>Reviergrenzen einzeichnen</DialogTitle>
+           </DialogHeader>
+           <div className="space-y-3 text-sm text-gray-600">
+             <p>Um Reviergrenzen einzuzeichnen, gehen Sie zur <strong>Karte</strong> und nutzen Sie den Button "Reviergrenze einzeichnen".</p>
+             <p>So funktioniert es:</p>
+             <ol className="list-decimal list-inside space-y-2 ml-2">
+               <li>Klicken Sie auf den Button "Reviergrenze einzeichnen"</li>
+               <li>Klicken Sie auf die Karte, um Punkte zu setzen</li>
+               <li>Setzen Sie mindestens 3 Punkte</li>
+               <li>Klicken Sie "Fertig", um die Grenze zu speichern</li>
+               <li>Wählen Sie ein Revier und eine Farbe</li>
+               <li>Klicken Sie "Speichern"</li>
+             </ol>
+             <div className="pt-2">
+               <Link
+                 to={createPageUrl("Karte")}
+                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0F2F23] text-white text-sm font-medium hover:opacity-90 transition-opacity"
+               >
+                 <Map className="w-4 h-4" />
+                 Zur Karte
+               </Link>
+             </div>
+           </div>
+         </DialogContent>
+       </Dialog>
+      </div>
+      );
+      }
