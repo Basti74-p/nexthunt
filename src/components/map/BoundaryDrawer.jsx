@@ -77,39 +77,11 @@ export function BoundaryDrawerControls({
     <div className="absolute bottom-16 left-3 z-[1000] flex flex-col gap-2 w-64">
       {!drawing && !showAssign && (
         <div className="flex flex-col gap-1.5">
-          <div className="bg-white border border-gray-200 rounded-xl shadow-md px-3 py-2 flex flex-col gap-2">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full border border-gray-300" style={{ background: boundaryColor }} />
-              <span className="text-xs font-medium text-gray-600">Grenzfarbe</span>
-            </div>
-            <div className="flex gap-1.5 flex-wrap">
-              {COLORS.map(c => (
-                <button
-                  key={c.hex}
-                  title={c.label}
-                  onClick={() => onColorChange(c.hex)}
-                  className="w-5 h-5 rounded-full border-2 transition-transform hover:scale-110"
-                  style={{
-                    background: c.hex,
-                    borderColor: boundaryColor === c.hex ? "#1a1a1a" : "#d1d5db",
-                  }}
-                />
-              ))}
-              <input
-                type="color"
-                value={boundaryColor}
-                onChange={e => onColorChange(e.target.value)}
-                title="Eigene Farbe"
-                className="w-5 h-5 rounded-full cursor-pointer border border-gray-300 p-0 overflow-hidden"
-                style={{ background: "transparent" }}
-              />
-            </div>
-          </div>
           <button
             onClick={onStart}
             className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-xl shadow-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
           >
-            <Pencil className="w-3.5 h-3.5" style={{ color: boundaryColor }} />
+            <Pencil className="w-3.5 h-3.5 text-[#22c55e]" />
             Reviergrenze einzeichnen
           </button>
 
