@@ -82,17 +82,21 @@ export default function Karte() {
     });
   };
 
+  const resetCursor = () => { const el = document.querySelector('.leaflet-container'); if (el) el.style.cursor = ''; };
+
   // Boundary drawing handlers
-  const handleStart = () => { setDrawing(true); setDrawnPoints([]); document.querySelector('.leaflet-container').style.cursor = 'crosshair'; };
-  const _origCancel = handleCancel;
+  const handleStart = () => {
+    setDrawing(true); setDrawnPoints([]);
+    const el = document.querySelector('.leaflet-container');
+    if (el) el.style.cursor = 'crosshair';
+  };
   const handleFinish = () => {
     if (drawnPoints.length < 3) return;
-    setDrawing(false);
-    setShowAssign(true);
+    setDrawing(false); setShowAssign(true); resetCursor();
     if (reviere.length === 1) setAssignRevierId(reviere[0].id);
   };
   const handleUndo = () => setDrawnPoints(prev => prev.slice(0, -1));
-  const handleCancel = () => { setDrawing(false); setDrawnPoints([]); setShowAssign(false); setAssignRevierId(""); };
+  const handleCancel = () => { setDrawing(false); setDrawnPoints([]); setShowAssign(false); setAssignRevierId(""); resetCursor(); };
   const handleSave = async () => {
     if (!assignRevierId || drawnPoints.length < 3) return;
     setSaving(true);
