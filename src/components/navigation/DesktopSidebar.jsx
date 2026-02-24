@@ -248,12 +248,7 @@ export default function DesktopSidebar({ currentPage }) {
         )}
 
         {NAV.map(item => (
-          <div key={item.label}>
-            <NavItem item={item} currentPage={currentPage} />
-            {item.page === "Reviere" && currentPage === "RevierDetail" && (
-              <RevierSubNav />
-            )}
-          </div>
+          <NavItem key={item.label} item={item} currentPage={currentPage} />
         ))}
       </nav>
 
