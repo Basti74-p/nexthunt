@@ -33,10 +33,10 @@ export default function BoundaryDrawer({ drawing, points = [], onPoint, boundari
     <>
       {/* Existing saved boundaries */}
       {boundaries.map(b => (
-        <Polygon
+        <Polyline
           key={b.revierId}
-          positions={b.coords}
-          pathOptions={{ color: b.color || "#22c55e", fillColor: b.color || "#22c55e", fillOpacity: 0.08, weight: 2, dashArray: "6 3" }}
+          positions={[...b.coords, b.coords[0]]}
+          pathOptions={{ color: b.color || "#22c55e", weight: 2, dashArray: "6 3" }}
         />
       ))}
 
