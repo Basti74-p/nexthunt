@@ -36,7 +36,7 @@ export default function BoundaryDrawer({ drawing, points = [], onPoint, boundari
         <Polygon
           key={b.revierId}
           positions={b.coords}
-          pathOptions={{ color: "#22c55e", fillColor: "#22c55e", fillOpacity: 0.08, weight: 2, dashArray: "6 3" }}
+          pathOptions={{ color: b.color || "#22c55e", fillColor: b.color || "#22c55e", fillOpacity: 0.08, weight: 2, dashArray: "6 3" }}
         />
       ))}
 
@@ -44,7 +44,7 @@ export default function BoundaryDrawer({ drawing, points = [], onPoint, boundari
       {points.length >= 2 && (
         <Polyline
           positions={[...points, points[0]]}
-          pathOptions={{ color: "#22c55e", weight: 2, dashArray: "5 5", opacity: 0.8 }}
+          pathOptions={{ color: previewColor || "#22c55e", weight: 2, dashArray: "5 5", opacity: 0.8 }}
         />
       )}
       {points.map((p, i) => (
