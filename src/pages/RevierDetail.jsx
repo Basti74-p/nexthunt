@@ -5,7 +5,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { ChevronLeft, TreePine, Loader2 } from "lucide-react";
-import RevierTabs from "@/components/navigation/RevierTabs";
 import RevierOverview from "@/components/revier/RevierOverview";
 import RevierMap from "@/components/revier/RevierMap";
 import RevierEinrichtungen from "@/components/revier/RevierEinrichtungen";
