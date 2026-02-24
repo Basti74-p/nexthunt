@@ -43,7 +43,7 @@ export default function Revier() {
     }
   });
 
-  const canManage = isTenantOwner || isPlatformAdmin;
+  const canManage = (isTenantOwner || isPlatformAdmin) && !!tenant?.id;
 
   const quickLinks = [
   { label: "Karte", page: "Reviere", icon: Map, desc: "Revierkarte und Grenzen" },
