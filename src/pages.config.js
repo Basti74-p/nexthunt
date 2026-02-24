@@ -83,6 +83,7 @@ import WildRotwild from './pages/WildRotwild';
 import WildSchwarzwild from './pages/WildSchwarzwild';
 import WildWolf from './pages/WildWolf';
 import Wildmanagement from './pages/Wildmanagement';
+import Karte from './pages/Karte';
 import __Layout from './Layout.jsx';
 
 
@@ -123,6 +124,7 @@ export const PAGES = {
     "WildSchwarzwild": WildSchwarzwild,
     "WildWolf": WildWolf,
     "Wildmanagement": Wildmanagement,
+    "Karte": Karte,
 }
 
 export const pagesConfig = {
