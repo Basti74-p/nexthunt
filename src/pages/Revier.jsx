@@ -18,17 +18,27 @@ export default function Revier() {
   const { tenant, isTenantOwner, isPlatformAdmin } = useAuth();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [form, setForm] = React.useState({ name: "", region: "", size_ha: "", notes: "" });
+  const [selectedTenantId, setSelectedTenantId] = React.useState("");
   const queryClient = useQueryClient();
 
+  // Load all tenants for platform admins
+  const { data: allTenants = [] } = useQuery({
+    queryKey: ["all-tenants"],
+    queryFn: () => base44.entities.Tenant.list(),
+    enabled: isPlatformAdmin
+  });
+
+  const activeTenantId = isPlatformAdmin ? selectedTenantId : tenant?.id;
+
   const { data: reviere = [], isLoading } = useQuery({
-    queryKey: ["reviere", tenant?.id],
-    queryFn: () => base44.entities.Revier.filter({ tenant_id: tenant?.id }),
-    enabled: !!tenant?.id
+    queryKey: ["reviere", activeTenantId],
+    queryFn: () => base44.entities.Revier.filter({ tenant_id: activeTenantId }),
+    enabled: !!activeTenantId
   });
 
   const createMutation = useMutation({
     mutationFn: (data) => {
-      const tid = tenant?.id;
+      const tid = activeTenantId;
       if (!tid) throw new Error("Kein Tenant gefunden");
       return base44.entities.Revier.create({ ...data, tenant_id: tid, status: "active" });
     },
@@ -43,7 +53,7 @@ export default function Revier() {
     }
   });
 
-  const canManage = (isTenantOwner || isPlatformAdmin) && !!tenant?.id;
+  const canManage = isTenantOwner || isPlatformAdmin;
 
   const quickLinks = [
   { label: "Karte", page: "Reviere", icon: Map, desc: "Revierkarte und Grenzen" },
