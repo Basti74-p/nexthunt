@@ -28,7 +28,7 @@ function DrawingCapture({ active, onPoint }) {
  * BoundaryDrawer – inside MapContainer
  * Props: reviere, drawing, points, onPoint, boundaries
  */
-export default function BoundaryDrawer({ drawing, points = [], onPoint, boundaries = [] }) {
+export default function BoundaryDrawer({ drawing, points = [], onPoint, boundaries = [], boundaryColor }) {
   return (
     <>
       {/* Existing saved boundaries */}
