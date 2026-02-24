@@ -70,7 +70,6 @@ const NAV = [
   },
   {
     label: "Karte",
-    page: "Jagdeinrichtungen",
     icon: Map,
     module: "einrichtungen",
     children: [
