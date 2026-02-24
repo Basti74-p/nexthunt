@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAuth } from "@/components/hooks/useAuth";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Map, Crosshair, ListTodo, Users, Calendar, TreePine, ArrowRight } from "lucide-react";
+import { Map, Crosshair, ListTodo, Users, Calendar, TreePine, ArrowRight, Pencil } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export default function Dashboard() {
   const { user, tenant, tenantFeatures } = useAuth();
