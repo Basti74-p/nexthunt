@@ -158,6 +158,41 @@ function NavItem({ item, currentPage, depth = 0 }) {
   );
 }
 
+function TenantSwitcher() {
+  const { tenant, switchTenant } = useAuth();
+  const [tenants, setTenants] = useState([]);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    base44.entities.Tenant.list().then(setTenants).catch(() => {});
+  }, []);
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg bg-[#2d2d2d] hover:bg-[#3a3a3a] text-xs text-gray-300 transition-colors"
+      >
+        <span className="flex-1 text-left truncate">{tenant?.name || "Tenant wählen..."}</span>
+        <ChevronsUpDown className="w-3 h-3 text-gray-500 shrink-0" />
+      </button>
+      {open && (
+        <div className="absolute left-0 right-0 top-full mt-1 bg-[#1e1e1e] border border-[#3a3a3a] rounded-xl shadow-xl z-50 max-h-60 overflow-y-auto">
+          {tenants.map(t => (
+            <button
+              key={t.id}
+              onClick={() => { switchTenant(t); setOpen(false); }}
+              className={`w-full text-left px-3 py-2 text-xs hover:bg-[#2d2d2d] transition-colors ${tenant?.id === t.id ? "text-[#22c55e] font-semibold" : "text-gray-300"}`}
+            >
+              {t.name}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function DesktopSidebar({ currentPage }) {
   const { user, tenant, isPlatformAdmin } = useAuth();
 
