@@ -29,6 +29,8 @@ export default function Karte() {
   const [boundaryColor, setBoundaryColor] = useState("#22c55e");
   // boundaries state passed from BoundaryDrawer via ref pattern – we use queryClient to reload reviere
   const [boundariesState, setBoundariesState] = useState([]);
+  const [showEinrichtungForm, setShowEinrichtungForm] = useState(false);
+  const [formCoords, setFormCoords] = useState({ lat: null, lng: null });
 
   const { data: reviere = [] } = useQuery({
     queryKey: ["reviere", tenant?.id],
