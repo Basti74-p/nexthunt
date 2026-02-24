@@ -128,6 +128,14 @@ export function AuthProvider({ children }) {
   const isTenantOwner = tenantMember?.role === "tenant_owner";
   const isTenantMember = !!tenantMember || !!user?.tenant_id;
 
+  // For platform admins: the "active" tenant is the manually selected one
+  const activeTenant = isPlatformAdmin ? (adminSelectedTenant || tenant) : tenant;
+
+  const switchTenant = async (tenantObj) => {
+    setAdminSelectedTenant(tenantObj);
+    try { localStorage.setItem(ADMIN_TENANT_KEY, JSON.stringify(tenantObj)); } catch {}
+  };
+
   /**
    * Check if the current user can access a specific revier.
    * tenant_owner and platform_admin can always access all.
