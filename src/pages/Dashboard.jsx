@@ -79,16 +79,25 @@ export default function Dashboard() {
       </div>
 
       {/* Reviere Quick Access */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">Ihre Reviere</h2>
-          <Link
-            to={createPageUrl("Reviere")}
-            className="text-sm text-[#0F2F23] font-medium flex items-center gap-1 hover:underline"
-          >
-            Alle anzeigen <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
+       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
+         <div className="flex items-center justify-between mb-4">
+           <h2 className="text-lg font-semibold text-gray-900">Ihre Reviere</h2>
+           <div className="flex items-center gap-2">
+             <button
+               onClick={() => setShowBoundaryHelp(true)}
+               className="text-sm text-[#0F2F23] font-medium flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50 border border-gray-100 transition-colors"
+             >
+               <Pencil className="w-3.5 h-3.5" />
+               Grenzen einzeichnen
+             </button>
+             <Link
+               to={createPageUrl("Reviere")}
+               className="text-sm text-[#0F2F23] font-medium flex items-center gap-1 hover:underline"
+             >
+               Alle anzeigen <ArrowRight className="w-4 h-4" />
+             </Link>
+           </div>
+         </div>
         {reviere.length === 0 ? (
           <p className="text-sm text-gray-500">Noch keine Reviere angelegt.</p>
         ) : (
