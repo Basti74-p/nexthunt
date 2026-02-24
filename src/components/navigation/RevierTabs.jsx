@@ -26,19 +26,19 @@ export default function RevierTabs({ activeTab, onTabChange }) {
   );
 
   return (
-    <div className="border-b border-gray-100 bg-white overflow-x-auto">
-      <div className="flex gap-1 px-4 py-2 min-w-max">
+    <div className="w-48 shrink-0">
+      <div className="flex flex-col gap-0.5">
         {tabs.map(({ key, label, icon: Icon }) => (
           <button
             key={key}
             onClick={() => onTabChange(key)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
+            className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left ${
               activeTab === key
-                ? "bg-[#0F2F23] text-white shadow-sm"
-                : "text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                ? "bg-[#22c55e] text-[#1e1e1e]"
+                : "text-gray-400 hover:bg-[#2d2d2d] hover:text-gray-200"
             }`}
           >
-            <Icon className="w-4 h-4" />
+            <Icon className="w-4 h-4 shrink-0" />
             {label}
           </button>
         ))}
