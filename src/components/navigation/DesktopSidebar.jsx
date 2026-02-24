@@ -10,6 +10,19 @@ import {
 import { useAuth } from "../hooks/useAuth";
 import { base44 } from "@/api/base44Client";
 
+const REVIER_TABS = [
+  { key: "overview", label: "Übersicht", icon: LayoutDashboard, feature: null },
+  { key: "map", label: "Karte", icon: Map, feature: "feature_map" },
+  { key: "einrichtungen", label: "Jagdeinrichtungen", icon: Building, feature: null },
+  { key: "wildmanagement", label: "Wildmanagement", icon: Eye, feature: "feature_sightings" },
+  { key: "strecke", label: "Strecke", icon: Crosshair, feature: "feature_strecke" },
+  { key: "wildmarken", label: "Wildmarken", icon: Tag, feature: "feature_wildmarken" },
+  { key: "kalender", label: "Jagdkalender", icon: Calendar, feature: null },
+  { key: "aufgaben", label: "Aufgaben", icon: ListTodo, feature: "feature_tasks" },
+  { key: "gesellschaftsjagd", label: "Gesellschaftsjagd", icon: Users, feature: "feature_driven_hunt" },
+  { key: "public", label: "Öffentlich", icon: Globe, feature: "feature_public_portal" },
+];
+
 // module key maps to canAccess() key. undefined = always visible
 const NAV = [
   {
