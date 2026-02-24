@@ -72,17 +72,21 @@ function SearchControl({ onResult }) {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const inputRef = useRef(null);
+  const debounceRef = useRef(null);
 
   const search = useCallback(async (q) => {
-    if (!q.trim()) return;
+    if (!q.trim() || q.trim().length < 2) { setResults([]); return; }
     setLoading(true);
-    const res = await fetch(
-      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=5`,
-      { headers: { "Accept-Language": "de" } }
-    );
-    const data = await res.json();
-    setResults(data);
-    setLoading(false);
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=7&addressdetails=1&countrycodes=de,at,ch`,
+        { headers: { "Accept-Language": "de" } }
+      );
+      const data = await res.json();
+      setResults(data);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -90,12 +94,45 @@ function SearchControl({ onResult }) {
     else setTimeout(() => inputRef.current?.focus(), 50);
   }, [open]);
 
+  const handleChange = (e) => {
+    const val = e.target.value;
+    setQuery(val);
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => search(val), 350);
+  };
+
   const handleKey = (e) => {
-    if (e.key === "Enter") search(query);
+    if (e.key === "Enter") { clearTimeout(debounceRef.current); search(query); }
+    if (e.key === "Escape") setOpen(false);
+  };
+
+  const handleSelect = (r) => {
+    onResult([parseFloat(r.lat), parseFloat(r.lon)], r.display_name);
+    setOpen(false);
+  };
+
+  // Format result label: prefer short display
+  const formatLabel = (r) => {
+    const a = r.address || {};
+    const parts = [
+      a.road || a.pedestrian || a.path,
+      a.house_number,
+      a.village || a.town || a.city || a.municipality,
+      a.state,
+    ].filter(Boolean);
+    return parts.length > 0 ? parts.join(", ") : r.display_name;
+  };
+
+  const getType = (r) => {
+    const a = r.address || {};
+    if (a.city || a.town || a.village) return "Ort";
+    if (a.road || a.pedestrian) return "Straße";
+    if (r.type === "forest" || r.type === "wood") return "Wald";
+    return r.class || "";
   };
 
   return (
-    <div className="absolute top-3 left-3 z-[1000] flex flex-col gap-1 w-72 max-w-[calc(100vw-24px)]">
+    <div className="absolute top-3 left-3 z-[1000] flex flex-col gap-1 w-80 max-w-[calc(100vw-24px)]">
       {!open ? (
         <button
           onClick={() => setOpen(true)}
@@ -106,36 +143,45 @@ function SearchControl({ onResult }) {
         </button>
       ) : (
         <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-          <div className="flex items-center gap-2 px-3 py-2.5">
-            {loading ? <Loader2 className="w-4 h-4 text-gray-400 animate-spin" /> : <Search className="w-4 h-4 text-gray-400" />}
+          <div className="flex items-center gap-2 px-3 py-2.5 border-b border-gray-50">
+            {loading ? <Loader2 className="w-4 h-4 text-gray-400 animate-spin flex-shrink-0" /> : <Search className="w-4 h-4 text-gray-400 flex-shrink-0" />}
             <input
               ref={inputRef}
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={handleChange}
               onKeyDown={handleKey}
-              placeholder="Ort, Adresse suchen..."
-              className="flex-1 text-sm outline-none text-gray-900 placeholder:text-gray-400"
+              placeholder="Ort, Adresse, Waldgebiet..."
+              className="flex-1 text-sm outline-none text-gray-900 placeholder:text-gray-400 bg-transparent"
             />
-            <button onClick={() => setOpen(false)}>
-              <X className="w-4 h-4 text-gray-400 hover:text-gray-600" />
+            {query && (
+              <button onClick={() => { setQuery(""); setResults([]); inputRef.current?.focus(); }}>
+                <X className="w-3.5 h-3.5 text-gray-400 hover:text-gray-600" />
+              </button>
+            )}
+            <button onClick={() => setOpen(false)} className="ml-1">
+              <X className="w-4 h-4 text-gray-300 hover:text-gray-500" />
             </button>
           </div>
           {results.length > 0 && (
-            <div className="border-t border-gray-100 max-h-48 overflow-y-auto">
+            <div className="max-h-56 overflow-y-auto">
               {results.map((r) => (
                 <button
                   key={r.place_id}
-                  className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                  onClick={() => {
-                    onResult([parseFloat(r.lat), parseFloat(r.lon)], r.display_name);
-                    setOpen(false);
-                  }}
+                  className="w-full text-left px-3 py-2.5 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0"
+                  onClick={() => handleSelect(r)}
                 >
-                  {r.display_name}
+                  <div className="text-sm text-gray-800 font-medium truncate">{formatLabel(r)}</div>
+                  <div className="text-xs text-gray-400 truncate mt-0.5">{r.display_name}</div>
                 </button>
               ))}
             </div>
           )}
+          {!loading && query.length >= 2 && results.length === 0 && (
+            <div className="px-3 py-3 text-sm text-gray-400 text-center">Keine Ergebnisse</div>
+          )}
+          <div className="px-3 py-1.5 text-[10px] text-gray-300 text-right border-t border-gray-50">
+            © OpenStreetMap / Nominatim
+          </div>
         </div>
       )}
     </div>
