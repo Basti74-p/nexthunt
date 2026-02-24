@@ -286,12 +286,12 @@ export default function DesktopSidebar({ currentPage }) {
         )}
 
         {NAV.map(item => (
-          <React.Fragment key={item.label}>
+          <div key={item.label}>
             <NavItem item={item} currentPage={currentPage} />
             {item.page === "Reviere" && currentPage === "RevierDetail" && (
-              <RevierSubNav currentPage={currentPage} />
+              <RevierSubNav />
             )}
-          </React.Fragment>
+          </div>
         ))}
       </nav>
 
