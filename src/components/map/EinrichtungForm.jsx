@@ -12,9 +12,14 @@ const TYPE_OPTIONS = [
   { value: "hochsitz", label: "Hochsitz" },
   { value: "leiter", label: "Leiter" },
   { value: "erdsitz", label: "Erdsitz" },
+  { value: "drueckjagdbock", label: "Drückjagdbock" },
+  { value: "ansitzdrueckjagdleiter", label: "Ansitzdrückjagdleiter" },
   { value: "kirrung", label: "Kirrung" },
   { value: "salzlecke", label: "Salzlecke" },
   { value: "suhle", label: "Suhle" },
+  { value: "wildacker", label: "Wildacker" },
+  { value: "fuetterung", label: "Fütterung" },
+  { value: "fanganlage", label: "Fanganlage" },
 ];
 
 const CONDITION_OPTIONS = [
