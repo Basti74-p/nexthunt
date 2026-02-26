@@ -81,6 +81,7 @@ export function BoundaryDrawerControls({
   drawing, points, onStart, onFinish, onUndo, onCancel,
   showAssign, reviere, selectedRevierId, onSelectRevier, onSave, saving,
   boundaries, onDeleteBoundary, boundaryColor, onColorChange, onCreateNewRevier,
+  highlightedRevierId, onHighlightRevier,
 }) {
   const [newRevierName, setNewRevierName] = useState("");
   const [showNewRevierInput, setShowNewRevierInput] = useState(false);
