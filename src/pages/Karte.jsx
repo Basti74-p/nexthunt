@@ -8,7 +8,6 @@ import WildmanagementLayer from "@/components/map/layers/WildmanagementLayer";
 import BoundaryDrawer, { BoundaryDrawerControls } from "@/components/map/BoundaryDrawer";
 import EinrichtungForm from "@/components/map/EinrichtungForm";
 import { Building2, Eye, Map as MapIcon, Plus, Pencil } from "lucide-react";
-import WindWidget from "@/components/map/WindWidget";
 
 const LAYERS = [
   { id: "einrichtungen", label: "Jagdeinrichtungen", icon: Building2 },
