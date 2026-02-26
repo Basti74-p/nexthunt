@@ -182,6 +182,41 @@ export function BoundaryDrawerControls({
               <option key={r.id} value={r.id}>{r.name}</option>
             ))}
           </select>
+
+          {!showNewRevierInput ? (
+            <button
+              onClick={() => setShowNewRevierInput(true)}
+              className="w-full text-xs px-2 py-1.5 rounded-lg border border-dashed border-[#22c55e] text-[#22c55e] hover:bg-[#22c55e]/10 flex items-center justify-center gap-1 transition-colors"
+            >
+              <Plus className="w-3 h-3" />
+              Neues Revier erstellen
+            </button>
+          ) : (
+            <div className="flex gap-1.5">
+              <input
+                autoFocus
+                type="text"
+                placeholder="Reviername..."
+                value={newRevierName}
+                onChange={e => setNewRevierName(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && handleCreateRevier()}
+                className="flex-1 text-xs bg-gray-50 border border-gray-200 rounded-lg px-2 py-1.5 focus:outline-none focus:border-[#22c55e] text-gray-800"
+              />
+              <button
+                onClick={handleCreateRevier}
+                disabled={!newRevierName.trim()}
+                className="px-2 py-1.5 rounded-lg bg-[#22c55e] text-white disabled:opacity-40"
+              >
+                <Check className="w-3.5 h-3.5" />
+              </button>
+              <button
+                onClick={() => { setShowNewRevierInput(false); setNewRevierName(""); }}
+                className="px-2 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-50"
+              >
+                <X className="w-3.5 h-3.5 text-gray-500" />
+              </button>
+            </div>
+          )}
           <div className="flex gap-2">
             <button
               onClick={onCancel}
