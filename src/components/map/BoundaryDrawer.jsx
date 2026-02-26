@@ -28,17 +28,26 @@ function DrawingCapture({ active, onPoint }) {
  * BoundaryDrawer – inside MapContainer
  * Props: reviere, drawing, points, onPoint, boundaries
  */
-export default function BoundaryDrawer({ drawing, points = [], onPoint, boundaries = [], boundaryColor }) {
+export default function BoundaryDrawer({ drawing, points = [], onPoint, boundaries = [], boundaryColor, highlightedRevierId }) {
   return (
     <>
       {/* Existing saved boundaries */}
-      {boundaries.map(b => (
-        <Polyline
-          key={b.revierId}
-          positions={[...b.coords, b.coords[0]]}
-          pathOptions={{ color: b.color || "#22c55e", weight: 2, dashArray: "6 3" }}
-        />
-      ))}
+      {boundaries.map(b => {
+        const isHighlighted = b.revierId === highlightedRevierId;
+        return isHighlighted ? (
+          <Polygon
+            key={b.revierId}
+            positions={b.coords}
+            pathOptions={{ color: b.color || "#22c55e", weight: 3, fillColor: b.color || "#22c55e", fillOpacity: 0.2 }}
+          />
+        ) : (
+          <Polyline
+            key={b.revierId}
+            positions={[...b.coords, b.coords[0]]}
+            pathOptions={{ color: b.color || "#22c55e", weight: 2, dashArray: "6 3" }}
+          />
+        );
+      })}
 
       {/* Current drawing preview */}
       {points.length >= 2 && (
