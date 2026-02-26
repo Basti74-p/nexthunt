@@ -163,12 +163,19 @@ export default function Karte() {
               </button>
             ))}
             <button
-              onClick={() => { setFormCoords({ lat: null, lng: null }); setShowEinrichtungForm(true); }}
-              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl bg-[#22c55e] text-black font-medium hover:bg-[#16a34a] transition-all"
-            >
-              <Plus className="w-3.5 h-3.5" />
-              Einrichtung
-            </button>
+               onClick={() => { setFormCoords({ lat: null, lng: null }); setShowEinrichtungForm(true); }}
+               className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl bg-[#22c55e] text-black font-medium hover:bg-[#16a34a] transition-all"
+             >
+               <Plus className="w-3.5 h-3.5" />
+               Einrichtung
+             </button>
+             <button
+               onClick={handleStart}
+               className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl border border-[#3a3a3a] bg-[#2d2d2d] text-gray-300 font-medium hover:border-gray-500 transition-all"
+             >
+               <Pencil className="w-3.5 h-3.5" />
+               Reviergrenze
+             </button>
           </div>
         </div>
       </div>
