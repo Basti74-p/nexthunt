@@ -90,7 +90,7 @@ export function BoundaryDrawerControls({
         <div className="flex flex-col gap-1.5">
           {boundaries.length > 0 && (
             <div className="bg-gray-800/70 backdrop-blur-sm border border-gray-600/40 rounded-xl shadow-sm overflow-hidden">
-              <div className="px-3 py-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider border-b border-gray-50">
+              <div className="px-3 py-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider border-b border-gray-600/40">
                 Gespeicherte Grenzen
               </div>
               {boundaries.map(b => (
