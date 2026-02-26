@@ -191,7 +191,7 @@ export default function Karte() {
       {selectedRevier ? (
         <>
           <div className="relative">
-            <RevierMapCore revier={selectedRevier} height="calc(100vh - 180px)">
+            <RevierMapCore revier={selectedRevier} height="calc(100vh - 180px)" onMapClick={handleMapClick}>
               {activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} />}
               {activeLayers.has("sichtungen") && <WildmanagementLayer items={wildmanagement} />}
               <BoundaryDrawer
