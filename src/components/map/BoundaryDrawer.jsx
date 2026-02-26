@@ -2,10 +2,10 @@
  * BoundaryDrawer – Zeichnet Reviergrenzen auf der Karte (Polygon-Layer + Klick-Capture).
  * State wird vom Parent (Karte.js) verwaltet und via Props übergeben.
  */
-import React from "react";
+import React, { useState } from "react";
 import { Polygon, Marker, Polyline, useMapEvents } from "react-leaflet";
 import L from "leaflet";
-import { Pencil, Trash2, Save, X, Check, MapPin } from "lucide-react";
+import { Pencil, Trash2, Save, X, Check, MapPin, Plus } from "lucide-react";
 
 const VERTEX_ICON = L.divIcon({
   className: "",
