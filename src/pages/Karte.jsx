@@ -222,6 +222,8 @@ export default function Karte() {
               boundaryColor={boundaryColor}
               onColorChange={setBoundaryColor}
               onCreateNewRevier={handleCreateNewRevier}
+              highlightedRevierId={highlightedRevierId}
+              onHighlightRevier={setHighlightedRevierId}
             />
           </div>
           <p className="text-xs text-gray-500 text-center">
