@@ -181,11 +181,15 @@ export default function Karte() {
               </button>
             ))}
             <button
-               onClick={() => { setFormCoords({ lat: null, lng: null }); setShowEinrichtungForm(true); }}
-               className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl bg-[#22c55e] text-black font-medium hover:bg-[#16a34a] transition-all"
+               onClick={handleStartPlacingEinrichtung}
+               className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl font-medium transition-all ${
+                 placingEinrichtung
+                   ? "bg-yellow-500 text-black border border-yellow-400"
+                   : "bg-[#22c55e] text-black hover:bg-[#16a34a]"
+               }`}
              >
                <Plus className="w-3.5 h-3.5" />
-               Einrichtung
+               {placingEinrichtung ? "Klick auf Karte..." : "Einrichtung"}
              </button>
              <button
                onClick={handleStart}
