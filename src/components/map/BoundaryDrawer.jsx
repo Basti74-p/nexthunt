@@ -104,12 +104,19 @@ export function BoundaryDrawerControls({
                 Gespeicherte Grenzen
               </div>
               {boundaries.map(b => (
-                <div key={b.revierId} className="flex items-center justify-between px-3 py-1.5 hover:bg-white/10">
-                <span className="text-xs text-gray-200 truncate">{b.revierName}</span>
-                  <button onClick={() => onDeleteBoundary(b.revierId)} className="ml-2 text-red-400 hover:text-red-600">
-                    <Trash2 className="w-3 h-3" />
-                  </button>
-                </div>
+                 <div
+                   key={b.revierId}
+                   onClick={() => onHighlightRevier && onHighlightRevier(b.revierId === highlightedRevierId ? null : b.revierId)}
+                   className={`flex items-center justify-between px-3 py-1.5 cursor-pointer transition-colors ${b.revierId === highlightedRevierId ? "bg-white/20" : "hover:bg-white/10"}`}
+                 >
+                   <div className="flex items-center gap-2 min-w-0">
+                     <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: b.color || "#22c55e" }} />
+                     <span className={`text-xs truncate ${b.revierId === highlightedRevierId ? "text-white font-medium" : "text-gray-200"}`}>{b.revierName}</span>
+                   </div>
+                   <button onClick={(e) => { e.stopPropagation(); onDeleteBoundary(b.revierId); }} className="ml-2 text-red-400 hover:text-red-600 flex-shrink-0">
+                     <Trash2 className="w-3 h-3" />
+                   </button>
+                 </div>
               ))}
             </div>
           )}
