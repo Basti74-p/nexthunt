@@ -246,7 +246,10 @@ export default function Karte() {
             {einrichtungen.filter(e => e.latitude).length} Einrichtungen · {wildmanagement.filter(w => w.latitude).length} Sichtungen · {selectedRevier.name}
           </p>
 
-          <WindWidget lat={selectedRevier?.boundary_geojson ? (() => { try { const g = JSON.parse(selectedRevier.boundary_geojson); return g.coordinates[0][0][1]; } catch { return 51.1657; } })() : 51.1657} lng={selectedRevier?.boundary_geojson ? (() => { try { const g = JSON.parse(selectedRevier.boundary_geojson); return g.coordinates[0][0][0]; } catch { return 10.4515; } })() : 10.4515} />
+          <WindWidget
+            lat={boundaries[0]?.coords[0]?.[0] ?? 51.1657}
+            lng={boundaries[0]?.coords[0]?.[1] ?? 10.4515}
+          />
 
           <EinrichtungForm
            isOpen={showEinrichtungForm}
