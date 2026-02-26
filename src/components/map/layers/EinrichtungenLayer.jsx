@@ -7,10 +7,10 @@ import { Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 
 const TYPE_COLORS = {
-  hochsitz: "#0F2F23",
-  leiter: "#0F2F23",
+  hochsitz: "#dc2626",
+  leiter: "#dc2626",
   erdsitz: "#374151",
-  drueckjagdbock: "#14532d",
+  drueckjagdbock: "#dc2626",
   ansitzdrueckjagdleiter: "#166534",
   kirrung: "#92400e",
   salzlecke: "#1d4ed8",
