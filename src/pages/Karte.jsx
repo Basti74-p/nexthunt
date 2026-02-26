@@ -200,6 +200,7 @@ export default function Karte() {
                 onPoint={(p) => setDrawnPoints(prev => [...prev, p])}
                 boundaries={boundaries}
                 previewColor={boundaryColor}
+                highlightedRevierId={highlightedRevierId}
               />
             </RevierMapCore>
 
