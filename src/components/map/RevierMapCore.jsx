@@ -57,11 +57,16 @@ const USER_ICON = L.divIcon({
 });
 
 // Internal component to handle map events and expose map instance
-function MapController({ onMapReady }) {
+function MapController({ onMapReady, onMapClick }) {
   const map = useMap();
   useEffect(() => {
     onMapReady(map);
   }, [map]);
+  useMapEvents({
+    click(e) {
+      onMapClick && onMapClick(e);
+    },
+  });
   return null;
 }
 
