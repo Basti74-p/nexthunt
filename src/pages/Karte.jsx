@@ -128,10 +128,19 @@ export default function Karte() {
 
   const handleMapClick = (e) => {
     if (drawing || showAssign) return;
-    if (e.latlng) {
+    if (placingEinrichtung && e.latlng) {
       setFormCoords({ lat: e.latlng.lat, lng: e.latlng.lng });
       setShowEinrichtungForm(true);
+      setPlacingEinrichtung(false);
+      const el = document.querySelector('.leaflet-container');
+      if (el) el.style.cursor = '';
     }
+  };
+
+  const handleStartPlacingEinrichtung = () => {
+    setPlacingEinrichtung(true);
+    const el = document.querySelector('.leaflet-container');
+    if (el) el.style.cursor = 'crosshair';
   };
 
   return (
