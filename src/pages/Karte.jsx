@@ -126,6 +126,7 @@ export default function Karte() {
   };
 
   const handleMapClick = (e) => {
+    if (drawing || showAssign) return;
     if (e.latlng) {
       setFormCoords({ lat: e.latlng.lat, lng: e.latlng.lng });
       setShowEinrichtungForm(true);
