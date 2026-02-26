@@ -75,7 +75,7 @@ export default function EinrichtungForm({ isOpen, onClose, revierId, tenantId, l
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md bg-[#2d2d2d] border-[#3a3a3a]">
+      <DialogContent className="max-w-md bg-[#2d2d2d] border-[#3a3a3a]" style={{ zIndex: 10000 }}>
         <DialogHeader>
           <DialogTitle className="text-gray-100">Jagdeinrichtung hinzufügen</DialogTitle>
         </DialogHeader>
