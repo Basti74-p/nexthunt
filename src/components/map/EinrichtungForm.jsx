@@ -35,6 +35,17 @@ export default function EinrichtungForm({ isOpen, onClose, revierId, tenantId, l
     longitude: lng || "",
   });
 
+  // Sync coordinates when dialog opens with new click position
+  React.useEffect(() => {
+    if (isOpen) {
+      setFormData(prev => ({
+        ...prev,
+        latitude: lat || "",
+        longitude: lng || "",
+      }));
+    }
+  }, [isOpen, lat, lng]);
+
   const mutation = useMutation({
     mutationFn: (data) =>
       base44.entities.Jagdeinrichtung.create({
