@@ -197,7 +197,7 @@ function SearchControl({ onResult }) {
 function StyleControl({ currentStyle, onStyleChange }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="absolute top-3 right-3 z-[1000]">
+    <div className="absolute bottom-24 right-3 z-[1000]">
       {open ? (
         <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden min-w-[140px]">
           <div className="px-3 py-2 border-b border-gray-50 flex items-center justify-between">
