@@ -83,7 +83,7 @@ export default function WindWidget({ lat, lng }) {
   return (
     <div
       className="absolute z-[1000] bg-[#1a1a1a]/90 backdrop-blur-sm border border-[#3a3a3a] rounded-xl shadow-lg overflow-hidden"
-      style={{ top: 110, right: 52, minWidth: 160 }}
+      style={{ bottom: 100, right: 52, minWidth: 160 }}
     >
       <button
         onClick={() => setExpanded(p => !p)}
