@@ -219,6 +219,7 @@ export default function Karte() {
               onDeleteBoundary={handleDeleteBoundary}
               boundaryColor={boundaryColor}
               onColorChange={setBoundaryColor}
+              onCreateNewRevier={handleCreateNewRevier}
             />
           </div>
           <p className="text-xs text-gray-500 text-center">
