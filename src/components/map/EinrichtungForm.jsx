@@ -90,7 +90,7 @@ export default function EinrichtungForm({ isOpen, onClose, revierId, tenantId, l
             <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
               <SelectValue placeholder="Typ auswählen" />
             </SelectTrigger>
-            <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
+            <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]" style={{ zIndex: 10001 }}>
               {TYPE_OPTIONS.map((opt) => (
                 <SelectItem key={opt.value} value={opt.value}>
                   {opt.label}
