@@ -118,6 +118,12 @@ export default function Karte() {
     queryClient.invalidateQueries(["reviere", tenant?.id]);
   };
 
+  const handleCreateNewRevier = async (name) => {
+    const newRevier = await base44.entities.Revier.create({ tenant_id: tenant.id, name, status: "active" });
+    queryClient.invalidateQueries(["reviere", tenant?.id]);
+    return newRevier.id;
+  };
+
   const handleMapClick = (e) => {
     if (e.latlng) {
       setFormCoords({ lat: e.latlng.lat, lng: e.latlng.lng });
