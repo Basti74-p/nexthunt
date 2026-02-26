@@ -32,6 +32,7 @@ export default function Karte() {
   const [showEinrichtungForm, setShowEinrichtungForm] = useState(false);
   const [formCoords, setFormCoords] = useState({ lat: null, lng: null });
   const [highlightedRevierId, setHighlightedRevierId] = useState(null);
+  const [placingEinrichtung, setPlacingEinrichtung] = useState(false);
 
   const { data: reviere = [] } = useQuery({
     queryKey: ["reviere", tenant?.id],
