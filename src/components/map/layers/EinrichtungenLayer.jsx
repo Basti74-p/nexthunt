@@ -10,9 +10,14 @@ const TYPE_COLORS = {
   hochsitz: "#0F2F23",
   leiter: "#0F2F23",
   erdsitz: "#374151",
+  drueckjagdbock: "#14532d",
+  ansitzdrueckjagdleiter: "#166534",
   kirrung: "#92400e",
   salzlecke: "#1d4ed8",
   suhle: "#5b21b6",
+  wildacker: "#15803d",
+  fuetterung: "#b45309",
+  fanganlage: "#be123c",
 };
 
 function makeIcon(type) {
@@ -29,9 +34,14 @@ const TYPE_LABELS = {
   hochsitz: "Hochsitz",
   leiter: "Leiter",
   erdsitz: "Erdsitz",
+  drueckjagdbock: "Drückjagdbock",
+  ansitzdrueckjagdleiter: "Ansitzdrückjagdleiter",
   kirrung: "Kirrung",
   salzlecke: "Salzlecke",
   suhle: "Suhle",
+  wildacker: "Wildacker",
+  fuetterung: "Fütterung",
+  fanganlage: "Fanganlage",
 };
 
 export default function EinrichtungenLayer({ items = [] }) {
