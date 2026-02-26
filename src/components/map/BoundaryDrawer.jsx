@@ -71,8 +71,19 @@ const COLORS = [
 export function BoundaryDrawerControls({
   drawing, points, onStart, onFinish, onUndo, onCancel,
   showAssign, reviere, selectedRevierId, onSelectRevier, onSave, saving,
-  boundaries, onDeleteBoundary, boundaryColor, onColorChange,
+  boundaries, onDeleteBoundary, boundaryColor, onColorChange, onCreateNewRevier,
 }) {
+  const [newRevierName, setNewRevierName] = useState("");
+  const [showNewRevierInput, setShowNewRevierInput] = useState(false);
+
+  const handleCreateRevier = async () => {
+    if (!newRevierName.trim()) return;
+    const newId = await onCreateNewRevier(newRevierName.trim());
+    setNewRevierName("");
+    setShowNewRevierInput(false);
+    if (newId) onSelectRevier(newId);
+  };
+
   return (
     <div className="absolute bottom-16 left-3 z-[1000] flex flex-col gap-2 w-64">
       {!drawing && !showAssign && (
