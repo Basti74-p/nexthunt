@@ -88,14 +88,6 @@ export function BoundaryDrawerControls({
     <div className="absolute bottom-16 left-3 z-[1000] flex flex-col gap-2 w-64">
       {!drawing && !showAssign && (
         <div className="flex flex-col gap-1.5">
-          <button
-            onClick={onStart}
-            className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-xl shadow-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-          >
-            <Pencil className="w-3.5 h-3.5 text-[#22c55e]" />
-            Reviergrenze einzeichnen
-          </button>
-
           {boundaries.length > 0 && (
             <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
               <div className="px-3 py-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider border-b border-gray-50">
