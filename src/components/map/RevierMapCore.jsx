@@ -281,6 +281,7 @@ export default function RevierMapCore({
   height = "500px",
   children,
   className = "",
+  onMapClick,
 }) {
   const [mapStyle, setMapStyle] = useState(() => {
     const saved = localStorage.getItem("nh_map_style");
