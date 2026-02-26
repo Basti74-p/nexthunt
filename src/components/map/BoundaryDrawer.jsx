@@ -94,8 +94,8 @@ export function BoundaryDrawerControls({
                 Gespeicherte Grenzen
               </div>
               {boundaries.map(b => (
-                <div key={b.revierId} className="flex items-center justify-between px-3 py-1.5 hover:bg-gray-50">
-                  <span className="text-xs text-gray-700 truncate">{b.revierName}</span>
+                <div key={b.revierId} className="flex items-center justify-between px-3 py-1.5 hover:bg-white/10">
+                <span className="text-xs text-gray-200 truncate">{b.revierName}</span>
                   <button onClick={() => onDeleteBoundary(b.revierId)} className="ml-2 text-red-400 hover:text-red-600">
                     <Trash2 className="w-3 h-3" />
                   </button>
