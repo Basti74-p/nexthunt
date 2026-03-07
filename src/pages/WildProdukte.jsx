@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Plus, Printer, Trash2, Edit2 } from "lucide-react";
 import PageHeader from "../components/ui/PageHeader";
+import EtikettPrintView from "../components/wildprodukte/EtikettPrintView";
 
 const PRODUKTTYPEN = {
   filet: "Filet",
