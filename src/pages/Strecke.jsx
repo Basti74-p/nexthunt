@@ -374,22 +374,23 @@ export default function Strecke() {
                 <Input type="number" step="0.1" value={form.weight_kg} onChange={e => setForm({ ...form, weight_kg: e.target.value })}
                   placeholder="z.B. 24.5" className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
               </div>
-            <div>
-              <Label className="text-gray-300 text-xs mb-1 block">Status</Label>
-              <Select value={form.status} onValueChange={v => setForm({ ...form, status: v })}>
-                <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-                  {STATUS_OPTIONS.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
+              <div>
+                <Label className="text-gray-300 text-xs mb-1 block">Status</Label>
+                <Select value={form.status} onValueChange={v => setForm({ ...form, status: v })}>
+                  <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
+                    {STATUS_OPTIONS.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              </div>
+              <div>
               <Label className="text-gray-300 text-xs mb-1 block">Notizen</Label>
               <Textarea value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })}
                 placeholder="Optionale Anmerkungen" className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 resize-none h-16" />
-            </div>
+              </div>
             <div className="flex gap-2 pt-1">
               <Button variant="outline" onClick={() => setDialogOpen(false)} className="flex-1 border-[#3a3a3a]">Abbrechen</Button>
               <Button
