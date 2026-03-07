@@ -14,7 +14,7 @@ export default function WildkammerAusgabeDialog({ open, onClose, onSave, item, k
   const [form, setForm] = useState({ ausgabe_datum: "", ausgabe_an: "", kunde_id: "", ausgabe_typ: "verkauf", verkaufspreis: "", notes: "" });
 
   useEffect(() => {
-    if (open) setForm({ ausgabe_datum: new Date().toISOString().split("T")[0], ausgabe_an: "", ausgabe_typ: "verkauf", verkaufspreis: "", notes: item?.notes || "" });
+    if (open) setForm({ ausgabe_datum: new Date().toISOString().split("T")[0], ausgabe_an: "", kunde_id: "", ausgabe_typ: "verkauf", verkaufspreis: "", notes: item?.notes || "" });
   }, [open, item]);
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
