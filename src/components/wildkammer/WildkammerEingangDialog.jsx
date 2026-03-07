@@ -130,6 +130,7 @@ export default function WildkammerEingangDialog({ open, onClose, onSave, reviere
               <Input value={form.age_class} onChange={e => set("age_class", e.target.value)}
                 placeholder="z.B. Bock Kl. II" className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
             </div>
+          </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
