@@ -156,13 +156,13 @@ export default function StreckeArchiv() {
 
         {/* Edit Dialog */}
         <Dialog open={!!editDialog} onOpenChange={(open) => !open && setEditDialog(null)}>
-        <DialogContent className="bg-[#232323] border-[#3a3a3a]">
-         <DialogHeader>
-           <DialogTitle className="text-gray-100">Archiveintrag bearbeiten</DialogTitle>
-           <DialogDescription className="text-gray-400">
-             {SPECIES_LABEL[editDialog?.species]} • {editDialog?.age_class} • {format(new Date(editDialog?.date), "dd.MM.yyyy", { locale: de })}
-           </DialogDescription>
-         </DialogHeader>
+          <DialogContent className="bg-[#232323] border-[#3a3a3a]">
+            <DialogHeader>
+              <DialogTitle className="text-gray-100">Archiveintrag bearbeiten</DialogTitle>
+              <DialogDescription className="text-gray-400">
+                {SPECIES_LABEL[editDialog?.species]} • {editDialog?.age_class} • {editDialog?.date ? format(new Date(editDialog.date), "dd.MM.yyyy", { locale: de }) : "–"}
+              </DialogDescription>
+            </DialogHeader>
          <div className="space-y-4">
            <div className="bg-[#1a1a1a] rounded-lg p-3 text-sm text-gray-300">
              <p><strong>Revier:</strong> {revierName(editDialog?.revier_id)}</p>
