@@ -268,7 +268,8 @@ export default function Strecke() {
                     <td className="px-4 py-3 text-gray-300">{genderLabel(item.gender)}</td>
                     <td className="px-4 py-3 text-gray-300">{item.age_class || "–"}</td>
                     <td className="px-4 py-3 text-gray-300">{revierName(item.revier_id)}</td>
-                    <td className="px-4 py-3 text-gray-300">{item.weight_kg ? `${item.weight_kg} kg` : "–"}</td>
+                     <td className="px-4 py-3 text-gray-300 text-xs">{item.wildmark_id ? wildmarken.find(w => w.id === item.wildmark_id)?.code || "–" : "–"}</td>
+                     <td className="px-4 py-3 text-gray-300">{item.weight_kg ? `${item.weight_kg} kg` : "–"}</td>
                     <td className="px-4 py-3">
                       <StatusSelect value={item.status || "erfasst"} onChange={(v) => handleStatusChange(item, v)} />
                     </td>
