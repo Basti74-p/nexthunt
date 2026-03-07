@@ -110,13 +110,22 @@ export default function StreckeWildverkauf() {
                     <td className="px-4 py-3 text-gray-300 text-sm">{item.ausgabe_an || "–"}</td>
                     <td className="px-4 py-3 text-gray-300 font-medium">{item.verkaufspreis ? `€ ${item.verkaufspreis.toFixed(2)}` : "–"}</td>
                     <td className="px-4 py-3 text-right">
-                      <button
-                        onClick={() => updateMutation.mutate({ id: item.id, data: { status: "lager" } })}
-                        className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-200 transition-colors ml-auto"
-                        title="Zurück ins Lager"
-                      >
-                        <RotateCcw className="w-3.5 h-3.5" />
-                      </button>
+                      <div className="flex items-center gap-2 ml-auto w-fit">
+                        <button
+                          onClick={() => handleGenerateInvoice(item.ausgabe_an)}
+                          className="text-xs text-gray-400 hover:text-blue-400 transition-colors"
+                          title="Rechnung generieren"
+                        >
+                          <FileText className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => updateMutation.mutate({ id: item.id, data: { status: "lager" } })}
+                          className="text-xs text-gray-400 hover:text-gray-200 transition-colors"
+                          title="Zurück ins Lager"
+                        >
+                          <RotateCcw className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
