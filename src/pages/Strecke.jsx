@@ -252,6 +252,7 @@ export default function Strecke() {
                   <th className="text-left px-4 py-3 text-gray-400 font-medium">Geschlecht</th>
                   <th className="text-left px-4 py-3 text-gray-400 font-medium">Altersklasse</th>
                   <th className="text-left px-4 py-3 text-gray-400 font-medium">Revier</th>
+                  <th className="text-left px-4 py-3 text-gray-400 font-medium">Wildmarke</th>
                   <th className="text-left px-4 py-3 text-gray-400 font-medium">Gewicht</th>
                   <th className="text-left px-4 py-3 text-gray-400 font-medium">Status</th>
                   <th className="text-right px-4 py-3 text-gray-400 font-medium">Aktionen</th>
