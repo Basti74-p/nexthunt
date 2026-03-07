@@ -78,6 +78,7 @@ export default function WildProdukte() {
       queryClient.invalidateQueries({ queryKey: ["wildProdukte"] });
       setShowDialog(false);
       setForm({
+        wildkammer_id: "",
         produkttyp: "filet",
         gewicht_kg: "",
         einfrierungs_datum: new Date().toISOString().split('T')[0],
