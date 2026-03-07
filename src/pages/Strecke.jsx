@@ -356,11 +356,23 @@ export default function Strecke() {
                 </Select>
               </div>
               <div>
+                <Label className="text-gray-300 text-xs mb-1 block">Wildmarke</Label>
+                <Select value={form.wildmark_id} onValueChange={v => setForm({ ...form, wildmark_id: v })}>
+                  <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
+                    <SelectValue placeholder="Marke wählen" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
+                    {wildmarken.map(w => <SelectItem key={w.id} value={w.id}>{w.code}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+              <div>
                 <Label className="text-gray-300 text-xs mb-1 block">Gewicht (kg)</Label>
                 <Input type="number" step="0.1" value={form.weight_kg} onChange={e => setForm({ ...form, weight_kg: e.target.value })}
                   placeholder="z.B. 24.5" className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
               </div>
-            </div>
             <div>
               <Label className="text-gray-300 text-xs mb-1 block">Status</Label>
               <Select value={form.status} onValueChange={v => setForm({ ...form, status: v })}>
