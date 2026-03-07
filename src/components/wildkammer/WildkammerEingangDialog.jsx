@@ -113,14 +113,13 @@ export default function WildkammerEingangDialog({ open, onClose, onSave, reviere
             </div>
             <div>
               <Label className="text-gray-300 text-xs mb-1 block">Wildmarke</Label>
-              <Select value={form.wildmark_id} onValueChange={v => set("wildmark_id", v)}>
-                <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
-                  <SelectValue placeholder="Marke wählen" />
-                </SelectTrigger>
-                <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-                  {wildmarken.map(w => <SelectItem key={w.id} value={w.id}>{w.code}</SelectItem>)}
-                </SelectContent>
-              </Select>
+              <Input 
+                value={form.wildmark_id} 
+                onChange={e => set("wildmark_id", e.target.value)}
+                placeholder="Code scannen oder eingeben" 
+                className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" 
+                autoFocus
+              />
             </div>
           </div>
 
