@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { useAuth } from "@/components/hooks/useAuth";
 import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
-import { Archive } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Archive, Trash2, RotateCcw } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import EmptyState from "@/components/ui/EmptyState";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const SPECIES_LABEL = {
   rotwild: "Rotwild", schwarzwild: "Schwarzwild", rehwild: "Rehwild",
