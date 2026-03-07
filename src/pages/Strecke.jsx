@@ -30,11 +30,11 @@ const GENDER = [
 ];
 
 const AGE_CLASSES = {
-  rotwild: ["Hirsch", "Spiesser", "Schmalspiesser", "Schmaltier", "Tiere"],
-  schwarzwild: ["Keiler", "Bache", "Frischling", "Überläufer"],
-  rehwild: ["Bock", "Schmalreh", "Ricke", "Kitz"],
-  damwild: ["Hirsch", "Spiesser", "Schmaltier", "Tiere"],
-  sikawild: ["Hirsch", "Spiesser", "Schmaltier", "Tiere"],
+  rotwild: ["Hirsch Klasse I", "Hirsch Klasse II", "Hirsch Klasse III", "Tier", "Schmaltier"],
+  schwarzwild: ["Keiler (stark)", "Keiler (mittel)", "Bache", "Überläufer (m)", "Überläufer (w)", "Frischling (m)", "Frischling (w)"],
+  rehwild: ["Bock Klasse I", "Bock Klasse II", "Bock Klasse III", "Schmalreh (m)", "Schmalreh (w)", "Ricke", "Kitz (m)", "Kitz (w)"],
+  damwild: ["Schaufler Klasse I", "Schaufler Klasse II", "Schaufler Klasse III", "Damtier", "Schmaltier"],
+  sikawild: ["Hirsch Klasse I", "Hirsch Klasse II", "Hirsch Klasse III", "Tier", "Schmaltier"],
   wolf: ["Rüde", "Fähe", "Welpe"],
 };
 
