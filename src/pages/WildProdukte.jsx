@@ -46,13 +46,15 @@ export default function WildProdukte() {
   });
 
   const { data: wildkammers } = useQuery({
-    queryKey: ["wildkammers", currentTenant?.id, currentRevier?.id],
-    queryFn: () => base44.entities.Wildkammer.filter({ tenant_id: currentTenant?.id, revier_id: currentRevier?.id }),
+    queryKey: ["wildkammers", tenant?.id],
+    queryFn: () => base44.entities.Wildkammer.filter({ tenant_id: tenant?.id }),
+    enabled: !!tenant?.id,
   });
 
   const { data: produkte } = useQuery({
-    queryKey: ["wildProdukte", currentTenant?.id, currentRevier?.id],
-    queryFn: () => base44.entities.WildProdukt.filter({ tenant_id: currentTenant?.id, revier_id: currentRevier?.id }),
+    queryKey: ["wildProdukte", tenant?.id],
+    queryFn: () => base44.entities.WildProdukt.filter({ tenant_id: tenant?.id }),
+    enabled: !!tenant?.id,
   });
 
   const createMutation = useMutation({
