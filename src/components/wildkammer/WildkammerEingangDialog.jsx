@@ -17,10 +17,10 @@ const EMPTY = {
   eingang_datum: new Date().toISOString().split("T")[0],
   eingang_zeit: new Date().toTimeString().slice(0, 5),
   gewicht_aufgebrochen: "", kuehltemperatur: "", notes: "",
-  aufbruch_ok: false, decke_ab: false, strecke_id: "",
+  aufbruch_ok: false, decke_ab: false, strecke_id: "", wildmark_id: "",
 };
 
-export default function WildkammerEingangDialog({ open, onClose, onSave, reviere, strecken = [] }) {
+export default function WildkammerEingangDialog({ open, onClose, onSave, reviere, strecken = [], wildmarken = [] }) {
   const [form, setForm] = useState(EMPTY);
 
   useEffect(() => { if (open) setForm(EMPTY); }, [open]);
