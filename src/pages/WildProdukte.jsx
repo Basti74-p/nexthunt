@@ -28,7 +28,7 @@ const STATUS_LABELS = {
 };
 
 export default function WildProdukte() {
-  const { user, currentTenant, currentRevier } = useAuth();
+  const { user, tenant } = useAuth();
   const queryClient = useQueryClient();
   const [showDialog, setShowDialog] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
