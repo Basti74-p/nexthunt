@@ -160,9 +160,9 @@ export default function StreckeAbschussplan() {
 
   // Match strecke to kategorie by age_class field
   const getIst = (species, kategorie) => {
-    const kat = SPECIES_KATEGORIEN[species]?.find(k => k.value === kategorie);
-    if (!kat) return 0;
-    return istStrecken.filter(s => s.species === species && s.age_class === kat.label).length;
+    // Count all entries for this species regardless of kategorie for now
+    // This is a simplified approach until age_class mapping is standardized
+    return istStrecken.filter(s => s.species === species).length;
   };
 
   // Also count all species strecke regardless of kategorie
