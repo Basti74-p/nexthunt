@@ -31,15 +31,15 @@ export default function StreckeWildverkauf() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }) => base44.entities.Strecke.update(id, data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["strecke"] }),
+    mutationFn: ({ id, data }) => base44.entities.Wildkammer.update(id, data),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["wildkammer"] }),
   });
 
-  const verkauftItems = strecken.filter(s => s.status === "verkauft");
+  const verkauftItems = wildkammer.filter(s => s.status === "verkauft");
   const revierName = (id) => reviere.find(r => r.id === id)?.name || "–";
 
   // Simple stats
-  const totalWeight = verkauftItems.reduce((sum, s) => sum + (s.weight_kg || 0), 0);
+  const totalWeight = verkauftItems.reduce((sum, s) => sum + (s.gewicht_kalt || 0), 0);
   const bySpecies = {};
   verkauftItems.forEach(s => { bySpecies[s.species] = (bySpecies[s.species] || 0) + 1; });
 
