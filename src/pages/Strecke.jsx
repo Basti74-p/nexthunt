@@ -100,6 +100,12 @@ export default function Strecke() {
     enabled: !!tenant?.id,
   });
 
+  const { data: wildmarken = [] } = useQuery({
+    queryKey: ["wildmarken", tenant?.id],
+    queryFn: () => base44.entities.Wildmarke.filter({ tenant_id: tenant?.id, status: "available" }),
+    enabled: !!tenant?.id,
+  });
+
   const createMutation = useMutation({
     mutationFn: (data) => base44.entities.Strecke.create({ ...data, tenant_id: tenant.id }),
     onSuccess: () => {
