@@ -134,20 +134,20 @@ export default function StreckeArchiv() {
                   </tr>
                 </thead>
                 <tbody>
-                  {yearStrecken.sort((a, b) => new Date(b.date) - new Date(a.date)).map((item, i) => (
-                    <tr key={item.id} className={`border-b border-[#3a3a3a] last:border-0 hover:bg-[#2a2a2a] ${i % 2 === 1 ? "bg-[#282828]" : ""}`}>
-                      <td className="px-4 py-3 text-gray-200">{format(new Date(item.date), "dd.MM.yyyy", { locale: de })}</td>
-                      <td className="px-4 py-3 font-medium text-gray-100">{SPECIES_LABEL[item.species] || item.species}</td>
-                      <td className="px-4 py-3 text-gray-300">{item.gender === "maennlich" ? "Männlich" : item.gender === "weiblich" ? "Weiblich" : "Unbekannt"}</td>
-                      <td className="px-4 py-3 text-gray-300">{item.age_class || "–"}</td>
-                      <td className="px-4 py-3 text-gray-300">{revierName(item.revier_id)}</td>
-                      <td className="px-4 py-3 text-gray-300">{item.weight_kg ? `${item.weight_kg} kg` : "–"}</td>
-                      <td className="px-4 py-3">
-                        <span className="text-xs text-gray-400 capitalize">{item.status}</span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+                   {yearStrecken.sort((a, b) => new Date(b.date) - new Date(a.date)).map((item, i) => (
+                     <tr key={item.id} className={`border-b border-[#3a3a3a] last:border-0 hover:bg-[#2a2a2a] cursor-pointer ${i % 2 === 1 ? "bg-[#282828]" : ""}`} onClick={() => setEditDialog(item)}>
+                       <td className="px-4 py-3 text-gray-200">{format(new Date(item.date), "dd.MM.yyyy", { locale: de })}</td>
+                       <td className="px-4 py-3 font-medium text-gray-100">{SPECIES_LABEL[item.species] || item.species}</td>
+                       <td className="px-4 py-3 text-gray-300">{item.gender === "maennlich" ? "Männlich" : item.gender === "weiblich" ? "Weiblich" : "Unbekannt"}</td>
+                       <td className="px-4 py-3 text-gray-300">{item.age_class || "–"}</td>
+                       <td className="px-4 py-3 text-gray-300">{revierName(item.revier_id)}</td>
+                       <td className="px-4 py-3 text-gray-300">{item.weight_kg ? `${item.weight_kg} kg` : "–"}</td>
+                       <td className="px-4 py-3">
+                         <span className="text-xs text-gray-400 capitalize">{item.status}</span>
+                       </td>
+                     </tr>
+                   ))}
+                 </tbody>
               </table>
             </div>
           </div>
