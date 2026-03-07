@@ -242,13 +242,27 @@ Beschreibung: ${product.beschreibung}
 
           <div className="space-y-4">
             <div>
+              <Label className="text-xs mb-1 block">Revier</Label>
+              <Select value={form.revier_id || ""} onValueChange={v => setForm({ ...form, revier_id: v })}>
+                <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a]">
+                  <SelectValue placeholder="Revier wählen" />
+                </SelectTrigger>
+                <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
+                  {reviere.map(r => (
+                    <SelectItem key={r.id} value={r.id}>{r.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
               <Label className="text-xs mb-1 block">Wildkammer</Label>
               <Select value={form.wildkammer_id} onValueChange={v => setForm({ ...form, wildkammer_id: v })}>
                 <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a]">
                   <SelectValue placeholder="Wildkammer wählen" />
                 </SelectTrigger>
                 <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-                  {wildkammers?.map(w => (
+                  {wildkammers?.filter(w => w.revier_id === form.revier_id).map(w => (
                     <SelectItem key={w.id} value={w.id}>
                       {w.species} - {w.eingang_datum}
                     </SelectItem>
