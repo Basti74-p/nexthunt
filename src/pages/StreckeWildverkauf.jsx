@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "@/components/hooks/useAuth";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Truck, RotateCcw } from "lucide-react";
+import { Truck, RotateCcw, FileText } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import EmptyState from "@/components/ui/EmptyState";
 import { format } from "date-fns";
