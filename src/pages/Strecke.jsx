@@ -53,6 +53,7 @@ const EMPTY_FORM = {
   date: new Date().toISOString().split("T")[0],
   revier_id: "",
   weight_kg: "",
+  wildmark_id: "",
   notes: "",
   status: "erfasst",
 };
