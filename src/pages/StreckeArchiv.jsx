@@ -23,6 +23,8 @@ const SPECIES_COLORS = {
 export default function StreckeArchiv() {
   const { tenant } = useAuth();
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [editDialog, setEditDialog] = useState(null);
+  const queryClient = useQueryClient();
 
   const { data: strecken = [] } = useQuery({
     queryKey: ["strecke", tenant?.id],
