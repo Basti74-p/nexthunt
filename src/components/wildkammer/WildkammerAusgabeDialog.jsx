@@ -10,8 +10,8 @@ const AUSGABE_TYPEN = {
   verkauf: "Verkauf", eigenverbrauch: "Eigenverbrauch", spende: "Spende", entsorgung: "Entsorgung",
 };
 
-export default function WildkammerAusgabeDialog({ open, onClose, onSave, item }) {
-  const [form, setForm] = useState({ ausgabe_datum: "", ausgabe_an: "", ausgabe_typ: "verkauf", verkaufspreis: "", notes: "" });
+export default function WildkammerAusgabeDialog({ open, onClose, onSave, item, kunden = [] }) {
+  const [form, setForm] = useState({ ausgabe_datum: "", ausgabe_an: "", kunde_id: "", ausgabe_typ: "verkauf", verkaufspreis: "", notes: "" });
 
   useEffect(() => {
     if (open) setForm({ ausgabe_datum: new Date().toISOString().split("T")[0], ausgabe_an: "", ausgabe_typ: "verkauf", verkaufspreis: "", notes: item?.notes || "" });
