@@ -73,27 +73,29 @@ export default function StreckeWildverkauf() {
                 <tr className="border-b border-[#3a3a3a]">
                   <th className="text-left px-4 py-3 text-gray-400 font-medium">Datum</th>
                   <th className="text-left px-4 py-3 text-gray-400 font-medium">Wildart</th>
+                  <th className="text-left px-4 py-3 text-gray-400 font-medium">Altersklasse</th>
                   <th className="text-left px-4 py-3 text-gray-400 font-medium">Geschlecht</th>
-                  <th className="text-left px-4 py-3 text-gray-400 font-medium">Revier</th>
-                  <th className="text-left px-4 py-3 text-gray-400 font-medium">Gewicht</th>
-                  <th className="text-left px-4 py-3 text-gray-400 font-medium">Notizen</th>
+                  <th className="text-left px-4 py-3 text-gray-400 font-medium">Kaltgewicht</th>
+                  <th className="text-left px-4 py-3 text-gray-400 font-medium">Käufer / Empfänger</th>
+                  <th className="text-left px-4 py-3 text-gray-400 font-medium">Preis</th>
                   <th className="text-right px-4 py-3 text-gray-400 font-medium">Aktion</th>
                 </tr>
               </thead>
               <tbody>
                 {verkauftItems.map((item, i) => (
                   <tr key={item.id} className={`border-b border-[#3a3a3a] last:border-0 hover:bg-[#2a2a2a] ${i % 2 === 1 ? "bg-[#282828]" : ""}`}>
-                    <td className="px-4 py-3 text-gray-200">{item.date ? format(new Date(item.date), "dd.MM.yyyy", { locale: de }) : "–"}</td>
+                    <td className="px-4 py-3 text-gray-200">{item.ausgabe_datum ? format(new Date(item.ausgabe_datum), "dd.MM.yyyy", { locale: de }) : "–"}</td>
                     <td className="px-4 py-3 font-medium text-gray-100">{SPECIES_LABEL[item.species] || item.species}</td>
+                    <td className="px-4 py-3 text-gray-300">{item.age_class || "–"}</td>
                     <td className="px-4 py-3 text-gray-300">{GENDER_LABEL[item.gender] || item.gender}</td>
-                    <td className="px-4 py-3 text-gray-300">{revierName(item.revier_id)}</td>
-                    <td className="px-4 py-3 text-gray-300">{item.weight_kg ? `${item.weight_kg} kg` : "–"}</td>
-                    <td className="px-4 py-3 text-gray-400 text-xs max-w-xs truncate">{item.notes || "–"}</td>
+                    <td className="px-4 py-3 text-gray-300">{item.gewicht_kalt ? `${item.gewicht_kalt} kg` : "–"}</td>
+                    <td className="px-4 py-3 text-gray-300 text-sm">{item.ausgabe_an || "–"}</td>
+                    <td className="px-4 py-3 text-gray-300 font-medium">{item.verkaufspreis ? `€ ${item.verkaufspreis.toFixed(2)}` : "–"}</td>
                     <td className="px-4 py-3 text-right">
                       <button
-                        onClick={() => updateMutation.mutate({ id: item.id, data: { status: "wildkammer" } })}
+                        onClick={() => updateMutation.mutate({ id: item.id, data: { status: "lager" } })}
                         className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-200 transition-colors ml-auto"
-                        title="Zurück zur Wildkammer"
+                        title="Zurück ins Lager"
                       >
                         <RotateCcw className="w-3.5 h-3.5" />
                       </button>
