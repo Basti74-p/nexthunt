@@ -46,8 +46,23 @@ export default function WildkammerAusgabeDialog({ open, onClose, onSave, item, k
           </div>
           <div>
             <Label className="text-gray-300 text-xs mb-1 block">Empfänger / Käufer</Label>
-            <Input value={form.ausgabe_an} onChange={e => set("ausgabe_an", e.target.value)}
-              placeholder="Name, Firma…" className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+            {kunden.length > 0 ? (
+              <Select value={form.kunde_id} onValueChange={v => {
+                const k = kunden.find(x => x.id === v);
+                set("kunde_id", v);
+                set("ausgabe_an", k?.name || "");
+              }}>
+                <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
+                  <SelectValue placeholder="Kunde wählen…" />
+                </SelectTrigger>
+                <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
+                  {kunden.map(k => <SelectItem key={k.id} value={k.id}>{k.name}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            ) : (
+              <Input value={form.ausgabe_an} onChange={e => set("ausgabe_an", e.target.value)}
+                placeholder="Name, Firma…" className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+            )}
           </div>
           {form.ausgabe_typ === "verkauf" && (
             <div>
