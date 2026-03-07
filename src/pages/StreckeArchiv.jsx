@@ -152,7 +152,46 @@ export default function StreckeArchiv() {
             </div>
           </div>
         </>
-      )}
-    </div>
-  );
-}
+        )}
+
+        {/* Edit Dialog */}
+        <Dialog open={!!editDialog} onOpenChange={(open) => !open && setEditDialog(null)}>
+        <DialogContent className="bg-[#232323] border-[#3a3a3a]">
+         <DialogHeader>
+           <DialogTitle className="text-gray-100">Archiveintrag bearbeiten</DialogTitle>
+           <DialogDescription className="text-gray-400">
+             {SPECIES_LABEL[editDialog?.species]} • {editDialog?.age_class} • {format(new Date(editDialog?.date), "dd.MM.yyyy", { locale: de })}
+           </DialogDescription>
+         </DialogHeader>
+         <div className="space-y-4">
+           <div className="bg-[#1a1a1a] rounded-lg p-3 text-sm text-gray-300">
+             <p><strong>Revier:</strong> {revierName(editDialog?.revier_id)}</p>
+             <p><strong>Gewicht:</strong> {editDialog?.weight_kg ? `${editDialog?.weight_kg} kg` : "–"}</p>
+             <p><strong>Geschlecht:</strong> {editDialog?.gender === "maennlich" ? "Männlich" : editDialog?.gender === "weiblich" ? "Weiblich" : "Unbekannt"}</p>
+           </div>
+           <div className="flex gap-2">
+             <Button
+               variant="outline"
+               className="flex-1 gap-2 border-[#3a3a3a] hover:bg-[#2a2a2a]"
+               onClick={() => restoreMutation.mutate(editDialog?.id)}
+               disabled={restoreMutation.isPending}
+             >
+               <RotateCcw className="w-4 h-4" />
+               Zur Wildkammer zurück
+             </Button>
+             <Button
+               variant="destructive"
+               className="flex-1 gap-2"
+               onClick={() => deleteMutation.mutate(editDialog?.id)}
+               disabled={deleteMutation.isPending}
+             >
+               <Trash2 className="w-4 h-4" />
+               Löschen
+             </Button>
+           </div>
+         </div>
+        </DialogContent>
+        </Dialog>
+        </div>
+        );
+        }
