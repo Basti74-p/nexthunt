@@ -150,6 +150,7 @@ export default function Strecke() {
       date: item.date || new Date().toISOString().split("T")[0],
       revier_id: item.revier_id || "",
       weight_kg: item.weight_kg || "",
+      wildmark_id: item.wildmark_id || "",
       notes: item.notes || "",
       status: item.status || "erfasst",
     });
