@@ -34,6 +34,7 @@ export default function WildProdukte() {
   const [editingProduct, setEditingProduct] = useState(null);
   const [statusFilter, setStatusFilter] = useState("lager");
   const [form, setForm] = useState({
+    revier_id: "",
     wildkammer_id: "",
     produkttyp: "filet",
     gewicht_kg: "",
