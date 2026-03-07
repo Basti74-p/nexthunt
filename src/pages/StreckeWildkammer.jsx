@@ -214,7 +214,7 @@ export default function StreckeWildkammer() {
       {/* Dialogs */}
       <WildkammerEingangDialog
         open={eingangOpen} onClose={() => setEingangOpen(false)}
-        onSave={handleEingang} reviere={reviere} strecken={strecken}
+        onSave={handleEingang} reviere={reviere} strecken={strecken} wildmarken={wildmarken}
       />
 
       <WildkammerAusgabeDialog
