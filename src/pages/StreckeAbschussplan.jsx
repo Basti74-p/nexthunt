@@ -17,6 +17,8 @@ const SPECIES_KATEGORIEN = {
     { value: "bock_kl1", label: "Bock Klasse I" },
     { value: "bock_kl2", label: "Bock Klasse II" },
     { value: "bock_kl3", label: "Bock Klasse III" },
+    { value: "schmalreh_maennlich", label: "Schmalreh (männlich)" },
+    { value: "schmalreh_weiblich", label: "Schmalreh (weiblich)" },
     { value: "ricke", label: "Ricke" },
     { value: "kitz_maennlich", label: "Kitz (männlich)" },
     { value: "kitz_weiblich", label: "Kitz (weiblich)" },
