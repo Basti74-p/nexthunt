@@ -45,12 +45,12 @@ export default function StreckeWildkammer() {
     enabled: !!tenant?.id,
   });
 
-  // Strecken mit Status "wildkammer" oder "bestaetigt" zum Verknüpfen
+  // Strecken zum Verknüpfen
   const { data: strecken = [] } = useQuery({
     queryKey: ["strecke-wk", tenant?.id],
     queryFn: () => base44.entities.Strecke.filter({ tenant_id: tenant?.id }),
     enabled: !!tenant?.id,
-    select: (data) => data.filter(s => s.status === "wildkammer" || s.status === "bestaetigt"),
+    select: (data) => data.filter(s => !["archiviert", "verkauft"].includes(s.status)),
   });
 
   const createMutation = useMutation({
