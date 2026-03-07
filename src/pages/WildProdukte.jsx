@@ -125,19 +125,7 @@ export default function WildProdukte() {
   };
 
   const handlePrintEtikett = (product) => {
-    const etikett = `
-WILDMARKE / ETIKETT
-═══════════════════════════════════════
-Wildnummer: ${product.wildnummer}
-Produkttyp: ${PRODUKTTYPEN[product.produkttyp]}
-Gewicht: ${product.gewicht_kg} kg
-Eingefrorenes: ${product.einfrierungs_datum}
-Lagertemperatur: ${product.lager_temperatur}°C
-Lagerort: ${product.lager_location}
-Beschreibung: ${product.beschreibung}
-═══════════════════════════════════════
-    `;
-    window.print();
+    setPrintProduct(product);
   };
 
   const filteredProducts = useMemo(() => {
