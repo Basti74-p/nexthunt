@@ -166,8 +166,7 @@ export default function StreckeAbschussplan() {
     return istStrecken.filter(s => 
       s.species === species && 
       s.status === "erfasst" &&
-      s.age_class && 
-      (katLabel.includes(s.age_class) || s.age_class === katLabel)
+      s.age_class === katLabel
     ).length;
   };
 
