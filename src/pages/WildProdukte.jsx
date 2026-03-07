@@ -227,6 +227,31 @@ export default function WildProdukte() {
         )}
       </div>
 
+      {printProduct && (
+        <div className="fixed inset-0 bg-white z-50">
+          <div className="absolute top-4 right-4 space-x-2">
+            <Button
+              onClick={() => {
+                setTimeout(() => window.print(), 100);
+              }}
+              className="bg-[#22c55e] hover:bg-[#16a34a]"
+            >
+              Drucken
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => setPrintProduct(null)}
+              className="text-gray-900"
+            >
+              Schließen
+            </Button>
+          </div>
+          <div className="pt-16">
+            <EtikettPrintView product={printProduct} />
+          </div>
+        </div>
+      )}
+
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent className="bg-[#2d2d2d] border-[#3a3a3a]">
           <DialogHeader>
