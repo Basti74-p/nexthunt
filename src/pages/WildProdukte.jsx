@@ -34,6 +34,7 @@ export default function WildProdukte() {
   const [showDialog, setShowDialog] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [statusFilter, setStatusFilter] = useState("lager");
+  const [printProduct, setPrintProduct] = useState(null);
   const [form, setForm] = useState({
     revier_id: "",
     wildkammer_id: "",
