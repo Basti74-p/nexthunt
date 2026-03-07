@@ -61,8 +61,8 @@ export default function WildProdukte() {
     mutationFn: async (data) => {
       const wildnummer = `WP-${Date.now().toString().slice(-8)}`;
       await base44.entities.WildProdukt.create({
-        tenant_id: currentTenant.id,
-        revier_id: currentRevier.id,
+        tenant_id: tenant.id,
+        revier_id: data.revier_id,
         wildkammer_id: data.wildkammer_id,
         wildnummer,
         produkttyp: data.produkttyp,
