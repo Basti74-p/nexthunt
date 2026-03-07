@@ -235,7 +235,7 @@ Beschreibung: ${product.beschreibung}
           <div className="space-y-4">
             <div>
               <Label className="text-xs mb-1 block">Wildkammer</Label>
-              <Select onValueChange={v => setForm({ ...form, wildkammer_id: v })}>
+              <Select value={form.wildkammer_id} onValueChange={v => setForm({ ...form, wildkammer_id: v })}>
                 <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a]">
                   <SelectValue placeholder="Wildkammer wählen" />
                 </SelectTrigger>
