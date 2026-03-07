@@ -53,6 +53,12 @@ export default function StreckeWildkammer() {
     select: (data) => data.filter(s => !["archiviert", "verkauft"].includes(s.status)),
   });
 
+  const { data: kunden = [] } = useQuery({
+    queryKey: ["kunden", tenant?.id],
+    queryFn: () => base44.entities.Kunde.filter({ tenant_id: tenant?.id }),
+    enabled: !!tenant?.id,
+  });
+
   const createMutation = useMutation({
     mutationFn: (data) => base44.entities.Wildkammer.create({ ...data, tenant_id: tenant.id }),
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["wildkammer"] }); setEingangOpen(false); },
