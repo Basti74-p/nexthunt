@@ -38,6 +38,22 @@ export default function StreckeArchiv() {
     enabled: !!tenant?.id,
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: (id) => base44.entities.Strecke.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["strecke"] });
+      setEditDialog(null);
+    },
+  });
+
+  const restoreMutation = useMutation({
+    mutationFn: (id) => base44.entities.Strecke.update(id, { status: "erfasst" }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["strecke"] });
+      setEditDialog(null);
+    },
+  });
+
   const years = [...new Set(strecken.map(s => s.date ? new Date(s.date).getFullYear() : null).filter(Boolean))].sort((a, b) => b - a);
   if (!years.includes(selectedYear) && years.length > 0) { /* no-op, user can select */ }
 
