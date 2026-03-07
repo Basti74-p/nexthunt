@@ -213,7 +213,7 @@ export default function StreckeWildkammer() {
 
       <WildkammerAusgabeDialog
         open={ausgabeOpen} onClose={() => setAusgabeOpen(false)}
-        onSave={handleAusgabe} item={activeItem}
+        onSave={handleAusgabe} item={activeItem} kunden={kunden}
       />
 
       {/* Trichinenprobe Dialog */}
