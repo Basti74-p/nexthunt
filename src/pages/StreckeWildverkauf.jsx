@@ -18,9 +18,9 @@ export default function StreckeWildverkauf() {
   const { tenant } = useAuth();
   const queryClient = useQueryClient();
 
-  const { data: strecken = [] } = useQuery({
-    queryKey: ["strecke", tenant?.id],
-    queryFn: () => base44.entities.Strecke.filter({ tenant_id: tenant?.id }),
+  const { data: wildkammer = [] } = useQuery({
+    queryKey: ["wildkammer", tenant?.id],
+    queryFn: () => base44.entities.Wildkammer.filter({ tenant_id: tenant?.id }),
     enabled: !!tenant?.id,
   });
 
