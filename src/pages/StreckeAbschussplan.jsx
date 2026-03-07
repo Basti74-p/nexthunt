@@ -162,13 +162,12 @@ export default function StreckeAbschussplan() {
   const getIst = (species, kategorie) => {
     const kat = SPECIES_KATEGORIEN[species]?.find(k => k.value === kategorie);
     if (!kat) return 0;
-    // Match by label (e.g. "Bock" from age_class matches "Bock Klasse I" label start)
     const katLabel = kat.label;
     return istStrecken.filter(s => 
       s.species === species && 
       s.status === "erfasst" &&
       s.age_class && 
-      katLabel.includes(s.age_class) || s.age_class === katLabel
+      (katLabel.includes(s.age_class) || s.age_class === katLabel)
     ).length;
   };
 
