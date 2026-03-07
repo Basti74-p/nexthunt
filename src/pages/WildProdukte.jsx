@@ -103,6 +103,7 @@ export default function WildProdukte() {
     if (product) {
       setEditingProduct(product);
       setForm({
+        wildkammer_id: product.wildkammer_id,
         produkttyp: product.produkttyp,
         gewicht_kg: product.gewicht_kg.toString(),
         einfrierungs_datum: product.einfrierungs_datum,
