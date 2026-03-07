@@ -38,6 +38,24 @@ export default function StreckeWildverkauf() {
   const verkauftItems = wildkammer.filter(s => s.status === "verkauft");
   const revierName = (id) => reviere.find(r => r.id === id)?.name || "–";
 
+  const handleGenerateInvoice = async (kundenName) => {
+    const kundenItems = verkauftItems.filter(s => s.ausgabe_an === kundenName);
+    const { data } = await base44.functions.invoke('generateInvoice', {
+      tenant_id: tenant?.id,
+      customer_name: kundenName,
+      items: kundenItems
+    });
+    const blob = new Blob([data], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Rechnung_${kundenName}_${new Date().toISOString().split('T')[0]}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
+  };
+
   // Simple stats
   const totalWeight = verkauftItems.reduce((sum, s) => sum + (s.gewicht_kalt || 0), 0);
   const bySpecies = {};
