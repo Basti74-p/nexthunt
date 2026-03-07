@@ -140,8 +140,14 @@ Beschreibung: ${product.beschreibung}
     return produkte.filter(p => p.status === statusFilter);
   }, [produkte, statusFilter]);
 
-  if (!currentTenant || !currentRevier) {
-    return <div className="text-gray-400">Bitte wählen Sie zuerst ein Revier</div>;
+  const { data: reviere = [] } = useQuery({
+    queryKey: ["reviere", tenant?.id],
+    queryFn: () => base44.entities.Revier.filter({ tenant_id: tenant?.id }),
+    enabled: !!tenant?.id,
+  });
+
+  if (!tenant) {
+    return <div className="text-gray-400">Keine Daten verfügbar</div>;
   }
 
   return (
