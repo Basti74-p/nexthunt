@@ -29,6 +29,15 @@ const GENDER = [
   { value: "unbekannt", label: "Unbekannt" },
 ];
 
+const AGE_CLASSES = {
+  rotwild: ["Hirsch", "Spiesser", "Schmalspiesser", "Schmaltier", "Tiere"],
+  schwarzwild: ["Keiler", "Bache", "Frischling", "Überläufer"],
+  rehwild: ["Bock", "Schmalreh", "Ricke", "Kitz"],
+  damwild: ["Hirsch", "Spiesser", "Schmaltier", "Tiere"],
+  sikawild: ["Hirsch", "Spiesser", "Schmaltier", "Tiere"],
+  wolf: ["Rüde", "Fähe", "Welpe"],
+};
+
 const STATUS_OPTIONS = [
   { value: "erfasst", label: "Erfasst", color: "bg-amber-100 text-amber-700" },
   { value: "bestaetigt", label: "Bestätigt", color: "bg-blue-100 text-blue-700" },
