@@ -38,7 +38,7 @@ const TYPE_ICON_COLOR = {
 };
 
 export default function Jagdeinrichtungen() {
-  const { tenant } = useAuth();
+  const { tenant, user, tenantMember } = useAuth();
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState("all");
@@ -53,8 +53,15 @@ export default function Jagdeinrichtungen() {
   });
 
   const { data: einrichtungen = [], isLoading } = useQuery({
-    queryKey: ["einrichtungen", tenant?.id],
-    queryFn: () => base44.entities.Jagdeinrichtung.filter({ tenant_id: tenant?.id }),
+    queryKey: ["einrichtungen", tenant?.id, tenantMember?.id],
+    queryFn: async () => {
+      const allEinrichtungen = await base44.entities.Jagdeinrichtung.filter({ tenant_id: tenant?.id });
+      // If user has allowed_reviere restrictions, filter by those
+      if (tenantMember?.allowed_reviere?.length > 0) {
+        return allEinrichtungen.filter(e => tenantMember.allowed_reviere.includes(e.revier_id));
+      }
+      return allEinrichtungen;
+    },
     enabled: !!tenant?.id,
   });
 
