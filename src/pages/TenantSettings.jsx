@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "@/components/hooks/useAuth";
-import { Settings, Check, X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import StatusBadge from "@/components/ui/StatusBadge";
+import EtikettSettings from "@/components/wildprodukte/EtikettSettings";
+import { base44 } from "@/api/base44Client";
+
+const DEFAULT_ETIKETT_SETTINGS = {
+  betriebsname: "",
+  adresse: "",
+  logoUrl: "",
+  schriftgroesse: "normal",
+  zeigeLagerlocation: true,
+  zeigeTemperatur: true,
+  zeigeBeschreibung: true,
+  zeigeEinfrierungsDatum: true,
+  zeigeDruckdatum: true,
+};
 
 const FEATURE_LABELS = {
   feature_map: "Karte",
