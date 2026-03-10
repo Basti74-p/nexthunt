@@ -426,7 +426,7 @@ export default function WildProdukte() {
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowDialog(false)}>Abbrechen</Button>
             <Button
-              onClick={() => createMutation.mutate(form)}
+              onClick={() => editingProduct ? updateMutation.mutate(form) : createMutation.mutate(form)}
               className="bg-[#22c55e] hover:bg-[#16a34a]"
             >
               Speichern
