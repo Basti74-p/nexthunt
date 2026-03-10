@@ -51,25 +51,12 @@ function LayoutInner({ children, currentPageName }) {
     );
   }
 
-  // Mobile mode
-  const mobilePages = ["MobileMap", "MobileSightings", "MobileStrecke", "MobileTasks", "MobileMonitor"];
-  if (isMobile && !mobilePages.includes(currentPageName) && currentPageName !== "PlatformAdmin") {
-    // Redirect to mobile map on mobile
-    return (
-      <div className="min-h-screen bg-[#2d2d2d]">
-        <MobileNav currentPage={currentPageName} />
-        <main className="pt-14 pb-20 px-4">
-          {children}
-        </main>
-      </div>
-    );
-  }
-
+  // Mobile mode: All pages render with mobile layout
   if (isMobile) {
     return (
-      <div className="min-h-screen bg-[#2d2d2d]">
+      <div className="min-h-screen bg-[#2d2d2d] overflow-x-hidden">
         <MobileNav currentPage={currentPageName} />
-        <main className="pt-14 pb-20 px-4">
+        <main className="pt-14 pb-20 px-4 max-w-full w-full">
           {children}
         </main>
       </div>
