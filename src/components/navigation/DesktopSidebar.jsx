@@ -209,7 +209,7 @@ export default function DesktopSidebar({ currentPage }) {
           <img
             src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c370741b119950032ab62/7a1f75278_NextHunt_logo_transparent.png"
             alt="NextHunt Logo"
-            className="h-9 w-auto object-contain"
+            className="h-14 w-auto object-contain"
           />
           {tenant && (
             <p className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">{tenant.name}</p>
