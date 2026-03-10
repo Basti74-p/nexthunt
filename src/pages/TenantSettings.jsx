@@ -4,6 +4,7 @@ import { Check, X } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import StatusBadge from "@/components/ui/StatusBadge";
 import EtikettSettings from "@/components/wildprodukte/EtikettSettings";
+import EtikettPrintView from "@/components/wildprodukte/EtikettPrintView";
 import { base44 } from "@/api/base44Client";
 
 const DEFAULT_ETIKETT_SETTINGS = {
