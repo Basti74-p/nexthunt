@@ -69,6 +69,22 @@ export default function RevierMembersManager({ revierId }) {
     },
   });
 
+  const permissionsMutation = useMutation({
+    mutationFn: (data) => base44.entities.TenantMember.update(data.id, {
+      perm_wildmanagement: data.perm_wildmanagement,
+      perm_strecke: data.perm_strecke,
+      perm_wildkammer: data.perm_wildkammer,
+      perm_kalender: data.perm_kalender,
+      perm_aufgaben: data.perm_aufgaben,
+      perm_einrichtungen: data.perm_einrichtungen,
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["revier-members", revierId] });
+      setPermDialogOpen(false);
+      setSelectedMember(null);
+    },
+  });
+
   const handleInvite = () => {
     if (!form.user_email) return;
     // Convert tenant role to app role for invitation
