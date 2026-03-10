@@ -120,7 +120,6 @@ export default function Wildverkauf() {
   const openPrint = (verkauf, mode) => {
     const kunde = kunden.find(k => k.id === verkauf.kunde_id);
     setPrintData({ verkauf, kunde, mode });
-    setTimeout(() => window.print(), 300);
   };
 
   const openKundeEdit = (k) => {
