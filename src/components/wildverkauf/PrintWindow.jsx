@@ -13,17 +13,19 @@ export default function PrintWindow({ printData, tenantSettings, onClose }) {
 
     const win = window.open("", "_blank", "width=900,height=1200");
     win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8">
-      <title>Dokument</title>
+      <title>NextHunt</title>
       <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: white; font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; }
+        @page {
+          size: A4;
+          margin: 15mm 20mm;
+        }
         @media print {
-          body { margin: 0; }
           * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
           a[href]:after { content: none !important; }
         }
       </style>
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@3/src/css/preflight.css">
     </head><body>${content.innerHTML}</body></html>`);
     win.document.close();
     win.focus();
