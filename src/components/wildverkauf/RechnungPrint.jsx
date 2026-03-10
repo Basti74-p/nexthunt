@@ -135,8 +135,12 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
       </div>
 
       <style>{`
+        @page {
+          margin: 0;
+          size: A4;
+        }
         @media print {
-          body { margin: 0; padding: 0; background: white; }
+          body { margin: 15mm 20mm; padding: 0; background: white; }
           * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
           a[href]:after { content: none !important; }
         }
