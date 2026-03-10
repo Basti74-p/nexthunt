@@ -86,7 +86,7 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
 
       {/* Summen (nur Rechnung) */}
       {!isLieferschein && (
-        <div className="ml-auto w-full md:w-56 space-y-0.5 text-xs md:text-sm">
+        <div className="ml-auto w-56 space-y-0.5 text-xs">
           <div className="flex justify-between">
             <span className="text-gray-600">Nettobetrag</span>
             <span>€ {(verkauf.gesamtbetrag || 0).toFixed(2)}</span>
@@ -95,7 +95,7 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
             <span className="text-gray-600">MwSt. {verkauf.mwst_prozent || 7}%</span>
             <span>€ {(verkauf.mwst_betrag || 0).toFixed(2)}</span>
           </div>
-          <div className="flex justify-between font-bold text-sm md:text-base" style={{ borderTop: `2px solid ${accentColor}`, paddingTop: "4px", marginTop: "4px" }}>
+          <div className="flex justify-between font-bold text-base" style={{ borderTop: `2px solid ${accentColor}`, paddingTop: "6px", marginTop: "6px" }}>
             <span>Gesamtbetrag</span>
             <span>€ {(verkauf.brutto_betrag || 0).toFixed(2)}</span>
           </div>
