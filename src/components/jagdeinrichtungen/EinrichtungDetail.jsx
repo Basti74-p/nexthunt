@@ -135,14 +135,14 @@ export default function EinrichtungDetail({ einrichtung, tenantId, onBack, onEdi
       {tab === "schaeden" && (
         <div className="flex-1 flex flex-col min-h-0">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-gray-400">{schaeden.length} Schaden/Schäden</span>
+            <span className="text-sm text-gray-400">{schaeden.length} Protokoll(e)</span>
             <Button size="sm" onClick={() => setSchadensDialog({ open: true, schaden: null })} className="bg-[#22c55e] text-black hover:bg-[#16a34a] h-7 text-xs">
-              <Plus className="w-3.5 h-3.5 mr-1" /> Schaden erfassen
+              <Plus className="w-3.5 h-3.5 mr-1" /> Neues Protokoll
             </Button>
           </div>
           <div className="space-y-2 overflow-y-auto">
             {schaeden.length === 0 ? (
-              <div className="text-center py-10 text-gray-500 text-sm">Keine Schäden erfasst</div>
+              <div className="text-center py-10 text-gray-500 text-sm">Noch keine Protokolle vorhanden</div>
             ) : (
               schaeden.map((s) => (
                 <div key={s.id} className="bg-[#1a1a1a] rounded-xl p-3">
@@ -150,13 +150,14 @@ export default function EinrichtungDetail({ einrichtung, tenantId, onBack, onEdi
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-1">
                         <span className="text-sm font-medium text-gray-100 truncate">{s.titel}</span>
-                        <span className={`text-[10px] px-1.5 py-0.5 rounded ${SCHWERE_COLOR[s.schwere]}`}>{s.schwere}</span>
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-gray-800 text-gray-300">{PROTOKOLL_TYP_LABEL[s.protokoll_typ] || s.protokoll_typ}</span>
                         <span className={`text-[10px] px-1.5 py-0.5 rounded ${STATUS_SCHADEN_COLOR[s.status]}`}>{STATUS_SCHADEN_LABEL[s.status]}</span>
                       </div>
                       <div className="flex items-center gap-3 text-xs text-gray-400">
                         <span>{s.datum ? format(new Date(s.datum), "dd.MM.yyyy", { locale: de }) : ""}</span>
-                        <span>{s.schadensart}</span>
-                        {s.kosten_geschaetzt && <span>~{s.kosten_geschaetzt}€</span>}
+                        {s.kontrolleur && <span>{s.kontrolleur}</span>}
+                        {s.zustand_gesamt && <span className={ZUSTAND_COLOR[s.zustand_gesamt]}>{ZUSTAND_LABEL[s.zustand_gesamt]}</span>}
+                        {s.hat_schaden && s.kosten_geschaetzt && <span>~{s.kosten_geschaetzt}€</span>}
                       </div>
                       {s.beschreibung && <p className="text-xs text-gray-400 mt-1 line-clamp-2">{s.beschreibung}</p>}
                     </div>
