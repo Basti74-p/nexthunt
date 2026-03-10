@@ -110,7 +110,7 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
 
       {/* Footer */}
       <div className="mt-16 pt-4 border-t border-gray-300 text-xs text-gray-500 text-center">
-        {tenantSettings?.betriebsname || "Jagdbetrieb"} · {tenantSettings?.adresse?.replace(/\n/g, " · ")} · Erstellt am {formatDate(new Date().toISOString().split("T")[0])}
+        {tenantSettings?.betriebsname || "Jagdbetrieb"} · Erstellt am {formatDate(new Date().toISOString().split("T")[0])}
       </div>
 
       <style>{`
