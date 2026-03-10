@@ -52,6 +52,17 @@ body {
 
 body, button, input, textarea, select, label, p, span, div, a, h1, h2, h3, h4, h5, h6 {
   color: #e5e5e5;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+input, textarea {
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
 }
 
 .nh-scrollbar::-webkit-scrollbar {
