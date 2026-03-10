@@ -2,11 +2,11 @@ import React, { useRef, useState } from "react";
 import { useAuth } from "@/components/hooks/useAuth";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ListTodo, Check, RefreshCw } from "lucide-react";
+import { Check, RefreshCw } from "lucide-react";
 import PageTransition from "@/components/ui/PageTransition";
 
 export default function MobileTasks() {
-  const { tenant, user } = useAuth();
+  const { tenant } = useAuth();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const pullStartRef = useRef(null);
   const queryClient = useQueryClient();
@@ -18,12 +18,15 @@ export default function MobileTasks() {
   });
 
   const toggleMutation = useMutation({
-    mutationFn: ({ id, status }) => base44.entities.Aufgabe.update(id, { status: status === "erledigt" ? "offen" : "erledigt" }),
+    mutationFn: ({ id, status }) =>
+      base44.entities.Aufgabe.update(id, {
+        status: status === "erledigt" ? "offen" : "erledigt",
+      }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["aufgaben-mobile"] }),
   });
 
-  const open = aufgaben.filter(a => a.status !== "erledigt");
-  const done = aufgaben.filter(a => a.status === "erledigt");
+  const open = aufgaben.filter((a) => a.status !== "erledigt");
+  const done = aufgaben.filter((a) => a.status === "erledigt");
 
   const handlePullToRefresh = async (e) => {
     if (e.type === "touchstart") pullStartRef.current = e.touches[0].clientY;
@@ -47,7 +50,7 @@ export default function MobileTasks() {
         </div>
 
         <div className="space-y-2 mb-6">
-          {open.map(a => (
+          {open.map((a) => (
             <div key={a.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex items-center gap-3 select-none">
               <button
                 onClick={() => toggleMutation.mutate({ id: a.id, status: a.status })}
@@ -65,7 +68,7 @@ export default function MobileTasks() {
           <>
             <h3 className="text-sm font-medium text-gray-400 mb-2 select-none">Erledigt</h3>
             <div className="space-y-2">
-              {done.map(a => (
+              {done.map((a) => (
                 <div key={a.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex items-center gap-3 opacity-50 select-none">
                   <button
                     onClick={() => toggleMutation.mutate({ id: a.id, status: a.status })}
