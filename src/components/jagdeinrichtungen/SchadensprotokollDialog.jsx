@@ -115,6 +115,25 @@ export default function SchadensprotokollDialog({ isOpen, onClose, schaden, einr
             einrichtung_id: einrichtung.id,
             einrichtung_name: einrichtung.name,
           }),
+    onMutate: (data) => {
+      if (isEdit) {
+        queryClient.setQueryData(["schadensprotokoll", einrichtung?.id], old => (old || []).map(s =>
+          s.id === schaden.id ? { ...s, ...data } : s
+        ));
+      } else {
+        queryClient.setQueryData(["schadensprotokoll", einrichtung?.id], old => [
+          ...(old || []),
+          {
+            ...data,
+            id: "temp-" + Date.now(),
+            tenant_id: tenantId,
+            revier_id: einrichtung.revier_id,
+            einrichtung_id: einrichtung.id,
+            einrichtung_name: einrichtung.name,
+          }
+        ]);
+      }
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(["schadensprotokoll", einrichtung?.id]);
       onClose();
