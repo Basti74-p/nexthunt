@@ -27,6 +27,12 @@ export default function Aufgaben() {
 
   const createMutation = useMutation({
     mutationFn: (data) => base44.entities.Aufgabe.create({ ...data, tenant_id: tenant.id, status: "offen" }),
+    onMutate: (data) => {
+      queryClient.setQueryData(["aufgaben-page", tenant?.id], old => [
+        ...(old || []),
+        { ...data, id: "temp-" + Date.now(), tenant_id: tenant.id, status: "offen" }
+      ]);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["aufgaben-page"] });
       setDialogOpen(false);
@@ -36,6 +42,11 @@ export default function Aufgaben() {
 
   const toggleMutation = useMutation({
     mutationFn: ({ id, status }) => base44.entities.Aufgabe.update(id, { status: status === "erledigt" ? "offen" : "erledigt" }),
+    onMutate: ({ id, status }) => {
+      queryClient.setQueryData(["aufgaben-page", tenant?.id], old => (old || []).map(a =>
+        a.id === id ? { ...a, status: status === "erledigt" ? "offen" : "erledigt" } : a
+      ));
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["aufgaben-page"] }),
   });
 
