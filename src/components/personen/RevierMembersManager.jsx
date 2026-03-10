@@ -88,6 +88,19 @@ export default function RevierMembersManager({ revierId }) {
     },
   });
 
+  const editMutation = useMutation({
+    mutationFn: (data) => base44.entities.TenantMember.update(data.id, {
+      first_name: data.first_name,
+      last_name: data.last_name,
+      phone: data.phone,
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["revier-members", revierId] });
+      setEditDialogOpen(false);
+      setEditForm({ first_name: "", last_name: "", phone: "" });
+    },
+  });
+
   const handleInvite = () => {
     if (!form.user_email) return;
     // Convert tenant role to app role for invitation
