@@ -109,6 +109,9 @@ export default function Strecke() {
 
   const createMutation = useMutation({
     mutationFn: (data) => base44.entities.Strecke.create({ ...data, tenant_id: tenant.id }),
+    onMutate: (data) => {
+      queryClient.setQueryData(["strecke", tenant?.id], old => [...(old || []), { ...data, id: "temp-" + Date.now() }]);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["strecke"] });
       setDialogOpen(false);
@@ -118,6 +121,9 @@ export default function Strecke() {
 
   const updateMutation = useMutation({
     mutationFn: ({ id, data }) => base44.entities.Strecke.update(id, data),
+    onMutate: ({ id, data }) => {
+      queryClient.setQueryData(["strecke", tenant?.id], old => (old || []).map(s => s.id === id ? { ...s, ...data } : s));
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["strecke"] });
       setDialogOpen(false);
@@ -128,6 +134,9 @@ export default function Strecke() {
 
   const deleteMutation = useMutation({
     mutationFn: (id) => base44.entities.Strecke.delete(id),
+    onMutate: (id) => {
+      queryClient.setQueryData(["strecke", tenant?.id], old => (old || []).filter(s => s.id !== id));
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["strecke"] }),
   });
 
@@ -239,63 +248,96 @@ export default function Strecke() {
         )}
       </div>
 
-      {/* Table */}
+      {/* Table / Card View */}
       {filtered.length === 0 && !isLoading ? (
         <EmptyState icon={Crosshair} title="Keine Einträge" description="Erfassen Sie erlegtes Wild mit dem Button oben rechts." />
       ) : (
-        <div className="bg-[#232323] rounded-2xl border border-[#3a3a3a] overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-[#3a3a3a]">
-                  <th className="text-left px-4 py-3 text-gray-400 font-medium">Datum</th>
-                  <th className="text-left px-4 py-3 text-gray-400 font-medium">Wildart</th>
-                  <th className="text-left px-4 py-3 text-gray-400 font-medium">Geschlecht</th>
-                  <th className="text-left px-4 py-3 text-gray-400 font-medium">Altersklasse</th>
-                  <th className="text-left px-4 py-3 text-gray-400 font-medium">Revier</th>
-                  <th className="text-left px-4 py-3 text-gray-400 font-medium">Wildmarke</th>
-                  <th className="text-left px-4 py-3 text-gray-400 font-medium">Gewicht</th>
-                  <th className="text-left px-4 py-3 text-gray-400 font-medium">Status</th>
-                  <th className="text-right px-4 py-3 text-gray-400 font-medium">Aktionen</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map((item, i) => (
-                  <tr key={item.id} className={`border-b border-[#3a3a3a] last:border-0 hover:bg-[#2a2a2a] transition-colors ${i % 2 === 0 ? "" : "bg-[#282828]"}`}>
-                    <td className="px-4 py-3 text-gray-200">
-                      {item.date ? format(new Date(item.date), "dd.MM.yyyy", { locale: de }) : "–"}
-                    </td>
-                    <td className="px-4 py-3 font-medium text-gray-100">{speciesLabel(item.species)}</td>
-                    <td className="px-4 py-3 text-gray-300">{genderLabel(item.gender)}</td>
-                    <td className="px-4 py-3 text-gray-300">{item.age_class || "–"}</td>
-                    <td className="px-4 py-3 text-gray-300">{revierName(item.revier_id)}</td>
-                     <td className="px-4 py-3 text-gray-300 text-xs">{item.wildmark_id ? wildmarken.find(w => w.id === item.wildmark_id)?.code || "–" : "–"}</td>
-                     <td className="px-4 py-3 text-gray-300">{item.weight_kg ? `${item.weight_kg} kg` : "–"}</td>
-                    <td className="px-4 py-3">
-                      <StatusSelect value={item.status || "erfasst"} onChange={(v) => handleStatusChange(item, v)} />
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <button onClick={() => openEdit(item)} className="p-1.5 rounded-lg hover:bg-[#3a3a3a] text-gray-400 hover:text-gray-200 transition-colors">
-                          <Pencil className="w-3.5 h-3.5" />
-                        </button>
-                        <button onClick={() => { if (confirm("Eintrag wirklich löschen?")) deleteMutation.mutate(item.id); }}
-                          className="p-1.5 rounded-lg hover:bg-red-900/30 text-gray-400 hover:text-red-400 transition-colors">
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </td>
+        <>
+          {/* Desktop Table */}
+          <div className="hidden sm:block bg-[#232323] rounded-2xl border border-[#3a3a3a] overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-[#3a3a3a]">
+                    <th className="text-left px-4 py-3 text-gray-400 font-medium">Datum</th>
+                    <th className="text-left px-4 py-3 text-gray-400 font-medium">Wildart</th>
+                    <th className="text-left px-4 py-3 text-gray-400 font-medium">Geschlecht</th>
+                    <th className="text-left px-4 py-3 text-gray-400 font-medium">Altersklasse</th>
+                    <th className="text-left px-4 py-3 text-gray-400 font-medium">Revier</th>
+                    <th className="text-left px-4 py-3 text-gray-400 font-medium">Wildmarke</th>
+                    <th className="text-left px-4 py-3 text-gray-400 font-medium">Gewicht</th>
+                    <th className="text-left px-4 py-3 text-gray-400 font-medium">Status</th>
+                    <th className="text-right px-4 py-3 text-gray-400 font-medium">Aktionen</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {filtered.map((item, i) => (
+                    <tr key={item.id} className={`border-b border-[#3a3a3a] last:border-0 hover:bg-[#2a2a2a] transition-colors ${i % 2 === 0 ? "" : "bg-[#282828]"}`}>
+                      <td className="px-4 py-3 text-gray-200">
+                        {item.date ? format(new Date(item.date), "dd.MM.yyyy", { locale: de }) : "–"}
+                      </td>
+                      <td className="px-4 py-3 font-medium text-gray-100">{speciesLabel(item.species)}</td>
+                      <td className="px-4 py-3 text-gray-300">{genderLabel(item.gender)}</td>
+                      <td className="px-4 py-3 text-gray-300">{item.age_class || "–"}</td>
+                      <td className="px-4 py-3 text-gray-300">{revierName(item.revier_id)}</td>
+                       <td className="px-4 py-3 text-gray-300 text-xs">{item.wildmark_id ? wildmarken.find(w => w.id === item.wildmark_id)?.code || "–" : "–"}</td>
+                       <td className="px-4 py-3 text-gray-300">{item.weight_kg ? `${item.weight_kg} kg` : "–"}</td>
+                      <td className="px-4 py-3">
+                        <StatusSelect value={item.status || "erfasst"} onChange={(v) => handleStatusChange(item, v)} />
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <button onClick={() => openEdit(item)} className="p-1.5 rounded-lg hover:bg-[#3a3a3a] text-gray-400 hover:text-gray-200 transition-colors">
+                            <Pencil className="w-3.5 h-3.5" />
+                          </button>
+                          <button onClick={() => { if (confirm("Eintrag wirklich löschen?")) deleteMutation.mutate(item.id); }}
+                            className="p-1.5 rounded-lg hover:bg-red-900/30 text-gray-400 hover:text-red-400 transition-colors">
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+
+          {/* Mobile Card View */}
+          <div className="sm:hidden space-y-3">
+            {filtered.map(item => (
+              <div key={item.id} className="bg-[#232323] rounded-xl border border-[#3a3a3a] p-4 space-y-2">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="font-medium text-gray-100">{speciesLabel(item.species)}</p>
+                    <p className="text-xs text-gray-400">{item.date ? format(new Date(item.date), "dd.MM.yyyy", { locale: de }) : "–"}</p>
+                  </div>
+                  <StatusSelect value={item.status || "erfasst"} onChange={(v) => handleStatusChange(item, v)} />
+                </div>
+                <div className="text-xs text-gray-400 space-y-1">
+                  <p>Geschlecht: {genderLabel(item.gender)}</p>
+                  {item.age_class && <p>Alter: {item.age_class}</p>}
+                  <p>Revier: {revierName(item.revier_id)}</p>
+                  {item.weight_kg && <p>Gewicht: {item.weight_kg} kg</p>}
+                </div>
+                <div className="flex gap-2 pt-2 border-t border-[#3a3a3a]">
+                  <button onClick={() => openEdit(item)} className="flex-1 p-2 rounded-lg hover:bg-[#3a3a3a] text-gray-400 hover:text-gray-200 transition-colors text-sm">
+                    <Pencil className="w-4 h-4 mx-auto" />
+                  </button>
+                  <button onClick={() => { if (confirm("Eintrag wirklich löschen?")) deleteMutation.mutate(item.id); }}
+                    className="flex-1 p-2 rounded-lg hover:bg-red-900/30 text-gray-400 hover:text-red-400 transition-colors text-sm">
+                    <Trash2 className="w-4 h-4 mx-auto" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
       )}
 
       {/* Dialog */}
       <Dialog open={dialogOpen} onOpenChange={(v) => { setDialogOpen(v); if (!v) { setEditItem(null); setForm(EMPTY_FORM); } }}>
-        <DialogContent className="bg-[#2d2d2d] border-[#3a3a3a] max-w-lg">
+        <DialogContent className="bg-[#2d2d2d] border-[#3a3a3a] max-w-lg sm:max-w-lg max-h-[90vh] w-[calc(100vw-2rem)] sm:w-auto rounded-2xl">
           <DialogHeader>
             <DialogTitle className="text-gray-100">{editItem ? "Eintrag bearbeiten" : "Neuer Strecken-Eintrag"}</DialogTitle>
           </DialogHeader>
