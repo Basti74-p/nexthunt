@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { base44 } from "@/api/base44Client";
+import { Loader2, Upload, X } from "lucide-react";
 
 export default function EtikettEditor({ settings, onChange }) {
   const set = (key, value) => onChange({ ...settings, [key]: value });
