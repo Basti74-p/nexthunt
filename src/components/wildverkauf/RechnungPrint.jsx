@@ -55,7 +55,7 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
       </div>
 
       {/* Positionen */}
-      <table className="w-full text-sm mb-6" style={{ borderCollapse: "collapse" }}>
+      <table className="w-full text-xs mb-4" style={{ borderCollapse: "collapse" }}>
         <thead>
           <tr style={{ borderBottom: `2px solid ${accentColor}` }}>
             <th className="text-left py-2 font-semibold">Bezeichnung</th>
