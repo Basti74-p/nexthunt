@@ -6,7 +6,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Camera, X, Upload } from "lucide-react";
+import { Loader2, Camera, X, CheckCircle, AlertTriangle } from "lucide-react";
+
+const PROTOKOLL_TYP = [
+  { value: "kontrolle", label: "Routinekontrolle" },
+  { value: "jahresinspektion", label: "Jahresinspektion" },
+  { value: "schadensmeldung", label: "Schadensmeldung" },
+  { value: "reparatur", label: "Reparaturbericht" },
+];
+
+const ZUSTAND_OPTIONS = [
+  { value: "gut", label: "Gut – keine Mängel", color: "border-green-600 bg-green-900/20 text-green-300" },
+  { value: "maessig", label: "Mäßig – leichte Mängel", color: "border-yellow-600 bg-yellow-900/20 text-yellow-300" },
+  { value: "schlecht", label: "Schlecht – Reparatur nötig", color: "border-red-600 bg-red-900/20 text-red-300" },
+  { value: "total", label: "Totalschaden", color: "border-red-800 bg-red-950/30 text-red-200" },
+];
 
 const SCHADENSART_OPTIONS = [
   { value: "vandalismus", label: "Vandalismus" },
@@ -25,9 +39,9 @@ const SCHWERE_OPTIONS = [
 ];
 
 const STATUS_OPTIONS = [
-  { value: "erfasst", label: "Erfasst" },
-  { value: "in_reparatur", label: "In Reparatur" },
-  { value: "behoben", label: "Behoben" },
+  { value: "offen", label: "Offen" },
+  { value: "in_bearbeitung", label: "In Bearbeitung" },
+  { value: "abgeschlossen", label: "Abgeschlossen" },
 ];
 
 const SCHWERE_COLOR = {
@@ -37,47 +51,56 @@ const SCHWERE_COLOR = {
   total: "border-red-800 bg-red-950/30 text-red-200",
 };
 
+const empty = () => ({
+  titel: "",
+  datum: new Date().toISOString().split("T")[0],
+  protokoll_typ: "kontrolle",
+  zustand_gesamt: "gut",
+  kontrolleur: "",
+  beschreibung: "",
+  hat_schaden: false,
+  schadensart: "sonstiges",
+  schwere: "gering",
+  massnahmen: "",
+  status: "offen",
+  kosten_geschaetzt: "",
+  kosten_tatsaechlich: "",
+  erledigt_am: "",
+  erledigt_durch: "",
+  notes: "",
+  fotos: [],
+});
+
 export default function SchadensprotokollDialog({ isOpen, onClose, schaden, einrichtung, tenantId }) {
   const queryClient = useQueryClient();
   const isEdit = !!schaden;
   const fileInputRef = useRef();
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
-
-  const empty = {
-    titel: "",
-    datum: new Date().toISOString().split("T")[0],
-    schadensart: "sonstiges",
-    schwere: "gering",
-    status: "erfasst",
-    beschreibung: "",
-    kosten_geschaetzt: "",
-    kosten_tatsaechlich: "",
-    behoben_am: "",
-    behoben_durch: "",
-    notes: "",
-    fotos: [],
-  };
-
-  const [formData, setFormData] = useState(empty);
+  const [formData, setFormData] = useState(empty());
 
   useEffect(() => {
     if (schaden) {
       setFormData({
         titel: schaden.titel || "",
         datum: schaden.datum || new Date().toISOString().split("T")[0],
+        protokoll_typ: schaden.protokoll_typ || "kontrolle",
+        zustand_gesamt: schaden.zustand_gesamt || "gut",
+        kontrolleur: schaden.kontrolleur || "",
+        beschreibung: schaden.beschreibung || "",
+        hat_schaden: schaden.hat_schaden || false,
         schadensart: schaden.schadensart || "sonstiges",
         schwere: schaden.schwere || "gering",
-        status: schaden.status || "erfasst",
-        beschreibung: schaden.beschreibung || "",
+        massnahmen: schaden.massnahmen || "",
+        status: schaden.status || "offen",
         kosten_geschaetzt: schaden.kosten_geschaetzt ?? "",
         kosten_tatsaechlich: schaden.kosten_tatsaechlich ?? "",
-        behoben_am: schaden.behoben_am || "",
-        behoben_durch: schaden.behoben_durch || "",
+        erledigt_am: schaden.erledigt_am || "",
+        erledigt_durch: schaden.erledigt_durch || "",
         notes: schaden.notes || "",
         fotos: schaden.fotos || [],
       });
     } else {
-      setFormData(empty);
+      setFormData(empty());
     }
   }, [schaden, isOpen]);
 
@@ -122,109 +145,186 @@ export default function SchadensprotokollDialog({ isOpen, onClose, schaden, einr
   };
 
   const set = (k, v) => setFormData((p) => ({ ...p, [k]: v }));
+  const zustandInfo = ZUSTAND_OPTIONS.find((z) => z.value === formData.zustand_gesamt);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl bg-[#2d2d2d] border-[#3a3a3a] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-gray-100 text-base">
-            {isEdit ? "Schadensprotokoll bearbeiten" : "Schadensprotokoll erfassen"}
+            {isEdit ? "Protokoll bearbeiten" : "Neues Protokoll"}
           </DialogTitle>
           {einrichtung && (
-            <p className="text-xs text-gray-400 mt-0.5">
-              {einrichtung.name} · {einrichtung.type}
-            </p>
+            <p className="text-xs text-gray-400 mt-0.5">{einrichtung.name}</p>
           )}
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-5">
+
+          {/* Protokolltyp Auswahl */}
+          <div className="grid grid-cols-2 gap-2">
+            {PROTOKOLL_TYP.map((t) => (
+              <button
+                key={t.value}
+                type="button"
+                onClick={() => set("protokoll_typ", t.value)}
+                className={`px-3 py-2.5 rounded-xl text-sm font-medium border transition-all text-left ${
+                  formData.protokoll_typ === t.value
+                    ? "border-[#22c55e] bg-green-900/20 text-green-300"
+                    : "border-[#3a3a3a] text-gray-400 hover:border-gray-500"
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
 
           {/* Grunddaten */}
           <section>
             <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Grunddaten</p>
             <div className="space-y-2">
               <Input
-                placeholder="Titel des Schadens *"
+                placeholder="Titel / Betreff *"
                 value={formData.titel}
                 onChange={(e) => set("titel", e.target.value)}
                 className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"
               />
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-xs text-gray-400 mb-1 block">Schadensdatum *</label>
+                  <label className="text-xs text-gray-400 mb-1 block">Datum *</label>
                   <Input type="date" value={formData.datum} onChange={(e) => set("datum", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
                 </div>
                 <div>
-                  <label className="text-xs text-gray-400 mb-1 block">Status</label>
-                  <Select value={formData.status} onValueChange={(v) => set("status", v)}>
-                    <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue /></SelectTrigger>
-                    <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-                      {STATUS_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
+                  <label className="text-xs text-gray-400 mb-1 block">Kontrolleur / Ersteller</label>
+                  <Input placeholder="Name" value={formData.kontrolleur} onChange={(e) => set("kontrolleur", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Schadensklassifikation */}
+          {/* Gesamtzustand */}
           <section>
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Klassifikation</p>
+            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Gesamtzustand der Einrichtung</p>
             <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label className="text-xs text-gray-400 mb-1 block">Schadensart</label>
-                <Select value={formData.schadensart} onValueChange={(v) => set("schadensart", v)}>
-                  <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue /></SelectTrigger>
-                  <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-                    {SCHADENSART_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <label className="text-xs text-gray-400 mb-1 block">Schwere</label>
-                <Select value={formData.schwere} onValueChange={(v) => set("schwere", v)}>
-                  <SelectTrigger className={`border text-sm font-medium ${SCHWERE_COLOR[formData.schwere]}`}><SelectValue /></SelectTrigger>
-                  <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-                    {SCHWERE_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
+              {ZUSTAND_OPTIONS.map((z) => (
+                <button
+                  key={z.value}
+                  type="button"
+                  onClick={() => set("zustand_gesamt", z.value)}
+                  className={`px-3 py-2.5 rounded-xl text-xs font-medium border transition-all flex items-center gap-2 ${
+                    formData.zustand_gesamt === z.value ? z.color : "border-[#3a3a3a] text-gray-500 hover:border-gray-500"
+                  }`}
+                >
+                  {formData.zustand_gesamt === z.value
+                    ? <CheckCircle className="w-3.5 h-3.5 shrink-0" />
+                    : <div className="w-3.5 h-3.5 rounded-full border border-current shrink-0" />
+                  }
+                  {z.label}
+                </button>
+              ))}
             </div>
           </section>
 
-          {/* Beschreibung */}
+          {/* Feststellungen / Beschreibung */}
           <section>
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Beschreibung</p>
+            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Feststellungen</p>
             <Textarea
-              placeholder="Detaillierte Beschreibung des Schadens..."
+              placeholder="Was wurde festgestellt? Zustand, Auffälligkeiten, durchgeführte Arbeiten..."
               value={formData.beschreibung}
               onChange={(e) => set("beschreibung", e.target.value)}
               className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 resize-none h-24"
             />
           </section>
 
-          {/* Kosten */}
+          {/* Schaden ja/nein Toggle */}
           <section>
-            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Kosten</p>
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label className="text-xs text-gray-400 mb-1 block">Geschätzte Kosten (€)</label>
-                <Input
-                  type="number" step="0.01" placeholder="0,00"
-                  value={formData.kosten_geschaetzt}
-                  onChange={(e) => set("kosten_geschaetzt", e.target.value)}
-                  className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"
-                />
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => set("hat_schaden", !formData.hat_schaden)}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border transition-all ${
+                  formData.hat_schaden
+                    ? "border-red-600 bg-red-900/20 text-red-300"
+                    : "border-[#3a3a3a] text-gray-400 hover:border-gray-500"
+                }`}
+              >
+                <AlertTriangle className="w-4 h-4" />
+                Schaden vorhanden
+              </button>
+              {!formData.hat_schaden && (
+                <span className="text-xs text-gray-500">Kein Schaden festgestellt</span>
+              )}
+            </div>
+
+            {formData.hat_schaden && (
+              <div className="mt-3 space-y-2 p-3 bg-red-950/10 border border-red-900/30 rounded-xl">
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-xs text-gray-400 mb-1 block">Schadensart</label>
+                    <Select value={formData.schadensart} onValueChange={(v) => set("schadensart", v)}>
+                      <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue /></SelectTrigger>
+                      <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
+                        {SCHADENSART_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-400 mb-1 block">Schwere</label>
+                    <Select value={formData.schwere} onValueChange={(v) => set("schwere", v)}>
+                      <SelectTrigger className={`border text-sm font-medium ${SCHWERE_COLOR[formData.schwere]}`}><SelectValue /></SelectTrigger>
+                      <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
+                        {SCHWERE_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-xs text-gray-400 mb-1 block">Geschätzte Kosten (€)</label>
+                    <Input type="number" step="0.01" placeholder="0,00" value={formData.kosten_geschaetzt} onChange={(e) => set("kosten_geschaetzt", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-400 mb-1 block">Tatsächliche Kosten (€)</label>
+                    <Input type="number" step="0.01" placeholder="0,00" value={formData.kosten_tatsaechlich} onChange={(e) => set("kosten_tatsaechlich", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+                  </div>
+                </div>
               </div>
-              <div>
-                <label className="text-xs text-gray-400 mb-1 block">Tatsächliche Kosten (€)</label>
-                <Input
-                  type="number" step="0.01" placeholder="0,00"
-                  value={formData.kosten_tatsaechlich}
-                  onChange={(e) => set("kosten_tatsaechlich", e.target.value)}
-                  className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"
-                />
-              </div>
+            )}
+          </section>
+
+          {/* Maßnahmen */}
+          <section>
+            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Maßnahmen</p>
+            <Textarea
+              placeholder="Eingeleitete oder geplante Maßnahmen..."
+              value={formData.massnahmen}
+              onChange={(e) => set("massnahmen", e.target.value)}
+              className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 resize-none h-16"
+            />
+          </section>
+
+          {/* Status & Erledigung */}
+          <section>
+            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Bearbeitungsstatus</p>
+            <div className="space-y-2">
+              <Select value={formData.status} onValueChange={(v) => set("status", v)}>
+                <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue /></SelectTrigger>
+                <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
+                  {STATUS_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+                </SelectContent>
+              </Select>
+              {formData.status === "abgeschlossen" && (
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-xs text-gray-400 mb-1 block">Erledigt am</label>
+                    <Input type="date" value={formData.erledigt_am} onChange={(e) => set("erledigt_am", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-400 mb-1 block">Erledigt durch</label>
+                    <Input placeholder="Name / Firma" value={formData.erledigt_durch} onChange={(e) => set("erledigt_durch", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+                  </div>
+                </div>
+              )}
             </div>
           </section>
 
@@ -257,23 +357,6 @@ export default function SchadensprotokollDialog({ isOpen, onClose, schaden, einr
             </div>
           </section>
 
-          {/* Behebung */}
-          {formData.status === "behoben" && (
-            <section>
-              <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Behebung</p>
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="text-xs text-gray-400 mb-1 block">Behoben am</label>
-                  <Input type="date" value={formData.behoben_am} onChange={(e) => set("behoben_am", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
-                </div>
-                <div>
-                  <label className="text-xs text-gray-400 mb-1 block">Behoben durch</label>
-                  <Input placeholder="Name / Firma" value={formData.behoben_durch} onChange={(e) => set("behoben_durch", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
-                </div>
-              </div>
-            </section>
-          )}
-
           {/* Interne Notizen */}
           <section>
             <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Interne Notizen</p>
@@ -281,7 +364,7 @@ export default function SchadensprotokollDialog({ isOpen, onClose, schaden, einr
               placeholder="Weitere Anmerkungen..."
               value={formData.notes}
               onChange={(e) => set("notes", e.target.value)}
-              className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 resize-none h-16"
+              className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 resize-none h-14"
             />
           </section>
 
