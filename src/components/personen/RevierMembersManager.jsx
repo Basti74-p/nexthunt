@@ -362,6 +362,52 @@ export default function RevierMembersManager({ revierId }) {
           </div>
         </DialogContent>
       </Dialog>
+
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Mitglied bearbeiten</DialogTitle></DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div>
+              <Label>Vorname</Label>
+              <Input
+                value={editForm.first_name}
+                onChange={(e) => setEditForm({ ...editForm, first_name: e.target.value })}
+                placeholder="Vorname"
+              />
+            </div>
+            <div>
+              <Label>Nachname</Label>
+              <Input
+                value={editForm.last_name}
+                onChange={(e) => setEditForm({ ...editForm, last_name: e.target.value })}
+                placeholder="Nachname"
+              />
+            </div>
+            <div>
+              <Label>Telefon</Label>
+              <Input
+                value={editForm.phone}
+                onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
+                placeholder="Telefon"
+              />
+            </div>
+            <Button
+              onClick={() => {
+                editMutation.mutate({
+                  id: selectedMember.id,
+                  first_name: editForm.first_name,
+                  last_name: editForm.last_name,
+                  phone: editForm.phone,
+                });
+              }}
+              disabled={editMutation.isPending}
+              className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl"
+            >
+              {editMutation.isPending ? "Speichert..." : "Speichern"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
