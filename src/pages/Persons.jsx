@@ -19,6 +19,10 @@ export default function Persons() {
   const [error, setError] = useState("");
   const queryClient = useQueryClient();
 
+  if (!tenant?.id) {
+    return <div>Loading...</div>;
+  }
+
   const { data: persons = [] } = useQuery({
     queryKey: ["persons", tenant?.id],
     queryFn: () => base44.entities.Person.filter({ tenant_id: tenant?.id }),
@@ -30,7 +34,7 @@ export default function Persons() {
       if (!data.name?.trim()) {
         throw new Error("Name ist erforderlich");
       }
-      return base44.entities.Person.create({ ...data, tenant_id: tenant.id });
+      return base44.entities.Person.create({ ...data, tenant_id: tenant?.id });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["persons"] });
