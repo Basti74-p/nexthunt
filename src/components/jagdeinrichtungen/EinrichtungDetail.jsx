@@ -46,6 +46,17 @@ export default function EinrichtungDetail({ einrichtung, tenantId, onBack, onEdi
     enabled: tab === "aufgaben",
   });
 
+  // Load schaeden for info tab as well
+  const { data: schaddenForInfo = [] } = useQuery({
+    queryKey: ["schadensprotokoll-info", einrichtung.id],
+    queryFn: () => base44.entities.Schadensprotokoll.filter({ einrichtung_id: einrichtung.id }),
+  });
+
+  // Get latest protocol with damage info
+  const latestProtocolWithDamage = schaddenForInfo
+    .filter(s => s.hat_schaden)
+    .sort((a, b) => new Date(b.datum) - new Date(a.datum))[0];
+
   const deleteSchaden = useMutation({
     mutationFn: (id) => base44.entities.Schadensprotokoll.delete(id),
     onSuccess: () => queryClient.invalidateQueries(["schadensprotokoll", einrichtung.id]),
