@@ -142,7 +142,7 @@ export default function TenantSettings() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Features</h2>
         <div className="space-y-3">
           {Object.entries(FEATURE_LABELS).map(([key, label]) => (
@@ -157,6 +157,16 @@ export default function TenantSettings() {
           ))}
         </div>
       </div>
+
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Kontoverwaltung</h2>
+        <p className="text-sm text-gray-600 mb-4">Löschen Sie Ihr Konto dauerhaft. Diese Aktion kann nicht rückgängig gemacht werden.</p>
+        <Button variant="destructive" onClick={() => setDeleteDialogOpen(true)}>
+          Konto löschen
+        </Button>
+      </div>
+
+      <DeleteAccountDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen} />
     </div>
   );
 }
