@@ -8,6 +8,17 @@ import { Loader2, Upload, X } from "lucide-react";
 
 export default function EtikettEditor({ settings, onChange }) {
   const set = (key, value) => onChange({ ...settings, [key]: value });
+  const fileInputRef = useRef();
+  const [uploading, setUploading] = useState(false);
+
+  const handleLogoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    set("logoUrl", file_url);
+    setUploading(false);
+  };
 
   return (
     <div className="space-y-5 text-sm text-gray-800">
