@@ -5,6 +5,9 @@ import PageHeader from "@/components/ui/PageHeader";
 import StatusBadge from "@/components/ui/StatusBadge";
 import EtikettSettings from "@/components/wildprodukte/EtikettSettings";
 import EtikettPrintView from "@/components/wildprodukte/EtikettPrintView";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
 
 const DEFAULT_ETIKETT_SETTINGS = {
