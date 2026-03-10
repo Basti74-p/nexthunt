@@ -66,6 +66,16 @@ export default function TenantSettings() {
         </div>
       </div>
 
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Etikett-Einstellungen</h2>
+        <EtikettSettings
+          settings={etikettSettings}
+          onChange={setEtikettSettings}
+          onSave={handleSave}
+          saving={saving}
+        />
+      </div>
+
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Features</h2>
         <div className="space-y-3">
