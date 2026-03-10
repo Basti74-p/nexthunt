@@ -32,6 +32,13 @@ export default function TenantMembers() {
     },
   });
 
+  const toggleStatusMutation = useMutation({
+    mutationFn: (member) => base44.entities.TenantMember.update(member.id, { status: member.status === "active" ? "inactive" : "active" }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["members"] });
+    },
+  });
+
   const canManage = isTenantOwner || isPlatformAdmin;
 
   return (
