@@ -10,6 +10,16 @@ function LayoutInner({ children, currentPageName }) {
   const { user, loading } = useAuth();
   const isMobile = useMobile();
 
+  // Auto-apply dark theme based on system preference
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      if (prefersDark) {
+        document.documentElement.classList.add("dark");
+      }
+    }
+  }, []);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#2d2d2d]">
