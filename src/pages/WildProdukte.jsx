@@ -37,18 +37,16 @@ export default function WildProdukte() {
   const [statusFilter, setStatusFilter] = useState("lager");
   const [printProduct, setPrintProduct] = useState(null);
   const [etikettSettings, setEtikettSettings] = useState({
-    betriebsname: "",
-    adresse: "",
-    logoUrl: "",
     empfaenger: "",
     eigeneNotiz: "",
-    schriftgroesse: "normal",
-    zeigeLagerlocation: true,
-    zeigeTemperatur: true,
-    zeigeBeschreibung: true,
-    zeigeEinfrierungsDatum: true,
-    zeigeDruckdatum: true,
   });
+  const [savedSettings, setSavedSettings] = useState({});
+
+  useEffect(() => {
+    base44.auth.me().then(u => {
+      if (u?.etikett_settings) setSavedSettings(u.etikett_settings);
+    });
+  }, []);
   const [form, setForm] = useState({
     revier_id: "",
     wildkammer_id: "",
