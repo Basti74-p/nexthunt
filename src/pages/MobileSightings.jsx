@@ -74,39 +74,40 @@ export default function MobileSightings() {
           {isRefreshing && <RefreshCw className="w-4 h-4 animate-spin text-[#0F2F23]" />}
         </div>
 
-      <div className="space-y-2">
-        {sightings.map(s => (
-          <div key={s.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
-            <Eye className="w-5 h-5 text-[#0F2F23]" />
-            <div className="flex-1">
-              <p className="font-medium text-gray-900 capitalize">{SPECIES.find(sp => sp.value === s.species)?.label}</p>
-              <p className="text-xs text-gray-500">{s.quantity}× • {s.date}</p>
+        <div className="space-y-2">
+          {sightings.map(s => (
+            <div key={s.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex items-center gap-3 select-none">
+              <Eye className="w-5 h-5 text-[#0F2F23]" />
+              <div className="flex-1">
+                <p className="font-medium text-gray-900 capitalize">{SPECIES.find(sp => sp.value === s.species)?.label}</p>
+                <p className="text-xs text-gray-500">{s.quantity}× • {s.date}</p>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
-          <DialogHeader><DialogTitle>Sichtung melden</DialogTitle></DialogHeader>
-          <div className="space-y-4 mt-4">
-            <div>
-              <Label>Wildart</Label>
-              <Select value={form.species} onValueChange={(v) => setForm({ ...form, species: v })}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>{SPECIES.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}</SelectContent>
-              </Select>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogContent>
+            <DialogHeader><DialogTitle>Sichtung melden</DialogTitle></DialogHeader>
+            <div className="space-y-4 mt-4">
+              <div>
+                <Label>Wildart</Label>
+                <Select value={form.species} onValueChange={(v) => setForm({ ...form, species: v })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>{SPECIES.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div><Label>Anzahl</Label><Input type="number" min="1" value={form.quantity} onChange={(e) => setForm({ ...form, quantity: Number(e.target.value) })} /></div>
+                <div><Label>Datum</Label><Input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} /></div>
+              </div>
+              <Button onClick={() => createMutation.mutate(form)} disabled={createMutation.isPending} className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl select-none">
+                {createMutation.isPending ? "Melden..." : "Sichtung melden"}
+              </Button>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div><Label>Anzahl</Label><Input type="number" min="1" value={form.quantity} onChange={(e) => setForm({ ...form, quantity: Number(e.target.value) })} /></div>
-              <div><Label>Datum</Label><Input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} /></div>
-            </div>
-            <Button onClick={() => createMutation.mutate(form)} disabled={createMutation.isPending} className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl">
-              {createMutation.isPending ? "Melden..." : "Sichtung melden"}
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </div>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </PageTransition>
   );
 }
