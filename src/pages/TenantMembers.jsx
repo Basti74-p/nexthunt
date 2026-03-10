@@ -73,6 +73,17 @@ export default function TenantMembers() {
               </div>
             </div>
             <span className="text-xs text-gray-400 capitalize">{m.role?.replace("_", " ")}</span>
+            {canManage && (
+              <Button
+                onClick={() => toggleStatusMutation.mutate(m)}
+                disabled={toggleStatusMutation.isPending}
+                variant="ghost"
+                size="sm"
+                className={m.status === "active" ? "text-gray-400 hover:text-red-600" : "text-red-600 hover:text-red-700"}
+              >
+                <Ban className="w-4 h-4" />
+              </Button>
+            )}
           </div>
         ))}
       </div>
