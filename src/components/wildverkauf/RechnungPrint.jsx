@@ -46,9 +46,9 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
       </div>
 
       {/* Empfänger */}
-      <div className="mb-8 pl-4" style={{ borderLeft: `4px solid ${accentColor}` }}>
-        <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Empfänger</p>
-        <p className="font-bold text-base">{kunde?.name || verkauf.kunde_name || "–"}</p>
+      <div className="mb-5 pl-3" style={{ borderLeft: `3px solid ${accentColor}` }}>
+        <p className="text-xs text-gray-500 uppercase tracking-wide mb-0.5">Empfänger</p>
+        <p className="font-bold text-sm">{kunde?.name || verkauf.kunde_name || "–"}</p>
         {kunde?.contact_person && <p className="text-sm">{kunde.contact_person}</p>}
         {kunde?.address && <p className="text-sm text-gray-700 whitespace-pre-line">{kunde.address}</p>}
         {kunde?.email && <p className="text-sm text-gray-600">{kunde.email}</p>}
