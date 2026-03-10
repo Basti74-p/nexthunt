@@ -7,6 +7,8 @@ import PageTransition from "@/components/ui/PageTransition";
 
 export default function MobileTasks() {
   const { tenant, user } = useAuth();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const pullStartRef = useRef(null);
   const queryClient = useQueryClient();
 
   const { data: aufgaben = [] } = useQuery({
