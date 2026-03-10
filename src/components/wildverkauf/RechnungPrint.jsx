@@ -108,9 +108,24 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
         </div>
       )}
 
-      {/* Footer */}
-      <div className="mt-16 pt-4 border-t border-gray-300 text-xs text-gray-500 text-center">
-        {tenantSettings?.betriebsname || "Jagdbetrieb"} · Erstellt am {formatDate(new Date().toISOString().split("T")[0])}
+      {/* Bankverbindung & Fußzeile */}
+      <div className="mt-16">
+        {tenantSettings?.rechnung_bankverbindung && (
+          <div className="mb-4 text-xs text-gray-600 whitespace-pre-line">
+            <span className="font-semibold">Bankverbindung:</span>{"\n"}{tenantSettings.rechnung_bankverbindung}
+          </div>
+        )}
+        {tenantSettings?.rechnung_steuernummer && (
+          <p className="text-xs text-gray-600 mb-2">
+            <span className="font-semibold">Steuernummer:</span> {tenantSettings.rechnung_steuernummer}
+          </p>
+        )}
+        {tenantSettings?.rechnung_fusszeile && (
+          <p className="text-xs text-gray-600 italic mb-4">{tenantSettings.rechnung_fusszeile}</p>
+        )}
+        <div className="pt-4 border-t border-gray-300 text-xs text-gray-500 text-center">
+          {tenantSettings?.betriebsname || "Jagdbetrieb"} · Erstellt am {formatDate(new Date().toISOString().split("T")[0])}
+        </div>
       </div>
 
       <style>{`
