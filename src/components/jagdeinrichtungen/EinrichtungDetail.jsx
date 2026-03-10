@@ -63,7 +63,7 @@ export default function EinrichtungDetail({ einrichtung, tenantId, onBack, onEdi
 
   const TABS = [
     { key: "info", label: "Info", icon: Info },
-    { key: "schaeden", label: "Schäden", icon: AlertTriangle },
+    { key: "schaeden", label: "Protokolle", icon: AlertTriangle },
     { key: "aufgaben", label: "Aufgaben", icon: ListTodo },
   ];
 
