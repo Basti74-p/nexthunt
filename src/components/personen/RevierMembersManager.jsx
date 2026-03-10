@@ -183,32 +183,148 @@ export default function RevierMembersManager({ revierId }) {
       </Dialog>
 
       <Dialog open={permDialogOpen} onOpenChange={setPermDialogOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader><DialogTitle>Berechtigungen für {selectedMember?.first_name} {selectedMember?.last_name}</DialogTitle></DialogHeader>
           <div className="space-y-4 mt-4">
-            <div className="space-y-3">
-              {[
-                { key: "perm_wildmanagement", label: "Wildmanagement" },
-                { key: "perm_strecke", label: "Strecke" },
-                { key: "perm_wildkammer", label: "Wildkammer" },
-                { key: "perm_kalender", label: "Jagdkalender" },
-                { key: "perm_aufgaben", label: "Aufgaben" },
-                { key: "perm_einrichtungen", label: "Jagdeinrichtungen" },
-              ].map(({ key, label }) => (
-                <div key={key} className="flex items-center gap-3 p-2 rounded hover:bg-gray-50">
+            <div className="space-y-4">
+              {/* Karte */}
+              <div className="border rounded-lg p-3 space-y-2">
+                <div className="flex items-center gap-2 font-semibold text-sm">
                   <Checkbox
-                    checked={selectedMember?.[key] || false}
+                    checked={selectedMember?.perm_einrichtungen || false}
                     onCheckedChange={(checked) => {
                       setSelectedMember({
                         ...selectedMember,
-                        [key]: checked,
+                        perm_einrichtungen: checked,
                       });
                     }}
                   />
-                  <label className="text-sm font-medium cursor-pointer">{label}</label>
+                  <label className="cursor-pointer">Karte</label>
                 </div>
-              ))}
+                <div className="ml-6 space-y-2 text-sm">
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      checked={selectedMember?.perm_einrichtungen || false}
+                      onCheckedChange={(checked) => {
+                        setSelectedMember({
+                          ...selectedMember,
+                          perm_einrichtungen: checked,
+                        });
+                      }}
+                    />
+                    <label className="cursor-pointer text-gray-600">Reviere</label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      checked={selectedMember?.perm_einrichtungen || false}
+                      onCheckedChange={(checked) => {
+                        setSelectedMember({
+                          ...selectedMember,
+                          perm_einrichtungen: checked,
+                        });
+                      }}
+                    />
+                    <label className="cursor-pointer text-gray-600">Jagdeinrichtungen</label>
+                  </div>
+                </div>
+              </div>
+
+              {/* Wildmanagement */}
+              <div className="border rounded-lg p-3 space-y-2">
+                <div className="flex items-center gap-2 font-semibold text-sm">
+                  <Checkbox
+                    checked={selectedMember?.perm_wildmanagement || false}
+                    onCheckedChange={(checked) => {
+                      setSelectedMember({
+                        ...selectedMember,
+                        perm_wildmanagement: checked,
+                      });
+                    }}
+                  />
+                  <label className="cursor-pointer">Wildmanagement</label>
+                </div>
+                <div className="ml-6 space-y-2 text-sm">
+                  {["Rotwild", "Schwarzwild", "Rehwild", "Wolf"].map((wild) => (
+                    <div key={wild} className="flex items-center gap-2">
+                      <Checkbox checked={selectedMember?.perm_wildmanagement || false} />
+                      <label className="cursor-pointer text-gray-600">{wild}</label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Strecke */}
+              <div className="border rounded-lg p-3 space-y-2">
+                <div className="flex items-center gap-2 font-semibold text-sm">
+                  <Checkbox
+                    checked={selectedMember?.perm_strecke || false}
+                    onCheckedChange={(checked) => {
+                      setSelectedMember({
+                        ...selectedMember,
+                        perm_strecke: checked,
+                      });
+                    }}
+                  />
+                  <label className="cursor-pointer">Strecke</label>
+                </div>
+                <div className="ml-6 space-y-2 text-sm">
+                  {["Abschussplan", "Wildkammer", "Lager", "Wildverkauf", "Archiv"].map((item) => (
+                    <div key={item} className="flex items-center gap-2">
+                      <Checkbox checked={selectedMember?.perm_strecke || false} />
+                      <label className="cursor-pointer text-gray-600">{item}</label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Jagdkalender */}
+              <div className="border rounded-lg p-3 space-y-2">
+                <div className="flex items-center gap-2 font-semibold text-sm">
+                  <Checkbox
+                    checked={selectedMember?.perm_kalender || false}
+                    onCheckedChange={(checked) => {
+                      setSelectedMember({
+                        ...selectedMember,
+                        perm_kalender: checked,
+                      });
+                    }}
+                  />
+                  <label className="cursor-pointer">Jagdkalender</label>
+                </div>
+                <div className="ml-6 space-y-2 text-sm">
+                  {["Jagdmonitor", "Jagdgäste", "Personal"].map((item) => (
+                    <div key={item} className="flex items-center gap-2">
+                      <Checkbox checked={selectedMember?.perm_kalender || false} />
+                      <label className="cursor-pointer text-gray-600">{item}</label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Weitere Module */}
+              <div className="space-y-2">
+                {[
+                  { key: "perm_aufgaben", label: "Aufgaben" },
+                  { key: "perm_wildkammer", label: "Wildkammer" },
+                  { key: "perm_personen", label: "Personen" },
+                  { key: "perm_oeffentlichkeit", label: "Öffentlichkeit" },
+                ].map(({ key, label }) => (
+                  <div key={key} className="flex items-center gap-3 p-2 rounded hover:bg-gray-50">
+                    <Checkbox
+                      checked={selectedMember?.[key] || false}
+                      onCheckedChange={(checked) => {
+                        setSelectedMember({
+                          ...selectedMember,
+                          [key]: checked,
+                        });
+                      }}
+                    />
+                    <label className="text-sm font-medium cursor-pointer">{label}</label>
+                  </div>
+                ))}
+              </div>
             </div>
+
             <Button
               onClick={() => permissionsMutation.mutate(selectedMember)}
               disabled={permissionsMutation.isPending}
