@@ -36,6 +36,19 @@ export default function WildProdukte() {
   const [editingProduct, setEditingProduct] = useState(null);
   const [statusFilter, setStatusFilter] = useState("lager");
   const [printProduct, setPrintProduct] = useState(null);
+  const [etikettSettings, setEtikettSettings] = useState({
+    betriebsname: "",
+    adresse: "",
+    logoUrl: "",
+    empfaenger: "",
+    eigeneNotiz: "",
+    schriftgroesse: "normal",
+    zeigeLagerlocation: true,
+    zeigeTemperatur: true,
+    zeigeBeschreibung: true,
+    zeigeEinfrierungsDatum: true,
+    zeigeDruckdatum: true,
+  });
   const [form, setForm] = useState({
     revier_id: "",
     wildkammer_id: "",
