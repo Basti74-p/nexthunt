@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { useAuth } from "@/components/hooks/useAuth";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ListTodo, Check } from "lucide-react";
+import { ListTodo, Check, RefreshCw } from "lucide-react";
+import PageTransition from "@/components/ui/PageTransition";
 
 export default function MobileTasks() {
   const { tenant, user } = useAuth();
