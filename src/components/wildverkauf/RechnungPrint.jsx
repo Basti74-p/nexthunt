@@ -22,13 +22,13 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
   };
 
   return (
-    <div className="w-full bg-white text-black font-sans" style={{ width: "210mm", minHeight: "297mm", padding: "15mm 15mm", boxSizing: "border-box", fontSize, margin: "0 auto" }}>
+    <div className="w-full bg-white text-black font-sans" style={{ width: "210mm", minHeight: "297mm", padding: "10mm 12mm", boxSizing: "border-box", fontSize, margin: "0 auto" }}>
 
       {/* Header */}
-      <div className="flex justify-between items-start mb-8">
+      <div className="flex justify-between items-start mb-5">
         <div>
           {tenantSettings?.logoUrl && (
-            <img src={tenantSettings.logoUrl} alt="Logo" className="h-14 object-contain mb-2"
+            <img src={tenantSettings.logoUrl} alt="Logo" className="h-10 object-contain mb-1"
               onError={e => e.target.style.display = "none"} />
           )}
           <p className="font-bold text-lg">{tenantSettings?.betriebsname || "Jagdbetrieb"}</p>
