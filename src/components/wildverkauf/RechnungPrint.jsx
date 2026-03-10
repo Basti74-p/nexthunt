@@ -115,9 +115,9 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
       )}
 
       {/* Footer */}
-      <div className="mt-16">
+      <div className="mt-6">
         {tenantSettings?.rechnung_bankverbindung && (
-          <div className="mb-3 text-xs text-gray-600 whitespace-pre-line">
+          <div className="mb-1.5 text-xs text-gray-600 whitespace-pre-line">
             <span className="font-semibold">Bankverbindung:</span>{"\n"}{tenantSettings.rechnung_bankverbindung}
           </div>
         )}
