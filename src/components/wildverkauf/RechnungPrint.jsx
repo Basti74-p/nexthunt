@@ -108,28 +108,28 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
 
       {/* Notizen */}
       {verkauf.notizen && (
-        <div className="mt-4 p-2 bg-gray-50 rounded text-xs text-gray-700">
-          <p className="font-semibold mb-1">Hinweise:</p>
-          <p>{verkauf.notizen}</p>
+        <div style={{ marginTop: "12px", padding: "6px 8px", backgroundColor: "#f9f9f9", borderRadius: "3px", fontSize: "10px", color: "#374151" }}>
+          <p style={{ fontWeight: "bold", marginBottom: "4px" }}>Hinweise:</p>
+          <p style={{ margin: "0" }}>{verkauf.notizen}</p>
         </div>
       )}
 
       {/* Footer */}
-      <div className="mt-6">
+      <div style={{ marginTop: "16px" }}>
         {tenantSettings?.rechnung_bankverbindung && (
-          <div className="mb-1.5 text-xs text-gray-600 whitespace-pre-line">
-            <span className="font-semibold">Bankverbindung:</span>{"\n"}{tenantSettings.rechnung_bankverbindung}
+          <div style={{ marginBottom: "4px", fontSize: "10px", color: "#4b5563", whiteSpace: "pre-line", lineHeight: "1.4" }}>
+            <span style={{ fontWeight: "bold" }}>Bankverbindung:</span>{"\n"}{tenantSettings.rechnung_bankverbindung}
           </div>
         )}
         {tenantSettings?.rechnung_steuernummer && (
-          <p className="text-xs text-gray-600 mb-2">
-            <span className="font-semibold">Steuernummer:</span> {tenantSettings.rechnung_steuernummer}
+          <p style={{ fontSize: "10px", color: "#4b5563", marginBottom: "4px" }}>
+            <span style={{ fontWeight: "bold" }}>Steuernummer:</span> {tenantSettings.rechnung_steuernummer}
           </p>
         )}
         {tenantSettings?.rechnung_fusszeile && (
-          <p className="text-xs text-gray-600 italic mb-4">{tenantSettings.rechnung_fusszeile}</p>
+          <p style={{ fontSize: "10px", color: "#4b5563", fontStyle: "italic", marginBottom: "8px" }}>{tenantSettings.rechnung_fusszeile}</p>
         )}
-        <div className="pt-4 border-t border-gray-300 text-xs text-gray-500 text-center">
+        <div style={{ paddingTop: "8px", borderTop: "1px solid #ccc", fontSize: "9px", color: "#999", textAlign: "center" }}>
           {tenantSettings?.betriebsname || "Jagdbetrieb"} · Erstellt am {formatDate(new Date().toISOString().split("T")[0])}
         </div>
       </div>
