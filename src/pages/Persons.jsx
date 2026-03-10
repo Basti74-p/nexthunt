@@ -19,15 +19,15 @@ export default function Persons() {
   const [error, setError] = useState("");
   const queryClient = useQueryClient();
 
-  if (!tenant?.id) {
-    return <div>Loading...</div>;
-  }
-
   const { data: persons = [] } = useQuery({
     queryKey: ["persons", tenant?.id],
     queryFn: () => base44.entities.Person.filter({ tenant_id: tenant?.id }),
     enabled: !!tenant?.id,
   });
+
+  if (!tenant?.id) {
+    return <div>Loading...</div>;
+  }
 
   const createMutation = useMutation({
     mutationFn: (data) => {
