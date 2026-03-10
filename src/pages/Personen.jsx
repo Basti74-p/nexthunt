@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/components/hooks/useAuth";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-import { Users, Shield, ArrowRight, Phone, BookUser } from "lucide-react";
+import { Users, Shield, ArrowRight, Phone, BookUser, MapPin } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
+import RevierMembersManager from "@/components/personen/RevierMembersManager";
 
 export default function Personen() {
   const { tenant } = useAuth();
