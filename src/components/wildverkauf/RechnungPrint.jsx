@@ -22,10 +22,10 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
   };
 
   return (
-    <div className="w-full bg-white text-black font-sans" style={{ minHeight: "297mm", padding: "20mm 20mm 20mm 25mm", boxSizing: "border-box", fontSize }}>
+    <div className="w-full bg-white text-black font-sans" style={{ width: "210mm", minHeight: "297mm", padding: "15mm 15mm", boxSizing: "border-box", fontSize, margin: "0 auto" }}>
 
       {/* Header */}
-      <div className="flex justify-between items-start mb-10">
+      <div className="flex justify-between items-start mb-8">
         <div>
           {tenantSettings?.logoUrl && (
             <img src={tenantSettings.logoUrl} alt="Logo" className="h-14 object-contain mb-2"
