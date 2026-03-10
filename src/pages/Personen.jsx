@@ -11,6 +11,7 @@ import RevierMembersManager from "@/components/personen/RevierMembersManager";
 export default function Personen() {
   const { tenant } = useAuth();
   const [selectedRevier, setSelectedRevier] = useState(null);
+  const [autoSelected, setAutoSelected] = useState(false);
 
   const { data: persons = [] } = useQuery({
     queryKey: ["persons-main", tenant?.id],
