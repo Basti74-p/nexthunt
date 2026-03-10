@@ -19,6 +19,7 @@ import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import VerkaufDialog from "@/components/wildverkauf/VerkaufDialog";
 import RechnungPrint from "@/components/wildverkauf/RechnungPrint";
+import PrintWindow from "@/components/wildverkauf/PrintWindow";
 import VerkaufStats from "@/components/wildverkauf/VerkaufStats";
 
 const ZAHLUNGSSTATUS_CONFIG = {
