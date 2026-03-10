@@ -32,7 +32,7 @@ export default function Personen() {
   });
 
   // Auto-select first revier
-  React.useEffect(() => {
+  useEffect(() => {
     if (reviere.length > 0 && !autoSelected) {
       setSelectedRevier(reviere[0].id);
       setAutoSelected(true);
