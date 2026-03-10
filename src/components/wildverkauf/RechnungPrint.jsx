@@ -86,7 +86,7 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
 
       {/* Summen (nur Rechnung) */}
       {!isLieferschein && (
-        <div className="ml-auto w-64 space-y-1 text-sm">
+        <div className="ml-auto w-56 space-y-0.5 text-xs">
           <div className="flex justify-between">
             <span className="text-gray-600">Nettobetrag</span>
             <span>€ {(verkauf.gesamtbetrag || 0).toFixed(2)}</span>
