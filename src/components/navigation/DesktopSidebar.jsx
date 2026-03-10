@@ -206,15 +206,14 @@ export default function DesktopSidebar({ currentPage }) {
       {/* Logo */}
       <div className="px-6 py-5 border-b border-[#2d2d2d]">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-[#22c55e] rounded-xl flex items-center justify-center">
-            <TreePine className="w-5 h-5 text-[#1a1f2e]" />
-          </div>
-          <div>
-            <h1 className="text-lg font-bold text-[#22c55e] tracking-tight">NextHunt</h1>
-            {tenant && (
-              <p className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">{tenant.name}</p>
-            )}
-          </div>
+          <img
+            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c370741b119950032ab62/7a1f75278_NextHunt_logo_transparent.png"
+            alt="NextHunt Logo"
+            className="h-9 w-auto object-contain"
+          />
+          {tenant && (
+            <p className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">{tenant.name}</p>
+          )}
         </div>
       </div>
 
