@@ -17,6 +17,9 @@ const DEFAULT_ETIKETT_SETTINGS = {
   zeigeBeschreibung: true,
   zeigeEinfrierungsDatum: true,
   zeigeDruckdatum: true,
+  rechnung_fusszeile: "",
+  rechnung_bankverbindung: "",
+  rechnung_steuernummer: "",
 };
 
 const FEATURE_LABELS = {
