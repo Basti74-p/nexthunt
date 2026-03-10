@@ -46,12 +46,12 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
       </div>
 
       {/* Empfänger */}
-      <div className="mb-5 pl-3" style={{ borderLeft: `3px solid ${accentColor}` }}>
-        <p className="text-xs text-gray-500 uppercase tracking-wide mb-0.5">Empfänger</p>
-        <p className="font-bold text-sm">{kunde?.name || verkauf.kunde_name || "–"}</p>
-        {kunde?.contact_person && <p className="text-sm">{kunde.contact_person}</p>}
-        {kunde?.address && <p className="text-sm text-gray-700 whitespace-pre-line">{kunde.address}</p>}
-        {kunde?.email && <p className="text-sm text-gray-600">{kunde.email}</p>}
+      <div style={{ marginBottom: "16px", paddingLeft: "10px", borderLeft: `3px solid ${accentColor}` }}>
+        <p style={{ fontSize: "9px", color: "#7b8ba3", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "4px", fontWeight: "bold" }}>Empfänger</p>
+        <p style={{ fontSize: "11px", fontWeight: "bold", marginBottom: "2px" }}>{kunde?.name || verkauf.kunde_name || "–"}</p>
+        {kunde?.contact_person && <p style={{ fontSize: "11px", marginBottom: "2px" }}>{kunde.contact_person}</p>}
+        {kunde?.address && <p style={{ fontSize: "11px", color: "#374151", whiteSpace: "pre-line", lineHeight: "1.3", marginBottom: "2px" }}>{kunde.address}</p>}
+        {kunde?.email && <p style={{ fontSize: "11px", color: "#4b5563" }}>{kunde.email}</p>}
       </div>
 
       {/* Positionen */}
