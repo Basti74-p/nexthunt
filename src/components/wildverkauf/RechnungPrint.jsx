@@ -4,6 +4,8 @@ import { de } from "date-fns/locale";
 
 const ZAHLUNGSART_LABEL = { bar: "Bar", ueberweisung: "Überweisung", ec: "EC-Karte", sonstiges: "Sonstiges" };
 
+const FONT_SIZE = { klein: "11px", normal: "13px", gross: "15px" };
+
 export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "rechnung" }) {
   const isLieferschein = mode === "lieferschein";
   const docTitle = isLieferschein ? "LIEFERSCHEIN" : "RECHNUNG";
@@ -11,13 +13,16 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
     ? `LS-${verkauf.rechnungsnummer?.replace("RE-", "") || verkauf.id?.slice(-8)}`
     : (verkauf.rechnungsnummer || `RE-${verkauf.id?.slice(-8)}`);
 
+  const accentColor = tenantSettings?.rechnung_farbe || "#1a1a1a";
+  const fontSize = FONT_SIZE[tenantSettings?.rechnung_schriftgroesse] || "13px";
+
   const formatDate = (d) => {
     if (!d) return "–";
     try { return format(new Date(d), "dd.MM.yyyy", { locale: de }); } catch { return d; }
   };
 
   return (
-    <div className="w-full bg-white text-black font-sans" style={{ minHeight: "297mm", padding: "20mm 20mm 20mm 25mm", boxSizing: "border-box" }}>
+    <div className="w-full bg-white text-black font-sans" style={{ minHeight: "297mm", padding: "20mm 20mm 20mm 25mm", boxSizing: "border-box", fontSize }}>
 
       {/* Header */}
       <div className="flex justify-between items-start mb-10">
@@ -28,9 +33,10 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
           )}
           <p className="font-bold text-lg">{tenantSettings?.betriebsname || "Jagdbetrieb"}</p>
           {tenantSettings?.adresse && <p className="text-sm text-gray-600 whitespace-pre-line">{tenantSettings.adresse}</p>}
+          {tenantSettings?.rechnung_kontakt && <p className="text-sm text-gray-600">{tenantSettings.rechnung_kontakt}</p>}
         </div>
         <div className="text-right">
-          <h1 className="text-2xl font-bold uppercase tracking-wide">{docTitle}</h1>
+          <h1 className="text-2xl font-bold uppercase tracking-wide" style={{ color: accentColor }}>{docTitle}</h1>
           <p className="text-sm text-gray-600 mt-1">Nr.: <span className="font-mono font-bold text-black">{docNr}</span></p>
           <p className="text-sm text-gray-600">Datum: {formatDate(verkauf.datum)}</p>
           {!isLieferschein && verkauf.faelligkeitsdatum && (
@@ -40,18 +46,18 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
       </div>
 
       {/* Empfänger */}
-      <div className="mb-8 border-l-4 border-gray-800 pl-4">
+      <div className="mb-8 pl-4" style={{ borderLeft: `4px solid ${accentColor}` }}>
         <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Empfänger</p>
         <p className="font-bold text-base">{kunde?.name || verkauf.kunde_name || "–"}</p>
         {kunde?.contact_person && <p className="text-sm">{kunde.contact_person}</p>}
-        {kunde?.address && <p className="text-sm text-gray-700">{kunde.address}</p>}
+        {kunde?.address && <p className="text-sm text-gray-700 whitespace-pre-line">{kunde.address}</p>}
         {kunde?.email && <p className="text-sm text-gray-600">{kunde.email}</p>}
       </div>
 
       {/* Positionen */}
       <table className="w-full text-sm mb-6" style={{ borderCollapse: "collapse" }}>
         <thead>
-          <tr style={{ borderBottom: "2px solid #1a1a1a" }}>
+          <tr style={{ borderBottom: `2px solid ${accentColor}` }}>
             <th className="text-left py-2 font-semibold">Bezeichnung</th>
             <th className="text-right py-2 font-semibold">Gewicht (kg)</th>
             {!isLieferschein && (
@@ -89,7 +95,7 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
             <span className="text-gray-600">MwSt. {verkauf.mwst_prozent || 7}%</span>
             <span>€ {(verkauf.mwst_betrag || 0).toFixed(2)}</span>
           </div>
-          <div className="flex justify-between font-bold text-base" style={{ borderTop: "2px solid #1a1a1a", paddingTop: "6px", marginTop: "6px" }}>
+          <div className="flex justify-between font-bold text-base" style={{ borderTop: `2px solid ${accentColor}`, paddingTop: "6px", marginTop: "6px" }}>
             <span>Gesamtbetrag</span>
             <span>€ {(verkauf.brutto_betrag || 0).toFixed(2)}</span>
           </div>
@@ -108,10 +114,10 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
         </div>
       )}
 
-      {/* Bankverbindung & Fußzeile */}
+      {/* Footer */}
       <div className="mt-16">
         {tenantSettings?.rechnung_bankverbindung && (
-          <div className="mb-4 text-xs text-gray-600 whitespace-pre-line">
+          <div className="mb-3 text-xs text-gray-600 whitespace-pre-line">
             <span className="font-semibold">Bankverbindung:</span>{"\n"}{tenantSettings.rechnung_bankverbindung}
           </div>
         )}
