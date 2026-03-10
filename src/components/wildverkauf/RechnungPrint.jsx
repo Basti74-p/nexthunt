@@ -25,22 +25,22 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
     <div className="w-full bg-white text-black font-sans" style={{ width: "210mm", minHeight: "297mm", padding: "15mm 15mm", boxSizing: "border-box", fontSize: "11px", margin: "0 auto" }}>
 
       {/* Header */}
-      <div className="flex justify-between items-start mb-5">
+      <div className="flex justify-between items-start mb-6">
         <div>
           {tenantSettings?.logoUrl && (
-            <img src={tenantSettings.logoUrl} alt="Logo" className="h-8 object-contain mb-1"
+            <img src={tenantSettings.logoUrl} alt="Logo" style={{ height: "25px", marginBottom: "4px" }}
               onError={(e) => { e.target.style.display = "none"; }} />
           )}
-          <p className="font-bold text-base">{tenantSettings?.betriebsname || "Jagdbetrieb"}</p>
-          {tenantSettings?.adresse && <p className="text-xs text-gray-600 whitespace-pre-line">{tenantSettings.adresse}</p>}
-          {tenantSettings?.rechnung_kontakt && <p className="text-xs text-gray-600">{tenantSettings.rechnung_kontakt}</p>}
+          <p style={{ fontSize: "13px", fontWeight: "bold", marginBottom: "2px" }}>{tenantSettings?.betriebsname || "Jagdbetrieb"}</p>
+          {tenantSettings?.adresse && <p style={{ fontSize: "10px", color: "#4b5563", whiteSpace: "pre-line", lineHeight: "1.3" }}>{tenantSettings.adresse}</p>}
+          {tenantSettings?.rechnung_kontakt && <p style={{ fontSize: "10px", color: "#4b5563" }}>{tenantSettings.rechnung_kontakt}</p>}
         </div>
-        <div className="text-right">
-          <h1 className="text-xl font-bold uppercase tracking-wide" style={{ color: accentColor }}>{docTitle}</h1>
-          <p className="text-sm text-gray-600 mt-1">Nr.: <span className="font-mono font-bold text-black">{docNr}</span></p>
-          <p className="text-sm text-gray-600">Datum: {formatDate(verkauf.datum)}</p>
+        <div style={{ textAlign: "right" }}>
+          <h1 style={{ color: accentColor, fontSize: "20px", fontWeight: "bold", letterSpacing: "1px", marginBottom: "4px" }}>{docTitle}</h1>
+          <p style={{ fontSize: "11px", color: "#4b5563", marginBottom: "2px" }}>Nr.: <span style={{ fontFamily: "monospace", fontWeight: "bold", color: "black" }}>{docNr}</span></p>
+          <p style={{ fontSize: "11px", color: "#4b5563" }}>Datum: {formatDate(verkauf.datum)}</p>
           {!isLieferschein && verkauf.faelligkeitsdatum && (
-            <p className="text-sm text-gray-600">Fällig: {formatDate(verkauf.faelligkeitsdatum)}</p>
+            <p style={{ fontSize: "11px", color: "#4b5563" }}>Fällig: {formatDate(verkauf.faelligkeitsdatum)}</p>
           )}
         </div>
       </div>
