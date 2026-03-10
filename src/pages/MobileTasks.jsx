@@ -25,9 +25,26 @@ export default function MobileTasks() {
   const open = aufgaben.filter(a => a.status !== "erledigt");
   const done = aufgaben.filter(a => a.status === "erledigt");
 
+  const handlePullToRefresh = async (e) => {
+    if (e.type === "touchstart") pullStartRef.current = e.touches[0].clientY;
+    if (e.type === "touchmove" && pullStartRef.current !== null && window.scrollY === 0) {
+      const diff = e.touches[0].clientY - pullStartRef.current;
+      if (diff > 80 && !isRefreshing) {
+        setIsRefreshing(true);
+        pullStartRef.current = null;
+        await queryClient.invalidateQueries({ queryKey: ["aufgaben-mobile"] });
+        setTimeout(() => setIsRefreshing(false), 1000);
+      }
+    }
+  };
+
   return (
-    <div className="pt-4">
-      <h2 className="text-xl font-bold text-gray-900 mb-4">Aufgaben</h2>
+    <PageTransition>
+      <div className="pt-4" onTouchStart={handlePullToRefresh} onTouchMove={handlePullToRefresh}>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-gray-900 select-none">Aufgaben</h2>
+          {isRefreshing && <RefreshCw className="w-4 h-4 animate-spin text-[#0F2F23]" />}
+        </div>
 
       <div className="space-y-2 mb-6">
         {open.map(a => (
