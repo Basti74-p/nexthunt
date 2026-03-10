@@ -22,7 +22,7 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
   };
 
   return (
-    <div className="w-full bg-white text-black font-sans print:w-screen" style={{ width: "clamp(100%, 210mm, 100vw)", minHeight: "297mm", padding: "clamp(8px, 2vw, 12mm)", boxSizing: "border-box", fontSize, margin: "0 auto" }}>
+    <div className="w-full bg-white text-black font-sans" style={{ width: "210mm", minHeight: "297mm", padding: "10mm 12mm", boxSizing: "border-box", fontSize, margin: "0 auto" }}>
 
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start gap-3 md:gap-0 mb-4 md:mb-5">
