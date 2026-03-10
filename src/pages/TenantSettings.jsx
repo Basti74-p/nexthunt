@@ -103,41 +103,38 @@ export default function TenantSettings() {
       </div>
 
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">Rechnungs-Vorlage</h2>
-          <Button size="sm" onClick={handleSave} disabled={saving}>
-            {saving ? "Speichern..." : "Speichern"}
-          </Button>
-        </div>
-        <div className="space-y-4 text-sm">
+        <h2 className="text-lg font-semibold text-gray-900 mb-6">Rechnungs-Vorlage</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <RechnungSettings
+            settings={etikettSettings}
+            onChange={setEtikettSettings}
+            onSave={handleSave}
+            saving={saving}
+          />
           <div>
-            <label className="block text-gray-600 mb-1">Steuernummer / USt-IdNr.</label>
-            <Input
-              value={etikettSettings.rechnung_steuernummer || ""}
-              onChange={e => setEtikettSettings(s => ({ ...s, rechnung_steuernummer: e.target.value }))}
-              placeholder="z.B. DE123456789"
-              className="bg-white text-gray-900 border-gray-300"
-            />
-          </div>
-          <div>
-            <label className="block text-gray-600 mb-1">Bankverbindung</label>
-            <Textarea
-              value={etikettSettings.rechnung_bankverbindung || ""}
-              onChange={e => setEtikettSettings(s => ({ ...s, rechnung_bankverbindung: e.target.value }))}
-              placeholder={"IBAN: DE00 0000 0000 0000 0000 00\nBIC: XXXXXXXX\nBank: Musterbank"}
-              rows={3}
-              className="bg-white text-gray-900 border-gray-300"
-            />
-          </div>
-          <div>
-            <label className="block text-gray-600 mb-1">Fußzeilen-Text</label>
-            <Textarea
-              value={etikettSettings.rechnung_fusszeile || ""}
-              onChange={e => setEtikettSettings(s => ({ ...s, rechnung_fusszeile: e.target.value }))}
-              placeholder="z.B. Zahlbar innerhalb von 14 Tagen ohne Abzug."
-              rows={2}
-              className="bg-white text-gray-900 border-gray-300"
-            />
+            <p className="text-xs text-gray-500 mb-3 font-medium uppercase tracking-wider">Live-Vorschau</p>
+            <div style={{ transform: "scale(0.45)", transformOrigin: "top left", width: "222%", pointerEvents: "none" }}>
+              <RechnungPrint
+                tenantSettings={etikettSettings}
+                mode="rechnung"
+                verkauf={{
+                  rechnungsnummer: "RE-20240001",
+                  datum: new Date().toISOString().split("T")[0],
+                  faelligkeitsdatum: new Date(Date.now() + 14 * 86400000).toISOString().split("T")[0],
+                  positionen: [
+                    { bezeichnung: "Rehrücken (Filet)", gewicht_kg: 1.2, preis_pro_kg: 18.00, gesamtpreis: 21.60 },
+                    { bezeichnung: "Wildschwein Keule", gewicht_kg: 2.5, preis_pro_kg: 12.00, gesamtpreis: 30.00 },
+                  ],
+                  gesamtbetrag: 51.60,
+                  mwst_prozent: 7,
+                  mwst_betrag: 3.61,
+                  brutto_betrag: 55.21,
+                  zahlungsart: "ueberweisung",
+                  notizen: "Vielen Dank für Ihren Einkauf!",
+                }}
+                kunde={{ name: "Max Mustermann", address: "Musterstraße 1\n12345 Musterstadt", email: "max@mustermann.de" }}
+              />
+            </div>
           </div>
         </div>
       </div>
