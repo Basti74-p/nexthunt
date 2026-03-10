@@ -19,6 +19,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, ZoomContr
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { Locate, Layers, Search, X, Loader2, Map as MapIcon } from "lucide-react";
+import { useMobile } from "@/components/hooks/useMobile";
 
 // Fix Leaflet default icon path issue with bundlers
 delete L.Icon.Default.prototype._getIconUrl;
@@ -78,6 +79,7 @@ function SearchControl({ onResult }) {
   const [loading, setLoading] = useState(false);
   const inputRef = useRef(null);
   const debounceRef = useRef(null);
+  const isMobile = useMobile();
 
   const search = useCallback(async (q) => {
     if (!q.trim() || q.trim().length < 2) { setResults([]); return; }
@@ -128,63 +130,57 @@ function SearchControl({ onResult }) {
     return parts.length > 0 ? parts.join(", ") : r.display_name;
   };
 
-  const getType = (r) => {
-    const a = r.address || {};
-    if (a.city || a.town || a.village) return "Ort";
-    if (a.road || a.pedestrian) return "Straße";
-    if (r.type === "forest" || r.type === "wood") return "Wald";
-    return r.class || "";
-  };
-
   return (
-    <div className="absolute top-3 left-3 z-[1000] flex flex-col gap-1 w-80 max-w-[calc(100vw-24px)]">
+    <div className={`absolute left-0 right-0 z-[1000] flex flex-col gap-1 ${isMobile ? "top-4 left-4 right-auto w-10" : "top-3 left-3 w-80"}`}>
       {!open ? (
         <button
           onClick={() => setOpen(true)}
-          className="w-10 h-10 bg-white rounded-xl shadow-md flex items-center justify-center hover:bg-gray-50 transition-colors border border-gray-100"
+          className={`bg-white rounded-xl shadow-md flex items-center justify-center hover:bg-gray-50 transition-colors border border-gray-100 ${
+            isMobile ? "w-12 h-12" : "w-10 h-10"
+          }`}
           title="Ort suchen"
         >
-          <Search className="w-4 h-4 text-gray-600" />
+          <Search className={`text-gray-600 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />
         </button>
       ) : (
-        <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-          <div className="flex items-center gap-2 px-3 py-2.5 border-b border-gray-50">
-            {loading ? <Loader2 className="w-4 h-4 text-gray-400 animate-spin flex-shrink-0" /> : <Search className="w-4 h-4 text-gray-400 flex-shrink-0" />}
+        <div className={`bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden ${isMobile ? "fixed inset-x-4 top-24 w-auto" : "w-80"}`}>
+          <div className={`flex items-center gap-2 border-b border-gray-50 ${isMobile ? "px-4 py-3" : "px-3 py-2.5"}`}>
+            {loading ? <Loader2 className={`text-gray-400 animate-spin flex-shrink-0 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} /> : <Search className={`text-gray-400 flex-shrink-0 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />}
             <input
               ref={inputRef}
               value={query}
               onChange={handleChange}
               onKeyDown={handleKey}
               placeholder="Ort, Adresse, Waldgebiet..."
-              className="flex-1 text-sm outline-none text-gray-900 placeholder:text-gray-400 bg-transparent"
+              className={`flex-1 outline-none text-gray-900 placeholder:text-gray-400 bg-transparent ${isMobile ? "text-base" : "text-sm"}`}
             />
             {query && (
               <button onClick={() => { setQuery(""); setResults([]); inputRef.current?.focus(); }}>
-                <X className="w-3.5 h-3.5 text-gray-400 hover:text-gray-600" />
+                <X className={`text-gray-400 hover:text-gray-600 ${isMobile ? "w-5 h-5" : "w-3.5 h-3.5"}`} />
               </button>
             )}
             <button onClick={() => setOpen(false)} className="ml-1">
-              <X className="w-4 h-4 text-gray-300 hover:text-gray-500" />
+              <X className={`text-gray-300 hover:text-gray-500 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />
             </button>
           </div>
           {results.length > 0 && (
-            <div className="max-h-56 overflow-y-auto">
+            <div className={`overflow-y-auto ${isMobile ? "max-h-72" : "max-h-56"}`}>
               {results.map((r) => (
                 <button
                   key={r.place_id}
-                  className="w-full text-left px-3 py-2.5 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0"
+                  className={`w-full text-left hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0 ${isMobile ? "px-4 py-3" : "px-3 py-2.5"}`}
                   onClick={() => handleSelect(r)}
                 >
-                  <div className="text-sm text-gray-800 font-medium truncate">{formatLabel(r)}</div>
-                  <div className="text-xs text-gray-400 truncate mt-0.5">{r.display_name}</div>
+                  <div className={`text-gray-800 font-medium truncate ${isMobile ? "text-base" : "text-sm"}`}>{formatLabel(r)}</div>
+                  <div className={`text-gray-400 truncate mt-0.5 ${isMobile ? "text-sm" : "text-xs"}`}>{r.display_name}</div>
                 </button>
               ))}
             </div>
           )}
           {!loading && query.length >= 2 && results.length === 0 && (
-            <div className="px-3 py-3 text-sm text-gray-400 text-center">Keine Ergebnisse</div>
+            <div className={`text-gray-400 text-center ${isMobile ? "px-4 py-4 text-base" : "px-3 py-3 text-sm"}`}>Keine Ergebnisse</div>
           )}
-          <div className="px-3 py-1.5 text-[10px] text-gray-300 text-right border-t border-gray-50">
+          <div className={`text-gray-300 text-right border-t border-gray-50 ${isMobile ? "px-4 py-2 text-xs" : "px-3 py-1.5 text-[10px]"}`}>
             © OpenStreetMap / Nominatim
           </div>
         </div>
@@ -196,20 +192,24 @@ function SearchControl({ onResult }) {
 // Style switcher
 function StyleControl({ currentStyle, onStyleChange }) {
   const [open, setOpen] = useState(false);
+  const isMobile = useMobile();
+  
   return (
-    <div className="absolute top-3 right-3 z-[1000]">
+    <div className={`absolute z-[1000] ${isMobile ? "top-20 right-4" : "top-3 right-3"}`}>
       {open ? (
         <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden min-w-[140px]">
-          <div className="px-3 py-2 border-b border-gray-50 flex items-center justify-between">
+          <div className={`border-b border-gray-50 flex items-center justify-between ${isMobile ? "px-4 py-3" : "px-3 py-2"}`}>
             <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Kartenstil</span>
-            <button onClick={() => setOpen(false)}><X className="w-3.5 h-3.5 text-gray-400" /></button>
+            <button onClick={() => setOpen(false)}><X className={`text-gray-400 ${isMobile ? "w-5 h-5" : "w-3.5 h-3.5"}`} /></button>
           </div>
           {MAP_STYLES.map((s) => (
             <button
               key={s.id}
               onClick={() => { onStyleChange(s); setOpen(false); }}
-              className={`w-full text-left px-3 py-2 text-sm transition-colors ${
-                currentStyle.id === s.id ? "bg-[#0F2F23]/5 text-[#0F2F23] font-medium" : "text-gray-700 hover:bg-gray-50"
+              className={`w-full text-left transition-colors ${
+                isMobile 
+                  ? `px-4 py-3 text-base ${currentStyle.id === s.id ? "bg-[#0F2F23]/5 text-[#0F2F23] font-medium" : "text-gray-700 hover:bg-gray-50"}` 
+                  : `px-3 py-2 text-sm ${currentStyle.id === s.id ? "bg-[#0F2F23]/5 text-[#0F2F23] font-medium" : "text-gray-700 hover:bg-gray-50"}`
               }`}
             >
               {s.label}
@@ -219,10 +219,12 @@ function StyleControl({ currentStyle, onStyleChange }) {
       ) : (
         <button
           onClick={() => setOpen(true)}
-          className="w-10 h-10 bg-white rounded-xl shadow-md flex items-center justify-center hover:bg-gray-50 transition-colors border border-gray-100"
+          className={`bg-white rounded-xl shadow-md flex items-center justify-center hover:bg-gray-50 transition-colors border border-gray-100 ${
+            isMobile ? "w-12 h-12" : "w-10 h-10"
+          }`}
           title="Kartenstil wechseln"
         >
-          <Layers className="w-4 h-4 text-gray-600" />
+          <Layers className={`text-gray-600 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />
         </button>
       )}
     </div>
@@ -232,6 +234,8 @@ function StyleControl({ currentStyle, onStyleChange }) {
 // Geolocation button
 function GeolocationControl({ onLocate }) {
   const [loading, setLoading] = useState(false);
+  const isMobile = useMobile();
+  
   const handleClick = () => {
     setLoading(true);
     navigator.geolocation.getCurrentPosition(
@@ -243,13 +247,18 @@ function GeolocationControl({ onLocate }) {
       { enableHighAccuracy: true }
     );
   };
+  
   return (
     <button
       onClick={handleClick}
-      className="absolute bottom-6 right-3 z-[1000] w-10 h-10 bg-white rounded-xl shadow-md flex items-center justify-center hover:bg-gray-50 transition-colors border border-gray-100"
+      className={`absolute z-[1000] bg-white rounded-xl shadow-md flex items-center justify-center hover:bg-gray-50 transition-colors border border-gray-100 ${
+        isMobile 
+          ? "bottom-20 right-4 w-12 h-12" 
+          : "bottom-6 right-3 w-10 h-10"
+      }`}
       title="Meinen Standort anzeigen"
     >
-      {loading ? <Loader2 className="w-4 h-4 text-blue-500 animate-spin" /> : <Locate className="w-4 h-4 text-gray-600" />}
+      {loading ? <Loader2 className={`text-blue-500 animate-spin ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} /> : <Locate className={`text-gray-600 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />}
     </button>
   );
 }
