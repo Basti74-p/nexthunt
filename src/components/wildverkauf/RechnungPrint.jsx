@@ -145,10 +145,6 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
           * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
           a[href]:after { content: none !important; }
           .no-print { display: none !important; }
-          .line-clamp-2, .line-clamp-3 { -webkit-line-clamp: unset !important; }
-        }
-        @media (max-width: 768px) {
-          body { font-size: 12px; }
         }
       `}</style>
     </div>
