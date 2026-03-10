@@ -108,7 +108,7 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
 
       {/* Notizen */}
       {verkauf.notizen && (
-        <div className="mt-8 p-3 bg-gray-50 rounded text-sm text-gray-700">
+        <div className="mt-4 p-2 bg-gray-50 rounded text-xs text-gray-700">
           <p className="font-semibold mb-1">Hinweise:</p>
           <p>{verkauf.notizen}</p>
         </div>
