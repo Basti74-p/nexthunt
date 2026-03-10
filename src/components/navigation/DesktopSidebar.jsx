@@ -118,7 +118,7 @@ function NavItem({ item, currentPage, depth = 0 }) {
         } ${
           isActive
             ? "bg-[#22c55e] text-[#1a1f2e] shadow-sm"
-            : "text-gray-400 hover:bg-[#2d3a4f] hover:text-gray-200"
+            : "text-gray-300 hover:bg-[#2d2d2d] hover:text-gray-100"
         }`}
       >
         <item.icon className="w-4 h-4 shrink-0" />
