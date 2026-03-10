@@ -31,6 +31,14 @@ export default function Personen() {
     enabled: !!tenant?.id,
   });
 
+  // Auto-select first revier
+  React.useEffect(() => {
+    if (reviere.length > 0 && !autoSelected) {
+      setSelectedRevier(reviere[0].id);
+      setAutoSelected(true);
+    }
+  }, [reviere, autoSelected]);
+
   return (
     <div className="max-w-6xl mx-auto">
       <PageHeader title="Personen" subtitle="Mitglieder, Gäste und Berechtigungen" />
