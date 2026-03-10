@@ -43,7 +43,7 @@ export default function MobileTasks() {
 
   return (
     <PageTransition>
-      <div className="pt-4" onTouchStart={handlePullToRefresh} onTouchMove={handlePullToRefresh}>
+      <div className="pt-20 pb-24 px-4" onTouchStart={handlePullToRefresh} onTouchMove={handlePullToRefresh}>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-gray-900 select-none">Aufgaben</h2>
           {isRefreshing && <RefreshCw className="w-4 h-4 animate-spin text-[#0F2F23]" />}

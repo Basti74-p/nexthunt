@@ -65,7 +65,7 @@ export default function MobileSightings() {
 
   return (
     <PageTransition>
-      <div className="pt-4" onTouchStart={handlePullToRefresh} onTouchMove={handlePullToRefresh}>
+      <div className="pt-20 pb-24 px-4" onTouchStart={handlePullToRefresh} onTouchMove={handlePullToRefresh}>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-gray-900 select-none">Sichtungen</h2>
           <Button onClick={() => setDialogOpen(true)} size="sm" className="bg-[#0F2F23] hover:bg-[#1a4a36] text-white rounded-xl gap-1 select-none">
