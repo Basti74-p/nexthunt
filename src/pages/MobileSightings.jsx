@@ -66,12 +66,13 @@ export default function MobileSightings() {
   return (
     <PageTransition>
       <div className="pt-4" onTouchStart={handlePullToRefresh} onTouchMove={handlePullToRefresh}>
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-gray-900">Sichtungen</h2>
-        <Button onClick={() => setDialogOpen(true)} size="sm" className="bg-[#0F2F23] hover:bg-[#1a4a36] text-white rounded-xl gap-1">
-          <Plus className="w-4 h-4" /> Neu
-        </Button>
-      </div>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-gray-900 select-none">Sichtungen</h2>
+          <Button onClick={() => setDialogOpen(true)} size="sm" className="bg-[#0F2F23] hover:bg-[#1a4a36] text-white rounded-xl gap-1 select-none">
+            <Plus className="w-4 h-4" /> Neu
+          </Button>
+          {isRefreshing && <RefreshCw className="w-4 h-4 animate-spin text-[#0F2F23]" />}
+        </div>
 
       <div className="space-y-2">
         {sightings.map(s => (
