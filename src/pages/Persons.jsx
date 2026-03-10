@@ -16,6 +16,7 @@ export default function Persons() {
   const { tenant } = useAuth();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", phone: "", type: "other", notes: "" });
+  const [error, setError] = useState("");
   const queryClient = useQueryClient();
 
   const { data: persons = [] } = useQuery({
@@ -25,11 +26,20 @@ export default function Persons() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (data) => base44.entities.Person.create({ ...data, tenant_id: tenant.id }),
+    mutationFn: (data) => {
+      if (!data.name?.trim()) {
+        throw new Error("Name ist erforderlich");
+      }
+      return base44.entities.Person.create({ ...data, tenant_id: tenant.id });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["persons"] });
       setDialogOpen(false);
+      setError("");
       setForm({ name: "", email: "", phone: "", type: "other", notes: "" });
+    },
+    onError: (err) => {
+      setError(err.message || "Fehler beim Speichern");
     },
   });
 
@@ -65,10 +75,11 @@ export default function Persons() {
         ))}
       </div>
 
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
-          <DialogHeader><DialogTitle>Neue Person</DialogTitle></DialogHeader>
-          <div className="space-y-4 mt-4">
+      <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) setError(""); }}>
+         <DialogContent>
+           <DialogHeader><DialogTitle>Neue Person</DialogTitle></DialogHeader>
+           <div className="space-y-4 mt-4">
+             {error && <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-lg text-sm">{error}</div>}
              <div><Label>Name *</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
              <div><Label>E-Mail</Label><Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
              <div><Label>Telefon</Label><Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></div>
