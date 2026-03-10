@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { AuthProvider, useAuth } from "./components/hooks/useAuth";
 import { useMobile } from "./components/hooks/useMobile";
 import DesktopSidebar from "./components/navigation/DesktopSidebar";
