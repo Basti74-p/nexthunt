@@ -46,12 +46,12 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
       </div>
 
       {/* Empfänger */}
-      <div className="mb-4 md:mb-5 pl-2 md:pl-3" style={{ borderLeft: `3px solid ${accentColor}` }}>
+      <div className="mb-5 pl-3" style={{ borderLeft: `3px solid ${accentColor}` }}>
         <p className="text-xs text-gray-500 uppercase tracking-wide mb-0.5">Empfänger</p>
-        <p className="font-bold text-xs md:text-sm">{kunde?.name || verkauf.kunde_name || "–"}</p>
-        {kunde?.contact_person && <p className="text-xs md:text-sm">{kunde.contact_person}</p>}
-        {kunde?.address && <p className="text-xs md:text-sm text-gray-700 whitespace-pre-line line-clamp-3">{kunde.address}</p>}
-        {kunde?.email && <p className="text-xs md:text-sm text-gray-600 truncate">{kunde.email}</p>}
+        <p className="font-bold text-sm">{kunde?.name || verkauf.kunde_name || "–"}</p>
+        {kunde?.contact_person && <p className="text-sm">{kunde.contact_person}</p>}
+        {kunde?.address && <p className="text-sm text-gray-700 whitespace-pre-line">{kunde.address}</p>}
+        {kunde?.email && <p className="text-sm text-gray-600">{kunde.email}</p>}
       </div>
 
       {/* Positionen */}
