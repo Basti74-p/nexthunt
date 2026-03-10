@@ -28,10 +28,10 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
       <div className="flex justify-between items-start mb-5">
         <div>
           {tenantSettings?.logoUrl && (
-            <img src={tenantSettings.logoUrl} alt="Logo" className="h-10 object-contain mb-1"
+            <img src={tenantSettings.logoUrl} alt="Logo" className="h-6 object-contain mb-0.5"
               onError={e => e.target.style.display = "none"} />
           )}
-          <p className="font-bold text-base">{tenantSettings?.betriebsname || "Jagdbetrieb"}</p>
+          <p className="font-bold text-sm">{tenantSettings?.betriebsname || "Jagdbetrieb"}</p>
           {tenantSettings?.adresse && <p className="text-xs text-gray-600 whitespace-pre-line">{tenantSettings.adresse}</p>}
           {tenantSettings?.rechnung_kontakt && <p className="text-xs text-gray-600">{tenantSettings.rechnung_kontakt}</p>}
           </div>
