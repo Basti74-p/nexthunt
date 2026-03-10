@@ -124,6 +124,17 @@ export default function RevierMembersManager({ revierId }) {
                 </div>
               </div>
               <Button
+                onClick={() => {
+                  setSelectedMember(m);
+                  setPermDialogOpen(true);
+                }}
+                variant="ghost"
+                size="icon"
+                className="text-blue-500 hover:text-blue-700 hover:bg-blue-50"
+              >
+                <Lock className="w-4 h-4" />
+              </Button>
+              <Button
                 onClick={() => removeMutation.mutate(m.id)}
                 disabled={removeMutation.isPending}
                 variant="ghost"
