@@ -8,14 +8,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Plus, BookUser, Phone } from "lucide-react";
+import { Plus, BookUser, Phone, Mail } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import StatusBadge from "@/components/ui/StatusBadge";
 
 export default function Persons() {
   const { tenant } = useAuth();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [form, setForm] = useState({ name: "", phone: "", type: "other", notes: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", type: "other", notes: "" });
   const queryClient = useQueryClient();
 
   const { data: persons = [] } = useQuery({
@@ -29,7 +29,7 @@ export default function Persons() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["persons"] });
       setDialogOpen(false);
-      setForm({ name: "", phone: "", type: "other", notes: "" });
+      setForm({ name: "", email: "", phone: "", type: "other", notes: "" });
     },
   });
 
@@ -56,11 +56,10 @@ export default function Persons() {
                 <h3 className="font-medium text-gray-900">{p.name}</h3>
                 <span className="text-xs text-gray-400 capitalize">{p.type}</span>
               </div>
-              {p.phone && (
-                <span className="flex items-center gap-1 text-xs text-gray-500 mt-1">
-                  <Phone className="w-3 h-3" />{p.phone}
-                </span>
-              )}
+              <div className="flex items-center gap-3 text-xs text-gray-500 mt-1">
+                {p.phone && <span className="flex items-center gap-1"><Phone className="w-3 h-3" />{p.phone}</span>}
+                {p.email && <span className="flex items-center gap-1"><Mail className="w-3 h-3" />{p.email}</span>}
+              </div>
             </div>
           </div>
         ))}
@@ -70,19 +69,21 @@ export default function Persons() {
         <DialogContent>
           <DialogHeader><DialogTitle>Neue Person</DialogTitle></DialogHeader>
           <div className="space-y-4 mt-4">
-            <div><Label>Name *</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
-            <div><Label>Telefon</Label><Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></div>
-            <div>
-              <Label>Typ</Label>
-              <Select value={form.type} onValueChange={(v) => setForm({ ...form, type: v })}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="guest">Gast</SelectItem>
-                  <SelectItem value="service">Dienstleister</SelectItem>
-                  <SelectItem value="other">Sonstige</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+             <div><Label>Name *</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
+             <div><Label>E-Mail</Label><Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
+             <div><Label>Telefon</Label><Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></div>
+             <div>
+               <Label>Typ</Label>
+               <Select value={form.type} onValueChange={(v) => setForm({ ...form, type: v })}>
+                 <SelectTrigger><SelectValue /></SelectTrigger>
+                 <SelectContent>
+                   <SelectItem value="guest">Gast</SelectItem>
+                   <SelectItem value="service">Dienstleister</SelectItem>
+                   <SelectItem value="member">Mitglied</SelectItem>
+                   <SelectItem value="other">Sonstige</SelectItem>
+                 </SelectContent>
+               </Select>
+             </div>
             <div><Label>Notizen</Label><Textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></div>
             <Button onClick={() => createMutation.mutate(form)} disabled={!form.name || createMutation.isPending} className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl">
               {createMutation.isPending ? "Speichern..." : "Speichern"}
