@@ -81,11 +81,6 @@ const NAV = [
     ],
   },
   {
-   label: "Wildmarken",
-   page: "Wildmarken",
-   icon: Tag,
-  },
-  {
    label: "Öffentlichkeit",
    page: "Oeffentlichkeit",
    icon: Globe,
