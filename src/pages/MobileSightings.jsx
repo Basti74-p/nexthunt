@@ -50,8 +50,22 @@ export default function MobileSightings() {
     },
   });
 
+  const handlePullToRefresh = async (e) => {
+    if (e.type === "touchstart") pullStartRef.current = e.touches[0].clientY;
+    if (e.type === "touchmove" && pullStartRef.current !== null && window.scrollY === 0) {
+      const diff = e.touches[0].clientY - pullStartRef.current;
+      if (diff > 80 && !isRefreshing) {
+        setIsRefreshing(true);
+        pullStartRef.current = null;
+        await queryClient.invalidateQueries({ queryKey: ["sightings-mobile"] });
+        setTimeout(() => setIsRefreshing(false), 1000);
+      }
+    }
+  };
+
   return (
-    <div className="pt-4">
+    <PageTransition>
+      <div className="pt-4" onTouchStart={handlePullToRefresh} onTouchMove={handlePullToRefresh}>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-bold text-gray-900">Sichtungen</h2>
         <Button onClick={() => setDialogOpen(true)} size="sm" className="bg-[#0F2F23] hover:bg-[#1a4a36] text-white rounded-xl gap-1">
