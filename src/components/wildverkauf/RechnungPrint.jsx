@@ -22,25 +22,25 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
   };
 
   return (
-    <div className="w-full bg-white text-black font-sans" style={{ width: "210mm", minHeight: "297mm", padding: "10mm 12mm", boxSizing: "border-box", fontSize, margin: "0 auto" }}>
+    <div className="w-full bg-white text-black font-sans print:w-screen" style={{ width: "clamp(100%, 210mm, 100vw)", minHeight: "297mm", padding: "clamp(8px, 2vw, 12mm)", boxSizing: "border-box", fontSize, margin: "0 auto" }}>
 
       {/* Header */}
-      <div className="flex justify-between items-start mb-5">
-        <div>
+      <div className="flex flex-col md:flex-row justify-between items-start gap-3 md:gap-0 mb-4 md:mb-5">
+        <div className="flex-1">
           {tenantSettings?.logoUrl && (
-            <img src={tenantSettings.logoUrl} alt="Logo" className="h-8 object-contain mb-1"
+            <img src={tenantSettings.logoUrl} alt="Logo" className="h-6 md:h-8 object-contain mb-1"
               onError={(e) => { e.target.style.display = "none"; }} />
           )}
-          <p className="font-bold text-base">{tenantSettings?.betriebsname || "Jagdbetrieb"}</p>
-          {tenantSettings?.adresse && <p className="text-xs text-gray-600 whitespace-pre-line">{tenantSettings.adresse}</p>}
-          {tenantSettings?.rechnung_kontakt && <p className="text-xs text-gray-600">{tenantSettings.rechnung_kontakt}</p>}
-          </div>
-          <div className="text-right">
-          <h1 className="text-xl font-bold uppercase tracking-wide" style={{ color: accentColor }}>{docTitle}</h1>
-          <p className="text-sm text-gray-600 mt-1">Nr.: <span className="font-mono font-bold text-black">{docNr}</span></p>
-          <p className="text-sm text-gray-600">Datum: {formatDate(verkauf.datum)}</p>
+          <p className="font-bold text-sm md:text-base">{tenantSettings?.betriebsname || "Jagdbetrieb"}</p>
+          {tenantSettings?.adresse && <p className="text-xs text-gray-600 whitespace-pre-line line-clamp-2">{tenantSettings.adresse}</p>}
+          {tenantSettings?.rechnung_kontakt && <p className="text-xs text-gray-600 truncate">{tenantSettings.rechnung_kontakt}</p>}
+        </div>
+        <div className="text-right md:text-right">
+          <h1 className="text-lg md:text-xl font-bold uppercase tracking-wide" style={{ color: accentColor }}>{docTitle}</h1>
+          <p className="text-xs md:text-sm text-gray-600 mt-1">Nr.: <span className="font-mono font-bold text-black text-xs md:text-sm">{docNr}</span></p>
+          <p className="text-xs md:text-sm text-gray-600">Datum: {formatDate(verkauf.datum)}</p>
           {!isLieferschein && verkauf.faelligkeitsdatum && (
-            <p className="text-sm text-gray-600">Fällig: {formatDate(verkauf.faelligkeitsdatum)}</p>
+            <p className="text-xs md:text-sm text-gray-600">Fällig: {formatDate(verkauf.faelligkeitsdatum)}</p>
           )}
         </div>
       </div>
