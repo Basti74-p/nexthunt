@@ -73,7 +73,6 @@ export default function Wildverkauf() {
   const createVerkaufMutation = useMutation({
     mutationFn: async (data) => {
       const v = await base44.entities.Verkauf.create({ ...data, tenant_id: tenant.id });
-      // Update Lager-Status der Positionen
       for (const pos of data.positionen) {
         if (pos.typ === "wildprodukt") {
           await base44.entities.WildProdukt.update(pos.ref_id, { status: "verkauft", ausgabe_datum: data.datum, ausgabe_an: data.kunde_name });
@@ -82,6 +81,9 @@ export default function Wildverkauf() {
         }
       }
       return v;
+    },
+    onMutate: (data) => {
+      queryClient.setQueryData(["verkauefe", tenant?.id], old => [...(old || []), { ...data, id: "temp-" + Date.now() }]);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["verkauefe"] });
@@ -93,26 +95,41 @@ export default function Wildverkauf() {
 
   const updateStatusMutation = useMutation({
     mutationFn: ({ id, status, bezahlt_am }) => base44.entities.Verkauf.update(id, { zahlungsstatus: status, bezahlt_am }),
+    onMutate: ({ id, status, bezahlt_am }) => {
+      queryClient.setQueryData(["verkauefe", tenant?.id], old => (old || []).map(v => v.id === id ? { ...v, zahlungsstatus: status, bezahlt_am } : v));
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["verkauefe"] }),
   });
 
   const deleteVerkaufMutation = useMutation({
     mutationFn: (id) => base44.entities.Verkauf.delete(id),
+    onMutate: (id) => {
+      queryClient.setQueryData(["verkauefe", tenant?.id], old => (old || []).filter(v => v.id !== id));
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["verkauefe"] }),
   });
 
   const createKundeMutation = useMutation({
     mutationFn: (data) => base44.entities.Kunde.create({ ...data, tenant_id: tenant.id }),
+    onMutate: (data) => {
+      queryClient.setQueryData(["kunden", tenant?.id], old => [...(old || []), { ...data, id: "temp-" + Date.now() }]);
+    },
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["kunden"] }); setKundeDialog(false); setKundeForm(EMPTY_KUNDE); },
   });
 
   const updateKundeMutation = useMutation({
     mutationFn: ({ id, data }) => base44.entities.Kunde.update(id, data),
+    onMutate: ({ id, data }) => {
+      queryClient.setQueryData(["kunden", tenant?.id], old => (old || []).map(k => k.id === id ? { ...k, ...data } : k));
+    },
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["kunden"] }); setKundeDialog(false); setEditKunde(null); setKundeForm(EMPTY_KUNDE); },
   });
 
   const deleteKundeMutation = useMutation({
     mutationFn: (id) => base44.entities.Kunde.delete(id),
+    onMutate: (id) => {
+      queryClient.setQueryData(["kunden", tenant?.id], old => (old || []).filter(k => k.id !== id));
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["kunden"] }),
   });
 
@@ -192,66 +209,115 @@ export default function Wildverkauf() {
           {filteredVerkauefe.length === 0 ? (
             <EmptyState icon={ShoppingCart} title="Keine Verkäufe" description="Erstellen Sie Ihren ersten Verkauf mit 'Neuer Verkauf'." />
           ) : (
-            <div className="bg-[#1a1a1a] rounded-xl border border-[#3a3a3a] overflow-hidden">
-              <table className="w-full text-sm">
-                <thead className="border-b border-[#3a3a3a] bg-[#232323]">
-                  <tr>
-                    <th className="px-4 py-3 text-left text-gray-400 font-medium">Rechnung</th>
-                    <th className="px-4 py-3 text-left text-gray-400 font-medium">Datum</th>
-                    <th className="px-4 py-3 text-left text-gray-400 font-medium">Kunde</th>
-                    <th className="px-4 py-3 text-left text-gray-400 font-medium">Positionen</th>
-                    <th className="px-4 py-3 text-right text-gray-400 font-medium">Betrag</th>
-                    <th className="px-4 py-3 text-left text-gray-400 font-medium">Status</th>
-                    <th className="px-4 py-3 text-right text-gray-400 font-medium">Aktionen</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredVerkauefe.map(v => {
-                    const sc = ZAHLUNGSSTATUS_CONFIG[v.zahlungsstatus] || ZAHLUNGSSTATUS_CONFIG.offen;
-                    const StatusIcon = sc.icon;
-                    return (
-                      <tr key={v.id} className="border-b border-[#3a3a3a] hover:bg-[#252525]">
-                        <td className="px-4 py-3 font-mono text-[#22c55e] text-xs">{v.rechnungsnummer || "–"}</td>
-                        <td className="px-4 py-3" style={{color:"#e5e5e5"}}>{formatDate(v.datum)}</td>
-                        <td className="px-4 py-3 font-medium" style={{color:"#e5e5e5"}}>{v.kunde_name || "–"}</td>
-                        <td className="px-4 py-3 text-gray-400 text-xs">{(v.positionen || []).length} Pos.</td>
-                        <td className="px-4 py-3 text-right font-bold" style={{color:"#22c55e"}}>€ {(v.brutto_betrag || 0).toFixed(2)}</td>
-                        <td className="px-4 py-3">
-                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${sc.color}`}>
-                            <StatusIcon className="w-3 h-3" />
-                            {sc.label}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-right">
-                          <div className="flex items-center justify-end gap-1">
-                            {v.zahlungsstatus !== "bezahlt" && (
-                              <button onClick={() => updateStatusMutation.mutate({ id: v.id, status: "bezahlt", bezahlt_am: new Date().toISOString().split("T")[0] })}
-                                title="Als bezahlt markieren"
-                                className="p-1.5 rounded hover:bg-green-400/10 text-gray-400 hover:text-green-400 transition-colors">
-                                <CheckCircle className="w-4 h-4" />
+            <>
+              {/* Desktop Table */}
+              <div className="hidden sm:block bg-[#1a1a1a] rounded-xl border border-[#3a3a3a] overflow-hidden">
+                <table className="w-full text-sm">
+                  <thead className="border-b border-[#3a3a3a] bg-[#232323]">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-gray-400 font-medium">Rechnung</th>
+                      <th className="px-4 py-3 text-left text-gray-400 font-medium">Datum</th>
+                      <th className="px-4 py-3 text-left text-gray-400 font-medium">Kunde</th>
+                      <th className="px-4 py-3 text-left text-gray-400 font-medium">Positionen</th>
+                      <th className="px-4 py-3 text-right text-gray-400 font-medium">Betrag</th>
+                      <th className="px-4 py-3 text-left text-gray-400 font-medium">Status</th>
+                      <th className="px-4 py-3 text-right text-gray-400 font-medium">Aktionen</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredVerkauefe.map(v => {
+                      const sc = ZAHLUNGSSTATUS_CONFIG[v.zahlungsstatus] || ZAHLUNGSSTATUS_CONFIG.offen;
+                      const StatusIcon = sc.icon;
+                      return (
+                        <tr key={v.id} className="border-b border-[#3a3a3a] hover:bg-[#252525]">
+                          <td className="px-4 py-3 font-mono text-[#22c55e] text-xs">{v.rechnungsnummer || "–"}</td>
+                          <td className="px-4 py-3" style={{color:"#e5e5e5"}}>{formatDate(v.datum)}</td>
+                          <td className="px-4 py-3 font-medium" style={{color:"#e5e5e5"}}>{v.kunde_name || "–"}</td>
+                          <td className="px-4 py-3 text-gray-400 text-xs">{(v.positionen || []).length} Pos.</td>
+                          <td className="px-4 py-3 text-right font-bold" style={{color:"#22c55e"}}>€ {(v.brutto_betrag || 0).toFixed(2)}</td>
+                          <td className="px-4 py-3">
+                            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${sc.color}`}>
+                              <StatusIcon className="w-3 h-3" />
+                              {sc.label}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-right">
+                            <div className="flex items-center justify-end gap-1">
+                              {v.zahlungsstatus !== "bezahlt" && (
+                                <button onClick={() => updateStatusMutation.mutate({ id: v.id, status: "bezahlt", bezahlt_am: new Date().toISOString().split("T")[0] })}
+                                  title="Als bezahlt markieren"
+                                  className="p-1.5 rounded hover:bg-green-400/10 text-gray-400 hover:text-green-400 transition-colors">
+                                  <CheckCircle className="w-4 h-4" />
+                                </button>
+                              )}
+                              <button onClick={() => openPrint(v, "lieferschein")} title="Lieferschein"
+                                className="p-1.5 rounded hover:bg-[#2d2d2d] text-gray-400 hover:text-blue-400 transition-colors">
+                                <FileText className="w-4 h-4" />
                               </button>
-                            )}
-                            <button onClick={() => openPrint(v, "lieferschein")} title="Lieferschein"
-                              className="p-1.5 rounded hover:bg-[#2d2d2d] text-gray-400 hover:text-blue-400 transition-colors">
-                              <FileText className="w-4 h-4" />
-                            </button>
-                            <button onClick={() => openPrint(v, "rechnung")} title="Rechnung drucken"
-                              className="p-1.5 rounded hover:bg-[#2d2d2d] text-gray-400 hover:text-[#22c55e] transition-colors">
-                              <Printer className="w-4 h-4" />
-                            </button>
-                            <button onClick={() => { if (confirm("Verkauf wirklich löschen?")) deleteVerkaufMutation.mutate(v.id); }}
-                              title="Löschen"
-                              className="p-1.5 rounded hover:bg-red-900/20 text-gray-400 hover:text-red-400 transition-colors">
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                              <button onClick={() => openPrint(v, "rechnung")} title="Rechnung drucken"
+                                className="p-1.5 rounded hover:bg-[#2d2d2d] text-gray-400 hover:text-[#22c55e] transition-colors">
+                                <Printer className="w-4 h-4" />
+                              </button>
+                              <button onClick={() => { if (confirm("Verkauf wirklich löschen?")) deleteVerkaufMutation.mutate(v.id); }}
+                                title="Löschen"
+                                className="p-1.5 rounded hover:bg-red-900/20 text-gray-400 hover:text-red-400 transition-colors">
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile Card View */}
+              <div className="sm:hidden space-y-3">
+                {filteredVerkauefe.map(v => {
+                  const sc = ZAHLUNGSSTATUS_CONFIG[v.zahlungsstatus] || ZAHLUNGSSTATUS_CONFIG.offen;
+                  const StatusIcon = sc.icon;
+                  return (
+                    <div key={v.id} className="bg-[#232323] rounded-xl border border-[#3a3a3a] p-4 space-y-3">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <p className="font-mono text-[#22c55e] text-sm font-medium">{v.rechnungsnummer || "–"}</p>
+                          <p className="text-xs text-gray-400 mt-1">{formatDate(v.datum)}</p>
+                        </div>
+                        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${sc.color}`}>
+                          <StatusIcon className="w-3 h-3" />
+                          {sc.label}
+                        </span>
+                      </div>
+                      <div className="space-y-1 text-sm">
+                        <p className="font-medium text-gray-100">{v.kunde_name || "–"}</p>
+                        <p className="text-gray-400">{(v.positionen || []).length} Position(en) • €{(v.brutto_betrag || 0).toFixed(2)}</p>
+                      </div>
+                      <div className="flex gap-2 pt-2 border-t border-[#3a3a3a]">
+                        {v.zahlungsstatus !== "bezahlt" && (
+                          <button onClick={() => updateStatusMutation.mutate({ id: v.id, status: "bezahlt", bezahlt_am: new Date().toISOString().split("T")[0] })}
+                            className="flex-1 p-2 rounded-lg hover:bg-green-400/10 text-gray-400 hover:text-green-400 transition-colors">
+                            <CheckCircle className="w-4 h-4 mx-auto" />
+                          </button>
+                        )}
+                        <button onClick={() => openPrint(v, "lieferschein")}
+                          className="flex-1 p-2 rounded-lg hover:bg-[#2d2d2d] text-gray-400 hover:text-blue-400 transition-colors">
+                          <FileText className="w-4 h-4 mx-auto" />
+                        </button>
+                        <button onClick={() => openPrint(v, "rechnung")}
+                          className="flex-1 p-2 rounded-lg hover:bg-[#2d2d2d] text-gray-400 hover:text-[#22c55e] transition-colors">
+                          <Printer className="w-4 h-4 mx-auto" />
+                        </button>
+                        <button onClick={() => { if (confirm("Verkauf wirklich löschen?")) deleteVerkaufMutation.mutate(v.id); }}
+                          className="flex-1 p-2 rounded-lg hover:bg-red-900/20 text-gray-400 hover:text-red-400 transition-colors">
+                          <Trash2 className="w-4 h-4 mx-auto" />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
           )}
         </div>
       )}
@@ -316,7 +382,7 @@ export default function Wildverkauf() {
 
       {/* Kunden Dialog */}
       <Dialog open={kundeDialog} onOpenChange={v => { setKundeDialog(v); if (!v) { setEditKunde(null); setKundeForm(EMPTY_KUNDE); } }}>
-        <DialogContent className="bg-[#2d2d2d] border-[#3a3a3a] max-w-lg">
+        <DialogContent className="bg-[#2d2d2d] border-[#3a3a3a] max-w-lg sm:max-w-lg max-h-[90vh] w-[calc(100vw-2rem)] sm:w-auto rounded-2xl">
           <DialogHeader>
             <DialogTitle className="text-gray-100">{editKunde ? "Kunde bearbeiten" : "Neuer Kunde"}</DialogTitle>
           </DialogHeader>
