@@ -112,7 +112,7 @@ export default function EinrichtungDetail({ einrichtung, tenantId, onBack, onEdi
 
       {/* Tab Content */}
       {tab === "info" && (
-        <div className="space-y-3">
+        <div className="space-y-3 flex-1 overflow-y-auto">
           <div className="bg-[#1a1a1a] rounded-xl p-4 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs text-gray-400">Zustand</span>
@@ -134,6 +134,44 @@ export default function EinrichtungDetail({ einrichtung, tenantId, onBack, onEdi
               </div>
             )}
           </div>
+
+          {latestProtocolWithDamage && (
+            <div className="bg-[#1a1a1a] rounded-xl p-4 border border-[#3a3a3a]">
+              <div className="flex items-center gap-2 mb-2">
+                <AlertTriangle className="w-4 h-4 text-red-400" />
+                <p className="text-xs font-semibold text-gray-300">Letzter Schadensprotokoll</p>
+              </div>
+              <div className="space-y-2 text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-400">Titel:</span>
+                  <span className="text-gray-200">{latestProtocolWithDamage.titel}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-400">Zustand:</span>
+                  <span className={`font-medium ${ZUSTAND_COLOR[latestProtocolWithDamage.zustand_gesamt]}`}>
+                    {ZUSTAND_LABEL[latestProtocolWithDamage.zustand_gesamt]}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-400">Schwere:</span>
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded ${SCHWERE_COLOR[latestProtocolWithDamage.schwere]}`}>
+                    {latestProtocolWithDamage.schwere}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-400">Datum:</span>
+                  <span className="text-gray-300">{format(new Date(latestProtocolWithDamage.datum), "dd.MM.yyyy", { locale: de })}</span>
+                </div>
+                {latestProtocolWithDamage.kosten_geschaetzt && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-400">Kosten (geschätzt):</span>
+                    <span className="text-gray-200">{latestProtocolWithDamage.kosten_geschaetzt}€</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {einrichtung.notes && (
             <div className="bg-[#1a1a1a] rounded-xl p-4">
               <p className="text-xs text-gray-400 mb-1">Notizen</p>
