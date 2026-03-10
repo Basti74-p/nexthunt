@@ -140,6 +140,18 @@ export default function RevierMembersManager({ revierId }) {
               </div>
               <Button
                 onClick={() => {
+                  setEditForm({ first_name: m.first_name, last_name: m.last_name, phone: m.phone });
+                  setSelectedMember(m);
+                  setEditDialogOpen(true);
+                }}
+                variant="ghost"
+                size="icon"
+                className="text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+              >
+                <Pencil className="w-4 h-4" />
+              </Button>
+              <Button
+                onClick={() => {
                   setSelectedMember(m);
                   setPermDialogOpen(true);
                 }}
