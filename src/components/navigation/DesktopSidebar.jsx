@@ -45,7 +45,7 @@ const NAV = [
       { label: "Abschussplan", page: "StreckeAbschussplan", icon: Crosshair, module: "strecke" },
       { label: "Wildkammer", page: "StreckeWildkammer", icon: Archive, module: "wildkammer" },
       { label: "Lager", page: "WildProdukte", icon: Archive, module: "wildkammer" },
-      { label: "Wildverkauf", page: "StreckeWildverkauf", icon: Truck, module: "strecke" },
+      { label: "Wildverkauf", page: "Wildverkauf", icon: Truck, module: "strecke" },
       { label: "Archiv", page: "StreckeArchiv", icon: Archive, module: "strecke" },
     ],
   },
