@@ -69,9 +69,9 @@ export default function Karte() {
   const selectedRevier = reviere.find(r => r.id === selectedRevierId) || reviere[0] || null;
 
   const { data: einrichtungen = [] } = useQuery({
-    queryKey: ["einrichtungen", selectedRevier?.id],
-    queryFn: () => base44.entities.Jagdeinrichtung.filter({ revier_id: selectedRevier.id }),
-    enabled: !!selectedRevier?.id,
+    queryKey: ["einrichtungen-map", tenant?.id],
+    queryFn: () => base44.entities.Jagdeinrichtung.filter({ tenant_id: tenant.id }),
+    enabled: !!tenant?.id,
   });
 
   const { data: wildmanagement = [] } = useQuery({
