@@ -31,6 +31,16 @@ export default function RevierMembersManager({ revierId }) {
       setInviteLoading(true);
       try {
         await base44.users.inviteUser(data.email, data.role);
+        // Create TenantMember record
+        await base44.entities.TenantMember.create({
+          tenant_id: tenant?.id,
+          user_email: data.email,
+          first_name: data.email.split("@")[0],
+          last_name: "",
+          role: data.role === "admin" ? "tenant_owner" : "tenant_member",
+          status: "active",
+          allowed_reviere: [revierId],
+        });
         return { success: true };
       } finally {
         setInviteLoading(false);
