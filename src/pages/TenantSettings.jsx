@@ -31,6 +31,22 @@ const FEATURE_LABELS = {
 
 export default function TenantSettings() {
   const { tenant } = useAuth();
+  const [etikettSettings, setEtikettSettings] = useState(DEFAULT_ETIKETT_SETTINGS);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    base44.auth.me().then(u => {
+      if (u?.etikett_settings) {
+        setEtikettSettings({ ...DEFAULT_ETIKETT_SETTINGS, ...u.etikett_settings });
+      }
+    });
+  }, []);
+
+  const handleSave = async () => {
+    setSaving(true);
+    await base44.auth.updateMe({ etikett_settings: etikettSettings });
+    setSaving(false);
+  };
 
   if (!tenant) return null;
 
