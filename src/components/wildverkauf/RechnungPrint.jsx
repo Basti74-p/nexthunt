@@ -55,15 +55,15 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
       </div>
 
       {/* Positionen */}
-      <table className="w-full text-xs mb-4" style={{ borderCollapse: "collapse" }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "12px", fontSize: "11px" }}>
         <thead>
           <tr style={{ borderBottom: `2px solid ${accentColor}` }}>
-            <th className="text-left py-2 font-semibold">Bezeichnung</th>
-            <th className="text-right py-2 font-semibold">Gewicht (kg)</th>
+            <th style={{ textAlign: "left", paddingBottom: "6px", fontWeight: "bold" }}>Bezeichnung</th>
+            <th style={{ textAlign: "right", paddingBottom: "6px", fontWeight: "bold" }}>Gewicht (kg)</th>
             {!isLieferschein && (
               <>
-                <th className="text-right py-2 font-semibold">€/kg</th>
-                <th className="text-right py-2 font-semibold">Gesamt</th>
+                <th style={{ textAlign: "right", paddingBottom: "6px", fontWeight: "bold" }}>€/kg</th>
+                <th style={{ textAlign: "right", paddingBottom: "6px", fontWeight: "bold" }}>Gesamt</th>
               </>
             )}
           </tr>
@@ -71,12 +71,12 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
         <tbody>
           {(verkauf.positionen || []).map((pos, i) => (
             <tr key={i} style={{ borderBottom: "1px solid #e5e5e5" }}>
-              <td className="py-2">{pos.bezeichnung}</td>
-              <td className="text-right py-2">{pos.gewicht_kg?.toFixed(2)}</td>
+              <td style={{ paddingTop: "4px", paddingBottom: "4px" }}>{pos.bezeichnung}</td>
+              <td style={{ textAlign: "right", paddingTop: "4px", paddingBottom: "4px" }}>{pos.gewicht_kg?.toFixed(2)}</td>
               {!isLieferschein && (
                 <>
-                  <td className="text-right py-2">€ {pos.preis_pro_kg?.toFixed(2)}</td>
-                  <td className="text-right py-2 font-medium">€ {pos.gesamtpreis?.toFixed(2)}</td>
+                  <td style={{ textAlign: "right", paddingTop: "4px", paddingBottom: "4px" }}>€ {pos.preis_pro_kg?.toFixed(2)}</td>
+                  <td style={{ textAlign: "right", paddingTop: "4px", paddingBottom: "4px", fontWeight: "bold" }}>€ {pos.gesamtpreis?.toFixed(2)}</td>
                 </>
               )}
             </tr>
