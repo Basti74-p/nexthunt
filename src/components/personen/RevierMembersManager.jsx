@@ -27,10 +27,10 @@ export default function RevierMembersManager({ revierId }) {
   });
 
   const inviteMutation = useMutation({
-    mutationFn: async (email) => {
+    mutationFn: async (data) => {
       setInviteLoading(true);
       try {
-        await base44.users.inviteUser(email, form.role);
+        await base44.users.inviteUser(data.email, data.role);
         return { success: true };
       } finally {
         setInviteLoading(false);
@@ -59,7 +59,9 @@ export default function RevierMembersManager({ revierId }) {
 
   const handleInvite = () => {
     if (!form.user_email) return;
-    inviteMutation.mutate(form.user_email);
+    // Convert tenant role to app role for invitation
+    const appRole = form.role === "tenant_owner" ? "admin" : "user";
+    inviteMutation.mutate({ email: form.user_email, role: appRole });
   };
 
   return (
