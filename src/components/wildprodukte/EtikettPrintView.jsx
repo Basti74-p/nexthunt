@@ -10,6 +10,15 @@ const PRODUKTTYPEN = {
   sonstiges: "Sonstiges"
 };
 
+const WILDARTEN = {
+  rotwild: "Rotwild",
+  schwarzwild: "Schwarzwild",
+  rehwild: "Rehwild",
+  damwild: "Damwild",
+  sikawild: "Sikawild",
+  wolf: "Wolf"
+};
+
 const FONT_SIZES = {
   klein: { title: "text-base", number: "text-xl", body: "text-xs" },
   normal: { title: "text-xl", number: "text-2xl", body: "text-sm" },
