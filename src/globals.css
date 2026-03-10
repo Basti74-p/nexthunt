@@ -113,3 +113,190 @@ input, textarea {
     --radius: 0.75rem;
   }
 }
+
+/* ========================================
+   MOBILE-FIRST RESPONSIVE DESIGN
+   Mobile: 320-430px | Tablet: 431-768px | Desktop: 769px+
+   ======================================== */
+
+@media (max-width: 430px) {
+  /* Prevent horizontal scrolling */
+  body, html {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  /* Touch-friendly minimum sizes: 44px per accessibility standards */
+  button, [role="button"], input[type="checkbox"], input[type="radio"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Full-width forms */
+  input, textarea, select {
+    width: 100%;
+    max-width: 100%;
+    min-height: 44px;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+
+  /* Container adjustments */
+  .container, .max-w-4xl, .max-w-2xl, .max-w-xl {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  /* Text scaling */
+  body {
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  h3 {
+    font-size: 16px;
+  }
+
+  /* Responsive spacing */
+  .gap-4 {
+    gap: 12px;
+  }
+
+  .gap-6 {
+    gap: 16px;
+  }
+
+  .mb-4 {
+    margin-bottom: 12px;
+  }
+
+  .mb-6 {
+    margin-bottom: 16px;
+  }
+
+  /* Ensure content doesn't hide behind bottom nav */
+  main {
+    padding-bottom: 80px !important;
+  }
+
+  /* Hide desktop-only elements */
+  .hidden-mobile {
+    display: none !important;
+  }
+
+  /* Stack layouts vertically */
+  .flex-row {
+    flex-direction: column;
+  }
+
+  /* Card adjustments */
+  .card, [role="region"] {
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+
+  /* Dialog full width */
+  [role="dialog"], .dialog {
+    width: 100vw;
+    left: 0;
+    right: 0;
+  }
+}
+
+@media (min-width: 431px) and (max-width: 768px) {
+  /* Tablet adjustments */
+  button, [role="button"] {
+    min-height: 40px;
+  }
+
+  input, textarea {
+    min-height: 40px;
+  }
+
+  main {
+    padding-bottom: 60px !important;
+  }
+}
+
+@media (min-width: 769px) {
+  /* Desktop - no mobile constraints */
+  main {
+    padding-bottom: 0 !important;
+  }
+
+  .hidden-desktop {
+    display: none !important;
+  }
+
+  /* Reset mobile constraints */
+  button, [role="button"] {
+    min-height: auto;
+  }
+
+  input, textarea {
+    min-height: auto;
+    width: auto;
+  }
+}
+
+/* Safe area support for notched devices */
+.safe-area-pt {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-pb {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-area-pl {
+  padding-left: env(safe-area-inset-left);
+}
+
+.safe-area-pr {
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Prevent text selection on interactive elements */
+button, [role="button"], label {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection on content */
+p, span, div {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Responsive font utilities */
+.text-responsive-sm {
+  font-size: clamp(12px, 2.5vw, 14px);
+}
+
+.text-responsive-base {
+  font-size: clamp(14px, 3vw, 16px);
+}
+
+.text-responsive-lg {
+  font-size: clamp(16px, 4vw, 20px);
+}
+
+.text-responsive-xl {
+  font-size: clamp(20px, 5vw, 24px);
+}
+
+.text-responsive-2xl {
+  font-size: clamp(24px, 6vw, 30px);
+}
