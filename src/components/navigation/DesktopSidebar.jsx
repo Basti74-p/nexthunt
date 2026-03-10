@@ -20,9 +20,14 @@ const NAV = [
     icon: LayoutDashboard,
   },
   {
-    label: "Reviere",
-    page: "Reviere",
-    icon: TreePine,
+    label: "Karte",
+    page: "Karte",
+    icon: Map,
+    module: "einrichtungen",
+    children: [
+      { label: "Reviere", page: "Reviere", icon: TreePine },
+      { label: "Jagdeinrichtungen", page: "Jagdeinrichtungen", icon: Building, module: "einrichtungen" },
+    ],
   },
   {
     label: "Wildmanagement",
@@ -61,6 +66,12 @@ const NAV = [
     ],
   },
   {
+   label: "Aufgaben",
+   page: "Aufgaben",
+   icon: ListTodo,
+   module: "aufgaben",
+  },
+  {
     label: "Personen",
     page: "Personen",
     icon: Users,
@@ -68,21 +79,6 @@ const NAV = [
     children: [
       { label: "Berechtigungen", page: "TenantMembers", icon: Shield, module: "personen" },
     ],
-  },
-  {
-    label: "Karte",
-    page: "Karte",
-    icon: Map,
-    module: "einrichtungen",
-    children: [
-      { label: "Jagdeinrichtungen", page: "Jagdeinrichtungen", icon: Building, module: "einrichtungen" },
-    ],
-  },
-  {
-   label: "Aufgaben",
-   page: "Aufgaben",
-   icon: ListTodo,
-   module: "aufgaben",
   },
   {
    label: "Wildmarken",
