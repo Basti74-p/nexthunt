@@ -18,7 +18,7 @@ export default function MobileNav({ currentPage }) {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 z-50 safe-area-pb">
       {/* Top bar */}
-      <div className="fixed top-0 left-0 right-0 bg-white border-b border-gray-100 z-50 px-4 py-3 flex items-center gap-2">
+      <div className="fixed top-0 left-0 right-0 bg-white border-b border-gray-100 z-50 px-4 py-3 safe-area-pt flex items-center gap-2 select-none">
         <div className="w-7 h-7 bg-[#0F2F23] rounded-lg flex items-center justify-center">
           <TreePine className="w-4 h-4 text-white" />
         </div>
