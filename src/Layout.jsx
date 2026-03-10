@@ -11,7 +11,7 @@ function LayoutInner({ children, currentPageName }) {
   const isMobile = useMobile();
 
   // Auto-apply dark theme based on system preference
-  React.useEffect(() => {
+  useEffect(() => {
     if (typeof window !== "undefined") {
       const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
       if (prefersDark) {
