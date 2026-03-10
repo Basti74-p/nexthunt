@@ -137,6 +137,7 @@ export default function WildProdukte() {
   };
 
   const handlePrintEtikett = (product) => {
+    setEtikettSettings({ empfaenger: "", eigeneNotiz: "" });
     setPrintProduct(product);
   };
 
