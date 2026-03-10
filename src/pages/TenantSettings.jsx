@@ -3,10 +3,12 @@ import { useAuth } from "@/components/hooks/useAuth";
 import { Check, X } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import StatusBadge from "@/components/ui/StatusBadge";
+import { Button } from "@/components/ui/button";
 import EtikettSettings from "@/components/wildprodukte/EtikettSettings";
 import EtikettPrintView from "@/components/wildprodukte/EtikettPrintView";
 import RechnungSettings from "@/components/wildverkauf/RechnungSettings";
 import RechnungPrint from "@/components/wildverkauf/RechnungPrint";
+import DeleteAccountDialog from "@/components/wildverkauf/DeleteAccountDialog";
 import { base44 } from "@/api/base44Client";
 
 const DEFAULT_ETIKETT_SETTINGS = {
