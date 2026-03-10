@@ -20,8 +20,11 @@ const TYPE_LABEL = {
   suhle: "Suhle", wildacker: "Wildacker", fuetterung: "Fütterung", fanganlage: "Fanganlage",
 };
 const SCHWERE_COLOR = { gering: "bg-yellow-900 text-yellow-300", mittel: "bg-orange-900 text-orange-300", schwer: "bg-red-900 text-red-300", total: "bg-red-950 text-red-200" };
-const STATUS_SCHADEN_COLOR = { erfasst: "bg-blue-900 text-blue-300", in_reparatur: "bg-yellow-900 text-yellow-300", behoben: "bg-green-900 text-green-300" };
-const STATUS_SCHADEN_LABEL = { erfasst: "Erfasst", in_reparatur: "In Reparatur", behoben: "Behoben" };
+const STATUS_SCHADEN_COLOR = { offen: "bg-blue-900 text-blue-300", in_bearbeitung: "bg-yellow-900 text-yellow-300", abgeschlossen: "bg-green-900 text-green-300", erfasst: "bg-blue-900 text-blue-300", in_reparatur: "bg-yellow-900 text-yellow-300", behoben: "bg-green-900 text-green-300" };
+const STATUS_SCHADEN_LABEL = { offen: "Offen", in_bearbeitung: "In Bearb.", abgeschlossen: "Abgeschl.", erfasst: "Erfasst", in_reparatur: "In Reparatur", behoben: "Behoben" };
+const PROTOKOLL_TYP_LABEL = { kontrolle: "Routinekontrolle", jahresinspektion: "Jahresinspektion", schadensmeldung: "Schadensmeldung", reparatur: "Reparaturbericht" };
+const ZUSTAND_COLOR = { gut: "text-green-400", maessig: "text-yellow-400", schlecht: "text-red-400", total: "text-red-300" };
+const ZUSTAND_LABEL = { gut: "Gut", maessig: "Mäßig", schlecht: "Schlecht", total: "Totalschaden" };
 const PRIO_COLOR = { low: "bg-gray-700 text-gray-300", medium: "bg-blue-900 text-blue-300", high: "bg-red-900 text-red-300" };
 const PRIO_LABEL = { low: "Niedrig", medium: "Mittel", high: "Hoch" };
 
