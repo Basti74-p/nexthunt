@@ -10,6 +10,7 @@ import RevierMembersManager from "@/components/personen/RevierMembersManager";
 
 export default function Personen() {
   const { tenant } = useAuth();
+  const [selectedRevier, setSelectedRevier] = useState(null);
 
   const { data: persons = [] } = useQuery({
     queryKey: ["persons-main", tenant?.id],
@@ -20,6 +21,12 @@ export default function Personen() {
   const { data: members = [] } = useQuery({
     queryKey: ["members-main", tenant?.id],
     queryFn: () => base44.entities.TenantMember.filter({ tenant_id: tenant?.id }),
+    enabled: !!tenant?.id,
+  });
+
+  const { data: reviere = [] } = useQuery({
+    queryKey: ["reviere-members", tenant?.id],
+    queryFn: () => base44.entities.Revier.filter({ tenant_id: tenant?.id }),
     enabled: !!tenant?.id,
   });
 
