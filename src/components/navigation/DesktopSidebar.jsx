@@ -100,6 +100,11 @@ const NAV = [
    page: "SupportTickets",
    icon: LifeBuoy,
   },
+  {
+   label: "Einstellungen",
+   page: "TenantSettings",
+   icon: Settings,
+  },
   ];
 
 function NavItem({ item, currentPage, depth = 0 }) {
