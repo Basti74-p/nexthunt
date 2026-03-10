@@ -15,8 +15,10 @@ export default function RevierMembersManager({ revierId }) {
   const { tenant } = useAuth();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [permDialogOpen, setPermDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
   const [form, setForm] = useState({ user_email: "", role: "tenant_member" });
+  const [editForm, setEditForm] = useState({ first_name: "", last_name: "", phone: "" });
   const [inviteLoading, setInviteLoading] = useState(false);
   const queryClient = useQueryClient();
 
