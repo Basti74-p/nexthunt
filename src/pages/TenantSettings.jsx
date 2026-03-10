@@ -41,6 +41,7 @@ export default function TenantSettings() {
   const { tenant } = useAuth();
   const [etikettSettings, setEtikettSettings] = useState(DEFAULT_ETIKETT_SETTINGS);
   const [saving, setSaving] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(u => {
