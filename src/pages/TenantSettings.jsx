@@ -69,12 +69,31 @@ export default function TenantSettings() {
 
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Etikett-Einstellungen</h2>
-        <EtikettSettings
-          settings={etikettSettings}
-          onChange={setEtikettSettings}
-          onSave={handleSave}
-          saving={saving}
-        />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <EtikettSettings
+            settings={etikettSettings}
+            onChange={setEtikettSettings}
+            onSave={handleSave}
+            saving={saving}
+          />
+          <div>
+            <p className="text-xs text-gray-500 mb-3 font-medium uppercase tracking-wider">Vorschau</p>
+            <div className="scale-90 origin-top-left">
+              <EtikettPrintView
+                product={{
+                  wildnummer: "WP-12345678",
+                  produkttyp: "filet",
+                  gewicht_kg: 1.8,
+                  lager_location: "A1",
+                  lager_temperatur: -18,
+                  einfrierungs_datum: new Date().toISOString().split("T")[0],
+                  beschreibung: "Beispiel-Produkt",
+                }}
+                settings={etikettSettings}
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
