@@ -110,6 +110,28 @@ export default function WildProdukte() {
     }
   });
 
+  const updateMutation = useMutation({
+    mutationFn: async (data) => {
+      await base44.entities.WildProdukt.update(editingProduct.id, {
+        revier_id: data.revier_id,
+        wildkammer_id: data.wildkammer_id,
+        produkttyp: data.produkttyp,
+        gewicht_kg: parseFloat(data.gewicht_kg),
+        einfrierungs_datum: data.einfrierungs_datum,
+        einfrierungs_zeit: data.einfrierungs_zeit,
+        lager_temperatur: parseFloat(data.lager_temperatur),
+        lager_location: data.lager_location,
+        beschreibung: data.beschreibung,
+        notes: data.notes,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["wildProdukte"] });
+      setShowDialog(false);
+      setEditingProduct(null);
+    }
+  });
+
   const deleteMutation = useMutation({
     mutationFn: (id) => base44.entities.WildProdukt.delete(id),
     onSuccess: () => {
