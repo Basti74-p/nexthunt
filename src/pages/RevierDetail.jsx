@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "@/components/hooks/useAuth";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { ChevronLeft, TreePine, Loader2 } from "lucide-react";
 import RevierOverview from "@/components/revier/RevierOverview";
@@ -17,16 +17,22 @@ import RevierGesellschaftsjagd from "@/components/revier/RevierGesellschaftsjagd
 import RevierPublic from "@/components/revier/RevierPublic";
 
 export default function RevierDetail() {
+  const navigate = useNavigate();
   const urlParams = new URLSearchParams(window.location.search);
   const revierId = urlParams.get("id");
   const activeTab = urlParams.get("tab") || "overview";
+  const [lastTab, setLastTab] = useState(activeTab);
+
+  useEffect(() => {
+    // Preserve back button state
+    window.history.replaceState({ revierId, tab: activeTab }, "", `?id=${revierId}&tab=${activeTab}`);
+  }, [revierId, activeTab]);
 
   const setActiveTab = (tab) => {
+    setLastTab(tab);
     const params = new URLSearchParams(window.location.search);
     params.set("tab", tab);
-    window.history.pushState({}, "", `?${params.toString()}`);
-    // force re-render
-    window.dispatchEvent(new PopStateEvent("popstate"));
+    window.history.pushState({ revierId, tab }, "", `?${params.toString()}`);
   };
 
   const { data: revier, isLoading } = useQuery({
@@ -77,12 +83,18 @@ export default function RevierDetail() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="flex items-center gap-4 mb-6">
-        <Link
-          to={createPageUrl("Reviere")}
+        <button
+          onClick={() => {
+            if (window.history.length > 1) {
+              window.history.back();
+            } else {
+              navigate(createPageUrl("Reviere"));
+            }
+          }}
           className="flex items-center gap-1 text-sm text-gray-400 hover:text-gray-200 transition-colors"
         >
           <ChevronLeft className="w-4 h-4" /> Reviere
-        </Link>
+        </button>
         <div className="w-px h-6 bg-gray-600" />
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-emerald-900/40 flex items-center justify-center">
