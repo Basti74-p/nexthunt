@@ -242,26 +242,38 @@ export default function WildProdukte() {
       </div>
 
       {printProduct && (
-        <div className="fixed inset-0 bg-white z-50">
-          <div className="absolute top-4 right-4 space-x-2">
-            <Button
-              onClick={() => {
-                setTimeout(() => window.print(), 100);
-              }}
-              className="bg-[#22c55e] hover:bg-[#16a34a]"
-            >
-              Drucken
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => setPrintProduct(null)}
-              className="text-gray-900"
-            >
-              Schließen
-            </Button>
+        <div className="fixed inset-0 z-50 flex bg-gray-100">
+          {/* Linke Seite: Editor */}
+          <div className="w-80 bg-white border-r border-gray-200 flex flex-col h-full print:hidden">
+            <div className="px-5 py-4 border-b border-gray-200">
+              <h2 className="font-bold text-gray-900 text-base">Etikett personalisieren</h2>
+            </div>
+            <div className="flex-1 overflow-y-auto px-5 py-4">
+              <EtikettEditor settings={etikettSettings} onChange={setEtikettSettings} />
+            </div>
+            <div className="px-5 py-4 border-t border-gray-200 space-y-2">
+              <Button
+                onClick={() => setTimeout(() => window.print(), 100)}
+                className="w-full bg-[#22c55e] hover:bg-[#16a34a] text-white"
+              >
+                Drucken
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setPrintProduct(null)}
+                className="w-full text-gray-900 border-gray-300"
+              >
+                Schließen
+              </Button>
+            </div>
           </div>
-          <div className="pt-16">
-            <EtikettPrintView product={printProduct} />
+
+          {/* Rechte Seite: Vorschau */}
+          <div className="flex-1 flex items-center justify-center p-8 overflow-auto">
+            <div>
+              <p className="text-center text-gray-500 text-xs mb-3 print:hidden">Vorschau</p>
+              <EtikettPrintView product={printProduct} settings={etikettSettings} />
+            </div>
           </div>
         </div>
       )}
