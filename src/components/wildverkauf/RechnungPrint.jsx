@@ -31,12 +31,12 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
             <img src={tenantSettings.logoUrl} alt="Logo" className="h-10 object-contain mb-1"
               onError={e => e.target.style.display = "none"} />
           )}
-          <p className="font-bold text-lg">{tenantSettings?.betriebsname || "Jagdbetrieb"}</p>
-          {tenantSettings?.adresse && <p className="text-sm text-gray-600 whitespace-pre-line">{tenantSettings.adresse}</p>}
-          {tenantSettings?.rechnung_kontakt && <p className="text-sm text-gray-600">{tenantSettings.rechnung_kontakt}</p>}
-        </div>
-        <div className="text-right">
-          <h1 className="text-2xl font-bold uppercase tracking-wide" style={{ color: accentColor }}>{docTitle}</h1>
+          <p className="font-bold text-base">{tenantSettings?.betriebsname || "Jagdbetrieb"}</p>
+          {tenantSettings?.adresse && <p className="text-xs text-gray-600 whitespace-pre-line">{tenantSettings.adresse}</p>}
+          {tenantSettings?.rechnung_kontakt && <p className="text-xs text-gray-600">{tenantSettings.rechnung_kontakt}</p>}
+          </div>
+          <div className="text-right">
+          <h1 className="text-xl font-bold uppercase tracking-wide" style={{ color: accentColor }}>{docTitle}</h1>
           <p className="text-sm text-gray-600 mt-1">Nr.: <span className="font-mono font-bold text-black">{docNr}</span></p>
           <p className="text-sm text-gray-600">Datum: {formatDate(verkauf.datum)}</p>
           {!isLieferschein && verkauf.faelligkeitsdatum && (
