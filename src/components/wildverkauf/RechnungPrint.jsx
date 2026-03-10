@@ -55,36 +55,34 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
       </div>
 
       {/* Positionen */}
-      <div className="w-full mb-3 md:mb-4 overflow-x-auto">
-        <table className="w-full text-xs md:text-sm" style={{ borderCollapse: "collapse", minWidth: "100%" }}>
-          <thead>
-            <tr style={{ borderBottom: `2px solid ${accentColor}` }}>
-              <th className="text-left py-1.5 md:py-2 font-semibold px-1 md:px-0">Bezeichnung</th>
-              <th className="text-right py-1.5 md:py-2 font-semibold px-1 md:px-0">Gewicht (kg)</th>
+      <table className="w-full text-xs mb-4" style={{ borderCollapse: "collapse" }}>
+        <thead>
+          <tr style={{ borderBottom: `2px solid ${accentColor}` }}>
+            <th className="text-left py-2 font-semibold">Bezeichnung</th>
+            <th className="text-right py-2 font-semibold">Gewicht (kg)</th>
+            {!isLieferschein && (
+              <>
+                <th className="text-right py-2 font-semibold">€/kg</th>
+                <th className="text-right py-2 font-semibold">Gesamt</th>
+              </>
+            )}
+          </tr>
+        </thead>
+        <tbody>
+          {(verkauf.positionen || []).map((pos, i) => (
+            <tr key={i} style={{ borderBottom: "1px solid #e5e5e5" }}>
+              <td className="py-2">{pos.bezeichnung}</td>
+              <td className="text-right py-2">{pos.gewicht_kg?.toFixed(2)}</td>
               {!isLieferschein && (
                 <>
-                  <th className="text-right py-1.5 md:py-2 font-semibold px-1 md:px-0 hidden md:table-cell">€/kg</th>
-                  <th className="text-right py-1.5 md:py-2 font-semibold px-1 md:px-0">Gesamt</th>
+                  <td className="text-right py-2">€ {pos.preis_pro_kg?.toFixed(2)}</td>
+                  <td className="text-right py-2 font-medium">€ {pos.gesamtpreis?.toFixed(2)}</td>
                 </>
               )}
             </tr>
-          </thead>
-          <tbody>
-            {(verkauf.positionen || []).map((pos, i) => (
-              <tr key={i} style={{ borderBottom: "1px solid #e5e5e5" }}>
-                <td className="py-1.5 md:py-2 px-1 md:px-0">{pos.bezeichnung}</td>
-                <td className="text-right py-1.5 md:py-2 px-1 md:px-0">{pos.gewicht_kg?.toFixed(2)}</td>
-                {!isLieferschein && (
-                  <>
-                    <td className="text-right py-1.5 md:py-2 px-1 md:px-0 hidden md:table-cell">€ {pos.preis_pro_kg?.toFixed(2)}</td>
-                    <td className="text-right py-1.5 md:py-2 px-1 md:px-0 font-medium">€ {pos.gesamtpreis?.toFixed(2)}</td>
-                  </>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
 
       {/* Summen (nur Rechnung) */}
       {!isLieferschein && (
