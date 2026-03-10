@@ -110,28 +110,28 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
 
       {/* Notizen */}
       {verkauf.notizen && (
-        <div className="mt-4 p-2 bg-gray-50 rounded text-xs text-gray-700">
+        <div className="mt-3 md:mt-4 p-2 bg-gray-50 rounded text-xs md:text-sm text-gray-700">
           <p className="font-semibold mb-1">Hinweise:</p>
-          <p>{verkauf.notizen}</p>
+          <p className="line-clamp-3">{verkauf.notizen}</p>
         </div>
       )}
 
       {/* Footer */}
-      <div className="mt-6">
+      <div className="mt-4 md:mt-6 text-xs md:text-sm">
         {tenantSettings?.rechnung_bankverbindung && (
-          <div className="mb-1.5 text-xs text-gray-600 whitespace-pre-line">
-            <span className="font-semibold">Bankverbindung:</span>{"\n"}{tenantSettings.rechnung_bankverbindung}
+          <div className="mb-1 text-gray-600 whitespace-pre-line line-clamp-3">
+            <span className="font-semibold">Bankverbindung:</span> {tenantSettings.rechnung_bankverbindung}
           </div>
         )}
         {tenantSettings?.rechnung_steuernummer && (
-          <p className="text-xs text-gray-600 mb-2">
+          <p className="text-gray-600 mb-1">
             <span className="font-semibold">Steuernummer:</span> {tenantSettings.rechnung_steuernummer}
           </p>
         )}
         {tenantSettings?.rechnung_fusszeile && (
-          <p className="text-xs text-gray-600 italic mb-4">{tenantSettings.rechnung_fusszeile}</p>
+          <p className="text-gray-600 italic mb-3 line-clamp-2">{tenantSettings.rechnung_fusszeile}</p>
         )}
-        <div className="pt-4 border-t border-gray-300 text-xs text-gray-500 text-center">
+        <div className="pt-2 md:pt-4 border-t border-gray-300 text-gray-500 text-center text-xs">
           {tenantSettings?.betriebsname || "Jagdbetrieb"} · Erstellt am {formatDate(new Date().toISOString().split("T")[0])}
         </div>
       </div>
