@@ -44,13 +44,28 @@ export default function EtikettEditor({ settings, onChange }) {
             />
           </div>
           <div>
-            <Label className="text-xs text-gray-600 mb-1 block">Logo-URL (optional)</Label>
-            <Input
-              value={settings.logoUrl}
-              onChange={e => set("logoUrl", e.target.value)}
-              placeholder="https://..."
-              className="border-gray-300 text-gray-900 bg-white"
-            />
+            <Label className="text-xs text-gray-600 mb-1 block">Logo</Label>
+            <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} />
+            {settings.logoUrl ? (
+              <div className="flex items-center gap-2">
+                <img src={settings.logoUrl} alt="Logo" className="h-12 w-12 object-contain border border-gray-300 rounded p-1 bg-white" />
+                <button
+                  onClick={() => set("logoUrl", "")}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+                className="flex items-center gap-2 px-3 py-2 border border-dashed border-gray-400 rounded text-gray-600 hover:border-gray-600 text-xs w-full justify-center"
+              >
+                {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                {uploading ? "Wird hochgeladen..." : "Logo hochladen"}
+              </button>
+            )}
           </div>
         </div>
       </div>
