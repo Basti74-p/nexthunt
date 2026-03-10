@@ -271,7 +271,7 @@ export default function WildProdukte() {
           <div className="flex-1 flex items-center justify-center p-8 overflow-auto">
             <div>
               <p className="text-center text-gray-500 text-xs mb-3 print:hidden">Vorschau</p>
-              <EtikettPrintView product={printProduct} settings={etikettSettings} />
+              <EtikettPrintView product={printProduct} settings={{ ...savedSettings, ...etikettSettings }} />
             </div>
           </div>
         </div>
