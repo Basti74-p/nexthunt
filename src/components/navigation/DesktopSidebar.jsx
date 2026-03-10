@@ -130,7 +130,7 @@ function NavItem({ item, currentPage, depth = 0 }) {
   return (
     <div>
       <div className={`flex items-center rounded-xl text-sm font-medium transition-all duration-150 ${
-        isActive ? "bg-[#22c55e] text-[#1e1e1e]" : childIsActive ? "text-[#22c55e] bg-[#22c55e]/10" : "text-gray-300 hover:bg-[#2d2d2d]"
+        isActive ? "bg-[#22c55e] text-[#1e1e1e]" : "text-gray-300 hover:bg-[#2d2d2d]"
       }`}>
         {item.page ? (
           <Link to={createPageUrl(item.page)} className="flex items-center gap-3 px-3 py-2.5 flex-1">
