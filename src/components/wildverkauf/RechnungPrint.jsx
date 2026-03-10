@@ -140,9 +140,11 @@ export default function RechnungPrint({ verkauf, kunde, tenantSettings, mode = "
           size: A4;
         }
         @media print {
-          body { margin: 15mm 20mm; padding: 0; background: white; }
+          html { margin: 0; padding: 0; }
+          body { margin: 0; padding: 0; background: white; }
           * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
           a[href]:after { content: none !important; }
+          .no-print { display: none !important; }
         }
       `}</style>
     </div>
