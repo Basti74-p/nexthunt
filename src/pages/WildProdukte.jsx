@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Plus, Printer, Trash2, Edit2 } from "lucide-react";
 import PageHeader from "../components/ui/PageHeader";
 import EtikettPrintView from "../components/wildprodukte/EtikettPrintView";
+import EtikettEditor from "../components/wildprodukte/EtikettEditor";
 
 const PRODUKTTYPEN = {
   filet: "Filet",

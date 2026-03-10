@@ -80,12 +80,12 @@ import SystemAdminSupport from './pages/SystemAdminSupport';
 import SystemAdminTenants from './pages/SystemAdminTenants';
 import TenantMembers from './pages/TenantMembers';
 import TenantSettings from './pages/TenantSettings';
+import WildProdukte from './pages/WildProdukte';
 import WildRehwild from './pages/WildRehwild';
 import WildRotwild from './pages/WildRotwild';
 import WildSchwarzwild from './pages/WildSchwarzwild';
 import WildWolf from './pages/WildWolf';
 import Wildmanagement from './pages/Wildmanagement';
-import WildProdukte from './pages/WildProdukte';
 import __Layout from './Layout.jsx';
 
 
@@ -123,12 +123,12 @@ export const PAGES = {
     "SystemAdminTenants": SystemAdminTenants,
     "TenantMembers": TenantMembers,
     "TenantSettings": TenantSettings,
+    "WildProdukte": WildProdukte,
     "WildRehwild": WildRehwild,
     "WildRotwild": WildRotwild,
     "WildSchwarzwild": WildSchwarzwild,
     "WildWolf": WildWolf,
     "Wildmanagement": Wildmanagement,
-    "WildProdukte": WildProdukte,
 }
 
 export const pagesConfig = {
