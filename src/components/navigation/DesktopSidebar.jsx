@@ -209,7 +209,7 @@ export default function DesktopSidebar({ currentPage }) {
           <img
             src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c370741b119950032ab62/7a1f75278_NextHunt_logo_transparent.png"
             alt="NextHunt Logo"
-            className="h-20 w-auto object-contain" />
+            className="w-full h-auto object-contain" />
 
           
 
