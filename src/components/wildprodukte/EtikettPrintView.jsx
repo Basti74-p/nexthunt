@@ -63,6 +63,9 @@ export default function EtikettPrintView({ product, settings }) {
 
           {/* Produktdaten */}
           <div className={`border border-black p-3 space-y-1 ${fs.body}`}>
+            {product.wildart && (
+              <div><span className="font-bold">Wildart:</span> {WILDARTEN[product.wildart] || product.wildart}</div>
+            )}
             <div><span className="font-bold">Produkttyp:</span> {PRODUKTTYPEN[product.produkttyp]}</div>
             <div><span className="font-bold">Gewicht:</span> {product.gewicht_kg} kg</div>
 
