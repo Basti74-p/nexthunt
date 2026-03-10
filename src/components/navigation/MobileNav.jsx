@@ -26,14 +26,14 @@ export default function MobileNav({ currentPage }) {
       </div>
 
       {/* Bottom tabs */}
-      <nav className="flex justify-around px-2 py-2">
+      <nav className="flex justify-around px-2 py-2 select-none">
         {tabs.map(({ name, icon: Icon, page }) => {
           const isActive = currentPage === page;
           return (
             <Link
               key={page}
               to={createPageUrl(page)}
-              className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl transition-all ${
+              className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl transition-all select-none ${
                 isActive
                   ? "text-[#0F2F23]"
                   : "text-gray-400"
