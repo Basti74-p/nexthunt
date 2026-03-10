@@ -83,6 +83,7 @@ export default function TenantSettings() {
                 product={{
                   wildnummer: "WP-12345678",
                   produkttyp: "filet",
+                  wildart: "rehwild",
                   gewicht_kg: 1.8,
                   lager_location: "A1",
                   lager_temperatur: -18,
