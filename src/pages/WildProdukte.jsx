@@ -220,11 +220,11 @@ export default function WildProdukte() {
             {filteredProducts.map(product => (
               <tr key={product.id} className="border-b border-[#3a3a3a] hover:bg-[#252525]">
                 <td className="px-4 py-3 font-mono text-[#22c55e]">{product.wildnummer}</td>
-                <td className="px-4 py-3 text-gray-100">{PRODUKTTYPEN[product.produkttyp]}</td>
-                <td className="px-4 py-3 text-gray-100">{product.gewicht_kg} kg</td>
-                <td className="px-4 py-3 text-gray-100">{product.lager_location}</td>
-                <td className="px-4 py-3 text-xs text-gray-100">{product.lager_temperatur}°C</td>
-                <td className="px-4 py-3 text-xs text-gray-300">{product.einfrierungs_datum}</td>
+                <td className="px-4 py-3" style={{color: "#e5e5e5"}}>{PRODUKTTYPEN[product.produkttyp]}</td>
+                <td className="px-4 py-3" style={{color: "#e5e5e5"}}>{product.gewicht_kg} kg</td>
+                <td className="px-4 py-3" style={{color: "#e5e5e5"}}>{product.lager_location}</td>
+                <td className="px-4 py-3 text-xs" style={{color: "#e5e5e5"}}>{product.lager_temperatur}°C</td>
+                <td className="px-4 py-3 text-xs" style={{color: "#e5e5e5"}}>{product.einfrierungs_datum}</td>
                 <td className="px-4 py-3 text-right flex justify-end gap-2">
                   <Button
                     size="sm"
