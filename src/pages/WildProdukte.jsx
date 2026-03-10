@@ -245,7 +245,7 @@ export default function WildProdukte() {
           {/* Linke Seite: Editor */}
           <div className="w-80 bg-white border-r border-gray-200 flex flex-col h-full print:hidden">
             <div className="px-5 py-4 border-b border-gray-200">
-              <h2 className="font-bold text-gray-900 text-base">Etikett personalisieren</h2>
+              <h2 className="font-bold text-gray-900 text-base">Etikett drucken</h2>
             </div>
             <div className="flex-1 overflow-y-auto px-5 py-4">
               <EtikettEditor settings={etikettSettings} onChange={setEtikettSettings} />
