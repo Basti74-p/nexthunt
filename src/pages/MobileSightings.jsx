@@ -23,6 +23,8 @@ export default function MobileSightings() {
   const { tenant } = useAuth();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [form, setForm] = useState({ species: "rehwild", quantity: 1, date: new Date().toISOString().split("T")[0], notes: "" });
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const pullStartRef = useRef(null);
   const queryClient = useQueryClient();
 
   const { data: reviere = [] } = useQuery({
