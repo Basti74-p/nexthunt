@@ -103,6 +103,46 @@ export default function TenantSettings() {
         </div>
       </div>
 
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-semibold text-gray-900">Rechnungs-Vorlage</h2>
+          <Button size="sm" onClick={handleSave} disabled={saving}>
+            {saving ? "Speichern..." : "Speichern"}
+          </Button>
+        </div>
+        <div className="space-y-4 text-sm">
+          <div>
+            <label className="block text-gray-600 mb-1">Steuernummer / USt-IdNr.</label>
+            <Input
+              value={etikettSettings.rechnung_steuernummer || ""}
+              onChange={e => setEtikettSettings(s => ({ ...s, rechnung_steuernummer: e.target.value }))}
+              placeholder="z.B. DE123456789"
+              className="bg-white text-gray-900 border-gray-300"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-600 mb-1">Bankverbindung</label>
+            <Textarea
+              value={etikettSettings.rechnung_bankverbindung || ""}
+              onChange={e => setEtikettSettings(s => ({ ...s, rechnung_bankverbindung: e.target.value }))}
+              placeholder={"IBAN: DE00 0000 0000 0000 0000 00\nBIC: XXXXXXXX\nBank: Musterbank"}
+              rows={3}
+              className="bg-white text-gray-900 border-gray-300"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-600 mb-1">Fußzeilen-Text</label>
+            <Textarea
+              value={etikettSettings.rechnung_fusszeile || ""}
+              onChange={e => setEtikettSettings(s => ({ ...s, rechnung_fusszeile: e.target.value }))}
+              placeholder="z.B. Zahlbar innerhalb von 14 Tagen ohne Abzug."
+              rows={2}
+              className="bg-white text-gray-900 border-gray-300"
+            />
+          </div>
+        </div>
+      </div>
+
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Features</h2>
         <div className="space-y-3">
