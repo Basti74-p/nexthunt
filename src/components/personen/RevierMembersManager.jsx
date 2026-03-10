@@ -181,6 +181,44 @@ export default function RevierMembersManager({ revierId }) {
           </div>
         </DialogContent>
       </Dialog>
+
+      <Dialog open={permDialogOpen} onOpenChange={setPermDialogOpen}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Berechtigungen für {selectedMember?.first_name} {selectedMember?.last_name}</DialogTitle></DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div className="space-y-3">
+              {[
+                { key: "perm_wildmanagement", label: "Wildmanagement" },
+                { key: "perm_strecke", label: "Strecke" },
+                { key: "perm_wildkammer", label: "Wildkammer" },
+                { key: "perm_kalender", label: "Jagdkalender" },
+                { key: "perm_aufgaben", label: "Aufgaben" },
+                { key: "perm_einrichtungen", label: "Jagdeinrichtungen" },
+              ].map(({ key, label }) => (
+                <div key={key} className="flex items-center gap-3 p-2 rounded hover:bg-gray-50">
+                  <Checkbox
+                    checked={selectedMember?.[key] || false}
+                    onCheckedChange={(checked) => {
+                      setSelectedMember({
+                        ...selectedMember,
+                        [key]: checked,
+                      });
+                    }}
+                  />
+                  <label className="text-sm font-medium cursor-pointer">{label}</label>
+                </div>
+              ))}
+            </div>
+            <Button
+              onClick={() => permissionsMutation.mutate(selectedMember)}
+              disabled={permissionsMutation.isPending}
+              className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl"
+            >
+              {permissionsMutation.isPending ? "Speichert..." : "Speichern"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
