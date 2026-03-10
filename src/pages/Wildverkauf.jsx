@@ -145,22 +145,11 @@ export default function Wildverkauf() {
     <div>
       {/* Print-Ansicht */}
       {printData && (
-        <div className="fixed inset-0 z-50 bg-white overflow-auto print-view">
-          <div className="print:hidden flex gap-2 p-4 bg-gray-100 border-b border-gray-300">
-            <Button onClick={() => window.print()} className="bg-[#22c55e] text-black hover:bg-[#16a34a] gap-2">
-              <Printer className="w-4 h-4" /> Drucken
-            </Button>
-            <Button variant="outline" onClick={() => setPrintData(null)} className="border-gray-300 text-gray-800">
-              Schließen
-            </Button>
-          </div>
-          <RechnungPrint
-            verkauf={printData.verkauf}
-            kunde={printData.kunde}
-            tenantSettings={tenantSettings}
-            mode={printData.mode}
-          />
-        </div>
+        <PrintWindow
+          printData={printData}
+          tenantSettings={tenantSettings}
+          onClose={() => setPrintData(null)}
+        />
       )}
 
       <PageHeader
