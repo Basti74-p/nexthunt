@@ -19,6 +19,12 @@ const LAYERS = [
 export default function RevierMap({ revier }) {
   const [activeLayers, setActiveLayers] = useState(new Set(["einrichtungen", "sichtungen"]));
   const isMobile = useMobile();
+  const queryClient = useQueryClient();
+
+  const deleteEinrichtung = useMutation({
+    mutationFn: (id) => base44.entities.Jagdeinrichtung.delete(id),
+    onSuccess: () => queryClient.invalidateQueries(["einrichtungen", revier.id]),
+  });
 
   const { data: einrichtungen = [] } = useQuery({
     queryKey: ["einrichtungen", revier.id],
