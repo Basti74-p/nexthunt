@@ -72,11 +72,19 @@ export default function Reviere() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {reviere.map((r) =>
-        <Link
-          key={r.id}
-          to={createPageUrl(`RevierDetail?id=${r.id}`)}
-          className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:border-[#0F2F23]/20 hover:shadow-md transition-all group">
-
+        <div key={r.id} className="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:border-[#0F2F23]/20 hover:shadow-md transition-all group">
+            {canManage && (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (window.confirm(`Revier "${r.name}" wirklich löschen?`)) deleteMutation.mutate(r.id);
+                }}
+                className="absolute top-3 right-3 z-10 p-1.5 rounded-lg bg-white hover:bg-red-50 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            )}
+            <Link to={createPageUrl(`RevierDetail?id=${r.id}`)} className="block p-5">
               <div className="flex items-start justify-between mb-4">
                 <div className="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center">
                   <TreePine className="w-5 h-5 text-emerald-600" />
@@ -85,15 +93,14 @@ export default function Reviere() {
               </div>
               <h3 className="text-lg font-semibold text-gray-900 group-hover:text-[#0F2F23] transition-colors">{r.name}</h3>
               <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
-                {r.region &&
-            <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{r.region}</span>
-            }
+                {r.region && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{r.region}</span>}
                 {r.size_ha && <span>{r.size_ha} ha</span>}
               </div>
               <div className="mt-4 flex items-center gap-1 text-xs text-[#0F2F23] font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                 Öffnen <ArrowRight className="w-3 h-3" />
               </div>
             </Link>
+          </div>
         )}
         </div>
       }
