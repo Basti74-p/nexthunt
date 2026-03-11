@@ -60,7 +60,8 @@ const NAV = [
   icon: Calendar,
   module: "kalender",
   children: [
-  { label: "Jagdmonitor", page: "Jagdkalender", icon: Radio, module: "kalender" },
+  { label: "Alle Jagden", page: "JagdkalenderMain", icon: Calendar, module: "kalender" },
+  { label: "Live-Monitor", page: "Jagdkalender", icon: Radio, module: "kalender" },
   { label: "Jagdgäste", page: "Jagdgaeste", icon: UserCheck, module: "kalender" },
   { label: "Personal", page: "Personal", icon: UserCog, module: "kalender" }]
 
