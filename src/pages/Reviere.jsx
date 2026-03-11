@@ -35,6 +35,11 @@ export default function Reviere() {
     }
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: (id) => base44.entities.Revier.delete(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["reviere"] }),
+  });
+
   const canManage = isTenantOwner || isPlatformAdmin;
 
   return (
