@@ -258,6 +258,39 @@ export default function Jagdeinrichtungen() {
         )}
       </div>
 
+      {/* Move Dialog */}
+      <Dialog open={moveDialog.open} onOpenChange={(o) => !o && setMoveDialog({ open: false, einrichtung: null })}>
+        <DialogContent className="bg-[#2d2d2d] border-[#3a3a3a]">
+          <DialogHeader>
+            <DialogTitle>Einrichtung verschieben</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-gray-400">„{moveDialog.einrichtung?.name}" in ein anderes Revier verschieben</p>
+          <div className="mt-2">
+            <Label className="text-xs mb-1 block">Ziel-Revier</Label>
+            <Select value={moveRevierTarget} onValueChange={setMoveRevierTarget}>
+              <SelectTrigger className="bg-[#1e1e1e] border-[#3a3a3a]">
+                <SelectValue placeholder="Revier wählen" />
+              </SelectTrigger>
+              <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
+                {reviere.map(r => (
+                  <SelectItem key={r.id} value={r.id}>{r.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex gap-2 mt-4">
+            <Button variant="outline" onClick={() => setMoveDialog({ open: false, einrichtung: null })} className="flex-1">Abbrechen</Button>
+            <Button
+              onClick={() => moveEinrichtung.mutate({ id: moveDialog.einrichtung.id, revier_id: moveRevierTarget })}
+              disabled={!moveRevierTarget || moveRevierTarget === moveDialog.einrichtung?.revier_id || moveEinrichtung.isPending}
+              className="flex-1 bg-[#22c55e] hover:bg-[#16a34a] text-black"
+            >
+              Verschieben
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Dialog */}
       <EinrichtungDialog
         isOpen={dialog.open}
