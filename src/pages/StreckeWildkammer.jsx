@@ -96,6 +96,7 @@ export default function StreckeWildkammer() {
     else if (action === "trichinen") setTrichOpen(true);
     else if (action === "ausgabe") setAusgabeOpen(true);
     else if (action === "edit") { setEditForm({ ...item }); setEditOpen(true); }
+    else if (action === "delete") deleteMutation.mutate(item.id);
   };
 
   const handleTrichSave = () => {
