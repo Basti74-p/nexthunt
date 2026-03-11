@@ -165,6 +165,58 @@ export default function JagdLiveMonitor({ jagd, canManage }) {
         <StatusCard label="Nachsuchen offen" value={offeneNachsuchen} color={offeneNachsuchen > 0 ? "text-red-400" : "text-gray-400"} />
       </div>
 
+      {/* Jagdkarte */}
+      {(staendeMitGPS.length > 0 || meldungenMitGPS.length > 0) && (
+        <div>
+          <button
+            onClick={() => setShowMap(v => !v)}
+            className="flex items-center gap-2 text-sm font-semibold text-gray-400 hover:text-gray-200 transition-colors mb-2"
+          >
+            <Map className="w-4 h-4 text-[#22c55e]" />
+            Jagdkarte
+            <span className="text-xs text-[#22c55e] ml-1">{staendeMitGPS.length} Stände · {meldungenMitGPS.length} Meldungen</span>
+            <span className="text-xs ml-auto">{showMap ? "▲ einklappen" : "▼ aufklappen"}</span>
+          </button>
+          {showMap && (
+            <div className="rounded-xl overflow-hidden border border-[#3a3a3a]" style={{ height: 320 }}>
+              <MapContainer center={mapCenter} zoom={13} style={{ height: "100%", width: "100%" }} scrollWheelZoom={false}>
+                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="© OpenStreetMap" />
+                {staendeMitGPS.map(s => {
+                  const besetzt = teilnehmer.find(t => t.stand_id === s.id && (t.status === "stand_bezogen" || t.status === "aktiv"));
+                  return (
+                    <CircleMarker
+                      key={s.id}
+                      center={[s.latitude, s.longitude]}
+                      radius={10}
+                      pathOptions={{ color: besetzt ? "#22c55e" : "#3b82f6", fillColor: besetzt ? "#22c55e" : "#3b82f6", fillOpacity: 0.8 }}
+                    >
+                      <Popup>
+                        <strong>{s.name}</strong><br />
+                        {besetzt ? `👤 ${besetzt.name}` : "Nicht besetzt"}
+                      </Popup>
+                    </CircleMarker>
+                  );
+                })}
+                {meldungenMitGPS.map(m => (
+                  <Marker
+                    key={m.id}
+                    position={[parseFloat(m.latitude), parseFloat(m.longitude)]}
+                    icon={m.typ === "erlegt" ? erlegtIcon : schussIcon}
+                  >
+                    <Popup>
+                      <strong>{TYP_LABEL[m.typ] || m.typ}</strong><br />
+                      {m.teilnehmer_name && <span>{m.teilnehmer_name}<br /></span>}
+                      {m.wildart && <span className="capitalize">{m.wildart}<br /></span>}
+                      {m.nachricht && <span>{m.nachricht}</span>}
+                    </Popup>
+                  </Marker>
+                ))}
+              </MapContainer>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Quick Actions (für aktive Jagd) */}
       {jagd.status === "aktiv" && (
         <div>
