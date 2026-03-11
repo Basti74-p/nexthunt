@@ -100,6 +100,14 @@ export default function EinrichtungDetail({ einrichtung, tenantId, onBack, onEdi
         <Button onClick={onEdit} size="sm" variant="outline" className="border-[#3a3a3a] text-gray-300 hover:text-white shrink-0">
           <Pencil className="w-3.5 h-3.5 mr-1" /> Bearbeiten
         </Button>
+        <Button
+          size="sm"
+          variant="outline"
+          className="border-red-900/50 text-red-400 hover:bg-red-900/20 shrink-0"
+          onClick={() => { if (window.confirm(`"${einrichtung.name}" wirklich löschen?`)) deleteEinrichtung.mutate(einrichtung.id); }}
+        >
+          <Trash2 className="w-3.5 h-3.5" />
+        </Button>
       </div>
 
       {/* Tabs */}
