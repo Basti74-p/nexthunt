@@ -44,16 +44,26 @@ const TYPE_LABELS = {
   fanganlage: "Fanganlage",
 };
 
-export default function EinrichtungenLayer({ items = [] }) {
+export default function EinrichtungenLayer({ items = [], onDelete }) {
   return items
     .filter(i => i.latitude && i.longitude)
     .map(i => (
       <Marker key={i.id} position={[i.latitude, i.longitude]} icon={makeIcon(i.type)}>
         <Popup>
-          <div className="text-sm">
-            <strong>{i.name}</strong><br />
-            <span className="text-gray-500">{TYPE_LABELS[i.type] || i.type}</span>
-            {i.notes && <><br /><span className="text-gray-400 text-xs">{i.notes}</span></>}
+          <div style={{ minWidth: 140 }}>
+            <strong style={{ fontSize: 13 }}>{i.name}</strong><br />
+            <span style={{ color: "#6b7280", fontSize: 12 }}>{TYPE_LABELS[i.type] || i.type}</span>
+            {i.notes && <><br /><span style={{ color: "#9ca3af", fontSize: 11 }}>{i.notes}</span></>}
+            {onDelete && (
+              <div style={{ marginTop: 8 }}>
+                <button
+                  onClick={() => { if (window.confirm(`"${i.name}" wirklich löschen?`)) onDelete(i.id); }}
+                  style={{ background: "#dc2626", color: "white", border: "none", borderRadius: 6, padding: "4px 10px", fontSize: 12, cursor: "pointer", width: "100%" }}
+                >
+                  🗑 Löschen
+                </button>
+              </div>
+            )}
           </div>
         </Popup>
       </Marker>
