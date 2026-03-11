@@ -10,9 +10,11 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   MapPin, Crosshair, Truck, Search as SearchIcon,
-  CheckCircle, Clock, AlertTriangle, Radio, Plus
+  CheckCircle, Clock, AlertTriangle, Radio, Plus, Map
 } from "lucide-react";
 import { format } from "date-fns";
+import { MapContainer, TileLayer, Marker, Popup, CircleMarker } from "react-leaflet";
+import L from "leaflet";
 
 const MELDUNG_TYPEN = [
   { value: "schuss", label: "Schuss abgegeben", icon: Crosshair, color: "bg-amber-700 hover:bg-amber-600" },
