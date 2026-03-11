@@ -75,6 +75,11 @@ export default function StreckeWildkammer() {
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["wildkammer"] }); setAusgabeOpen(false); setTrichOpen(false); setEditOpen(false); },
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: (id) => base44.entities.Wildkammer.delete(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["wildkammer"] }),
+  });
+
   const handleEingang = (form) => {
     createMutation.mutate({
       ...form,
