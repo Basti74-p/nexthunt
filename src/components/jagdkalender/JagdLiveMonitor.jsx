@@ -46,12 +46,27 @@ const TYP_COLOR = {
   default: "border-[#2d2d2d] bg-[#1e1e1e]",
 };
 
+// Custom Leaflet icons (data URIs to avoid asset issues)
+const standIcon = new L.DivIcon({
+  html: `<div style="background:#3b82f6;border:2px solid white;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:9px;color:white;font-weight:bold;">S</div>`,
+  className: "", iconSize: [18, 18], iconAnchor: [9, 9],
+});
+const erlegtIcon = new L.DivIcon({
+  html: `<div style="background:#22c55e;border:2px solid white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;">✓</div>`,
+  className: "", iconSize: [20, 20], iconAnchor: [10, 10],
+});
+const schussIcon = new L.DivIcon({
+  html: `<div style="background:#d97706;border:2px solid white;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;">!</div>`,
+  className: "", iconSize: [18, 18], iconAnchor: [9, 9],
+});
+
 export default function JagdLiveMonitor({ jagd, canManage }) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [showMeldung, setShowMeldung] = useState(false);
   const [meldungTyp, setMeldungTyp] = useState(null);
   const [meldungForm, setMeldungForm] = useState({ wildart: "", nachricht: "", latitude: "", longitude: "" });
+  const [showMap, setShowMap] = useState(false);
 
   const { data: meldungen = [] } = useQuery({
     queryKey: ["jagd-meldungen", jagd.id],
