@@ -81,6 +81,12 @@ export default function JagdLiveMonitor({ jagd, canManage }) {
     enabled: !!jagd.id,
   });
 
+  const { data: einrichtungen = [] } = useQuery({
+    queryKey: ["einrichtungen-live", jagd.revier_id],
+    queryFn: () => base44.entities.Jagdeinrichtung.filter({ revier_id: jagd.revier_id }),
+    enabled: !!jagd.revier_id,
+  });
+
   // Subscribe to real-time updates
   useEffect(() => {
     if (jagd.status !== "aktiv") return;
