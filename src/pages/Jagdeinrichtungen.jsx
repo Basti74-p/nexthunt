@@ -222,6 +222,22 @@ export default function Jagdeinrichtungen() {
                         )}
                       </div>
                     </div>
+                    <div className="flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button
+                        onClick={(ev) => { ev.stopPropagation(); setMoveRevierTarget(e.revier_id); setMoveDialog({ open: true, einrichtung: e }); }}
+                        className="p-1.5 rounded-lg hover:bg-blue-500/20 text-blue-400"
+                        title="In anderes Revier verschieben"
+                      >
+                        <MoveRight className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={(ev) => { ev.stopPropagation(); if (window.confirm(`"${e.name}" wirklich löschen?`)) deleteEinrichtung.mutate(e.id); }}
+                        className="p-1.5 rounded-lg hover:bg-red-500/20 text-red-400"
+                        title="Löschen"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
