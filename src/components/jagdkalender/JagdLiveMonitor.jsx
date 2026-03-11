@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
+import { useAuth } from "@/components/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -44,7 +45,7 @@ const TYP_COLOR = {
 };
 
 export default function JagdLiveMonitor({ jagd, canManage }) {
-  const { user } = useAuth ? useAuth() : { user: null };
+  const { user } = useAuth();
   const queryClient = useQueryClient();
   const [showMeldung, setShowMeldung] = useState(false);
   const [meldungTyp, setMeldungTyp] = useState(null);
@@ -231,14 +232,6 @@ export default function JagdLiveMonitor({ jagd, canManage }) {
       </Dialog>
     </div>
   );
-}
-
-function useAuth() {
-  const { useAuth: _useAuth } = require ? {} : {};
-  try {
-    const mod = require("@/components/hooks/useAuth");
-    return mod.useAuth();
-  } catch { return { user: null }; }
 }
 
 function StatusCard({ label, value, color }) {
