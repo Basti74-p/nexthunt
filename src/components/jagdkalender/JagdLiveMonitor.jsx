@@ -130,6 +130,22 @@ export default function JagdLiveMonitor({ jagd, canManage }) {
     setShowMeldung(true);
   };
 
+  // Stände mit GPS-Koordinaten
+  const staendeMitGPS = einrichtungen.filter(e =>
+    ["hochsitz", "leiter", "erdsitz", "drueckjagdbock", "ansitzdrueckjagdleiter"].includes(e.type) &&
+    e.latitude && e.longitude
+  );
+
+  // Meldungen mit GPS
+  const meldungenMitGPS = meldungen.filter(m => m.latitude && m.longitude);
+
+  // Karten-Mittelpunkt: erster Stand oder Meldung mit GPS
+  const allPoints = [
+    ...staendeMitGPS.map(s => [s.latitude, s.longitude]),
+    ...meldungenMitGPS.map(m => [parseFloat(m.latitude), parseFloat(m.longitude)]),
+  ];
+  const mapCenter = allPoints.length > 0 ? allPoints[0] : [51.0, 10.0];
+
   const standStats = {
     gesamt: teilnehmer.filter(t => t.stand_nummer || t.stand_id).length,
     besetzt: teilnehmer.filter(t => (t.stand_nummer || t.stand_id) && t.status === "stand_bezogen").length,
