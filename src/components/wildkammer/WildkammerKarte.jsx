@@ -124,6 +124,20 @@ export default function WildkammerKarte({ item, onAction, revierName }) {
           className="text-xs px-3 py-1.5 rounded-lg bg-[#2d2d2d] text-gray-400 hover:text-gray-200 hover:bg-[#3a3a3a] transition-colors ml-auto">
           Bearbeiten
         </button>
+        {!confirmDelete ? (
+          <button onClick={() => setConfirmDelete(true)}
+            className="text-xs px-3 py-1.5 rounded-lg bg-red-900/20 text-red-400 hover:bg-red-900/40 transition-colors">
+            <Trash2 className="w-3 h-3" />
+          </button>
+        ) : (
+          <div className="flex gap-1 items-center ml-auto">
+            <span className="text-xs text-red-400">Löschen?</span>
+            <button onClick={() => onAction("delete", item)}
+              className="text-xs px-2 py-1 rounded-lg bg-red-700 text-white hover:bg-red-600 transition-colors">Ja</button>
+            <button onClick={() => setConfirmDelete(false)}
+              className="text-xs px-2 py-1 rounded-lg bg-[#3a3a3a] text-gray-300 hover:bg-[#4a4a4a] transition-colors">Nein</button>
+          </div>
+        )}
       </div>
     </div>
   );
