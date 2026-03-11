@@ -195,22 +195,48 @@ export default function JagdPlanung({ jagd, canManage }) {
               </Select>
             </div>
             {(form.rolle === "schuetze" || form.rolle === "gast") && (
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <Label className="text-gray-300 text-sm">Stand-Nr.</Label>
-                  <Input value={form.stand_nummer} onChange={e => set("stand_nummer", e.target.value)} placeholder="z.B. 4" className="bg-[#2d2d2d] border-[#3a3a3a] text-gray-100 mt-1" />
+              <div className="space-y-2">
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <Label className="text-gray-300 text-sm">Stand-Nr.</Label>
+                    <Input value={form.stand_nummer} onChange={e => set("stand_nummer", e.target.value)} placeholder="z.B. 4" className="bg-[#2d2d2d] border-[#3a3a3a] text-gray-100 mt-1" />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300 text-sm">Stand aus Revier</Label>
+                    <Select
+                      value={form.stand_id || ""}
+                      onValueChange={v => {
+                        const s = staende.find(x => x.id === v);
+                        set("stand_id", v);
+                        set("stand_name", s?.name || "");
+                        if (s?.latitude && s?.longitude) setMapStand(s);
+                      }}
+                    >
+                      <SelectTrigger className="bg-[#2d2d2d] border-[#3a3a3a] text-gray-100 mt-1">
+                        <SelectValue placeholder={staende.length === 0 ? "Keine Stände" : "Stand wählen…"} />
+                      </SelectTrigger>
+                      <SelectContent className="bg-[#1e1e1e] border-[#2d2d2d]">
+                        {staende.length === 0 && (
+                          <div className="px-3 py-2 text-xs text-gray-500">Keine Stände in diesem Revier</div>
+                        )}
+                        {staende.map(s => (
+                          <SelectItem key={s.id} value={s.id} className="text-gray-100">
+                            {s.name}{s.latitude ? " 📍" : ""}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
-                <div>
-                  <Label className="text-gray-300 text-sm">Stand-Name</Label>
-                  <Select value={form.stand_id || ""} onValueChange={v => { const s = staende.find(x => x.id === v); set("stand_id", v); set("stand_name", s?.name || ""); }}>
-                    <SelectTrigger className="bg-[#2d2d2d] border-[#3a3a3a] text-gray-100 mt-1">
-                      <SelectValue placeholder="Aus Karte" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-[#1e1e1e] border-[#2d2d2d]">
-                      {staende.map(s => <SelectItem key={s.id} value={s.id} className="text-gray-100">{s.name}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
+                {form.stand_id && staende.find(s => s.id === form.stand_id)?.latitude && (
+                  <button
+                    type="button"
+                    onClick={() => setMapStand(staende.find(s => s.id === form.stand_id))}
+                    className="flex items-center gap-1.5 text-xs text-[#22c55e] hover:underline"
+                  >
+                    <MapPin className="w-3 h-3" /> Position auf Karte anzeigen
+                  </button>
+                )}
               </div>
             )}
             <div>
