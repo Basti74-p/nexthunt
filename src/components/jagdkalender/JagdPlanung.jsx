@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, UserPlus, Trash2, MapPin, Users } from "lucide-react";
+import { Plus, UserPlus, Trash2, MapPin, Users, X } from "lucide-react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
 const ROLLEN = [
   { value: "jagdleiter", label: "Jagdleiter", color: "bg-yellow-900 text-yellow-200" },
