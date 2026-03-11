@@ -192,7 +192,7 @@ export default function Jagdeinrichtungen() {
                 <div
                   key={e.id}
                   onClick={() => setSelected(e)}
-                  className={`bg-[#1e1e1e] border rounded-xl p-4 cursor-pointer transition-all hover:border-[#22c55e]/40 ${
+                  className={`bg-[#1e1e1e] border rounded-xl p-4 cursor-pointer transition-all hover:border-[#22c55e]/40 group ${
                     selected?.id === e.id ? "border-[#22c55e]/60 bg-[#1a2e1a]" : "border-[#2d2d2d]"
                   }`}
                 >
