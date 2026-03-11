@@ -1,5 +1,5 @@
-import React from "react";
-import { CheckCircle2, Circle, Clock, Thermometer, Scale, FlaskConical, ShieldCheck } from "lucide-react";
+import React, { useState } from "react";
+import { CheckCircle2, Circle, Clock, Thermometer, Scale, FlaskConical, ShieldCheck, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 
