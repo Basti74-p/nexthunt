@@ -160,7 +160,9 @@ export default function WildProdukte() {
 
   const handlePrintEtikett = (product) => {
     setEtikettSettings({ empfaenger: "", eigeneNotiz: "" });
-    setPrintProduct(product);
+    // Enrich product with wildart from linked wildkammer
+    const wk = wildkammers?.find(w => w.id === product.wildkammer_id);
+    setPrintProduct({ ...product, wildart: wk?.species || product.wildart });
   };
 
   const filteredProducts = useMemo(() => {
