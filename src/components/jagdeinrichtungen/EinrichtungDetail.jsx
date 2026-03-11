@@ -28,8 +28,16 @@ const ZUSTAND_LABEL = { gut: "Gut", maessig: "Mäßig", schlecht: "Schlecht", to
 const PRIO_COLOR = { low: "bg-gray-700 text-gray-300", medium: "bg-blue-900 text-blue-300", high: "bg-red-900 text-red-300" };
 const PRIO_LABEL = { low: "Niedrig", medium: "Mittel", high: "Hoch" };
 
-export default function EinrichtungDetail({ einrichtung, tenantId, onBack, onEdit }) {
+export default function EinrichtungDetail({ einrichtung, tenantId, onBack, onEdit, onDelete }) {
   const queryClient = useQueryClient();
+
+  const deleteEinrichtung = useMutation({
+    mutationFn: (id) => base44.entities.Jagdeinrichtung.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["einrichtungen"]);
+      onDelete?.();
+    },
+  });
   const [tab, setTab] = useState("info");
   const [schadensDialog, setSchadensDialog] = useState({ open: false, schaden: null });
   const [aufgabeDialog, setAufgabeDialog] = useState({ open: false, aufgabe: null });
