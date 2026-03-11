@@ -77,6 +77,16 @@ export default function Jagdeinrichtungen() {
     },
   });
 
+  const moveEinrichtung = useMutation({
+    mutationFn: ({ id, revier_id }) => base44.entities.Jagdeinrichtung.update(id, { revier_id }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["einrichtungen", tenant?.id]);
+      setMoveDialog({ open: false, einrichtung: null });
+      setMoveRevierTarget("");
+      setSelected(null);
+    },
+  });
+
   const filtered = einrichtungen.filter((e) => {
     const matchSearch = !search || e.name?.toLowerCase().includes(search.toLowerCase());
     const matchType = filterType === "all" || e.type === filterType;
