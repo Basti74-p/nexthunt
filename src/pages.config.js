@@ -86,7 +86,7 @@ import WildSchwarzwild from './pages/WildSchwarzwild';
 import WildWolf from './pages/WildWolf';
 import Wildmanagement from './pages/Wildmanagement';
 import Wildverkauf from './pages/Wildverkauf';
-import JagdDetail from './pages/JagdDetail';
+import JagdkalenderMain from './pages/JagdkalenderMain';
 import __Layout from './Layout.jsx';
 
 
@@ -130,7 +130,7 @@ export const PAGES = {
     "WildWolf": WildWolf,
     "Wildmanagement": Wildmanagement,
     "Wildverkauf": Wildverkauf,
-    "JagdDetail": JagdDetail,
+    "JagdkalenderMain": JagdkalenderMain,
 }
 
 export const pagesConfig = {
