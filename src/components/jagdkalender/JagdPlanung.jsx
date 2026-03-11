@@ -47,8 +47,9 @@ function RollenBadge({ rolle }) {
 export default function JagdPlanung({ jagd, canManage }) {
   const queryClient = useQueryClient();
   const [showAdd, setShowAdd] = useState(false);
-  const [form, setForm] = useState({ name: "", user_email: "", telefon: "", rolle: "schuetze", stand_nummer: "", stand_name: "", notizen: "" });
+  const [form, setForm] = useState({ name: "", user_email: "", telefon: "", rolle: "schuetze", stand_nummer: "", stand_name: "", stand_id: "", notizen: "" });
   const [activeGroup, setActiveGroup] = useState("schuetze");
+  const [mapStand, setMapStand] = useState(null); // Stand für Mini-Karte
 
   const { data: teilnehmer = [] } = useQuery({
     queryKey: ["jagd-teilnehmer", jagd.id],
