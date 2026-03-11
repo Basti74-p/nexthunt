@@ -253,6 +253,7 @@ export default function Jagdeinrichtungen() {
               tenantId={tenant?.id}
               onBack={() => setSelected(null)}
               onEdit={() => setDialog({ open: true, einrichtung: selected })}
+              onDelete={() => setSelected(null)}
             />
           </div>
         )}
