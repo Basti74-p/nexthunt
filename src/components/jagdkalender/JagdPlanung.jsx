@@ -174,6 +174,40 @@ export default function JagdPlanung({ jagd, canManage }) {
         </div>
       )}
 
+      {/* Mini-Karte Dialog */}
+      <Dialog open={!!mapStand} onOpenChange={v => !v && setMapStand(null)}>
+        <DialogContent className="bg-[#1e1e1e] border-[#2d2d2d] text-gray-100 max-w-md p-0 overflow-hidden">
+          <DialogHeader className="px-4 pt-4 pb-2">
+            <DialogTitle className="flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-[#22c55e]" />
+              {mapStand?.name}
+            </DialogTitle>
+          </DialogHeader>
+          {mapStand?.latitude && mapStand?.longitude && (
+            <div className="h-64 w-full">
+              <MapContainer
+                center={[mapStand.latitude, mapStand.longitude]}
+                zoom={15}
+                style={{ height: "100%", width: "100%" }}
+                scrollWheelZoom={false}
+              >
+                <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='© OpenStreetMap'
+                />
+                <Marker position={[mapStand.latitude, mapStand.longitude]}>
+                  <Popup>{mapStand.name}</Popup>
+                </Marker>
+              </MapContainer>
+            </div>
+          )}
+          <div className="px-4 pb-4 pt-2 flex justify-between items-center">
+            <p className="text-xs text-gray-500">{mapStand?.latitude?.toFixed(5)}, {mapStand?.longitude?.toFixed(5)}</p>
+            <Button size="sm" variant="outline" onClick={() => setMapStand(null)} className="border-[#3a3a3a] text-gray-300">Schließen</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Add Dialog */}
       <Dialog open={showAdd} onOpenChange={setShowAdd}>
         <DialogContent className="bg-[#1e1e1e] border-[#2d2d2d] text-gray-100 max-w-sm">
