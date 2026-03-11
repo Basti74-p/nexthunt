@@ -47,6 +47,8 @@ export default function Jagdeinrichtungen() {
   const [filterCondition, setFilterCondition] = useState("all");
   const [selected, setSelected] = useState(null);
   const [dialog, setDialog] = useState({ open: false, einrichtung: null });
+  const [moveDialog, setMoveDialog] = useState({ open: false, einrichtung: null });
+  const [moveRevierTarget, setMoveRevierTarget] = useState("");
 
   const { data: reviere = [] } = useQuery({
     queryKey: ["reviere", tenant?.id],
