@@ -30,8 +30,8 @@ export default function EtikettPrintView({ product, settings }) {
 
   return (
     <div className="w-full flex items-center justify-center bg-white">
-      <div className="w-96 bg-white border-2 border-black p-6" style={{ pageBreakAfter: 'always' }}>
-        <div className={`space-y-3 font-mono`}>
+      <div className="w-96 bg-white border-2 border-black p-6" style={{ pageBreakAfter: 'always', color: '#000000' }}>
+        <div className={`space-y-3 font-mono`} style={{ color: '#000000' }}>
 
           {/* Header: Logo + Betriebsname */}
           <div className="flex items-center gap-3 border-b-2 border-black pb-3">
