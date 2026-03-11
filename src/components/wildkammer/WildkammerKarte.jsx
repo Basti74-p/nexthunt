@@ -32,6 +32,7 @@ function Check({ ok, label }) {
 }
 
 export default function WildkammerKarte({ item, onAction, revierName }) {
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const sc = STATUS_CONFIG[item.status] || STATUS_CONFIG.eingang;
   const trich = TRICH_CONFIG[item.trichinenprobe_ergebnis] || TRICH_CONFIG.ausstehend;
   const daysInChamber = item.eingang_datum
