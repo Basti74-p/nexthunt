@@ -57,47 +57,47 @@ export default function EtikettPrintView({ product, settings }) {
           </div>
 
           {/* Wildnummer */}
-          <div className={`font-bold text-center ${fs.number} py-2`}>
+          <div className={`font-bold text-center ${fs.number} py-2`} style={{ color: '#000000' }}>
             {product.wildnummer}
           </div>
 
           {/* Produktdaten */}
-          <div className={`border border-black p-3 space-y-1 ${fs.body}`}>
+          <div className={`border border-black p-3 space-y-1 ${fs.body}`} style={{ color: '#000000' }}>
             {product.wildart && (
-              <div><span className="font-bold">Wildart:</span> {WILDARTEN[product.wildart] || product.wildart}</div>
+              <div style={{ color: '#000000' }}><span className="font-bold">Wildart:</span> {WILDARTEN[product.wildart] || product.wildart}</div>
             )}
-            <div><span className="font-bold">Produkttyp:</span> {PRODUKTTYPEN[product.produkttyp]}</div>
-            <div><span className="font-bold">Gewicht:</span> {product.gewicht_kg} kg</div>
+            <div style={{ color: '#000000' }}><span className="font-bold">Produkttyp:</span> {PRODUKTTYPEN[product.produkttyp]}</div>
+            <div style={{ color: '#000000' }}><span className="font-bold">Gewicht:</span> {product.gewicht_kg} kg</div>
 
             {settings?.zeigeLagerlocation !== false && product.lager_location && (
-              <div><span className="font-bold">Lagerlocation:</span> {product.lager_location}</div>
+              <div style={{ color: '#000000' }}><span className="font-bold">Lagerlocation:</span> {product.lager_location}</div>
             )}
             {settings?.zeigeTemperatur !== false && (
-              <div><span className="font-bold">Temperatur:</span> {product.lager_temperatur}°C</div>
+              <div style={{ color: '#000000' }}><span className="font-bold">Temperatur:</span> {product.lager_temperatur}°C</div>
             )}
             {settings?.zeigeEinfrierungsDatum !== false && (
-              <div><span className="font-bold">Eingefrorenes:</span> {product.einfrierungs_datum}</div>
+              <div style={{ color: '#000000' }}><span className="font-bold">Eingefrorenes:</span> {product.einfrierungs_datum}</div>
             )}
             {settings?.zeigeBeschreibung !== false && product.beschreibung && (
-              <div><span className="font-bold">Beschreibung:</span> {product.beschreibung}</div>
+              <div style={{ color: '#000000' }}><span className="font-bold">Beschreibung:</span> {product.beschreibung}</div>
             )}
           </div>
 
           {/* Freitext-Felder */}
           {(settings?.empfaenger || settings?.eigeneNotiz) && (
-            <div className={`border-t border-gray-400 pt-2 space-y-1 ${fs.body}`}>
+            <div className={`border-t border-gray-400 pt-2 space-y-1 ${fs.body}`} style={{ color: '#000000' }}>
               {settings.empfaenger && (
-                <div><span className="font-bold">Empfänger:</span> {settings.empfaenger}</div>
+                <div style={{ color: '#000000' }}><span className="font-bold">Empfänger:</span> {settings.empfaenger}</div>
               )}
               {settings.eigeneNotiz && (
-                <div><span className="font-bold">Notiz:</span> {settings.eigeneNotiz}</div>
+                <div style={{ color: '#000000' }}><span className="font-bold">Notiz:</span> {settings.eigeneNotiz}</div>
               )}
             </div>
           )}
 
           {/* Footer */}
           {settings?.zeigeDruckdatum !== false && (
-            <div className="text-xs text-gray-500 border-t border-black pt-2 text-right">
+            <div className="text-xs border-t border-black pt-2 text-right" style={{ color: '#555555' }}>
               {new Date().toLocaleDateString('de-DE')}
             </div>
           )}
