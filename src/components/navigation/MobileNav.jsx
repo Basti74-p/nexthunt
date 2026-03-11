@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Map, Eye, Crosshair, ListTodo, Radio } from "lucide-react";
+import { Map, Eye, Crosshair, ListTodo, Radio, Calendar } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import MobileTopBar from "./MobileTopBar";
 
@@ -11,6 +11,8 @@ const TAB_NAMES = {
   MobileStrecke: "Strecke",
   MobileTasks: "Aufgaben",
   MobileMonitor: "Monitor",
+  JagdkalenderMain: "Jagdkalender",
+  JagdDetail: "Jagd",
 };
 
 export default function MobileNav({ currentPage }) {
@@ -22,6 +24,7 @@ export default function MobileNav({ currentPage }) {
     { name: "Sichtungen", icon: Eye, page: "MobileSightings", feature: "feature_sightings" },
     { name: "Strecke", icon: Crosshair, page: "MobileStrecke", feature: "feature_strecke" },
     { name: "Aufgaben", icon: ListTodo, page: "MobileTasks", feature: "feature_tasks" },
+    { name: "Jagd", icon: Calendar, page: "JagdkalenderMain", feature: "feature_kalender" },
     { name: "Monitor", icon: Radio, page: "MobileMonitor", feature: "feature_driven_hunt" },
   ].filter(t => tenantFeatures[t.feature] !== false);
 
