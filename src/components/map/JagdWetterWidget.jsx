@@ -88,18 +88,28 @@ function jagdBewertung(weather) {
 function WindRose({ deg, speed }) {
   const color = speed > 30 ? "#f87171" : speed > 15 ? "#fbbf24" : "#60a5fa";
   return (
-    <div className="relative flex items-center justify-center" style={{ width: 64, height: 64 }}>
+    <div className="relative flex items-center justify-center flex-shrink-0" style={{ width: 80, height: 80 }}>
+      <style>{`
+        @keyframes windPulse {
+          0% { r: 35px; opacity: 0.6; }
+          100% { r: 55px; opacity: 0; }
+        }
+        .wind-pulse {
+          animation: windPulse 1.5s ease-out infinite;
+        }
+      `}</style>
       {speed > 5 && (
-        <div className="absolute rounded-full border animate-ping"
-          style={{ width: 64, height: 64, borderColor: color, animationDuration: "1.5s", opacity: 0.5 }} />
+        <svg className="absolute inset-0 wind-pulse" width="80" height="80" viewBox="0 0 80 80" fill="none">
+          <circle cx="40" cy="40" r="35" stroke={color} strokeWidth="2" />
+        </svg>
       )}
-      <div className="absolute rounded-full border" style={{ width: 64, height: 64, borderColor: color, opacity: 0.3 }} />
-      <div className="absolute rounded-full border" style={{ width: 48, height: 48, borderColor: color, opacity: 0.15 }} />
-      <div style={{ transform: `rotate(${deg}deg)`, transition: "transform 1.2s ease" }}>
-        <svg width="44" height="44" viewBox="0 0 36 36" fill="none">
+      <circle cx="40" cy="40" r="40" fill="none" stroke={color} strokeWidth="1" opacity="0.3" />
+      <circle cx="40" cy="40" r="28" fill="none" stroke={color} strokeWidth="1" opacity="0.15" />
+      <g style={{ transform: `rotate(${deg}deg)`, transformOrigin: "40px 40px", transition: "transform 1.2s ease" }}>
+        <svg x="20" y="5" width="40" height="40" viewBox="0 0 36 36" fill="none">
           <path d="M18 4 L22 16 L19.5 15 L19.5 32 L16.5 32 L16.5 15 L14 16 Z" fill={color} />
         </svg>
-      </div>
+      </g>
     </div>
   );
 }
