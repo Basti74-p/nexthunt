@@ -11,14 +11,26 @@ Deno.serve(async (req) => {
 
     // Get current user's tenant and allowed reviere
     const userEmail = user.email;
-    const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: userEmail });
     
-    if (!tenantMembers || tenantMembers.length === 0) {
-      return Response.json({ error: 'Keine Berechtigung für Backups' }, { status: 403 });
+    // Try to get tenant from user data (may have tenant_id stored)
+    const userData = user;
+    let userTenantId = userData.tenant_id;
+    
+    if (!userTenantId) {
+      // Try to find from TenantMember
+      const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: userEmail });
+      if (tenantMembers && tenantMembers.length > 0) {
+        userTenantId = tenantMembers[0].tenant_id;
+      }
+    }
+    
+    if (!userTenantId) {
+      return Response.json({ error: 'Keine Tenant-Zuordnung gefunden' }, { status: 403 });
     }
 
-    const member = tenantMembers[0];
-    const userTenantId = member.tenant_id;
+    // Get allowed_reviere if restricted
+    const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: userEmail });
+    const member = tenantMembers?.[0];
 
     // Get reviere - either all (if allowed_reviere is empty) or filtered by allowed_reviere
     let reviere = await base44.asServiceRole.entities.Revier.filter({ tenant_id: userTenantId });
