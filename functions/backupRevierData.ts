@@ -12,19 +12,14 @@ Deno.serve(async (req) => {
     // Get user's reviere (auto-filtered to user's tenant via base44)
     let reviere = await base44.entities.Revier.list();
     
-    // Get TenantMember info to check for access restrictions
-    const userEmail = user.email;
-    try {
-      const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: userEmail });
-      if (tenantMembers && tenantMembers.length > 0) {
-        const allowedReviere = tenantMembers[0].allowed_reviere;
-        // Filter by allowed_reviere if user has restricted access (non-empty list means restrictions apply)
-        if (allowedReviere && allowedReviere.length > 0) {
-          reviere = reviere.filter(r => allowedReviere.includes(r.id));
-        }
+    // For tenant members with restricted access, filter by allowed_reviere
+    const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: user.email });
+    if (tenantMembers && tenantMembers.length > 0) {
+      const allowedReviere = tenantMembers[0].allowed_reviere;
+      // Filter by allowed_reviere if user has restricted access (non-empty list means restrictions apply)
+      if (allowedReviere && allowedReviere.length > 0) {
+        reviere = reviere.filter(r => allowedReviere.includes(r.id));
       }
-    } catch (err) {
-      // Continue with all reviere if TenantMember lookup fails
     }
     
     if (!reviere || reviere.length === 0) {
