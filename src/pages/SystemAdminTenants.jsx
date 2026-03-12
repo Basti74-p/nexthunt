@@ -72,6 +72,14 @@ export default function SystemAdminTenants() {
     enabled: isPlatformAdmin,
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: (id) => base44.entities.Tenant.delete(id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["sa-tenants"] });
+      setDeleteConfirm(null);
+    },
+  });
+
   const saveMutation = useMutation({
     mutationFn: (data) =>
       editing?.id
