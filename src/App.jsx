@@ -49,6 +49,11 @@ const AuthenticatedApp = () => {
           <MainPage />
         </LayoutWrapper>
       } />
+      <Route path="/BackupManagement" element={
+        <LayoutWrapper currentPageName="BackupManagement">
+          <BackupManagement />
+        </LayoutWrapper>
+      } />
       {Object.entries(Pages).map(([path, Page]) => (
         <Route
           key={path}
