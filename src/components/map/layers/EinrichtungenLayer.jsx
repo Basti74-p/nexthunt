@@ -58,7 +58,7 @@ const CONDITION_COLORS = {
   neu: "#3b82f6",
 };
 
-export default function EinrichtungenLayer({ items = [], onDelete }) {
+export default function EinrichtungenLayer({ items = [], onDelete, onEdit }) {
   return items
     .filter(i => i.latitude && i.longitude)
     .map(i => (
