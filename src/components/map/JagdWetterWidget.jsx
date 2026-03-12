@@ -223,9 +223,9 @@ export default function JagdWetterWidget({ lat, lng, onWeatherLoaded, onClose })
 
   return (
     <div
-      className="fixed z-[1000] bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl overflow-hidden max-w-[calc(100vw-32px)]"
+      className="fixed z-[9999] bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl overflow-hidden max-w-[calc(100vw-32px)]"
       style={{ 
-        bottom: 88, 
+        bottom: 100, 
         left: 16, 
         right: 16,
         width: expanded ? "calc(100vw - 32px)" : 180,
