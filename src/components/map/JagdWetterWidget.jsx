@@ -64,7 +64,7 @@ function HourBar({ hour }) {
   );
 }
 
-export default function JagdWetterWidget({ lat, lng }) {
+export default function JagdWetterWidget({ lat, lng, onWeatherLoaded }) {
   const [weather, setWeather] = useState(null);
   const [forecast, setForecast] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -82,14 +82,16 @@ export default function JagdWetterWidget({ lat, lng }) {
       .then(r => r.json())
       .then(data => {
         const c = data.current;
-        setWeather({
+        const w = {
           temp: Math.round(c.temperature_2m),
           humidity: c.relative_humidity_2m,
           windSpeed: Math.round(c.wind_speed_10m),
           windDeg: c.wind_direction_10m,
           precipitation: c.precipitation,
           visibility: c.visibility,
-        });
+        };
+        setWeather(w);
+        if (onWeatherLoaded) onWeatherLoaded(w.windDeg, w.windSpeed);
         // Build 12h forecast starting from current hour
         const now = new Date();
         const curH = now.getHours();

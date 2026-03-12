@@ -344,6 +344,7 @@ export default function RevierMapCore({
   children,
   className = "",
   onMapClick,
+  onUserLocation,
 }) {
   const [mapStyle, setMapStyle] = useState(() => {
     const saved = localStorage.getItem("nh_map_style");
@@ -363,10 +364,10 @@ export default function RevierMapCore({
   };
 
   const handleLocate = (latlng, heading) => {
-    console.log("[GPS] lat:", latlng[0], "lng:", latlng[1], "heading:", heading);
     setUserLocation(latlng);
     setUserHeading(heading ?? null);
     setFlyTarget({ center: latlng, zoom: 15 });
+    if (onUserLocation) onUserLocation(latlng);
   };
 
   const handleSearchResult = (latlng, label) => {
