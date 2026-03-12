@@ -9,8 +9,18 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get reviere from user's scope (platform)
-    let reviere = await base44.entities.Revier.list();
+    // Parse tenant_id from request body
+    const requestBody = await req.json();
+    const tenantId = requestBody.tenant_id;
+
+    if (!tenantId) {
+      return Response.json({ error: 'tenant_id is required' }, { status: 400 });
+    }
+
+    // Get ONLY reviere for the specified tenant
+    let reviere = await base44.asServiceRole.entities.Revier.filter({
+      tenant_id: tenantId
+    });
     
     if (!reviere || reviere.length === 0) {
       return Response.json({ 
