@@ -345,6 +345,29 @@ export default function SystemAdminTenants() {
           )}
         </DialogContent>
       </Dialog>
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={!!deleteConfirm} onOpenChange={() => setDeleteConfirm(null)}>
+        <DialogContent className="max-w-sm bg-slate-900 border-slate-700 text-white">
+          <DialogHeader>
+            <DialogTitle className="text-white">Kunde löschen?</DialogTitle>
+          </DialogHeader>
+          <p className="text-slate-400 text-sm mt-2">
+            Möchten Sie <span className="text-white font-semibold">{deleteConfirm?.name}</span> wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.
+          </p>
+          <div className="flex gap-3 mt-4">
+            <Button variant="ghost" onClick={() => setDeleteConfirm(null)} className="flex-1 border border-slate-700 text-slate-300 hover:bg-slate-800">
+              Abbrechen
+            </Button>
+            <Button
+              onClick={() => deleteMutation.mutate(deleteConfirm.id)}
+              disabled={deleteMutation.isPending}
+              className="flex-1 bg-red-500 hover:bg-red-600 text-white"
+            >
+              {deleteMutation.isPending ? "Löschen..." : "Löschen"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </AdminLayout>
   );
 }
