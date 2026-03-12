@@ -197,18 +197,32 @@ export default function EinrichtungForm({ isOpen, onClose, revierId, tenantId, l
           {/* Photo upload section */}
           <div className="space-y-2">
             <label className="text-xs text-gray-400 font-semibold">Fotos (optional)</label>
-            <label className="flex items-center justify-center gap-2 px-3 py-2 border border-dashed border-[#3a3a3a] rounded-lg bg-[#1a1a1a] hover:border-[#22c55e]/50 cursor-pointer transition-colors">
-              <Upload className="w-4 h-4 text-gray-400" />
-              <span className="text-xs text-gray-400">Fotos hochladen</span>
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={handlePhotoUpload}
-                disabled={uploadingPhotos}
-                className="hidden"
-              />
-            </label>
+            <div className="flex gap-2">
+              <label className="flex-1 flex items-center justify-center gap-2 px-3 py-2 border border-dashed border-[#3a3a3a] rounded-lg bg-[#1a1a1a] hover:border-[#22c55e]/50 cursor-pointer transition-colors">
+                <Upload className="w-4 h-4 text-gray-400" />
+                <span className="text-xs text-gray-400">Datei</span>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handlePhotoUpload}
+                  disabled={uploadingPhotos}
+                  className="hidden"
+                />
+              </label>
+              <label className="flex-1 flex items-center justify-center gap-2 px-3 py-2 border border-dashed border-[#3a3a3a] rounded-lg bg-[#1a1a1a] hover:border-[#22c55e]/50 cursor-pointer transition-colors">
+                <span className="text-xs text-gray-400">📷</span>
+                <span className="text-xs text-gray-400">Kamera</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  onChange={handlePhotoUpload}
+                  disabled={uploadingPhotos}
+                  className="hidden"
+                />
+              </label>
+            </div>
             {uploadingPhotos && <p className="text-xs text-gray-400 text-center">Wird hochgeladen...</p>}
             {formData.photos.length > 0 && (
               <div className="grid grid-cols-3 gap-2">
