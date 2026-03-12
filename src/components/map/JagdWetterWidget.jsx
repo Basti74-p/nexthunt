@@ -243,7 +243,7 @@ export default function JagdWetterWidget({ lat, lng, onWeatherLoaded }) {
                   <button
                     key={key}
                     onClick={() => setTab(key)}
-                    className={`text-xs py-1.5 px-2 border-b-2 transition-colors whitespace-nowrap ${tab === key ? "border-[#22c55e] text-[#22c55e]" : "border-transparent text-gray-500 hover:text-gray-300"}`}
+                    className={`text-xs py-1.5 px-2 border-b-2 transition-colors whitespace-nowrap ${tab === key ? "border-[#22c55e] text-[#22c55e]" : "border-transparent text-gray-200 hover:text-white"}`}
                   >
                     {label}
                   </button>
