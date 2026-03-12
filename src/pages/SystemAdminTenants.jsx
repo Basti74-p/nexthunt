@@ -127,6 +127,77 @@ export default function SystemAdminTenants() {
           </Button>
         </div>
 
+        {/* Tabs */}
+        <div className="flex gap-1 bg-slate-800 rounded-xl p-1 border border-slate-700">
+          <button
+            onClick={() => setActiveTab("tenants")}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === "tenants" ? "bg-emerald-500 text-white" : "text-slate-400 hover:text-white"}`}
+          >
+            <Building2 className="w-4 h-4" />
+            Kunden ({tenants.length})
+          </button>
+          <button
+            onClick={() => setActiveTab("users")}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === "users" ? "bg-emerald-500 text-white" : "text-slate-400 hover:text-white"}`}
+          >
+            <UserPlus className="w-4 h-4" />
+            Neue Registrierungen
+            {usersWithoutTenant.length > 0 && (
+              <span className={`text-xs px-1.5 py-0.5 rounded-full font-bold ${activeTab === "users" ? "bg-white/20 text-white" : "bg-amber-500/20 text-amber-400"}`}>
+                {usersWithoutTenant.length}
+              </span>
+            )}
+          </button>
+        </div>
+
+        {activeTab === "users" && (
+          <div className="space-y-3">
+            {usersWithoutTenant.length === 0 && (
+              <div className="text-center py-16 text-slate-500">Keine neuen Registrierungen ohne Tenant.</div>
+            )}
+            {usersWithoutTenant.map((u) => (
+              <div key={u.id} className="bg-slate-800 rounded-2xl border border-slate-700 p-5 hover:border-slate-600 transition-colors">
+                <div className="flex items-center gap-4">
+                  <div className="w-11 h-11 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400 font-bold text-lg shrink-0">
+                    {u.full_name?.[0]?.toUpperCase() || u.email?.[0]?.toUpperCase()}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="font-semibold text-white">{u.full_name || "Kein Name"}</h3>
+                      <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-amber-500/20 text-amber-300 flex items-center gap-1">
+                        <Clock className="w-3 h-3" /> Kein Tenant
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-500 mt-0.5">{u.email}</p>
+                    {u.created_date && (
+                      <p className="text-xs text-slate-600 mt-0.5">
+                        Registriert: {new Date(u.created_date).toLocaleDateString("de-DE")}
+                      </p>
+                    )}
+                  </div>
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      setEditing({
+                        name: u.full_name || "", contact_person: u.full_name || "", contact_email: u.email,
+                        phone: "", address: "", status: "active", plan: "starter",
+                        feature_dashboard: true, feature_reviere: true, feature_map: true, feature_sightings: true, feature_strecke: true,
+                        feature_wildkammer: false, feature_kalender: true, feature_tasks: true, feature_personen: true,
+                        feature_driven_hunt: false, feature_einrichtungen: true, feature_public_portal: false, feature_wildmarken: false,
+                      });
+                      setDialogOpen(true);
+                    }}
+                    className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl gap-2 shrink-0"
+                  >
+                    <Plus className="w-4 h-4" /> Tenant anlegen
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {activeTab === "tenants" && (
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <Input
@@ -136,7 +207,9 @@ export default function SystemAdminTenants() {
             className="pl-10 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 rounded-xl"
           />
         </div>
+        )}
 
+        {activeTab === "tenants" && (
         <div className="space-y-3">
           {filtered.map((t) => {
             const memberCount = members.filter(m => m.tenant_id === t.id).length;
