@@ -71,16 +71,7 @@ export default function MobileMap() {
         </RevierMapCore>
       </div>
 
-      {/* Weather widget overlays the map */}
-      <div className="absolute inset-0 pointer-events-none z-[1000]" style={{ bottom: 0 }}>
-        <div className="pointer-events-auto">
-          <JagdWetterWidget
-            lat={mapLat}
-            lng={mapLng}
-            onWeatherLoaded={(deg, speed) => setWindData({ deg, speed })}
-          />
-        </div>
-      </div>
+
     </div>
   );
 }
