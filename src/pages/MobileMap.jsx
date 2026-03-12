@@ -5,12 +5,7 @@ import { useAuth } from "@/components/hooks/useAuth";
 import RevierMapCore from "@/components/map/RevierMapCore";
 import EinrichtungenLayer from "@/components/map/layers/EinrichtungenLayer";
 import WildmanagementLayer from "@/components/map/layers/WildmanagementLayer";
-import { Building2, Eye, ChevronDown } from "lucide-react";
-
-const LAYERS = [
-  { id: "einrichtungen", label: "Einrichtungen", icon: Building2 },
-  { id: "sichtungen", label: "Sichtungen", icon: Eye },
-];
+import { ChevronDown } from "lucide-react";
 
 export default function MobileMap() {
   const { tenant } = useAuth();
