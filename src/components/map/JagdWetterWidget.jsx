@@ -86,30 +86,32 @@ function jagdBewertung(weather) {
 }
 
 function WindRose({ deg, speed }) {
-  const color = speed > 30 ? "#f87171" : speed > 15 ? "#fbbf24" : "#60a5fa";
+  const color = speed > 30 ? "rgb(248, 113, 113)" : speed > 15 ? "rgb(251, 191, 36)" : "rgb(96, 165, 250)";
+  const bgColor = speed > 30 ? "bg-red-500" : speed > 15 ? "bg-yellow-500" : "bg-blue-400";
+  
   return (
-    <div className="relative flex items-center justify-center flex-shrink-0" style={{ width: 80, height: 80 }}>
-      <style>{`
-        @keyframes windPulse {
-          0% { r: 35px; opacity: 0.6; }
-          100% { r: 55px; opacity: 0; }
-        }
-        .wind-pulse {
-          animation: windPulse 1.5s ease-out infinite;
-        }
-      `}</style>
+    <div className="flex items-center justify-center flex-shrink-0 relative" style={{ width: 70, height: 70 }}>
+      <div className={`absolute inset-0 rounded-full ${bgColor} opacity-20`} />
+      <div 
+        className={`absolute inset-1 rounded-full border-2`}
+        style={{ borderColor: color, opacity: 0.5 }}
+      />
       {speed > 5 && (
-        <svg className="absolute inset-0 wind-pulse" width="80" height="80" viewBox="0 0 80 80" fill="none">
-          <circle cx="40" cy="40" r="35" stroke={color} strokeWidth="2" />
-        </svg>
+        <div 
+          className={`absolute inset-0 rounded-full border-2 ${bgColor} opacity-20 animate-ping`}
+          style={{ animationDuration: "1.5s" }}
+        />
       )}
-      <circle cx="40" cy="40" r="40" fill="none" stroke={color} strokeWidth="1" opacity="0.3" />
-      <circle cx="40" cy="40" r="28" fill="none" stroke={color} strokeWidth="1" opacity="0.15" />
-      <g style={{ transform: `rotate(${deg}deg)`, transformOrigin: "40px 40px", transition: "transform 1.2s ease" }}>
-        <svg x="20" y="5" width="40" height="40" viewBox="0 0 36 36" fill="none">
-          <path d="M18 4 L22 16 L19.5 15 L19.5 32 L16.5 32 L16.5 15 L14 16 Z" fill={color} />
-        </svg>
-      </g>
+      <div 
+        className="absolute w-8 h-12 rounded-full opacity-80 flex items-end justify-center pb-1 text-xs font-bold text-white"
+        style={{ 
+          background: color,
+          transform: `rotate(${deg}deg)`,
+          transition: "transform 1.2s ease",
+        }}
+      >
+        ↑
+      </div>
     </div>
   );
 }
