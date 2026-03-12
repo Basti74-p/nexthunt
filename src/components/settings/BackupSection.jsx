@@ -46,7 +46,8 @@ export default function BackupSection() {
       }
     } catch (error) {
       setMessageType('error');
-      setMessage(`✗ Fehler beim Erstellen des Backups: ${error.message}`);
+      const errorMsg = error.response?.data?.error || error.message || 'Unbekannter Fehler';
+      setMessage(`✗ Fehler beim Erstellen des Backups: ${errorMsg}`);
     } finally {
       setLoading(false);
     }
