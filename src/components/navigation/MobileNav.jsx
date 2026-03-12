@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Map, Eye, Crosshair, ListTodo, Radio, Calendar, Wind } from "lucide-react";
+import { Map, Eye, Crosshair, ListTodo, Radio, Calendar } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import MobileTopBar from "./MobileTopBar";
 
@@ -27,7 +27,6 @@ export default function MobileNav({ currentPage }) {
     { name: "Strecke", icon: Crosshair, page: "MobileStrecke", feature: "feature_strecke" },
     { name: "Aufgaben", icon: ListTodo, page: "MobileTasks", feature: "feature_tasks" },
     { name: "Jagd", icon: Calendar, page: "JagdkalenderMain", feature: "feature_kalender" },
-    { name: "Wetter", icon: Wind, page: "MobileJagdWetter", feature: null },
   ].filter(t => t.feature === null || tenantFeatures[t.feature] !== false);
 
   // Track tab switches for history management

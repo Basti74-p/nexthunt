@@ -16,10 +16,10 @@
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, ZoomControl } from "react-leaflet";
-import { useNavigate } from "react-router-dom";
+
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { Locate, Layers, Search, X, Loader2, Map as MapIcon, Wind } from "lucide-react";
+import { Locate, Layers, Search, X, Loader2, Map as MapIcon } from "lucide-react";
 import { useMobile } from "@/components/hooks/useMobile";
 
 // Fix Leaflet default icon path issue with bundlers
@@ -317,24 +317,6 @@ function GeolocationControl({ onLocate }) {
   );
 }
 
-// Weather button
-function WeatherControl() {
-  const navigate = useNavigate();
-  const isMobile = useMobile();
-
-  return (
-    <button
-      onClick={() => navigate('/MobileJagdWetter')}
-      className={`absolute z-[1000] rounded-xl shadow-md flex items-center justify-center transition-colors border bg-[#2d2d2d] border-[#444] hover:bg-[#3a3a3a] ${
-        isMobile ? "top-36 right-4 w-12 h-12" : "hidden"
-      }`}
-      title="Jagdwetter anzeigen"
-    >
-      <Wind className={`text-gray-300 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />
-    </button>
-  );
-}
-
 // Map panner – pans map when center changes
 function MapPanner({ center, zoom }) {
   const map = useMap();
@@ -430,7 +412,6 @@ export default function RevierMapCore({
       <SearchControl onResult={handleSearchResult} />
       <StyleControl currentStyle={mapStyle} onStyleChange={handleStyleChange} />
       <GeolocationControl onLocate={handleLocate} />
-      <WeatherControl />
     </div>
   );
 }
