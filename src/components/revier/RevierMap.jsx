@@ -19,6 +19,8 @@ const LAYERS = [
 
 export default function RevierMap({ revier }) {
   const [activeLayers, setActiveLayers] = useState(new Set(["einrichtungen", "sichtungen"]));
+  const [showEinrichtungForm, setShowEinrichtungForm] = useState(false);
+  const [clickedCoords, setClickedCoords] = useState(null);
   const isMobile = useMobile();
   const queryClient = useQueryClient();
 
@@ -43,6 +45,18 @@ export default function RevierMap({ revier }) {
       next.has(id) ? next.delete(id) : next.add(id);
       return next;
     });
+  };
+
+  const handleMapClick = (e) => {
+    const { lat, lng } = e.latlng;
+    setClickedCoords({ lat, lng });
+    setShowEinrichtungForm(true);
+  };
+
+  const handleAddEinrichtung = () => {
+    // Default coordinates if no click
+    setClickedCoords({ lat: revier.latitude || 51.1657, lng: revier.longitude || 10.4515 });
+    setShowEinrichtungForm(true);
   };
 
   return (
@@ -91,13 +105,36 @@ export default function RevierMap({ revier }) {
       )}
 
       {/* Central map */}
-      <div className={isMobile ? "flex-1 overflow-hidden" : ""}>
-        <RevierMapCore revier={revier} height={isMobile ? "100%" : "520px"}>
+      <div className={isMobile ? "flex-1 overflow-hidden relative" : "relative"}>
+        <RevierMapCore 
+          revier={revier} 
+          height={isMobile ? "100%" : "520px"}
+          onMapClick={handleMapClick}
+        >
           <BoundaryLayer revier={revier} color={REVIER_COLORS[0]} />
           {activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} onDelete={(id) => deleteEinrichtung.mutate(id)} />}
           {activeLayers.has("sichtungen") && <WildmanagementLayer items={wildmanagement} />}
         </RevierMapCore>
+        
+        {/* FAB Button */}
+        <AddMapFeatureButton 
+          onAddEinrichtung={handleAddEinrichtung}
+          onAddBoundary={() => {}} // TODO: Implement boundary drawing
+        />
       </div>
+
+      {/* Einrichtung Form Dialog */}
+      <EinrichtungForm
+        isOpen={showEinrichtungForm}
+        onClose={() => {
+          setShowEinrichtungForm(false);
+          setClickedCoords(null);
+        }}
+        revierId={revier.id}
+        tenantId={revier.tenant_id}
+        lat={clickedCoords?.lat}
+        lng={clickedCoords?.lng}
+      />
 
       {!isMobile && (
         <p className="text-xs text-gray-400 text-center">
