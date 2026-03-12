@@ -78,6 +78,7 @@ export default function MobileMap() {
         <JagdWetterWidget
           lat={userPos?.[0] ?? 51.1657}
           lng={userPos?.[1] ?? 10.4515}
+          onWeatherLoaded={(deg, speed) => setWindData({ deg, speed })}
           onClose={() => setShowWeather(false)}
         />
       )}
