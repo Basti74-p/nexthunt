@@ -249,6 +249,9 @@ export default function SystemAdminTenants() {
                     <Button variant="ghost" size="icon" onClick={() => { setEditing({ ...t }); setDialogOpen(true); }} className="text-slate-400 hover:text-white hover:bg-slate-700 rounded-xl">
                       <Pencil className="w-4 h-4" />
                     </Button>
+                    <Button variant="ghost" size="icon" onClick={() => setDeleteConfirm(t)} className="text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-xl">
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
                   </div>
                 </div>
 
