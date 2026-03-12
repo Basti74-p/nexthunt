@@ -64,10 +64,59 @@ export default function EinrichtungenLayer({ items = [], onDelete }) {
     .map(i => (
       <Marker key={i.id} position={[i.latitude, i.longitude]} icon={makeIcon(i.type)}>
         <Popup>
-          <div style={{ minWidth: 140 }}>
-            <strong style={{ fontSize: 13 }}>{i.name}</strong><br />
+          <div style={{ minWidth: 220, maxWidth: 280 }}>
+            {/* Header mit Name und Typ */}
+            <strong style={{ fontSize: 13, color: "#1f2937" }}>{i.name}</strong><br />
             <span style={{ color: "#6b7280", fontSize: 12 }}>{TYPE_LABELS[i.type] || i.type}</span>
-            {i.notes && <><br /><span style={{ color: "#9ca3af", fontSize: 11 }}>{i.notes}</span></>}
+            
+            {/* Zustand Badge */}
+            {i.condition && (
+              <div style={{ marginTop: 6, marginBottom: 6 }}>
+                <span style={{
+                  background: CONDITION_COLORS[i.condition],
+                  color: "white",
+                  padding: "2px 8px",
+                  borderRadius: 4,
+                  fontSize: 11,
+                  fontWeight: "bold",
+                  display: "inline-block"
+                }}>
+                  {CONDITION_LABELS[i.condition]}
+                </span>
+              </div>
+            )}
+
+            {/* Orientierung */}
+            {i.orientation && (
+              <div style={{ fontSize: 11, color: "#4b5563", marginBottom: 4 }}>
+                <strong>Ausrichtung:</strong> {i.orientation.toUpperCase()}
+              </div>
+            )}
+
+            {/* Notizen */}
+            {i.notes && (
+              <div style={{ fontSize: 11, color: "#4b5563", marginBottom: 6, fontStyle: "italic" }}>
+                {i.notes}
+              </div>
+            )}
+
+            {/* Foto */}
+            {i.photos && i.photos.length > 0 && (
+              <div style={{ marginTop: 8, marginBottom: 8 }}>
+                <img
+                  src={i.photos[0]}
+                  alt="Einrichtung"
+                  style={{ width: "100%", height: 120, objectFit: "cover", borderRadius: 4, border: "1px solid #e5e7eb" }}
+                />
+                {i.photos.length > 1 && (
+                  <div style={{ fontSize: 10, color: "#9ca3af", marginTop: 2 }}>
+                    +{i.photos.length - 1} weitere Foto{i.photos.length > 2 ? "s" : ""}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Löschen Button */}
             {onDelete && (
               <div style={{ marginTop: 8 }}>
                 <button
