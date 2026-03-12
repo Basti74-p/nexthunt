@@ -27,7 +27,6 @@ export default function MobileNav({ currentPage }) {
     { name: "Strecke", icon: Crosshair, page: "MobileStrecke", feature: "feature_strecke" },
     { name: "Aufgaben", icon: ListTodo, page: "MobileTasks", feature: "feature_tasks" },
     { name: "Jagd", icon: Calendar, page: "JagdkalenderMain", feature: "feature_kalender" },
-    { name: "Monitor", icon: Radio, page: "MobileMonitor", feature: "feature_driven_hunt" },
     { name: "Wetter", icon: Wind, page: "MobileJagdWetter", feature: null },
   ].filter(t => t.feature === null || tenantFeatures[t.feature] !== false);
 
