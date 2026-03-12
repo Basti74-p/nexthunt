@@ -88,15 +88,15 @@ function jagdBewertung(weather) {
 function WindRose({ deg, speed }) {
   const color = speed > 30 ? "#f87171" : speed > 15 ? "#fbbf24" : "#60a5fa";
   return (
-    <div className="relative flex items-center justify-center" style={{ width: 52, height: 52 }}>
+    <div className="relative flex items-center justify-center" style={{ width: 64, height: 64 }}>
       {speed > 5 && (
-        <div className="absolute rounded-full border animate-ping opacity-30"
-          style={{ width: 52, height: 52, borderColor: color, animationDuration: "2.5s" }} />
+        <div className="absolute rounded-full border animate-ping"
+          style={{ width: 64, height: 64, borderColor: color, animationDuration: "1.5s", opacity: 0.5 }} />
       )}
-      <div className="absolute rounded-full border opacity-20" style={{ width: 52, height: 52, borderColor: color }} />
-      <div className="absolute rounded-full border opacity-10" style={{ width: 36, height: 36, borderColor: color }} />
+      <div className="absolute rounded-full border" style={{ width: 64, height: 64, borderColor: color, opacity: 0.3 }} />
+      <div className="absolute rounded-full border" style={{ width: 48, height: 48, borderColor: color, opacity: 0.15 }} />
       <div style={{ transform: `rotate(${deg}deg)`, transition: "transform 1.2s ease" }}>
-        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+        <svg width="44" height="44" viewBox="0 0 36 36" fill="none">
           <path d="M18 4 L22 16 L19.5 15 L19.5 32 L16.5 32 L16.5 15 L14 16 Z" fill={color} />
         </svg>
       </div>
