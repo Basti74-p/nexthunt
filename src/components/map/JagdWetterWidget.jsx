@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Wind, Thermometer, Droplets, Eye, ChevronDown, ChevronUp, Clock, Gauge, Sunrise, Sunset } from "lucide-react";
+import { Wind, Thermometer, Droplets, Eye, ChevronDown, ChevronUp, Clock, Gauge, Sunrise, Sunset, X } from "lucide-react";
 
 const WIND_DIRS = ["N","NNO","NO","ONO","O","OSO","SO","SSO","S","SSW","SW","WSW","W","WNW","NW","NNW"];
 function degToDir(deg) { return WIND_DIRS[Math.round(deg / 22.5) % 16]; }
@@ -148,11 +148,11 @@ function StatPill({ icon, value, label, color = "text-gray-300" }) {
   );
 }
 
-export default function JagdWetterWidget({ lat, lng, onWeatherLoaded }) {
+export default function JagdWetterWidget({ lat, lng, onWeatherLoaded, onClose }) {
   const [weather, setWeather] = useState(null);
   const [forecast, setForecast] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   const [tab, setTab] = useState("aktuell");
 
   useEffect(() => {
@@ -215,10 +215,11 @@ export default function JagdWetterWidget({ lat, lng, onWeatherLoaded }) {
       style={{ bottom: 88, left: 16, width: expanded ? 340 : 180, transition: "width 0.3s ease" }}
     >
       {/* Header */}
-      <button
-        onClick={() => setExpanded(p => !p)}
-        className="flex items-center gap-2 px-3 py-2.5 w-full hover:bg-white/5 transition-colors"
-      >
+      <div className="flex items-center gap-2 px-3 py-2.5 w-full hover:bg-white/5 transition-colors">
+        <button
+          onClick={() => setExpanded(p => !p)}
+          className="flex items-center gap-2 flex-1"
+        >
         <Wind className="w-4 h-4 text-blue-400 flex-shrink-0" />
         <span className="text-xs font-semibold text-gray-200">Jagdwetter</span>
         {bewertung && (
@@ -227,8 +228,18 @@ export default function JagdWetterWidget({ lat, lng, onWeatherLoaded }) {
         {activeNow && !expanded && (
           <span className="ml-1 text-[9px] bg-[#22c55e]/20 text-[#22c55e] px-1 py-0.5 rounded font-medium">AKTIV</span>
         )}
-        <span className="ml-auto text-gray-500">{expanded ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronUp className="w-3.5 h-3.5" />}</span>
-      </button>
+          <span className="ml-auto text-gray-500">{expanded ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronUp className="w-3.5 h-3.5" />}</span>
+        </button>
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-300 transition-colors"
+            title="Schließen"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
+      </div>
 
       {expanded && (
         <div>
