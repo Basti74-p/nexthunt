@@ -255,7 +255,7 @@ function GeolocationControl({ onLocate }) {
       }`}
       title="Meinen Standort anzeigen"
     >
-      {loading ? <Loader2 className={`text-blue-500 animate-spin ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} /> : <Locate className={`text-gray-600 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />}
+      {loading ? <Loader2 className={`text-[#22c55e] animate-spin ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} /> : <Locate className={`text-gray-300 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />}
     </button>
   );
 }
