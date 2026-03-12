@@ -18,30 +18,18 @@ Deno.serve(async (req) => {
 
     const tenantId = userReviere[0].tenant_id;
 
-    // List backups from private storage (pattern: backups/{tenant_id}/*.json)
-    const backups = await base44.integrations.Core.ListStorageFiles({
-      path: `backups/${tenantId}`,
-      storage_type: 'private'
-    });
+    // Get all backups for this tenant
+    const backups = await base44.entities.Backup.filter({ tenant_id: tenantId }, '-created_date');
 
     // Format backup list
-    const formattedBackups = backups
-      .filter(file => file.name.endsWith('.json'))
-      .map(file => {
-        // Extract timestamp from filename (format: backup-{timestamp}.json)
-        const match = file.name.match(/backup-(\d+)-(.+?)\.json/);
-        const timestamp = match ? parseInt(match[1]) : 0;
-        const reviersCount = match ? parseInt(match[2]) || 0 : 0;
-        
-        return {
-          id: file.name,
-          name: file.name,
-          size: file.size,
-          created: new Date(timestamp).toLocaleString('de-DE'),
-          reviersCount
-        };
-      })
-      .sort((a, b) => b.created - a.created);
+    const formattedBackups = backups.map(backup => ({
+      id: backup.id,
+      fileUri: backup.file_uri,
+      created: new Date(backup.created_date).toLocaleString('de-DE'),
+      reviersCount: backup.reviers_count,
+      isAutomatic: backup.is_automatic,
+      fileSize: backup.file_size
+    }));
 
     return Response.json({ backups: formattedBackups });
   } catch (error) {

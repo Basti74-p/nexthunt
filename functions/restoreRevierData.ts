@@ -9,14 +9,43 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const formData = await req.formData();
-    const file = formData.get('file');
+    let content = null;
+    const contentType = req.headers.get('content-type') || '';
+    
+    // Check if it's a backup ID or file upload
+    if (contentType.includes('application/json')) {
+      const body = await req.json();
+      const backupId = body.backupId;
 
-    if (!file) {
-      return Response.json({ error: 'Keine Datei hochgeladen' }, { status: 400 });
+      if (backupId) {
+        // Load backup from Cloud
+        const backup = await base44.entities.Backup.get(backupId);
+        if (!backup) {
+          return Response.json({ error: 'Backup nicht gefunden' }, { status: 404 });
+        }
+
+        // Download file from private storage
+        const signedUrl = await base44.integrations.Core.CreateFileSignedUrl({
+          file_uri: backup.file_uri,
+          expires_in: 300
+        });
+
+        const fileResponse = await fetch(signedUrl.signed_url);
+        content = await fileResponse.text();
+      } else {
+        return Response.json({ error: 'Keine Datei oder Backup ID angegeben' }, { status: 400 });
+      }
+    } else {
+      // File upload
+      const formData = await req.formData();
+      const file = formData.get('file');
+
+      if (!file) {
+        return Response.json({ error: 'Keine Datei hochgeladen' }, { status: 400 });
+      }
+
+      content = await file.text();
     }
-
-    const content = await file.text();
     let backupData;
     
     try {
