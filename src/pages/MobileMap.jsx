@@ -90,25 +90,7 @@ export default function MobileMap() {
         </div>
       )}
 
-      {/* ── UNTEN LINKS: Layer-Toggle-Buttons ── */}
-      {/* RevierMapCore platziert Geolocation bei bottom-20 right-4 auf Mobile,
-          wir bleiben links und geben etwas Abstand nach oben */}
-      <div className="absolute bottom-4 left-4 z-[1002] flex flex-col gap-2">
-        {LAYERS.map(layer => (
-          <button
-            key={layer.id}
-            onClick={() => toggleLayer(layer.id)}
-            className={`flex items-center gap-2 px-4 py-3 rounded-xl shadow-md text-sm font-medium border transition-all active:scale-95 ${
-              activeLayers.has(layer.id)
-                ? "bg-[#22c55e] text-black border-[#22c55e]"
-                : "bg-white text-gray-500 border-gray-100"
-            }`}
-          >
-            <layer.icon className="w-4 h-4" />
-            {layer.label}
-          </button>
-        ))}
-      </div>
+
     </div>
   );
 }
