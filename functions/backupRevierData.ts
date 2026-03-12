@@ -9,8 +9,17 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get user's reviere (auto-filtered to user's tenant via base44)
+    // DEBUG: Get user's reviere (auto-filtered to user's tenant via base44)
     let reviere = await base44.entities.Revier.list();
+    
+    // Log which tenant this user is mapped to
+    const tenantIdFromReviere = reviere.length > 0 ? reviere[0].tenant_id : 'unknown';
+    const debugInfo = {
+      user_email: user.email,
+      reviere_count: reviere.length,
+      tenant_id_from_reviere: tenantIdFromReviere,
+      revier_names: reviere.map(r => r.name)
+    };
     
     // For tenant members with restricted access, filter by allowed_reviere
     const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: user.email });
