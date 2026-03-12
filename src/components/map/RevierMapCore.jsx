@@ -363,6 +363,7 @@ export default function RevierMapCore({
   };
 
   const handleLocate = (latlng, heading) => {
+    console.log("[GPS] lat:", latlng[0], "lng:", latlng[1], "heading:", heading);
     setUserLocation(latlng);
     setUserHeading(heading ?? null);
     setFlyTarget({ center: latlng, zoom: 15 });
