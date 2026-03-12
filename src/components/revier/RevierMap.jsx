@@ -122,7 +122,7 @@ export default function RevierMap({ revier }) {
           onMapClick={handleMapClick}
         >
           <BoundaryLayer revier={revier} color={REVIER_COLORS[0]} />
-          {activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} onDelete={(id) => deleteEinrichtung.mutate(id)} />}
+          {activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} onDelete={(id) => deleteEinrichtung.mutate(id)} onEdit={handleEditEinrichtung} />}
           {activeLayers.has("sichtungen") && <WildmanagementLayer items={wildmanagement} />}
         </RevierMapCore>
         
