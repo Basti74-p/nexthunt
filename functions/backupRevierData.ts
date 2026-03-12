@@ -31,10 +31,10 @@ Deno.serve(async (req) => {
         wildkammern,
         jagdevents
       ] = await Promise.all([
-        base44.asServiceRole.entities.Jagdeinrichtung.filter({ revier_id: revier.id }),
-        base44.asServiceRole.entities.Strecke.filter({ revier_id: revier.id }),
-        base44.asServiceRole.entities.Wildkammer.filter({ revier_id: revier.id }),
-        base44.asServiceRole.entities.JagdEvent.filter({ revier_id: revier.id })
+        base44.entities.Jagdeinrichtung.filter({ revier_id: revier.id }),
+        base44.entities.Strecke.filter({ revier_id: revier.id }),
+        base44.entities.Wildkammer.filter({ revier_id: revier.id }),
+        base44.entities.JagdEvent.filter({ revier_id: revier.id })
       ]);
 
       backupData.count.reviere++;
