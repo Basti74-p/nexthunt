@@ -9,42 +9,8 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get user's primary tenant (from user object if available, fallback to TenantMember query)
-    let userTenantId = user.tenant_id;
-    let primaryTenant = null;
-    
-    // If user.tenant_id not set, query TenantMember
-    if (!userTenantId) {
-      const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({
-        user_email: user.email
-      });
-      
-      if (tenantMembers && tenantMembers.length > 0) {
-        primaryTenant = tenantMembers[0];
-        userTenantId = primaryTenant.tenant_id;
-      }
-    }
-    
-    if (!userTenantId) {
-      return Response.json({ error: 'Could not determine user tenant' }, { status: 403 });
-    }
-    
-    // Get ONLY reviere from user's primary tenant
-    let reviere = await base44.asServiceRole.entities.Revier.filter({
-      tenant_id: userTenantId
-    });
-    
-    const debugInfo = {
-      user_email: user.email,
-      user_tenant_id: userTenantId,
-      reviere_count: reviere.length,
-      revier_names: reviere.map(r => r.name)
-    };
-    
-    // For tenant members with restricted access, filter by allowed_reviere
-    if (primaryTenant && primaryTenant.allowed_reviere && primaryTenant.allowed_reviere.length > 0) {
-      reviere = reviere.filter(r => primaryTenant.allowed_reviere.includes(r.id));
-    }
+    // Get reviere from user's scope (platform)
+    let reviere = await base44.entities.Revier.list();
     
     if (!reviere || reviere.length === 0) {
       return Response.json({ 
