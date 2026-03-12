@@ -207,7 +207,7 @@ function StyleControl({ currentStyle, onStyleChange }) {
                 isMobile 
                   ? `px-4 py-3 text-base ${currentStyle.id === s.id ? "text-[#22c55e] font-medium bg-[#22c55e]/10" : "text-gray-300 hover:bg-[#3a3a3a]"}` 
                   : `px-3 py-2 text-sm ${currentStyle.id === s.id ? "text-[#22c55e] font-medium bg-[#22c55e]/10" : "text-gray-300 hover:bg-[#3a3a3a]"}`
-              }`
+              }`}
             >
               {s.label}
             </button>
