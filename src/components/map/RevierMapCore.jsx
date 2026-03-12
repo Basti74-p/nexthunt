@@ -131,7 +131,7 @@ function SearchControl({ onResult }) {
   };
 
   return (
-    <div className={`absolute left-0 right-0 z-[1000] flex flex-col gap-1 ${isMobile ? "top-4 left-4 right-auto w-10" : "top-3 left-3 w-80"}`}>
+    <div className={`absolute z-[1000] flex flex-col gap-1 ${isMobile ? "top-4 left-4 w-auto" : "top-3 left-3 w-80"}`}>
       {!open ? (
         <button
           onClick={() => setOpen(true)}
