@@ -35,8 +35,17 @@ export default function BackupSection() {
     setLoading(true);
     setMessage(null);
 
+    if (!tenant?.id) {
+      setMessageType('error');
+      setMessage('✗ Fehler: Tenant-ID nicht gefunden');
+      setLoading(false);
+      return;
+    }
+
     try {
-      const response = await base44.functions.invoke('backupRevierData', {});
+      const response = await base44.functions.invoke('backupRevierData', {
+        tenant_id: tenant.id
+      });
       
       if (response.data.success) {
         setMessageType('success');
