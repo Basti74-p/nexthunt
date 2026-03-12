@@ -216,12 +216,12 @@ function StyleControl({ currentStyle, onStyleChange }) {
       ) : (
         <button
           onClick={() => setOpen(true)}
-          className={`bg-white rounded-xl shadow-md flex items-center justify-center hover:bg-gray-50 transition-colors border border-gray-100 ${
+          className={`bg-[#2d2d2d] rounded-xl shadow-md flex items-center justify-center hover:bg-[#3a3a3a] transition-colors border border-[#444] ${
             isMobile ? "w-12 h-12" : "w-10 h-10"
           }`}
           title="Kartenstil wechseln"
         >
-          <Layers className={`text-gray-600 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />
+          <Layers className={`text-gray-300 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />
         </button>
       )}
     </div>
