@@ -9,27 +9,22 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get user's reviere
+    // Get user's reviere (auto-filtered to user's tenant via base44)
+    let reviere = await base44.entities.Revier.list();
+    
+    // Get TenantMember info to check for access restrictions
     const userEmail = user.email;
-    let allowedReviere = null;
-    let tenantId = null;
-    
-    // Get tenant info from TenantMember (service role to see all tenants)
-    const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: userEmail });
-    if (tenantMembers && tenantMembers.length > 0) {
-      allowedReviere = tenantMembers[0].allowed_reviere;
-      tenantId = tenantMembers[0].tenant_id;
-    }
-    
-    // Get reviere for user's tenant - use service role to access user's specific tenant
-    let reviere = [];
-    if (tenantId) {
-      reviere = await base44.asServiceRole.entities.Revier.filter({ tenant_id: tenantId });
-    }
-    
-    // Filter by allowed_reviere if user has restricted access (non-empty list means restrictions apply)
-    if (allowedReviere && allowedReviere.length > 0) {
-      reviere = reviere.filter(r => allowedReviere.includes(r.id));
+    try {
+      const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: userEmail });
+      if (tenantMembers && tenantMembers.length > 0) {
+        const allowedReviere = tenantMembers[0].allowed_reviere;
+        // Filter by allowed_reviere if user has restricted access (non-empty list means restrictions apply)
+        if (allowedReviere && allowedReviere.length > 0) {
+          reviere = reviere.filter(r => allowedReviere.includes(r.id));
+        }
+      }
+    } catch (err) {
+      // Continue with all reviere if TenantMember lookup fails
     }
     
     if (!reviere || reviere.length === 0) {
