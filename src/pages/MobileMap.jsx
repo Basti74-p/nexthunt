@@ -9,7 +9,7 @@ import { ChevronDown } from "lucide-react";
 
 export default function MobileMap() {
   const { tenant } = useAuth();
-  const [activeLayers, setActiveLayers] = useState(new Set(["einrichtungen", "sichtungen"]));
+  const [activeLayers] = useState(new Set(["einrichtungen", "sichtungen"]));
   const [selectedRevierId, setSelectedRevierId] = useState(null);
   const [showRevierPicker, setShowRevierPicker] = useState(false);
 
