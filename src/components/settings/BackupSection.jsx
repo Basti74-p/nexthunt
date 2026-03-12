@@ -1,14 +1,33 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
-import { Loader2, Download, Upload, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Loader2, Download, Upload, CheckCircle2, AlertCircle, Trash2 } from 'lucide-react';
 
 export default function BackupSection() {
   const [loading, setLoading] = useState(false);
   const [restoreLoading, setRestoreLoading] = useState(false);
+  const [backupsLoading, setBackupsLoading] = useState(true);
   const [message, setMessage] = useState(null);
   const [messageType, setMessageType] = useState(null);
+  const [backups, setBackups] = useState([]);
+  const [selectedBackup, setSelectedBackup] = useState(null);
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    loadBackups();
+  }, []);
+
+  const loadBackups = async () => {
+    setBackupsLoading(true);
+    try {
+      const response = await base44.functions.invoke('listBackups', {});
+      setBackups(response.data.backups || []);
+    } catch (error) {
+      console.error('Fehler beim Laden der Backups:', error);
+    } finally {
+      setBackupsLoading(false);
+    }
+  };
 
   const handleCreateBackup = async () => {
     setLoading(true);
@@ -20,6 +39,7 @@ export default function BackupSection() {
       if (response.data.success) {
         setMessageType('success');
         setMessage(`✓ ${response.data.message} - ${response.data.reviersCount} Revier(e) gesichert`);
+        loadBackups();
       } else {
         setMessageType('error');
         setMessage(`✗ Fehler: ${response.data.error}`);
@@ -32,7 +52,7 @@ export default function BackupSection() {
     }
   };
 
-  const handleRestore = async (event) => {
+  const handleRestoreFromFile = async (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -48,6 +68,26 @@ export default function BackupSection() {
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
+    } catch (error) {
+      setMessageType('error');
+      setMessage(`✗ Fehler beim Wiederherstellen: ${error.response?.data?.error || error.message}`);
+    } finally {
+      setRestoreLoading(false);
+    }
+  };
+
+  const handleRestoreSelected = async () => {
+    if (!selectedBackup) return;
+
+    setRestoreLoading(true);
+    setMessage(null);
+    try {
+      const response = await base44.functions.invoke('restoreRevierData', {
+        backupId: selectedBackup
+      });
+      setMessageType('success');
+      setMessage(`✓ ${response.data.restoredCount} Einträge wiederhergestellt`);
+      setSelectedBackup(null);
     } catch (error) {
       setMessageType('error');
       setMessage(`✗ Fehler beim Wiederherstellen: ${error.response?.data?.error || error.message}`);
@@ -84,36 +124,89 @@ export default function BackupSection() {
             )}
           </Button>
 
-          <div>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".json"
-              onChange={handleRestore}
-              disabled={restoreLoading}
-              className="hidden"
-              id="restore-input"
-            />
-            <label htmlFor="restore-input" className="block">
-              <Button
-                onClick={() => fileInputRef.current?.click()}
-                disabled={restoreLoading}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg flex items-center justify-center gap-2 cursor-pointer"
-              >
-                {restoreLoading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Stelle...
-                  </>
-                ) : (
-                  <>
-                    <Upload className="w-4 h-4" />
-                    Restore
-                  </>
-                )}
-              </Button>
-            </label>
+        </div>
+
+
+        {!backupsLoading && backups.length > 0 && (
+          <div className="border-t pt-4">
+            <h3 className="text-sm font-semibold text-gray-900 mb-3">Verfügbare Backups</h3>
+            <div className="space-y-2 mb-3">
+              {backups.map(backup => (
+                <div
+                  key={backup.id}
+                  onClick={() => setSelectedBackup(selectedBackup === backup.id ? null : backup.id)}
+                  className={`p-3 rounded-lg border cursor-pointer transition ${
+                    selectedBackup === backup.id
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 bg-white hover:bg-gray-50'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-gray-900">{backup.created}</p>
+                      <p className="text-xs text-gray-600">{backup.reviersCount} Revier(e)</p>
+                    </div>
+                    <input
+                      type="radio"
+                      name="backup"
+                      checked={selectedBackup === backup.id}
+                      onChange={() => setSelectedBackup(backup.id)}
+                      className="cursor-pointer"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <Button
+              onClick={handleRestoreSelected}
+              disabled={!selectedBackup || restoreLoading}
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium py-2.5 rounded-lg flex items-center justify-center gap-2"
+            >
+              {restoreLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Wird wiederhergestellt...
+                </>
+              ) : (
+                <>
+                  <Download className="w-4 h-4" />
+                  Ausgewähltes Backup wiederherstellen
+                </>
+              )}
+            </Button>
           </div>
+        )}
+
+        <div className="border-t pt-4">
+          <h3 className="text-sm font-semibold text-gray-900 mb-3">Oder Datei hochladen</h3>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json"
+            onChange={handleRestoreFromFile}
+            disabled={restoreLoading}
+            className="hidden"
+            id="restore-input"
+          />
+          <label htmlFor="restore-input" className="block">
+            <Button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={restoreLoading}
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2.5 rounded-lg flex items-center justify-center gap-2 cursor-pointer"
+            >
+              {restoreLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Wird wiederhergestellt...
+                </>
+              ) : (
+                <>
+                  <Upload className="w-4 h-4" />
+                  Backup-Datei hochladen
+                </>
+              )}
+            </Button>
+          </label>
         </div>
 
         {message && (
