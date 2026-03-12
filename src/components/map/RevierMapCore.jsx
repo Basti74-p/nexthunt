@@ -317,6 +317,22 @@ function GeolocationControl({ onLocate }) {
   );
 }
 
+// Weather button
+function WeatherControl() {
+  const isMobile = useMobile();
+
+  return (
+    <button
+      className={`absolute z-[1000] rounded-xl shadow-md flex items-center justify-center transition-colors border bg-[#2d2d2d] border-[#444] hover:bg-[#3a3a3a] ${
+        isMobile ? "top-36 right-4 w-12 h-12" : "hidden"
+      }`}
+      title="Jagdwetter"
+    >
+      <Wind className={`text-gray-300 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />
+    </button>
+  );
+}
+
 // Map panner – pans map when center changes
 function MapPanner({ center, zoom }) {
   const map = useMap();
