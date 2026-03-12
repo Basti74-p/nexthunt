@@ -54,7 +54,7 @@ function LayoutInner({ children, currentPageName }) {
   // Mobile mode: All pages render with mobile layout
   if (isMobile) {
     return (
-      <div className="min-h-screen bg-[#2d2d2d] overflow-x-hidden">
+      <div className="min-h-screen bg-[#1e1e1e] overflow-x-hidden">
         <MobileNav currentPage={currentPageName} />
         <main className="pt-14 pb-20 px-4 max-w-full w-full">
           {children}
