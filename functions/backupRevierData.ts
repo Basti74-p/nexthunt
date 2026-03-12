@@ -9,8 +9,23 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get all reviere the user has access to (base44 already filters by user context)
-    let reviere = await base44.entities.Revier.list();
+    // Get user's tenant memberships to find allowed reviere
+    const userEmail = user.email;
+    const tenantMembers = await base44.entities.TenantMember.filter({ user_email: userEmail });
+    
+    if (!tenantMembers || tenantMembers.length === 0) {
+      return Response.json({ error: 'Keine TenantMember-Zuordnung gefunden' }, { status: 403 });
+    }
+
+    const member = tenantMembers[0];
+    
+    // Get reviere for this tenant
+    let reviere = await base44.entities.Revier.filter({ tenant_id: member.tenant_id });
+    
+    // Filter by allowed_reviere if user has restricted access (non-empty allowed_reviere array)
+    if (member.allowed_reviere && member.allowed_reviere.length > 0) {
+      reviere = reviere.filter(r => member.allowed_reviere.includes(r.id));
+    }
     
     const backupData = {
       timestamp: new Date().toISOString(),
