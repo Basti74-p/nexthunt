@@ -82,8 +82,7 @@ Deno.serve(async (req) => {
       success: true,
       message: `Backup erfolgreich erstellt`,
       reviersCount: reviere.length,
-      timestamp: now.toISOString(),
-      debug: debugInfo
+      timestamp: now.toISOString()
     });
 
   } catch (error) {
