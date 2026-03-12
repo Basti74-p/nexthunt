@@ -256,6 +256,7 @@ export default function SystemAdminTenants() {
             <div className="text-center py-16 text-slate-500">Keine Kunden gefunden.</div>
           )}
         </div>
+        </>
         )}
       </div>
 
