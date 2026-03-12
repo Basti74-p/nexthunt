@@ -58,7 +58,14 @@ export default function RevierMap({ revier }) {
 
   const handleAddEinrichtung = () => {
     // Default coordinates if no click
+    setSelectedEinrichtung(null);
     setClickedCoords({ lat: revier.latitude || 51.1657, lng: revier.longitude || 10.4515 });
+    setShowEinrichtungForm(true);
+  };
+
+  const handleEditEinrichtung = (einrichtung) => {
+    setSelectedEinrichtung(einrichtung);
+    setClickedCoords(null);
     setShowEinrichtungForm(true);
   };
 
