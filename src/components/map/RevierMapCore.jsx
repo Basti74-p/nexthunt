@@ -19,7 +19,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, ZoomContr
 
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { Locate, Layers, Search, X, Loader2, Map as MapIcon } from "lucide-react";
+import { Locate, Layers, Search, X, Loader2, Map as MapIcon, Wind } from "lucide-react";
 import { useMobile } from "@/components/hooks/useMobile";
 
 // Fix Leaflet default icon path issue with bundlers
@@ -412,6 +412,7 @@ export default function RevierMapCore({
       <SearchControl onResult={handleSearchResult} />
       <StyleControl currentStyle={mapStyle} onStyleChange={handleStyleChange} />
       <GeolocationControl onLocate={handleLocate} />
+      <WeatherControl />
     </div>
   );
 }
