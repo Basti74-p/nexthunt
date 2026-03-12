@@ -12,19 +12,23 @@ Deno.serve(async (req) => {
     // Get user's reviere - automatically filtered by user's tenant
     const userEmail = user.email;
     let allowedReviere = null;
+    let tenantId = null;
     
-    // Try to get restrictions from TenantMember
+    // Get tenant info from TenantMember
     try {
       const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: userEmail });
       if (tenantMembers && tenantMembers.length > 0) {
         allowedReviere = tenantMembers[0].allowed_reviere;
+        tenantId = tenantMembers[0].tenant_id;
       }
     } catch (err) {
       // Continue without restriction data
     }
     
     // Get reviere for user's tenant (user-scoped call auto-filters by tenant)
-    let reviere = await base44.entities.Revier.list();
+    let reviere = tenantId 
+      ? await base44.entities.Revier.filter({ tenant_id: tenantId })
+      : await base44.entities.Revier.list();
     
     // Filter by allowed_reviere if user has restricted access (non-empty list means restrictions apply)
     if (allowedReviere && allowedReviere.length > 0) {
