@@ -19,6 +19,8 @@ export default function MobileNav({ currentPage }) {
   const { tenantFeatures } = useAuth();
   const [tabHistories, setTabHistories] = useState({});
 
+  const [showWeather, setShowWeather] = useState(false);
+
   const tabs = [
     { name: "Karte", icon: Map, page: "MobileMap", feature: "feature_map" },
     { name: "Sichtungen", icon: Eye, page: "MobileSightings", feature: "feature_sightings" },
@@ -26,7 +28,8 @@ export default function MobileNav({ currentPage }) {
     { name: "Aufgaben", icon: ListTodo, page: "MobileTasks", feature: "feature_tasks" },
     { name: "Jagd", icon: Calendar, page: "JagdkalenderMain", feature: "feature_kalender" },
     { name: "Monitor", icon: Radio, page: "MobileMonitor", feature: "feature_driven_hunt" },
-  ].filter(t => tenantFeatures[t.feature] !== false);
+    { name: "Wetter", icon: Wind, page: "weather", feature: null, action: () => setShowWeather(!showWeather) },
+  ].filter(t => tenantFeatures[t.feature] !== false || t.feature === null);
 
   // Track tab switches for history management
   useEffect(() => {
