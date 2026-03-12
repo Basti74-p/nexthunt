@@ -328,7 +328,7 @@ export default function JagdWetterWidget({ lat, lng, onWeatherLoaded }) {
                   <div className="flex gap-1 overflow-x-auto pb-1">
                     {forecast.map((h, i) => <HourBar key={i} hour={h} />)}
                   </div>
-                  <div className="text-[10px] text-gray-600 px-1 mt-1.5">Wind km/h · Temp °C</div>
+                  <div className="text-[10px] text-gray-400 px-1 mt-1.5">Wind km/h · Temp °C</div>
                 </div>
               )}
 
