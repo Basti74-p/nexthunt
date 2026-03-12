@@ -124,15 +124,28 @@ class WindCanvasLayer extends L.Layer {
       if (trail.length < 2) continue;
 
       for (let t = 0; t < trail.length - 1; t++) {
-        const alpha = ((trail.length - t) / trail.length) * 0.35;
+        const alpha = ((trail.length - t) / trail.length) * 0.6;
         ctx.beginPath();
         ctx.moveTo(trail[t].x, trail[t].y);
         ctx.lineTo(trail[t + 1].x, trail[t + 1].y);
         ctx.strokeStyle = `rgba(${r},${g},${b},${alpha})`;
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 0.5;
         ctx.lineCap = "round";
         ctx.stroke();
       }
+
+      // Pfeilkopf zeichnen
+      const head = trail[0];
+      const prev = trail[Math.min(5, trail.length - 1)];
+      const angle = Math.atan2(head.y - prev.y, head.x - prev.x);
+      const arrowSize = 8;
+      ctx.fillStyle = `rgba(${r},${g},${b},0.8)`;
+      ctx.beginPath();
+      ctx.moveTo(head.x, head.y);
+      ctx.lineTo(head.x - arrowSize * Math.cos(angle - Math.PI / 6), head.y - arrowSize * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(head.x - arrowSize * Math.cos(angle + Math.PI / 6), head.y - arrowSize * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fill();
 
       // Reset when out of bounds or old
       const outOfBounds = s.x < -60 || s.x > w + 60 || s.y < -60 || s.y > h + 60;
