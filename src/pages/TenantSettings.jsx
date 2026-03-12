@@ -9,6 +9,7 @@ import EtikettPrintView from "@/components/wildprodukte/EtikettPrintView";
 import RechnungSettings from "@/components/wildverkauf/RechnungSettings";
 import RechnungPrint from "@/components/wildverkauf/RechnungPrint";
 import DeleteAccountDialog from "@/components/wildverkauf/DeleteAccountDialog";
+import BackupSection from "@/components/settings/BackupSection";
 import { base44 } from "@/api/base44Client";
 
 const DEFAULT_ETIKETT_SETTINGS = {
