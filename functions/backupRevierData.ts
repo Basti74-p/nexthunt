@@ -9,12 +9,8 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    console.log('User:', user.email);
-    
     // Get user's reviere (auto-filtered to user's tenant via base44)
     let reviere = await base44.entities.Revier.list();
-    console.log('Reviere count:', reviere.length);
-    console.log('Reviere tenant_ids:', reviere.map(r => r.tenant_id));
     
     // Get TenantMember info to check for access restrictions
     const userEmail = user.email;
