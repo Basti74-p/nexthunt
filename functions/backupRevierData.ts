@@ -9,26 +9,23 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get user's reviere - automatically filtered by user's tenant
+    // Get user's reviere
     const userEmail = user.email;
     let allowedReviere = null;
     let tenantId = null;
     
-    // Get tenant info from TenantMember
-    try {
-      const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: userEmail });
-      if (tenantMembers && tenantMembers.length > 0) {
-        allowedReviere = tenantMembers[0].allowed_reviere;
-        tenantId = tenantMembers[0].tenant_id;
-      }
-    } catch (err) {
-      // Continue without restriction data
+    // Get tenant info from TenantMember (service role to see all tenants)
+    const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: userEmail });
+    if (tenantMembers && tenantMembers.length > 0) {
+      allowedReviere = tenantMembers[0].allowed_reviere;
+      tenantId = tenantMembers[0].tenant_id;
     }
     
-    // Get reviere for user's tenant (user-scoped call auto-filters by tenant)
-    let reviere = tenantId 
-      ? await base44.entities.Revier.filter({ tenant_id: tenantId })
-      : await base44.entities.Revier.list();
+    // Get reviere for user's tenant - use service role to access user's specific tenant
+    let reviere = [];
+    if (tenantId) {
+      reviere = await base44.asServiceRole.entities.Revier.filter({ tenant_id: tenantId });
+    }
     
     // Filter by allowed_reviere if user has restricted access (non-empty list means restrictions apply)
     if (allowedReviere && allowedReviere.length > 0) {
