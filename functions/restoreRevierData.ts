@@ -9,7 +9,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    let content = null;
+    let backupData = null;
     const contentType = req.headers.get('content-type') || '';
     
     // Check if it's a backup ID or file upload
@@ -31,7 +31,8 @@ Deno.serve(async (req) => {
         });
 
         const fileResponse = await fetch(signedUrl.signed_url);
-        content = await fileResponse.text();
+        const content = await fileResponse.text();
+        backupData = JSON.parse(content);
       } else {
         return Response.json({ error: 'Keine Datei oder Backup ID angegeben' }, { status: 400 });
       }
@@ -44,18 +45,12 @@ Deno.serve(async (req) => {
         return Response.json({ error: 'Keine Datei hochgeladen' }, { status: 400 });
       }
 
-      content = await file.text();
-    }
-    let backupData;
-    
-    try {
+      const content = await file.text();
       backupData = JSON.parse(content);
-    } catch (e) {
-      return Response.json({ error: 'Ungültiges Backup-Format' }, { status: 400 });
     }
 
-    if (!backupData.reviere || !Array.isArray(backupData.reviere)) {
-      return Response.json({ error: 'Backup-Struktur ungültig' }, { status: 400 });
+    if (!backupData) {
+      return Response.json({ error: 'Ungültiges Backup-Format' }, { status: 400 });
     }
 
     // Get user's reviere to verify ownership
@@ -64,15 +59,14 @@ Deno.serve(async (req) => {
 
     // Track restored count
     let restoredCount = 0;
-    const errors = [];
+
+    // If backup has reviere array (old format), use it. Otherwise it's the new format
+    const revieresToRestore = backupData.reviere || [];
 
     // Restore each revier's data
-    for (const revierBackup of backupData.reviere) {
-      const revierId = revierBackup.id;
-
-      // Verify user owns this revier
-      if (!userRevierIds.includes(revierId)) {
-        errors.push(`Keine Berechtigung für Revier ${revierId}`);
+    for (const revierBackup of revieresToRestore) {
+      // Only restore if user has access to this revier
+      if (!userRevierIds.includes(revierBackup.id)) {
         continue;
       }
 
@@ -94,7 +88,7 @@ Deno.serve(async (req) => {
             });
             restoredCount++;
           } catch (e) {
-            errors.push(`Fehler bei Jagdeinrichtung: ${e.message}`);
+            console.error('Fehler bei Jagdeinrichtung:', e);
           }
         }
       }
@@ -119,7 +113,7 @@ Deno.serve(async (req) => {
             });
             restoredCount++;
           } catch (e) {
-            errors.push(`Fehler bei Strecke: ${e.message}`);
+            console.error('Fehler bei Strecke:', e);
           }
         }
       }
@@ -139,7 +133,7 @@ Deno.serve(async (req) => {
             });
             restoredCount++;
           } catch (e) {
-            errors.push(`Fehler bei Wildkammer: ${e.message}`);
+            console.error('Fehler bei Wildkammer:', e);
           }
         }
       }
@@ -157,7 +151,7 @@ Deno.serve(async (req) => {
             });
             restoredCount++;
           } catch (e) {
-            errors.push(`Fehler bei JagdEvent: ${e.message}`);
+            console.error('Fehler bei JagdEvent:', e);
           }
         }
       }
@@ -165,9 +159,7 @@ Deno.serve(async (req) => {
 
     return Response.json({
       success: true,
-      message: `${restoredCount} Einträge wiederhergestellt`,
-      restoredCount,
-      errors: errors.length > 0 ? errors : undefined
+      restoredCount
     });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
