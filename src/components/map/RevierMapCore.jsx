@@ -196,7 +196,7 @@ function StyleControl({ currentStyle, onStyleChange }) {
       {open ? (
         <div className="bg-[#2d2d2d] rounded-xl shadow-lg border border-[#444] overflow-hidden min-w-[140px]">
           <div className={`border-b border-gray-50 flex items-center justify-between ${isMobile ? "px-4 py-3" : "px-3 py-2"}`}>
-            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Kartenstil</span>
+            <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Kartenstil</span>
             <button onClick={() => setOpen(false)}><X className={`text-gray-400 ${isMobile ? "w-5 h-5" : "w-3.5 h-3.5"}`} /></button>
           </div>
           {MAP_STYLES.map((s) => (
@@ -205,9 +205,9 @@ function StyleControl({ currentStyle, onStyleChange }) {
               onClick={() => { onStyleChange(s); setOpen(false); }}
               className={`w-full text-left transition-colors ${
                 isMobile 
-                  ? `px-4 py-3 text-base ${currentStyle.id === s.id ? "bg-[#0F2F23]/5 text-[#0F2F23] font-medium" : "text-gray-700 hover:bg-gray-50"}` 
-                  : `px-3 py-2 text-sm ${currentStyle.id === s.id ? "bg-[#0F2F23]/5 text-[#0F2F23] font-medium" : "text-gray-700 hover:bg-gray-50"}`
-              }`}
+                  ? `px-4 py-3 text-base ${currentStyle.id === s.id ? "text-[#22c55e] font-medium bg-[#22c55e]/10" : "text-gray-300 hover:bg-[#3a3a3a]"}` 
+                  : `px-3 py-2 text-sm ${currentStyle.id === s.id ? "text-[#22c55e] font-medium bg-[#22c55e]/10" : "text-gray-300 hover:bg-[#3a3a3a]"}`
+              }`
             >
               {s.label}
             </button>
