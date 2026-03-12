@@ -270,7 +270,7 @@ export default function EinrichtungForm({ isOpen, onClose, revierId, tenantId, l
               className="flex-1 bg-[#22c55e] text-black hover:bg-[#16a34a]"
             >
               {mutation.isPending && <Loader2 className="w-3 h-3 mr-1 animate-spin" />}
-              Speichern
+              {einrichtung ? "Aktualisieren" : "Speichern"}
             </Button>
           </div>
         </form>
