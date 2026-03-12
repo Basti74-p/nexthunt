@@ -325,7 +325,7 @@ export default function RevierMapCore({
         zoom={zoom}
         style={{ height: "100%", width: "100%" }}
         zoomControl={false}
-        attributionControl={true}
+        attributionControl={false}
       >
         <TileLayer key={mapStyle.id} url={mapStyle.url} attribution={mapStyle.attribution} maxZoom={19} />
         <ZoomControl position="bottomright" />
