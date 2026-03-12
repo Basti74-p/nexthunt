@@ -60,35 +60,7 @@ export default function MobileMap() {
         </RevierMapCore>
       </div>
 
-      {/* ── OBEN: Revier-Picker (rechts neben der Suchbox von RevierMapCore) ── */}
-      {reviere.length > 1 && (
-        <div className="absolute top-4 left-16 z-[1002]">
-          <button
-            onClick={() => setShowRevierPicker(!showRevierPicker)}
-            className="flex items-center gap-1.5 bg-white rounded-xl shadow-md px-3 h-12 text-sm font-medium text-gray-800 border border-gray-100 active:scale-95 transition-transform"
-          >
-            {selectedRevier.name}
-            <ChevronDown className="w-4 h-4 text-gray-500" />
-          </button>
-          {showRevierPicker && (
-            <div className="mt-1 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden min-w-[160px]">
-              {reviere.map(r => (
-                <button
-                  key={r.id}
-                  onClick={() => { setSelectedRevierId(r.id); setShowRevierPicker(false); }}
-                  className={`w-full text-left px-4 py-3 text-sm transition-colors ${
-                    r.id === selectedRevier.id
-                      ? "bg-[#0F2F23]/5 text-[#0F2F23] font-medium"
-                      : "text-gray-700 hover:bg-gray-50"
-                  }`}
-                >
-                  {r.name}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+
 
 
     </div>
