@@ -318,11 +318,12 @@ function GeolocationControl({ onLocate }) {
 }
 
 // Weather button
-function WeatherControl() {
+function WeatherControl({ onWeatherClick }) {
   const isMobile = useMobile();
 
   return (
     <button
+      onClick={onWeatherClick}
       className={`absolute z-[1000] rounded-xl shadow-md flex items-center justify-center transition-colors border bg-[#2d2d2d] border-[#444] hover:bg-[#3a3a3a] ${
         isMobile ? "top-36 right-4 w-12 h-12" : "hidden"
       }`}
@@ -362,6 +363,7 @@ export default function RevierMapCore({
   className = "",
   onMapClick,
   onUserLocation,
+  onWeatherButtonClick,
 }) {
   const [mapStyle, setMapStyle] = useState(() => {
     const saved = localStorage.getItem("nh_map_style");
@@ -428,7 +430,7 @@ export default function RevierMapCore({
       <SearchControl onResult={handleSearchResult} />
       <StyleControl currentStyle={mapStyle} onStyleChange={handleStyleChange} />
       <GeolocationControl onLocate={handleLocate} />
-      <WeatherControl />
+      <WeatherControl onWeatherClick={onWeatherButtonClick} />
     </div>
   );
 }
