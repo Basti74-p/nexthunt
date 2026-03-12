@@ -224,6 +224,13 @@ export default function Jagdeinrichtungen() {
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
                       <button
+                        onClick={(ev) => { ev.stopPropagation(); setDialog({ open: true, einrichtung: e }); }}
+                        className="p-1.5 rounded-lg hover:bg-green-500/20 text-green-400"
+                        title="Bearbeiten"
+                      >
+                        <Pencil className="w-3.5 h-3.5" />
+                      </button>
+                      <button
                         onClick={(ev) => { ev.stopPropagation(); setMoveRevierTarget(e.revier_id); setMoveDialog({ open: true, einrichtung: e }); }}
                         className="p-1.5 rounded-lg hover:bg-blue-500/20 text-blue-400"
                         title="In anderes Revier verschieben"
