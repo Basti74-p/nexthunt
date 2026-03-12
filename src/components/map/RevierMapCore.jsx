@@ -135,16 +135,16 @@ function SearchControl({ onResult }) {
       {!open ? (
         <button
           onClick={() => setOpen(true)}
-          className={`bg-white rounded-xl shadow-md flex items-center justify-center hover:bg-gray-50 transition-colors border border-gray-100 ${
+          className={`bg-[#2d2d2d] rounded-xl shadow-md flex items-center justify-center hover:bg-[#3a3a3a] transition-colors border border-[#444] ${
             isMobile ? "w-12 h-12" : "w-10 h-10"
           }`}
           title="Ort suchen"
         >
-          <Search className={`text-gray-600 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />
+          <Search className={`text-gray-300 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />
         </button>
       ) : (
-        <div className={`bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden ${isMobile ? "fixed inset-x-4 top-24 w-auto" : "w-80"}`}>
-          <div className={`flex items-center gap-2 border-b border-gray-50 ${isMobile ? "px-4 py-3" : "px-3 py-2.5"}`}>
+        <div className={`bg-[#2d2d2d] rounded-xl shadow-lg border border-[#444] overflow-hidden ${isMobile ? "fixed inset-x-4 top-24 w-auto" : "w-80"}`}>
+          <div className={`flex items-center gap-2 border-b border-[#3a3a3a] ${isMobile ? "px-4 py-3" : "px-3 py-2.5"}`}>
             {loading ? <Loader2 className={`text-gray-400 animate-spin flex-shrink-0 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} /> : <Search className={`text-gray-400 flex-shrink-0 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />}
             <input
               ref={inputRef}
@@ -152,15 +152,15 @@ function SearchControl({ onResult }) {
               onChange={handleChange}
               onKeyDown={handleKey}
               placeholder="Ort, Adresse, Waldgebiet..."
-              className={`flex-1 outline-none text-gray-900 placeholder:text-gray-400 bg-transparent ${isMobile ? "text-base" : "text-sm"}`}
+              className={`flex-1 outline-none text-gray-100 placeholder:text-gray-500 bg-transparent ${isMobile ? "text-base" : "text-sm"}`}
             />
             {query && (
               <button onClick={() => { setQuery(""); setResults([]); inputRef.current?.focus(); }}>
-                <X className={`text-gray-400 hover:text-gray-600 ${isMobile ? "w-5 h-5" : "w-3.5 h-3.5"}`} />
+                <X className={`text-gray-400 hover:text-gray-200 ${isMobile ? "w-5 h-5" : "w-3.5 h-3.5"}`} />
               </button>
             )}
             <button onClick={() => setOpen(false)} className="ml-1">
-              <X className={`text-gray-300 hover:text-gray-500 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />
+              <X className={`text-gray-500 hover:text-gray-300 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />
             </button>
           </div>
           {results.length > 0 && (
@@ -168,21 +168,18 @@ function SearchControl({ onResult }) {
               {results.map((r) => (
                 <button
                   key={r.place_id}
-                  className={`w-full text-left hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0 ${isMobile ? "px-4 py-3" : "px-3 py-2.5"}`}
+                  className={`w-full text-left hover:bg-[#3a3a3a] transition-colors border-b border-[#3a3a3a] last:border-0 ${isMobile ? "px-4 py-3" : "px-3 py-2.5"}`}
                   onClick={() => handleSelect(r)}
                 >
-                  <div className={`text-gray-800 font-medium truncate ${isMobile ? "text-base" : "text-sm"}`}>{formatLabel(r)}</div>
-                  <div className={`text-gray-400 truncate mt-0.5 ${isMobile ? "text-sm" : "text-xs"}`}>{r.display_name}</div>
+                  <div className={`text-gray-100 font-medium truncate ${isMobile ? "text-base" : "text-sm"}`}>{formatLabel(r)}</div>
+                  <div className={`text-gray-500 truncate mt-0.5 ${isMobile ? "text-sm" : "text-xs"}`}>{r.display_name}</div>
                 </button>
               ))}
             </div>
           )}
           {!loading && query.length >= 2 && results.length === 0 && (
-            <div className={`text-gray-400 text-center ${isMobile ? "px-4 py-4 text-base" : "px-3 py-3 text-sm"}`}>Keine Ergebnisse</div>
+            <div className={`text-gray-500 text-center ${isMobile ? "px-4 py-4 text-base" : "px-3 py-3 text-sm"}`}>Keine Ergebnisse</div>
           )}
-          <div className={`text-gray-300 text-right border-t border-gray-50 ${isMobile ? "px-4 py-2 text-xs" : "px-3 py-1.5 text-[10px]"}`}>
-            © OpenStreetMap / Nominatim
-          </div>
         </div>
       )}
     </div>
