@@ -143,20 +143,36 @@ export default function EinrichtungDialog({ isOpen, onClose, einrichtung, revier
                 ))}
               </div>
             )}
-            <label className="block">
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={handlePhotoUpload}
-                disabled={uploading}
-                className="hidden"
-              />
-              <div className="border-2 border-dashed border-[#3a3a3a] rounded-lg p-3 text-center cursor-pointer hover:border-[#22c55e] transition-colors">
-                <Upload className="w-4 h-4 text-gray-500 mx-auto mb-1" />
-                <p className="text-xs text-gray-400">{uploading ? "Wird hochgeladen..." : "Klick zum Hochladen"}</p>
-              </div>
-            </label>
+            <div className="flex gap-2">
+              <label className="flex-1">
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  onChange={handlePhotoUpload}
+                  disabled={uploading}
+                  className="hidden"
+                />
+                <div className="border-2 border-dashed border-[#3a3a3a] rounded-lg p-3 text-center cursor-pointer hover:border-[#22c55e] transition-colors">
+                  <Upload className="w-4 h-4 text-gray-500 mx-auto mb-1" />
+                  <p className="text-xs text-gray-400">{uploading ? "Wird hochgeladen..." : "📷 Foto"}</p>
+                </div>
+              </label>
+              <label className="flex-1">
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handlePhotoUpload}
+                  disabled={uploading}
+                  className="hidden"
+                />
+                <div className="border-2 border-dashed border-[#3a3a3a] rounded-lg p-3 text-center cursor-pointer hover:border-[#22c55e] transition-colors">
+                  <Upload className="w-4 h-4 text-gray-500 mx-auto mb-1" />
+                  <p className="text-xs text-gray-400">{uploading ? "Wird hochgeladen..." : "📁 Datei"}</p>
+                </div>
+              </label>
+            </div>
           </div>
 
           <div className="flex gap-2">
