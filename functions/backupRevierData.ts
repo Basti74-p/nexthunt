@@ -9,16 +9,30 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // DEBUG: Get user's reviere (auto-filtered to user's tenant via base44)
-    let reviere = await base44.entities.Revier.list();
+    // Get user's tenant membership to determine their primary tenant
+    const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({
+      user_email: user.email
+    });
     
-    // Log which tenant this user is mapped to
-    const tenantIdFromReviere = reviere.length > 0 ? reviere[0].tenant_id : 'unknown';
+    if (!tenantMembers || tenantMembers.length === 0) {
+      return Response.json({ error: 'User has no tenant membership' }, { status: 403 });
+    }
+    
+    // Use first tenant membership as primary tenant
+    const primaryTenant = tenantMembers[0];
+    const userTenantId = primaryTenant.tenant_id;
+    
+    // Get ONLY reviere from user's primary tenant
+    let reviere = await base44.asServiceRole.entities.Revier.filter({
+      tenant_id: userTenantId
+    });
+    
     const debugInfo = {
       user_email: user.email,
+      user_tenant_id: userTenantId,
       reviere_count: reviere.length,
-      tenant_id_from_reviere: tenantIdFromReviere,
-      revier_names: reviere.map(r => r.name)
+      revier_names: reviere.map(r => r.name),
+      all_tenant_memberships: tenantMembers.length
     };
     
     // For tenant members with restricted access, filter by allowed_reviere
