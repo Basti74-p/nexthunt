@@ -192,7 +192,7 @@ function StyleControl({ currentStyle, onStyleChange }) {
   const isMobile = useMobile();
   
   return (
-    <div className={`absolute z-[1000] ${isMobile ? "top-20 right-4" : "top-3 right-3"}`}>
+    <div className={`absolute z-[1000] ${isMobile ? "top-4 right-4" : "top-3 right-3"}`}>
       {open ? (
         <div className="bg-[#2d2d2d] rounded-xl shadow-lg border border-[#444] overflow-hidden min-w-[140px]">
           <div className={`border-b border-gray-50 flex items-center justify-between ${isMobile ? "px-4 py-3" : "px-3 py-2"}`}>
