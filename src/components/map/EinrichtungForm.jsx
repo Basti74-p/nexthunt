@@ -106,12 +106,16 @@ export default function EinrichtungForm({ isOpen, onClose, revierId, tenantId, l
   };
 
   const mutation = useMutation({
-    mutationFn: (data) =>
-      base44.entities.Jagdeinrichtung.create({
+    mutationFn: (data) => {
+      if (einrichtung?.id) {
+        return base44.entities.Jagdeinrichtung.update(einrichtung.id, data);
+      }
+      return base44.entities.Jagdeinrichtung.create({
         ...data,
         tenant_id: tenantId,
         revier_id: revierId,
-      }),
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(["einrichtungen", revierId]);
       setFormData({ name: "", type: "", condition: "gut", orientation: "", notes: "", latitude: lat || "", longitude: lng || "", photos: [] });
