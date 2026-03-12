@@ -116,17 +116,25 @@ export default function EinrichtungenLayer({ items = [], onDelete, onEdit }) {
               </div>
             )}
 
-            {/* Löschen Button */}
-            {onDelete && (
-              <div style={{ marginTop: 8 }}>
+            {/* Action Buttons */}
+            <div style={{ marginTop: 8, display: "flex", gap: 6 }}>
+              {onEdit && (
+                <button
+                  onClick={() => { onEdit(i); }}
+                  style={{ background: "#3b82f6", color: "white", border: "none", borderRadius: 6, padding: "4px 10px", fontSize: 12, cursor: "pointer", flex: 1 }}
+                >
+                  ✏️ Bearbeiten
+                </button>
+              )}
+              {onDelete && (
                 <button
                   onClick={() => { if (window.confirm(`"${i.name}" wirklich löschen?`)) onDelete(i.id); }}
-                  style={{ background: "#dc2626", color: "white", border: "none", borderRadius: 6, padding: "4px 10px", fontSize: 12, cursor: "pointer", width: "100%" }}
+                  style={{ background: "#dc2626", color: "white", border: "none", borderRadius: 6, padding: "4px 10px", fontSize: 12, cursor: "pointer", flex: 1 }}
                 >
                   🗑 Löschen
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </Popup>
       </Marker>
