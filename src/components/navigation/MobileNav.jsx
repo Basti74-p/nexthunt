@@ -38,11 +38,13 @@ export default function MobileNav({ currentPage }) {
 
   return (
     <>
-      {/* Top bar */}
-      <MobileTopBar 
-        title={TAB_NAMES[currentPage] || "NextHunt"} 
-        showBackButton={false}
-      />
+      {/* Top bar – auf der Karte ausblenden (Vollbild) */}
+      {currentPage !== "MobileMap" && (
+        <MobileTopBar 
+          title={TAB_NAMES[currentPage] || "NextHunt"} 
+          showBackButton={false}
+        />
+      )}
 
       {/* Bottom tabs */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 z-50 flex justify-around px-2 py-2 safe-area-pb select-none">

@@ -53,7 +53,7 @@ export default function MobileMap() {
 
   if (!selectedRevier) {
     return (
-      <div className="fixed inset-0 top-14 bottom-20 bg-[#2d2d2d] flex items-center justify-center">
+      <div className="fixed inset-0 top-0 bottom-20 bg-[#2d2d2d] flex items-center justify-center">
         <p className="text-gray-400">Kein Revier verfügbar</p>
       </div>
     );
@@ -61,7 +61,7 @@ export default function MobileMap() {
 
   return (
     // Vollbild: von Top-Bar (top-14) bis Bottom-Nav (bottom-20)
-    <div className="fixed inset-0 top-14 bottom-20 z-10">
+    <div className="fixed inset-0 top-0 bottom-20 z-10">
       {/* Karte füllt den gesamten Bereich */}
       <RevierMapCore
         revier={selectedRevier}
