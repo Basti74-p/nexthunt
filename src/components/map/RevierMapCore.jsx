@@ -268,31 +268,50 @@ function StyleControl({ currentStyle, onStyleChange }) {
 // Geolocation button
 function GeolocationControl({ onLocate }) {
   const [loading, setLoading] = useState(false);
+  const [active, setActive] = useState(false);
+  const watchIdRef = useRef(null);
   const isMobile = useMobile();
-  
+
+  const stopWatch = () => {
+    if (watchIdRef.current !== null) {
+      navigator.geolocation.clearWatch(watchIdRef.current);
+      watchIdRef.current = null;
+    }
+    setActive(false);
+  };
+
   const handleClick = () => {
+    if (active) {
+      stopWatch();
+      return;
+    }
     setLoading(true);
-    navigator.geolocation.getCurrentPosition(
+    watchIdRef.current = navigator.geolocation.watchPosition(
       (pos) => {
-        onLocate([pos.coords.latitude, pos.coords.longitude], pos.coords.heading);
         setLoading(false);
+        setActive(true);
+        onLocate([pos.coords.latitude, pos.coords.longitude], pos.coords.heading);
       },
-      () => setLoading(false),
-      { enableHighAccuracy: true }
+      () => { setLoading(false); setActive(false); },
+      { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
     );
   };
-  
+
+  useEffect(() => () => stopWatch(), []);
+
   return (
     <button
       onClick={handleClick}
-      className={`absolute z-[1000] bg-[#2d2d2d] rounded-xl shadow-md flex items-center justify-center hover:bg-[#3a3a3a] transition-colors border border-[#444] ${
-        isMobile 
-          ? "top-20 right-4 w-12 h-12" 
-          : "bottom-6 right-3 w-10 h-10"
-      }`}
-      title="Meinen Standort anzeigen"
+      className={`absolute z-[1000] rounded-xl shadow-md flex items-center justify-center transition-colors border ${
+        active
+          ? "bg-[#22c55e]/20 border-[#22c55e]/60 hover:bg-[#22c55e]/30"
+          : "bg-[#2d2d2d] border-[#444] hover:bg-[#3a3a3a]"
+      } ${isMobile ? "top-20 right-4 w-12 h-12" : "bottom-6 right-3 w-10 h-10"}`}
+      title={active ? "Standortverfolgung stoppen" : "Meinen Standort anzeigen"}
     >
-      {loading ? <Loader2 className={`text-[#22c55e] animate-spin ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} /> : <Locate className={`text-gray-300 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />}
+      {loading
+        ? <Loader2 className={`text-[#22c55e] animate-spin ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />
+        : <Locate className={`${active ? "text-[#22c55e]" : "text-gray-300"} ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />}
     </button>
   );
 }
