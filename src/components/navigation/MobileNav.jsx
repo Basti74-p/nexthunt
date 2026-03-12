@@ -51,8 +51,25 @@ export default function MobileNav({ currentPage }) {
 
       {/* Bottom tabs */}
       <nav className="fixed bottom-0 left-0 right-0 bg-[#1e1e1e] border-t border-[#3a3a3a] z-50 flex justify-around px-2 py-2 safe-area-pb select-none">
-        {tabs.map(({ name, icon: Icon, page }) => {
+        {tabs.map(({ name, icon: Icon, page, action }) => {
           const isActive = currentPage === page;
+          const isWeather = page === "weather";
+
+          if (isWeather) {
+            return (
+              <button
+                key={page}
+                onClick={action}
+                className={`flex flex-col items-center gap-1.5 px-3 py-2 rounded-xl transition-all select-none ${
+                  showWeather ? "text-[#22c55e]" : "text-gray-500"
+                }`}
+              >
+                <Icon className={`w-5 h-5 ${showWeather ? "stroke-[2.5]" : "stroke-[1.5]"}`} />
+                <span className={`text-[10px] font-medium ${showWeather ? "text-[#22c55e]" : "text-gray-500"}`}>{name}</span>
+              </button>
+            );
+          }
+
           return (
             <Link
               key={page}
