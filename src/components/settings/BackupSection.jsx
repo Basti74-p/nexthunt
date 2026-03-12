@@ -36,7 +36,7 @@ export default function BackupSection() {
       
       <div className="space-y-4">
         <p className="text-sm text-gray-600">
-          Erstellen Sie manuelle Backups aller Revierdaten. Automatische Backups werden täglich um 00:00 Uhr erstellt und im sicheren Base44-Dateispeicher gespeichert.
+          Erstellen Sie manuelle Backups aller Revierdaten. Automatische Backups werden täglich um 00:00 Uhr erstellt und sicher auf dem NextHunt Server gespeichert.
         </p>
 
         <Button
@@ -78,7 +78,7 @@ export default function BackupSection() {
           <p className="font-medium">ℹ️ Automatische Backups:</p>
           <p>• Täglich um 00:00 Uhr (Berlin-Zeit)</p>
           <p>• Alle Revierdaten (Jagdeinrichtungen, Strecke, Wildkammer, etc.)</p>
-          <p>• Sichere Speicherung außerhalb des Projekts</p>
+          <p>• Sichere Speicherung auf dem NextHunt Server</p>
         </div>
       </div>
     </div>
