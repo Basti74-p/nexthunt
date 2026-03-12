@@ -65,6 +65,12 @@ export default function SystemAdminTenants() {
     enabled: isPlatformAdmin,
   });
 
+  const { data: allUsers = [] } = useQuery({
+    queryKey: ["sa-all-users"],
+    queryFn: () => base44.entities.User.list("-created_date", 500),
+    enabled: isPlatformAdmin,
+  });
+
   const saveMutation = useMutation({
     mutationFn: (data) =>
       editing?.id
