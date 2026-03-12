@@ -45,6 +45,7 @@ export default function SystemAdminTenants() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [activeTab, setActiveTab] = useState("tenants");
+  const [deleteConfirm, setDeleteConfirm] = useState(null);
   const qc = useQueryClient();
 
   const { data: tenants = [], isLoading } = useQuery({
