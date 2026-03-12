@@ -211,8 +211,8 @@ export default function JagdWetterWidget({ lat, lng, onWeatherLoaded }) {
 
   return (
     <div
-      className="absolute z-[1000] bg-[#161616]/96 backdrop-blur-md border border-[#2e2e2e] rounded-2xl shadow-2xl overflow-hidden"
-      style={{ bottom: 16, left: 16, width: expanded ? 340 : 180, transition: "width 0.3s ease" }}
+      className="fixed z-[1000] bg-[#161616]/96 backdrop-blur-md border border-[#2e2e2e] rounded-2xl shadow-2xl overflow-hidden"
+      style={{ bottom: 88, left: 16, width: expanded ? 340 : 180, transition: "width 0.3s ease" }}
     >
       {/* Header */}
       <button
