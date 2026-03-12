@@ -332,6 +332,7 @@ export default function RevierMapCore({
   });
   const [mapInstance, setMapInstance] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
+  const [userHeading, setUserHeading] = useState(null);
   const [searchResult, setSearchResult] = useState(null);
 
   const defaultCenter = center || [51.1657, 10.4515]; // Germany center fallback
@@ -342,8 +343,9 @@ export default function RevierMapCore({
     localStorage.setItem("nh_map_style", style.id);
   };
 
-  const handleLocate = (latlng) => {
+  const handleLocate = (latlng, heading) => {
     setUserLocation(latlng);
+    setUserHeading(heading ?? null);
     setFlyTarget({ center: latlng, zoom: 15 });
   };
 
