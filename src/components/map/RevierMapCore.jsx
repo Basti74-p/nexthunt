@@ -319,7 +319,7 @@ export default function RevierMapCore({
   };
 
   return (
-    <div className={`relative rounded-2xl overflow-hidden border border-gray-100 shadow-sm ${className}`} style={{ height }}>
+    <div className={`relative overflow-hidden ${className.includes('!rounded-none') ? '' : 'rounded-2xl border border-gray-100 shadow-sm'} ${className}`} style={{ height }}>
       <MapContainer
         center={defaultCenter}
         zoom={zoom}
