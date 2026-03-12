@@ -263,7 +263,7 @@ export default function JagdWetterWidget({ lat, lng, onWeatherLoaded }) {
                     </div>
                     <div className="text-right">
                       <div className="text-lg font-bold text-orange-300">{weather.temp}°C</div>
-                      <div className="text-[11px] text-gray-500">{weather.humidity}% rF</div>
+                      <div className="text-[11px] text-gray-300">{weather.humidity}% rF</div>
                     </div>
                   </div>
 
