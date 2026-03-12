@@ -9,28 +9,23 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get user's tenant memberships to find allowed reviere
+    // Get user's tenant to backup only their reviere
     const userEmail = user.email;
-    let allowedReviere = null;
+    const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: userEmail });
     
-    try {
-      const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: userEmail });
-      if (tenantMembers && tenantMembers.length > 0) {
-        const member = tenantMembers[0];
-        // If user has restricted allowed_reviere list, store it for filtering
-        if (member.allowed_reviere && member.allowed_reviere.length > 0) {
-          allowedReviere = member.allowed_reviere;
-        }
-      }
-    } catch (err) {
-      // If TenantMember lookup fails, continue with no restrictions
+    if (!tenantMembers || tenantMembers.length === 0) {
+      return Response.json({ error: 'Keine Berechtigung für Backups' }, { status: 403 });
     }
+
+    const member = tenantMembers[0];
+    const userTenantId = member.tenant_id;
+    let allowedReviere = member.allowed_reviere;
     
-    // Get all accessible reviere for the user
-    let reviere = await base44.entities.Revier.list();
+    // Get reviere for user's tenant
+    let reviere = await base44.asServiceRole.entities.Revier.filter({ tenant_id: userTenantId });
     
-    // Filter by allowed_reviere if restrictions apply
-    if (allowedReviere) {
+    // Filter by allowed_reviere if user has restricted access
+    if (allowedReviere && allowedReviere.length > 0) {
       reviere = reviere.filter(r => allowedReviere.includes(r.id));
     }
     
