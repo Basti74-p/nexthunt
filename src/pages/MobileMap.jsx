@@ -5,6 +5,7 @@ import { useAuth } from "@/components/hooks/useAuth";
 import RevierMapCore from "@/components/map/RevierMapCore";
 import EinrichtungenLayer from "@/components/map/layers/EinrichtungenLayer";
 import WildmanagementLayer from "@/components/map/layers/WildmanagementLayer";
+import BoundaryLayer from "@/components/map/layers/BoundaryLayer";
 import { ChevronDown } from "lucide-react";
 
 export default function MobileMap() {

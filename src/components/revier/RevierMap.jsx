@@ -8,6 +8,7 @@ import { base44 } from "@/api/base44Client";
 import RevierMapCore from "@/components/map/RevierMapCore";
 import EinrichtungenLayer from "@/components/map/layers/EinrichtungenLayer";
 import WildmanagementLayer from "@/components/map/layers/WildmanagementLayer";
+import BoundaryLayer from "@/components/map/layers/BoundaryLayer";
 import { useMobile } from "@/components/hooks/useMobile";
 import { Building2, Eye, Map as MapIcon } from "lucide-react";
 
