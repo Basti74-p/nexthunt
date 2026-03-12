@@ -29,7 +29,7 @@ export default function MobileNav({ currentPage }) {
     { name: "Jagd", icon: Calendar, page: "JagdkalenderMain", feature: "feature_kalender" },
     { name: "Monitor", icon: Radio, page: "MobileMonitor", feature: "feature_driven_hunt" },
     { name: "Wetter", icon: Wind, page: "MobileJagdWetter", feature: null },
-  ].filter(t => tenantFeatures[t.feature] !== false || t.feature === null);
+  ].filter(t => t.feature === null || tenantFeatures[t.feature] !== false);
 
   // Track tab switches for history management
   useEffect(() => {
