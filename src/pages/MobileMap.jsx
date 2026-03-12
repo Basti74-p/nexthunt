@@ -51,24 +51,31 @@ export default function MobileMap() {
     );
   }
 
+  // Extract map center for weather (use revier center or Germany fallback)
+  const mapLat = userPos?.[0] ?? 51.1657;
+  const mapLng = userPos?.[1] ?? 10.4515;
+
   return (
     <div className="fixed inset-0 bottom-20 z-10">
-      {/* Karte füllt exakt den ganzen Bereich */}
       <div className="absolute inset-0" style={{ borderRadius: 0 }}>
         <RevierMapCore
           revier={selectedRevier}
           height="100%"
           className="!rounded-none !border-0 !shadow-none"
+          onUserLocation={(pos) => setUserPos(pos)}
         >
           {reviere.map((r, i) => <BoundaryLayer key={r.id} revier={r} color={REVIER_COLORS[i % REVIER_COLORS.length]} />)}
           {activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} />}
           {activeLayers.has("sichtungen") && <WildmanagementLayer items={wildmanagement} />}
+          {windData.deg !== null && <WindLayer windDeg={windData.deg} windSpeed={windData.speed} />}
         </RevierMapCore>
       </div>
 
-
-
-
+      <JagdWetterWidget
+        lat={mapLat}
+        lng={mapLng}
+        onWeatherLoaded={(deg, speed) => setWindData({ deg, speed })}
+      />
     </div>
   );
 }
