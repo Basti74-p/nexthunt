@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { useAuth } from '@/lib/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Loader2, Download, Upload, CheckCircle2, AlertCircle, Trash2 } from 'lucide-react';
 
 export default function BackupSection() {
+  const { tenant } = useAuth();
   const [loading, setLoading] = useState(false);
   const [restoreLoading, setRestoreLoading] = useState(false);
   const [backupsLoading, setBackupsLoading] = useState(true);
