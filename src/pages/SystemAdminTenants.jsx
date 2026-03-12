@@ -85,6 +85,13 @@ export default function SystemAdminTenants() {
 
   if (!isPlatformAdmin) return <AccessDenied />;
 
+  // Users without any tenant association
+  const tenantEmails = new Set([
+    ...tenants.map(t => t.contact_email).filter(Boolean),
+    ...members.map(m => m.user_email).filter(Boolean),
+  ]);
+  const usersWithoutTenant = allUsers.filter(u => !tenantEmails.has(u.email) && u.role !== "admin" && u.role !== "platform_admin");
+
   const filtered = tenants.filter(
     (t) =>
       t.name?.toLowerCase().includes(search.toLowerCase()) ||
