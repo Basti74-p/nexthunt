@@ -194,7 +194,7 @@ function StyleControl({ currentStyle, onStyleChange }) {
   return (
     <div className={`absolute z-[1000] ${isMobile ? "top-20 right-4" : "top-3 right-3"}`}>
       {open ? (
-        <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden min-w-[140px]">
+        <div className="bg-[#2d2d2d] rounded-xl shadow-lg border border-[#444] overflow-hidden min-w-[140px]">
           <div className={`border-b border-gray-50 flex items-center justify-between ${isMobile ? "px-4 py-3" : "px-3 py-2"}`}>
             <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Kartenstil</span>
             <button onClick={() => setOpen(false)}><X className={`text-gray-400 ${isMobile ? "w-5 h-5" : "w-3.5 h-3.5"}`} /></button>
