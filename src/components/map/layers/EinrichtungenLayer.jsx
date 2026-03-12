@@ -44,6 +44,20 @@ const TYPE_LABELS = {
   fanganlage: "Fanganlage",
 };
 
+const CONDITION_LABELS = {
+  gut: "Gut",
+  maessig: "Mäßig",
+  schlecht: "Schlecht",
+  neu: "Neu",
+};
+
+const CONDITION_COLORS = {
+  gut: "#15803d",
+  maessig: "#f59e0b",
+  schlecht: "#dc2626",
+  neu: "#3b82f6",
+};
+
 export default function EinrichtungenLayer({ items = [], onDelete }) {
   return items
     .filter(i => i.latitude && i.longitude)
