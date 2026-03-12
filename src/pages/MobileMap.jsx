@@ -7,6 +7,7 @@ import EinrichtungenLayer from "@/components/map/layers/EinrichtungenLayer";
 import WildmanagementLayer from "@/components/map/layers/WildmanagementLayer";
 import BoundaryLayer, { REVIER_COLORS } from "@/components/map/layers/BoundaryLayer";
 import WindLayer from "@/components/map/layers/WindLayer";
+import JagdWetterWidget from "@/components/map/JagdWetterWidget";
 
 import { ChevronDown } from "lucide-react";
 
@@ -17,6 +18,7 @@ export default function MobileMap() {
   const [showRevierPicker, setShowRevierPicker] = useState(false);
   const [windData, setWindData] = useState({ deg: null, speed: 0 });
   const [userPos, setUserPos] = useState(null);
+  const [showWeather, setShowWeather] = useState(false);
 
   const { data: reviere = [] } = useQuery({
     queryKey: ["reviere", tenant?.id],
@@ -63,6 +65,7 @@ export default function MobileMap() {
           height="100%"
           className="!rounded-none !border-0 !shadow-none"
           onUserLocation={(pos) => setUserPos(pos)}
+          onWeatherButtonClick={() => setShowWeather(true)}
         >
           {reviere.map((r, i) => <BoundaryLayer key={r.id} revier={r} color={REVIER_COLORS[i % REVIER_COLORS.length]} />)}
           {activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} />}
@@ -71,7 +74,13 @@ export default function MobileMap() {
         </RevierMapCore>
       </div>
 
-
+      {showWeather && (
+        <JagdWetterWidget
+          lat={userPos?.[0] ?? 51.1657}
+          lng={userPos?.[1] ?? 10.4515}
+          onClose={() => setShowWeather(false)}
+        />
+      )}
     </div>
   );
 }
