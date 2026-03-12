@@ -23,6 +23,7 @@ export default function RevierMap({ revier }) {
   const [activeLayers, setActiveLayers] = useState(new Set(["einrichtungen", "sichtungen"]));
   const [showEinrichtungForm, setShowEinrichtungForm] = useState(false);
   const [clickedCoords, setClickedCoords] = useState(null);
+  const [selectedEinrichtung, setSelectedEinrichtung] = useState(null);
   const isMobile = useMobile();
   const queryClient = useQueryClient();
 
