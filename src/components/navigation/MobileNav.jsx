@@ -19,7 +19,7 @@ export default function MobileNav({ currentPage }) {
   const { tenantFeatures } = useAuth();
   const [tabHistories, setTabHistories] = useState({});
 
-  const [showWeather, setShowWeather] = useState(false);
+
 
   const tabs = [
     { name: "Karte", icon: Map, page: "MobileMap", feature: "feature_map" },
@@ -28,7 +28,7 @@ export default function MobileNav({ currentPage }) {
     { name: "Aufgaben", icon: ListTodo, page: "MobileTasks", feature: "feature_tasks" },
     { name: "Jagd", icon: Calendar, page: "JagdkalenderMain", feature: "feature_kalender" },
     { name: "Monitor", icon: Radio, page: "MobileMonitor", feature: "feature_driven_hunt" },
-    { name: "Wetter", icon: Wind, page: "weather", feature: null, action: () => setShowWeather(!showWeather) },
+    { name: "Wetter", icon: Wind, page: "MobileJagdWetter", feature: null },
   ].filter(t => tenantFeatures[t.feature] !== false || t.feature === null);
 
   // Track tab switches for history management
@@ -51,38 +51,21 @@ export default function MobileNav({ currentPage }) {
 
       {/* Bottom tabs */}
       <nav className="fixed bottom-0 left-0 right-0 bg-[#1e1e1e] border-t border-[#3a3a3a] z-50 flex justify-around px-2 py-2 safe-area-pb select-none">
-        {tabs.map(({ name, icon: Icon, page, action }) => {
-          const isActive = currentPage === page;
-          const isWeather = page === "weather";
-
-          if (isWeather) {
+        {tabs.map(({ name, icon: Icon, page }) => {
+            const isActive = currentPage === page;
             return (
-              <button
+              <Link
                 key={page}
-                onClick={action}
+                to={createPageUrl(page)}
                 className={`flex flex-col items-center gap-1.5 px-3 py-2 rounded-xl transition-all select-none ${
-                  showWeather ? "text-[#22c55e]" : "text-gray-500"
+                  isActive ? "text-[#22c55e]" : "text-gray-500"
                 }`}
               >
-                <Icon className={`w-5 h-5 ${showWeather ? "stroke-[2.5]" : "stroke-[1.5]"}`} />
-                <span className={`text-[10px] font-medium ${showWeather ? "text-[#22c55e]" : "text-gray-500"}`}>{name}</span>
-              </button>
+                <Icon className={`w-5 h-5 ${isActive ? "stroke-[2.5]" : "stroke-[1.5]"}`} />
+                <span className={`text-[10px] font-medium ${isActive ? "text-[#22c55e]" : "text-gray-500"}`}>{name}</span>
+              </Link>
             );
-          }
-
-          return (
-            <Link
-              key={page}
-              to={createPageUrl(page)}
-              className={`flex flex-col items-center gap-1.5 px-3 py-2 rounded-xl transition-all select-none ${
-                isActive ? "text-[#22c55e]" : "text-gray-500"
-              }`}
-            >
-              <Icon className={`w-5 h-5 ${isActive ? "stroke-[2.5]" : "stroke-[1.5]"}`} />
-              <span className={`text-[10px] font-medium ${isActive ? "text-[#22c55e]" : "text-gray-500"}`}>{name}</span>
-            </Link>
-          );
-        })}
+          })}
       </nav>
     </>
   );
