@@ -36,13 +36,9 @@ Deno.serve(async (req) => {
     };
     
     // For tenant members with restricted access, filter by allowed_reviere
-    const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: user.email });
-    if (tenantMembers && tenantMembers.length > 0) {
-      const allowedReviere = tenantMembers[0].allowed_reviere;
-      // Filter by allowed_reviere if user has restricted access (non-empty list means restrictions apply)
-      if (allowedReviere && allowedReviere.length > 0) {
-        reviere = reviere.filter(r => allowedReviere.includes(r.id));
-      }
+    const allowedReviere = primaryTenant.allowed_reviere;
+    if (allowedReviere && allowedReviere.length > 0) {
+      reviere = reviere.filter(r => allowedReviere.includes(r.id));
     }
     
     if (!reviere || reviere.length === 0) {
