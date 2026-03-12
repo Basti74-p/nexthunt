@@ -11,7 +11,7 @@ Deno.serve(async (req) => {
 
     // Get user's tenant memberships to find allowed reviere
     const userEmail = user.email;
-    const tenantMembers = await base44.entities.TenantMember.filter({ user_email: userEmail });
+    const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: userEmail });
     
     if (!tenantMembers || tenantMembers.length === 0) {
       return Response.json({ error: 'Keine TenantMember-Zuordnung gefunden' }, { status: 403 });
