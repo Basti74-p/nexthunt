@@ -104,9 +104,8 @@ class WindCanvasLayer extends L.Layer {
     const dy = -Math.cos(rad);
     const pxSpeed = Math.max(0.8, (this.windSpeed / 3.6) * 0.5);
 
-    // Fade previous frame — key for streak effect
-    ctx.fillStyle = "rgba(0,0,0,0.18)";
-    ctx.fillRect(0, 0, w, h);
+    // Clear frame completely — trails are drawn per-segment with alpha
+    ctx.clearRect(0, 0, w, h);
 
     for (let i = 0; i < this._streamlines.length; i++) {
       const s = this._streamlines[i];
