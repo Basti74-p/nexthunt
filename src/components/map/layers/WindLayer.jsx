@@ -60,7 +60,7 @@ class WindCanvasLayer extends L.Layer {
     const dx = Math.sin(rad);
     const dy = -Math.cos(rad);
 
-    const count = Math.floor((w * h) / 5000);
+    const count = Math.floor((w * h) / 2500);
     this._streamlines = [];
 
     for (let i = 0; i < count; i++) {
