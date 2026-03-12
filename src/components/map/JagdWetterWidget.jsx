@@ -102,15 +102,18 @@ function WindRose({ deg, speed }) {
           style={{ animationDuration: "1.5s" }}
         />
       )}
-      <div 
-        className="absolute w-8 h-12 rounded-full opacity-80 flex items-end justify-center pb-1 text-xs font-bold text-white"
-        style={{ 
-          background: color,
+      <div
+        className="absolute flex items-center justify-center"
+        style={{
+          width: 70,
+          height: 70,
           transform: `rotate(${deg}deg)`,
           transition: "transform 1.2s ease",
         }}
       >
-        ↑
+        <svg width="6" height="40" viewBox="0 0 6 40" fill="none">
+          <path d="M3 0 L5 8 L3.5 7 L3.5 40 L2.5 40 L2.5 7 L1 8 Z" fill={color} />
+        </svg>
       </div>
     </div>
   );
