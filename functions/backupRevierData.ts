@@ -81,6 +81,18 @@ Deno.serve(async (req) => {
       file: file
     });
 
+    // Create backup record in database
+    const tenantId = reviere[0]?.tenant_id || '';
+    if (tenantId) {
+      await base44.asServiceRole.entities.Backup.create({
+        tenant_id: tenantId,
+        file_uri: uploadResult.file_uri,
+        reviers_count: reviere.length,
+        file_size: jsonString.length,
+        is_automatic: false
+      });
+    }
+
     return Response.json({
       success: true,
       message: `Backup erfolgreich erstellt`,
