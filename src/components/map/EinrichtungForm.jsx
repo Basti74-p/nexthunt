@@ -40,7 +40,7 @@ const ORIENTATION_OPTIONS = [
   { value: "nw", label: "Nordwest (↖)" },
 ];
 
-export default function EinrichtungForm({ isOpen, onClose, revierId, tenantId, lat, lng }) {
+export default function EinrichtungForm({ isOpen, onClose, revierId, tenantId, lat, lng, einrichtung }) {
   const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     name: "",
@@ -54,16 +54,29 @@ export default function EinrichtungForm({ isOpen, onClose, revierId, tenantId, l
   });
   const [uploadingPhotos, setUploadingPhotos] = useState(false);
 
-  // Sync coordinates when dialog opens with new click position
+  // Sync coordinates when dialog opens with new click position or load existing einrichtung
   React.useEffect(() => {
     if (isOpen) {
-      setFormData(prev => ({
-        ...prev,
-        latitude: lat || "",
-        longitude: lng || "",
-      }));
+      if (einrichtung) {
+        setFormData({
+          name: einrichtung.name || "",
+          type: einrichtung.type || "",
+          condition: einrichtung.condition || "gut",
+          orientation: einrichtung.orientation || "",
+          notes: einrichtung.notes || "",
+          latitude: einrichtung.latitude || "",
+          longitude: einrichtung.longitude || "",
+          photos: einrichtung.photos || [],
+        });
+      } else {
+        setFormData(prev => ({
+          ...prev,
+          latitude: lat || "",
+          longitude: lng || "",
+        }));
+      }
     }
-  }, [isOpen, lat, lng]);
+  }, [isOpen, lat, lng, einrichtung]);
 
   const handlePhotoUpload = async (e) => {
     const files = Array.from(e.target.files || []);
