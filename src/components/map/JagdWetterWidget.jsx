@@ -319,7 +319,7 @@ export default function JagdWetterWidget({ lat, lng, onWeatherLoaded }) {
               {/* 12H PROGNOSE TAB */}
               {tab === "prognose" && (
                 <div className="px-2 py-3">
-                  <div className="text-[10px] text-gray-500 px-1 mb-2 flex items-center gap-1.5">
+                  <div className="text-[10px] text-gray-300 px-1 mb-2 flex items-center gap-1.5">
                     <Clock className="w-3 h-3" />
                     <span>Nächste 12h ·</span>
                     <span className="text-[#22c55e]">■</span>
