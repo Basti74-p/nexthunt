@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
-import { Loader2, Download, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Loader2, Download, Upload, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function BackupSection() {
   const [loading, setLoading] = useState(false);
+  const [restoreLoading, setRestoreLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [messageType, setMessageType] = useState(null);
+  const fileInputRef = useRef(null);
 
   const handleCreateBackup = async () => {
     setLoading(true);
@@ -30,6 +32,30 @@ export default function BackupSection() {
     }
   };
 
+  const handleRestore = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setRestoreLoading(true);
+    setMessage(null);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await base44.functions.invoke('restoreRevierData', formData);
+      setMessageType('success');
+      setMessage(`✓ ${response.data.restoredCount} Einträge wiederhergestellt`);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    } catch (error) {
+      setMessageType('error');
+      setMessage(`✗ Fehler beim Wiederherstellen: ${error.response?.data?.error || error.message}`);
+    } finally {
+      setRestoreLoading(false);
+    }
+  };
+
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
       <h2 className="text-lg font-semibold text-gray-900 mb-4">Backup-Verwaltung</h2>
@@ -39,23 +65,56 @@ export default function BackupSection() {
           Erstellen Sie manuelle Backups aller Revierdaten. Automatische Backups werden täglich um 00:00 Uhr erstellt und sicher auf dem NextHunt Server gespeichert.
         </p>
 
-        <Button
-          onClick={handleCreateBackup}
-          disabled={loading}
-          className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2.5 rounded-lg flex items-center justify-center gap-2"
-        >
-          {loading ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Backup wird erstellt...
-            </>
-          ) : (
-            <>
-              <Download className="w-4 h-4" />
-              Backup jetzt erstellen
-            </>
-          )}
-        </Button>
+        <div className="grid grid-cols-2 gap-3">
+          <Button
+            onClick={handleCreateBackup}
+            disabled={loading}
+            className="bg-green-600 hover:bg-green-700 text-white font-medium py-2.5 rounded-lg flex items-center justify-center gap-2"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Erstelle...
+              </>
+            ) : (
+              <>
+                <Download className="w-4 h-4" />
+                Backup
+              </>
+            )}
+          </Button>
+
+          <div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".json"
+              onChange={handleRestore}
+              disabled={restoreLoading}
+              className="hidden"
+              id="restore-input"
+            />
+            <label htmlFor="restore-input" className="block">
+              <Button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={restoreLoading}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg flex items-center justify-center gap-2 cursor-pointer"
+              >
+                {restoreLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Stelle...
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-4 h-4" />
+                    Restore
+                  </>
+                )}
+              </Button>
+            </label>
+          </div>
+        </div>
 
         {message && (
           <div className={`border rounded-lg p-4 flex items-start gap-3 ${
