@@ -139,11 +139,13 @@ export default function RevierMap({ revier }) {
         onClose={() => {
           setShowEinrichtungForm(false);
           setClickedCoords(null);
+          setSelectedEinrichtung(null);
         }}
         revierId={revier.id}
         tenantId={revier.tenant_id}
         lat={clickedCoords?.lat}
         lng={clickedCoords?.lng}
+        einrichtung={selectedEinrichtung}
       />
 
       {!isMobile && (
