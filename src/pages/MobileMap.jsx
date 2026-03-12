@@ -38,14 +38,6 @@ export default function MobileMap() {
     enabled: !!selectedRevier?.id,
   });
 
-  const toggleLayer = (id) => {
-    setActiveLayers(prev => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
-  };
-
   if (!selectedRevier) {
     return (
       <div className="fixed inset-0 top-0 bottom-20 bg-[#2d2d2d] flex items-center justify-center">
