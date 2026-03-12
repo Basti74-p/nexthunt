@@ -274,7 +274,7 @@ function GeolocationControl({ onLocate }) {
     setLoading(true);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        onLocate([pos.coords.latitude, pos.coords.longitude]);
+        onLocate([pos.coords.latitude, pos.coords.longitude], pos.coords.heading);
         setLoading(false);
       },
       () => setLoading(false),
@@ -370,7 +370,7 @@ export default function RevierMapCore({
         {flyTarget && <MapPanner center={flyTarget.center} zoom={flyTarget.zoom} />}
 
         {userLocation && (
-          <Marker position={userLocation} icon={USER_ICON}>
+          <Marker position={userLocation} icon={createUserIcon(userHeading)}>
             <Popup>Ihr Standort</Popup>
           </Marker>
         )}
