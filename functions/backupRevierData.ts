@@ -82,16 +82,16 @@ Deno.serve(async (req) => {
 
     // Convert to JSON and upload
     const jsonString = JSON.stringify(backupData, null, 2);
-    const jsonBlob = new Blob([jsonString], { type: 'application/json' });
-    
-    // Create filename with date
     const now = new Date();
     const dateStr = now.toISOString().split('T')[0];
     const filename = `revier-backup-${dateStr}.json`;
 
+    // Create a File object from the JSON string
+    const file = new File([jsonString], filename, { type: 'application/json' });
+
     // Upload to private file storage
     const uploadResult = await base44.integrations.Core.UploadPrivateFile({
-      file: jsonBlob
+      file: file
     });
 
     return Response.json({
