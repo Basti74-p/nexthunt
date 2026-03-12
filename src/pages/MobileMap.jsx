@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/components/hooks/useAuth";
 import RevierMapCore from "@/components/map/RevierMapCore";
 import EinrichtungenLayer from "@/components/map/layers/EinrichtungenLayer";
 import WildmanagementLayer from "@/components/map/layers/WildmanagementLayer";
 import BoundaryLayer, { REVIER_COLORS } from "@/components/map/layers/BoundaryLayer";
+import WindLayer from "@/components/map/layers/WindLayer";
+import JagdWetterWidget from "@/components/map/JagdWetterWidget";
 import { ChevronDown } from "lucide-react";
 
 export default function MobileMap() {
