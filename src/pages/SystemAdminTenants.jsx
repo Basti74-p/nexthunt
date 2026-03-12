@@ -44,6 +44,7 @@ export default function SystemAdminTenants() {
   const [search, setSearch] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState(null);
+  const [activeTab, setActiveTab] = useState("tenants");
   const qc = useQueryClient();
 
   const { data: tenants = [], isLoading } = useQuery({
