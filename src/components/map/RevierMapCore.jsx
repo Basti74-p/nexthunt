@@ -250,7 +250,7 @@ function GeolocationControl({ onLocate }) {
       onClick={handleClick}
       className={`absolute z-[1000] bg-[#2d2d2d] rounded-xl shadow-md flex items-center justify-center hover:bg-[#3a3a3a] transition-colors border border-[#444] ${
         isMobile 
-          ? "bottom-20 right-4 w-12 h-12" 
+          ? "top-20 right-4 w-12 h-12" 
           : "bottom-6 right-3 w-10 h-10"
       }`}
       title="Meinen Standort anzeigen"
