@@ -143,7 +143,7 @@ function SearchControl({ onResult }) {
           <Search className={`text-gray-300 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />
         </button>
       ) : (
-        <div className={`bg-[#2d2d2d] rounded-xl shadow-lg border border-[#444] overflow-hidden ${isMobile ? "fixed inset-x-4 top-24 w-auto" : "w-80"}`}>
+        <div className={`bg-[#2d2d2d] rounded-xl shadow-lg border border-[#444] overflow-hidden ${isMobile ? "w-[calc(100vw-2rem)]" : "w-80"}`}>
           <div className={`flex items-center gap-2 border-b border-[#3a3a3a] ${isMobile ? "px-4 py-3" : "px-3 py-2.5"}`}>
             {loading ? <Loader2 className={`text-gray-400 animate-spin flex-shrink-0 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} /> : <Search className={`text-gray-400 flex-shrink-0 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />}
             <input
