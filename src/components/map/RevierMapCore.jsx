@@ -328,7 +328,7 @@ export default function RevierMapCore({
         attributionControl={false}
       >
         <TileLayer key={mapStyle.id} url={mapStyle.url} attribution={mapStyle.attribution} maxZoom={19} />
-        <ZoomControl position="bottomright" />
+
         <MapController onMapReady={setMapInstance} onMapClick={onMapClick} />
 
         {flyTarget && <MapPanner center={flyTarget.center} zoom={flyTarget.zoom} />}
