@@ -18,7 +18,7 @@ export default function MobileMap() {
   const [showRevierPicker, setShowRevierPicker] = useState(false);
   const [windData, setWindData] = useState({ deg: null, speed: 0 });
   const [userPos, setUserPos] = useState(null);
-  const [showWeather, setShowWeather] = useState(true);
+  const [showWeather, setShowWeather] = useState(false);
 
   const { data: reviere = [] } = useQuery({
     queryKey: ["reviere", tenant?.id],
