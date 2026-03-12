@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Building2, Plus, Pencil, Search, Users, LifeBuoy, UserPlus, Clock } from "lucide-react";
+import { Building2, Plus, Pencil, Search, Users, LifeBuoy, UserPlus, Clock, Trash2 } from "lucide-react";
 
 const FEATURES = [
   { key: "feature_dashboard", label: "Dashboard" },
