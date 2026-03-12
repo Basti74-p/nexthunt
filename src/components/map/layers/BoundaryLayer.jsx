@@ -24,7 +24,8 @@ export default function BoundaryLayer({ revier, color }) {
     return null;
   }
 
-  const borderColor = color || "#22c55e";
+  // Prefer color saved in the GeoJSON itself (set by desktop boundary drawer), then prop, then fallback
+  const borderColor = geojson.color || color || "#22c55e";
 
   return (
     <GeoJSON
