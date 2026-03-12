@@ -9,36 +9,8 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get current user's tenant and allowed reviere
-    const userEmail = user.email;
-    
-    // Try to get tenant from user data (may have tenant_id stored)
-    const userData = user;
-    let userTenantId = userData.tenant_id;
-    
-    if (!userTenantId) {
-      // Try to find from TenantMember
-      const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: userEmail });
-      if (tenantMembers && tenantMembers.length > 0) {
-        userTenantId = tenantMembers[0].tenant_id;
-      }
-    }
-    
-    if (!userTenantId) {
-      return Response.json({ error: 'Keine Tenant-Zuordnung gefunden' }, { status: 403 });
-    }
-
-    // Get allowed_reviere if restricted
-    const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: userEmail });
-    const member = tenantMembers?.[0];
-
-    // Get reviere - either all (if allowed_reviere is empty) or filtered by allowed_reviere
-    let reviere = await base44.asServiceRole.entities.Revier.filter({ tenant_id: userTenantId });
-    
-    // Filter by allowed_reviere if the user has restricted access
-    if (member.allowed_reviere && member.allowed_reviere.length > 0) {
-      reviere = reviere.filter(r => member.allowed_reviere.includes(r.id));
-    }
+    // Get all reviere the user has access to (base44 already filters by user context)
+    let reviere = await base44.entities.Revier.list();
     
     const backupData = {
       timestamp: new Date().toISOString(),
