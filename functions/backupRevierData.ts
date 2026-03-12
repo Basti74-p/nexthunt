@@ -87,7 +87,7 @@ Deno.serve(async (req) => {
     });
 
     // Create backup record in database
-    const tenantId = reviere[0]?.tenant_id || '';
+    tenantId = tenantId || reviere[0]?.tenant_id || '';
     if (tenantId) {
       await base44.asServiceRole.entities.Backup.create({
         tenant_id: tenantId,
