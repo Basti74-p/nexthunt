@@ -11,22 +11,32 @@ Deno.serve(async (req) => {
 
     // Get user's tenant to backup only their reviere
     const userEmail = user.email;
-    const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: userEmail });
+    let userTenantId = null;
+    let allowedReviere = null;
     
-    if (!tenantMembers || tenantMembers.length === 0) {
-      return Response.json({ error: 'Keine Berechtigung für Backups' }, { status: 403 });
+    // Try to get tenant from TenantMember
+    try {
+      const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: userEmail });
+      if (tenantMembers && tenantMembers.length > 0) {
+        userTenantId = tenantMembers[0].tenant_id;
+        allowedReviere = tenantMembers[0].allowed_reviere;
+      }
+    } catch (err) {
+      // Fallback: continue without explicit TenantMember
     }
-
-    const member = tenantMembers[0];
-    const userTenantId = member.tenant_id;
-    let allowedReviere = member.allowed_reviere;
     
-    // Get reviere for user's tenant
-    let reviere = await base44.asServiceRole.entities.Revier.filter({ tenant_id: userTenantId });
+    // Fallback: filter reviere by user context if no TenantMember found
+    let reviere = userTenantId 
+      ? await base44.asServiceRole.entities.Revier.filter({ tenant_id: userTenantId })
+      : await base44.entities.Revier.list();
     
     // Filter by allowed_reviere if user has restricted access
     if (allowedReviere && allowedReviere.length > 0) {
       reviere = reviere.filter(r => allowedReviere.includes(r.id));
+    }
+    
+    if (!reviere || reviere.length === 0) {
+      return Response.json({ error: 'Keine Reviere für Backup verfügbar' }, { status: 403 });
     }
     
     const backupData = {
