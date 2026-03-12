@@ -50,12 +50,49 @@ const MAP_STYLES = [
   },
 ];
 
-const USER_ICON = L.divIcon({
-  className: "",
-  html: `<div style="width:16px;height:16px;background:#2563eb;border:3px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(37,99,235,0.5)"></div>`,
-  iconSize: [16, 16],
-  iconAnchor: [8, 8],
-});
+function createUserIcon(heading) {
+  const coneHTML = heading !== null
+    ? `<div style="
+        position:absolute;
+        top:50%;left:50%;
+        width:0;height:0;
+        transform-origin:0 0;
+        transform:translate(-50%,-100%) rotate(${heading}deg);
+        border-left:10px solid transparent;
+        border-right:10px solid transparent;
+        border-bottom:28px solid rgba(37,99,235,0.25);
+        filter:drop-shadow(0 0 4px rgba(37,99,235,0.4));
+        margin-left:0;
+        margin-top:-2px;
+      "></div>`
+    : "";
+  return L.divIcon({
+    className: "",
+    html: `
+      <div style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;">
+        ${coneHTML}
+        <div style="
+          position:absolute;
+          width:32px;height:32px;
+          background:rgba(37,99,235,0.15);
+          border-radius:50%;
+          animation:nh-pulse 2s ease-out infinite;
+        "></div>
+        <div style="
+          position:relative;
+          width:14px;height:14px;
+          background:#2563eb;
+          border:2.5px solid white;
+          border-radius:50%;
+          box-shadow:0 2px 8px rgba(37,99,235,0.6);
+          z-index:1;
+        "></div>
+      </div>
+    `,
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
+  });
+}
 
 // Internal component to handle map events and expose map instance
 function MapController({ onMapReady, onMapClick }) {
