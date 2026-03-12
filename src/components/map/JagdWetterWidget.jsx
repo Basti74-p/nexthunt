@@ -211,8 +211,15 @@ export default function JagdWetterWidget({ lat, lng, onWeatherLoaded, onClose })
 
   return (
     <div
-      className="fixed z-[1000] bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
-      style={{ bottom: 88, left: 16, width: expanded ? 340 : 180, transition: "width 0.3s ease" }}
+      className="fixed z-[1000] bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl overflow-hidden max-w-[calc(100vw-32px)]"
+      style={{ 
+        bottom: 88, 
+        left: 16, 
+        right: 16,
+        width: expanded ? "calc(100vw - 32px)" : 180,
+        maxWidth: expanded ? 340 : 180,
+        transition: "width 0.3s ease, max-width 0.3s ease" 
+      }}
     >
       {/* Header */}
       <div className="flex items-center gap-2 px-3 py-2.5 w-full hover:bg-white/5 transition-colors">
@@ -263,7 +270,7 @@ export default function JagdWetterWidget({ lat, lng, onWeatherLoaded, onClose })
 
               {/* AKTUELL TAB */}
               {tab === "aktuell" && (
-                <div className="px-3 py-3 flex flex-col gap-3">
+                <div className="px-3 py-3 flex flex-col gap-3 max-h-[60vh] overflow-y-auto">
                   {/* Wind + Temp row */}
                   <div className="flex items-center gap-3">
                     <WindRose deg={weather.windDeg} speed={weather.windSpeed} />
@@ -329,7 +336,7 @@ export default function JagdWetterWidget({ lat, lng, onWeatherLoaded, onClose })
 
               {/* 12H PROGNOSE TAB */}
               {tab === "prognose" && (
-                <div className="px-2 py-3">
+                <div className="px-2 py-3 max-h-[60vh] overflow-y-auto">
                   <div className="text-[10px] text-gray-300 px-1 mb-2 flex items-center gap-1.5">
                     <Clock className="w-3 h-3" />
                     <span>Nächste 12h ·</span>
@@ -345,7 +352,7 @@ export default function JagdWetterWidget({ lat, lng, onWeatherLoaded, onClose })
 
               {/* JAGD-TIPPS TAB */}
               {tab === "jagd" && (
-                <div className="px-3 py-3 flex flex-col gap-2">
+                <div className="px-3 py-3 flex flex-col gap-2 max-h-[60vh] overflow-y-auto">
                   {/* Score card */}
                   <div className={`rounded-xl border px-3 py-2.5 ${bewertung.bg}`}>
                     <div className="flex items-center justify-between mb-2">
