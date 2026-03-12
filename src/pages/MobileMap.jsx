@@ -60,24 +60,25 @@ export default function MobileMap() {
   }
 
   return (
-    // Vollbild: von Top-Bar (top-14) bis Bottom-Nav (bottom-20)
-    <div className="fixed inset-0 top-0 bottom-20 z-10">
-      {/* Karte füllt den gesamten Bereich */}
-      <RevierMapCore
-        revier={selectedRevier}
-        height="100%"
-        className="rounded-none border-0"
-      >
-        {activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} />}
-        {activeLayers.has("sichtungen") && <WildmanagementLayer items={wildmanagement} />}
-      </RevierMapCore>
+    <div className="fixed inset-0 bottom-20 z-10">
+      {/* Karte füllt exakt den ganzen Bereich */}
+      <div className="absolute inset-0" style={{ borderRadius: 0 }}>
+        <RevierMapCore
+          revier={selectedRevier}
+          height="100%"
+          className="!rounded-none !border-0 !shadow-none"
+        >
+          {activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} />}
+          {activeLayers.has("sichtungen") && <WildmanagementLayer items={wildmanagement} />}
+        </RevierMapCore>
+      </div>
 
-      {/* Revier-Auswahl oben links (nur wenn mehrere Reviere) */}
+      {/* ── OBEN: Revier-Picker (rechts neben der Suchbox von RevierMapCore) ── */}
       {reviere.length > 1 && (
-        <div className="absolute top-4 left-16 z-[1001]">
+        <div className="absolute top-4 left-16 z-[1002]">
           <button
             onClick={() => setShowRevierPicker(!showRevierPicker)}
-            className="flex items-center gap-1.5 bg-white rounded-xl shadow-md px-3 py-2 text-sm font-medium text-gray-800 border border-gray-100 active:scale-95 transition-transform"
+            className="flex items-center gap-1.5 bg-white rounded-xl shadow-md px-3 h-12 text-sm font-medium text-gray-800 border border-gray-100 active:scale-95 transition-transform"
           >
             {selectedRevier.name}
             <ChevronDown className="w-4 h-4 text-gray-500" />
@@ -102,13 +103,15 @@ export default function MobileMap() {
         </div>
       )}
 
-      {/* Layer-Toggle unten links, über der Bottom-Nav */}
-      <div className="absolute bottom-4 left-4 z-[1001] flex flex-col gap-2">
+      {/* ── UNTEN LINKS: Layer-Toggle-Buttons ── */}
+      {/* RevierMapCore platziert Geolocation bei bottom-20 right-4 auf Mobile,
+          wir bleiben links und geben etwas Abstand nach oben */}
+      <div className="absolute bottom-4 left-4 z-[1002] flex flex-col gap-2">
         {LAYERS.map(layer => (
           <button
             key={layer.id}
             onClick={() => toggleLayer(layer.id)}
-            className={`flex items-center gap-2 px-3 py-2.5 rounded-xl shadow-md text-sm font-medium border transition-all active:scale-95 ${
+            className={`flex items-center gap-2 px-4 py-3 rounded-xl shadow-md text-sm font-medium border transition-all active:scale-95 ${
               activeLayers.has(layer.id)
                 ? "bg-[#22c55e] text-black border-[#22c55e]"
                 : "bg-white text-gray-500 border-gray-100"
@@ -118,13 +121,6 @@ export default function MobileMap() {
             {layer.label}
           </button>
         ))}
-      </div>
-
-      {/* Statistik-Pill unten mittig */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[1001]">
-        <div className="bg-black/50 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full">
-          {einrichtungen.filter(e => e.latitude).length} Einr. · {wildmanagement.filter(w => w.latitude).length} Sich.
-        </div>
       </div>
     </div>
   );
