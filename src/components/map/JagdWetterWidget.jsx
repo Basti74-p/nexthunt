@@ -141,7 +141,7 @@ function HourBar({ hour }) {
 function StatPill({ icon, value, label, color = "text-gray-300" }) {
   return (
     <div className="flex flex-col items-center gap-0.5 bg-[#242424] rounded-lg px-2 py-1.5 min-w-[56px]">
-      <span className="text-[10px] text-gray-500">{label}</span>
+      <span className="text-[10px] text-gray-400">{label}</span>
       <span className={`text-xs font-semibold ${color}`}>{value}</span>
       {icon && <span className="text-[11px]">{icon}</span>}
     </div>
