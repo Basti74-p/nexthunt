@@ -3,14 +3,7 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    let user;
-    
-    try {
-      user = await base44.auth.me();
-    } catch (e) {
-      // Auth might fail, but that's OK - we'll use service role
-      user = null;
-    }
+    const user = await base44.auth.me();
 
     if (!user) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
@@ -18,7 +11,7 @@ Deno.serve(async (req) => {
 
     // Get current user's tenant and allowed reviere
     const userEmail = user.email;
-    const tenantMember = await base44.entities.TenantMember.filter({ user_email: userEmail });
+    const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: userEmail });
     
     if (!tenantMember || tenantMember.length === 0) {
       return Response.json({ error: 'Keine Berechtigung für Backups' }, { status: 403 });
