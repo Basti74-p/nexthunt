@@ -290,7 +290,7 @@ export default function JagdWetterWidget({ lat, lng, onWeatherLoaded }) {
                       <div className="flex items-center gap-1.5 bg-[#242424] rounded-lg px-2.5 py-1.5 flex-1">
                         <Sunset className="w-3.5 h-3.5 text-red-400" />
                         <span className="text-xs text-red-300 font-medium">{sunTimes.set}</span>
-                        <span className="text-[10px] text-gray-500 ml-auto">Untergang</span>
+                        <span className="text-[10px] text-gray-300 ml-auto">Untergang</span>
                       </div>
                     </div>
                   )}
