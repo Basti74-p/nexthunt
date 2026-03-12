@@ -56,7 +56,7 @@ export default function MobileMap() {
           height="100%"
           className="!rounded-none !border-0 !shadow-none"
         >
-          <BoundaryLayer revier={selectedRevier} />
+          {reviere.map(r => <BoundaryLayer key={r.id} revier={r} />)}
           {activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} />}
           {activeLayers.has("sichtungen") && <WildmanagementLayer items={wildmanagement} />}
         </RevierMapCore>
