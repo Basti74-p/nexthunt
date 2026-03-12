@@ -9,6 +9,8 @@ import RevierMapCore from "@/components/map/RevierMapCore";
 import EinrichtungenLayer from "@/components/map/layers/EinrichtungenLayer";
 import WildmanagementLayer from "@/components/map/layers/WildmanagementLayer";
 import BoundaryLayer, { REVIER_COLORS } from "@/components/map/layers/BoundaryLayer";
+import EinrichtungForm from "@/components/map/EinrichtungForm";
+import AddMapFeatureButton from "@/components/revier/AddMapFeatureButton";
 import { useMobile } from "@/components/hooks/useMobile";
 import { Building2, Eye, Map as MapIcon } from "lucide-react";
 
