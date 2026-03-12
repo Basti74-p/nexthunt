@@ -134,16 +134,16 @@ class WindCanvasLayer extends L.Layer {
         ctx.stroke();
       }
 
-      // Pfeilkopf zeichnen
+      // Pfeilkopf zeichnen (schmal)
       const head = trail[0];
       const prev = trail[Math.min(5, trail.length - 1)];
       const angle = Math.atan2(head.y - prev.y, head.x - prev.x);
-      const arrowSize = 8;
+      const arrowSize = 5;
       ctx.fillStyle = `rgba(${r},${g},${b},0.8)`;
       ctx.beginPath();
       ctx.moveTo(head.x, head.y);
-      ctx.lineTo(head.x - arrowSize * Math.cos(angle - Math.PI / 6), head.y - arrowSize * Math.sin(angle - Math.PI / 6));
-      ctx.lineTo(head.x - arrowSize * Math.cos(angle + Math.PI / 6), head.y - arrowSize * Math.sin(angle + Math.PI / 6));
+      ctx.lineTo(head.x - arrowSize * Math.cos(angle - Math.PI / 8), head.y - arrowSize * Math.sin(angle - Math.PI / 8));
+      ctx.lineTo(head.x - arrowSize * Math.cos(angle + Math.PI / 8), head.y - arrowSize * Math.sin(angle + Math.PI / 8));
       ctx.closePath();
       ctx.fill();
 
