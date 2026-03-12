@@ -9,18 +9,25 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get user's tenant membership to determine their primary tenant
-    const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({
-      user_email: user.email
-    });
+    // Get user's primary tenant (from user object if available, fallback to TenantMember query)
+    let userTenantId = user.tenant_id;
+    let primaryTenant = null;
     
-    if (!tenantMembers || tenantMembers.length === 0) {
-      return Response.json({ error: 'User has no tenant membership' }, { status: 403 });
+    // If user.tenant_id not set, query TenantMember
+    if (!userTenantId) {
+      const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({
+        user_email: user.email
+      });
+      
+      if (tenantMembers && tenantMembers.length > 0) {
+        primaryTenant = tenantMembers[0];
+        userTenantId = primaryTenant.tenant_id;
+      }
     }
     
-    // Use first tenant membership as primary tenant
-    const primaryTenant = tenantMembers[0];
-    const userTenantId = primaryTenant.tenant_id;
+    if (!userTenantId) {
+      return Response.json({ error: 'Could not determine user tenant' }, { status: 403 });
+    }
     
     // Get ONLY reviere from user's primary tenant
     let reviere = await base44.asServiceRole.entities.Revier.filter({
@@ -31,14 +38,12 @@ Deno.serve(async (req) => {
       user_email: user.email,
       user_tenant_id: userTenantId,
       reviere_count: reviere.length,
-      revier_names: reviere.map(r => r.name),
-      all_tenant_memberships: tenantMembers.length
+      revier_names: reviere.map(r => r.name)
     };
     
     // For tenant members with restricted access, filter by allowed_reviere
-    const allowedReviere = primaryTenant.allowed_reviere;
-    if (allowedReviere && allowedReviere.length > 0) {
-      reviere = reviere.filter(r => allowedReviere.includes(r.id));
+    if (primaryTenant && primaryTenant.allowed_reviere && primaryTenant.allowed_reviere.length > 0) {
+      reviere = reviere.filter(r => primaryTenant.allowed_reviere.includes(r.id));
     }
     
     if (!reviere || reviere.length === 0) {
