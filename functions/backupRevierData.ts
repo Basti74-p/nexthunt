@@ -9,22 +9,22 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get user's tenant to backup only their reviere
+    // Get user's reviere - automatically filtered by user's tenant
     const userEmail = user.email;
+    let allowedReviere = null;
     
-    // Get tenant from TenantMember (required)
-    const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: userEmail });
-    
-    if (!tenantMembers || tenantMembers.length === 0) {
-      return Response.json({ error: 'Keine Berechtigung für Backups' }, { status: 403 });
+    // Try to get restrictions from TenantMember
+    try {
+      const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: userEmail });
+      if (tenantMembers && tenantMembers.length > 0) {
+        allowedReviere = tenantMembers[0].allowed_reviere;
+      }
+    } catch (err) {
+      // Continue without restriction data
     }
-
-    const member = tenantMembers[0];
-    const userTenantId = member.tenant_id;
-    let allowedReviere = member.allowed_reviere;
     
-    // Get only reviere for user's tenant
-    let reviere = await base44.asServiceRole.entities.Revier.filter({ tenant_id: userTenantId });
+    // Get reviere for user's tenant (user-scoped call auto-filters by tenant)
+    let reviere = await base44.entities.Revier.list();
     
     // Filter by allowed_reviere if user has restricted access (non-empty list means restrictions apply)
     if (allowedReviere && allowedReviere.length > 0) {
