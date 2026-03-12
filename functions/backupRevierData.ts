@@ -28,7 +28,10 @@ Deno.serve(async (req) => {
     }
     
     if (!reviere || reviere.length === 0) {
-      return Response.json({ error: 'Keine Reviere für Backup verfügbar' }, { status: 403 });
+      return Response.json({ 
+        success: false,
+        error: 'Keine Reviere für Backup verfügbar' 
+      }, { status: 400 });
     }
     
     const backupData = {
