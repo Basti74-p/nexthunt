@@ -67,9 +67,8 @@ Deno.serve(async (req) => {
 
     return Response.json({
       success: true,
-      message: `Backup erfolgreich erstellt: ${filename}`,
+      message: `Backup erfolgreich erstellt`,
       reviersCount: reviere.length,
-      fileUri: uploadResult.file_uri,
       timestamp: now.toISOString()
     });
 
