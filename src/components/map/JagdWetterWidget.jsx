@@ -306,7 +306,7 @@ export default function JagdWetterWidget({ lat, lng, onWeatherLoaded }) {
                     <div className={`text-xs font-bold mb-1.5 ${bewertung.color}`}>🦌 Jagdeignung: {bewertung.label}</div>
                     <div className="flex flex-col gap-1">
                       {bewertung.hints.map((h, i) => (
-                        <div key={i} className="text-[11px] text-gray-400 flex items-center gap-1.5">
+                        <div key={i} className="text-[11px] text-gray-200 flex items-center gap-1.5">
                           <span>{h.icon}</span>
                           <span>{h.text}</span>
                         </div>
