@@ -93,6 +93,7 @@ export default function RevierMap({ revier }) {
       {/* Central map */}
       <div className={isMobile ? "flex-1 overflow-hidden" : ""}>
         <RevierMapCore revier={revier} height={isMobile ? "100%" : "520px"}>
+          <BoundaryLayer revier={revier} />
           {activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} onDelete={(id) => deleteEinrichtung.mutate(id)} />}
           {activeLayers.has("sichtungen") && <WildmanagementLayer items={wildmanagement} />}
         </RevierMapCore>
