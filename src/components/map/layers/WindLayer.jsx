@@ -124,13 +124,12 @@ class WindCanvasLayer extends L.Layer {
       if (trail.length < 2) continue;
 
       for (let t = 0; t < trail.length - 1; t++) {
-        const alpha = ((trail.length - t) / trail.length) * 0.85;
-        const width = 1.2 + ((trail.length - t) / trail.length) * 0.8;
+        const alpha = ((trail.length - t) / trail.length) * 0.35;
         ctx.beginPath();
         ctx.moveTo(trail[t].x, trail[t].y);
         ctx.lineTo(trail[t + 1].x, trail[t + 1].y);
         ctx.strokeStyle = `rgba(${r},${g},${b},${alpha})`;
-        ctx.lineWidth = width;
+        ctx.lineWidth = 1;
         ctx.lineCap = "round";
         ctx.stroke();
       }
