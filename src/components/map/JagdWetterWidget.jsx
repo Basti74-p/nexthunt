@@ -298,7 +298,7 @@ export default function JagdWetterWidget({ lat, lng, onWeatherLoaded }) {
                   {/* Active time indicator */}
                   <div className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs ${activeNow ? "bg-[#22c55e]/15 border border-[#22c55e]/30 text-[#22c55e]" : "bg-[#242424] text-gray-500"}`}>
                     <div className={`w-2 h-2 rounded-full ${activeNow ? "bg-[#22c55e] animate-pulse" : "bg-gray-600"}`} />
-                    {activeNow ? "Hauptaktivzeit des Wildes – Jetzt!" : "Nächste Aktivzeit: Morgen- oder Abendstunden"}
+                    {activeNow ? "Hauptaktivzeit des Wildes – Jetzt!" : <span className="text-gray-300">Nächste Aktivzeit: Morgen- oder Abendstunden</span>}
                   </div>
 
                   {/* Jagdbewertung */}
