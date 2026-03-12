@@ -13,15 +13,15 @@ Deno.serve(async (req) => {
     const userEmail = user.email;
     const tenantMembers = await base44.asServiceRole.entities.TenantMember.filter({ user_email: userEmail });
     
-    if (!tenantMember || tenantMember.length === 0) {
+    if (!tenantMembers || tenantMembers.length === 0) {
       return Response.json({ error: 'Keine Berechtigung für Backups' }, { status: 403 });
     }
 
-    const member = tenantMember[0];
+    const member = tenantMembers[0];
     const userTenantId = member.tenant_id;
 
     // Get reviere - either all (if allowed_reviere is empty) or filtered by allowed_reviere
-    let reviere = await base44.entities.Revier.filter({ tenant_id: userTenantId });
+    let reviere = await base44.asServiceRole.entities.Revier.filter({ tenant_id: userTenantId });
     
     // Filter by allowed_reviere if the user has restricted access
     if (member.allowed_reviere && member.allowed_reviere.length > 0) {
