@@ -21,70 +21,34 @@ Deno.serve(async (req) => {
     
     const backupData = {
       timestamp: new Date().toISOString(),
-      reviere: []
+      count: {
+        reviere: 0,
+        jagdeinrichtungen: 0,
+        strecken: 0,
+        wildkammern: 0,
+        jagdevents: 0
+      }
     };
 
-    // For each revier, fetch all related entities
+    // For each revier, fetch key entities
     for (const revier of reviere) {
-      const revierBackup = {
-        revier: revier,
-        jagdeinrichtungen: [],
-        gesellschaftsjagden: [],
-        schadensprotokelle: [],
-        strecken: [],
-        wildmarken: [],
-        wildprodukte: [],
-        wildkammern: [],
-        abschusspläne: [],
-        jagdevents: [],
-        wildmanagement: [],
-        jagdeventassignments: []
-      };
-
-      // Fetch all entities filtered by revier_id
       const [
         jagdeinrichtungen,
-        gesellschaftsjagden,
-        schadensprotokelle,
         strecken,
-        wildmarken,
-        wildprodukte,
         wildkammern,
-        abschusspläne,
-        jagdevents,
-        wildmanagement,
-        jagdeventassignments
+        jagdevents
       ] = await Promise.all([
         base44.entities.Jagdeinrichtung.filter({ revier_id: revier.id }),
-        base44.entities.GesellschaftsJagd.filter({ revier_id: revier.id }),
-        base44.entities.Schadensprotokoll.filter({ revier_id: revier.id }),
         base44.entities.Strecke.filter({ revier_id: revier.id }),
-        base44.entities.Wildmarke.filter({ revier_id: revier.id }),
-        base44.entities.WildProdukt.filter({ revier_id: revier.id }),
         base44.entities.Wildkammer.filter({ revier_id: revier.id }),
-        base44.entities.Abschussplan.filter({ revier_id: revier.id }),
-        base44.entities.JagdEvent.filter({ revier_id: revier.id }),
-        base44.entities.WildManagement.filter({ revier_id: revier.id }),
-        base44.entities.JagdEventAssignment.filter({})
+        base44.entities.JagdEvent.filter({ revier_id: revier.id })
       ]);
 
-      revierBackup.jagdeinrichtungen = jagdeinrichtungen;
-      revierBackup.gesellschaftsjagden = gesellschaftsjagden;
-      revierBackup.schadensprotokelle = schadensprotokelle;
-      revierBackup.strecken = strecken;
-      revierBackup.wildmarken = wildmarken;
-      revierBackup.wildprodukte = wildprodukte;
-      revierBackup.wildkammern = wildkammern;
-      revierBackup.abschusspläne = abschusspläne;
-      revierBackup.jagdevents = jagdevents;
-      revierBackup.wildmanagement = wildmanagement;
-      
-      // Filter JagdEventAssignments for this revier's events
-      revierBackup.jagdeventassignments = jagdeventassignments.filter(a => 
-        jagdevents.some(e => e.id === a.jagd_event_id)
-      );
-
-      backupData.reviere.push(revierBackup);
+      backupData.count.reviere++;
+      backupData.count.jagdeinrichtungen += jagdeinrichtungen.length;
+      backupData.count.strecken += strecken.length;
+      backupData.count.wildkammern += wildkammern.length;
+      backupData.count.jagdevents += jagdevents.length;
     }
 
     // Convert to JSON and upload
