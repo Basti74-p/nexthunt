@@ -37,16 +37,10 @@ Deno.serve(async (req) => {
     
     const backupData = {
       timestamp: new Date().toISOString(),
-      count: {
-        reviere: 0,
-        jagdeinrichtungen: 0,
-        strecken: 0,
-        wildkammern: 0,
-        jagdevents: 0
-      }
+      reviere: []
     };
 
-    // For each revier, fetch key entities
+    // For each revier, fetch all related entities and build complete backup
     for (const revier of reviere) {
       const [
         jagdeinrichtungen,
@@ -60,11 +54,18 @@ Deno.serve(async (req) => {
         base44.entities.JagdEvent.filter({ revier_id: revier.id })
       ]);
 
-      backupData.count.reviere++;
-      backupData.count.jagdeinrichtungen += jagdeinrichtungen.length;
-      backupData.count.strecken += strecken.length;
-      backupData.count.wildkammern += wildkammern.length;
-      backupData.count.jagdevents += jagdevents.length;
+      backupData.reviere.push({
+        id: revier.id,
+        name: revier.name,
+        region: revier.region,
+        size_ha: revier.size_ha,
+        notes: revier.notes,
+        status: revier.status,
+        jagdeinrichtungen: jagdeinrichtungen,
+        strecken: strecken,
+        wildkammern: wildkammern,
+        jagdevents: jagdevents
+      });
     }
 
     // Convert to JSON and upload
