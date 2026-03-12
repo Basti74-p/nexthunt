@@ -198,6 +198,7 @@ export default function SystemAdminTenants() {
         )}
 
         {activeTab === "tenants" && (
+        <>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <Input
@@ -207,9 +208,6 @@ export default function SystemAdminTenants() {
             className="pl-10 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 rounded-xl"
           />
         </div>
-        )}
-
-        {activeTab === "tenants" && (
         <div className="space-y-3">
           {filtered.map((t) => {
             const memberCount = members.filter(m => m.tenant_id === t.id).length;
