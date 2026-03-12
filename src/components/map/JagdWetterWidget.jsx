@@ -289,7 +289,6 @@ export default function JagdWetterWidget({ lat, lng, onWeatherLoaded, onClose })
                     <div className="flex-1">
                       <div className="text-lg font-bold text-blue-300">{weather.windSpeed} km/h</div>
                       <div className="text-[11px] text-gray-300">aus {degToDir(weather.windDeg)} ({weather.windDeg}°)</div>
-                      <WindSpeedBar speed={weather.windSpeed} />
                     </div>
                     <div className="text-right">
                       <div className="text-lg font-bold text-orange-300">{weather.temp}°C</div>
