@@ -1,7 +1,18 @@
 import React from "react";
 import { GeoJSON } from "react-leaflet";
 
-export default function BoundaryLayer({ revier }) {
+const REVIER_COLORS = [
+  "#22c55e", // grün
+  "#3b82f6", // blau
+  "#f97316", // orange
+  "#a855f7", // lila
+  "#ef4444", // rot
+  "#eab308", // gelb
+  "#06b6d4", // cyan
+  "#ec4899", // pink
+];
+
+export default function BoundaryLayer({ revier, color }) {
   if (!revier?.boundary_geojson) return null;
 
   let geojson;
@@ -13,17 +24,21 @@ export default function BoundaryLayer({ revier }) {
     return null;
   }
 
+  const borderColor = color || "#22c55e";
+
   return (
     <GeoJSON
-      key={revier.id}
+      key={revier.id + borderColor}
       data={geojson}
       style={{
-        color: "#22c55e",
+        color: borderColor,
         weight: 3,
         opacity: 0.9,
-        fillColor: "#22c55e",
+        fillColor: borderColor,
         fillOpacity: 0.08,
       }}
     />
   );
 }
+
+export { REVIER_COLORS };
