@@ -738,6 +738,9 @@ export default function Demo() {
     Reviere: { reviere, onDelete: handleDeleteRevier },
     Strecke: { reviere, strecken },
     Aufgaben: { aufgaben, onToggle: handleToggleTask },
+    Wildmanagement: { reviere },
+    JagdkalenderMain: {},
+    Personen: {},
   }[currentPage] || {};
 
   return (
