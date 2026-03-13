@@ -4,6 +4,9 @@ import { createPageUrl } from "@/utils";
 import { Map, Eye, Crosshair, ListTodo, Radio, Calendar } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import MobileTopBar from "./MobileTopBar";
+import MaintenanceOverlay from "./MaintenanceOverlay";
+
+const MAINTENANCE_MODE = true; // Toggle für Wartungsmodus
 
 const TAB_NAMES = {
   MobileMap: "Karte",
