@@ -1,78 +1,228 @@
 import React, { useState } from "react";
 import {
-  Map, Crosshair, ListTodo, Calendar, TreePine, Settings, LogOut,
-  ChevronRight, Menu, X, Home, Users, Archive, AlertCircle
+  LayoutDashboard, TreePine, Shield, LogOut, ChevronDown, ChevronRight,
+  Users, Crosshair, Calendar, ListTodo, Globe, Eye, Truck, Archive, Radio,
+  UserCheck, UserCog, LifeBuoy, Settings, Menu, X, ChevronsUpDown, Map, Building
 } from "lucide-react";
 
-const DEMO_REVIERE = [
-  { id: 1, name: "Revier Mühlbach", region: "Thüringen", size_ha: 1240, status: "active" },
-  { id: 2, name: "Waldrevier Nord", region: "Kyffhäuser", size_ha: 870, status: "active" },
-  { id: 3, name: "Feldrevier Süd", region: "Thüringen", size_ha: 520, status: "archived" },
+const NAV = [
+  { label: "Dashboard", page: "Dashboard", icon: LayoutDashboard },
+  {
+    label: "Karte",
+    page: "Karte",
+    icon: Map,
+    children: [
+      { label: "Reviere", page: "Reviere", icon: TreePine },
+      { label: "Jagdeinrichtungen", page: "Jagdeinrichtungen", icon: Building }
+    ]
+  },
+  {
+    label: "Wildmanagement",
+    page: "Wildmanagement",
+    icon: Eye,
+    children: [
+      { label: "Rotwild", page: "WildRotwild", icon: TreePine },
+      { label: "Schwarzwild", page: "WildSchwarzwild", icon: TreePine },
+      { label: "Rehwild", page: "WildRehwild", icon: TreePine },
+      { label: "Wolf", page: "WildWolf", icon: TreePine }
+    ]
+  },
+  {
+    label: "Strecke",
+    page: "Strecke",
+    icon: Crosshair,
+    children: [
+      { label: "Abschussplan", page: "StreckeAbschussplan", icon: Crosshair },
+      { label: "Wildkammer", page: "StreckeWildkammer", icon: Archive },
+      { label: "Lager", page: "WildProdukte", icon: Archive },
+      { label: "Wildverkauf", page: "Wildverkauf", icon: Truck },
+      { label: "Archiv", page: "StreckeArchiv", icon: Archive }
+    ]
+  },
+  {
+    label: "Jagdkalender",
+    page: "JagdkalenderMain",
+    icon: Calendar,
+    children: [
+      { label: "Alle Jagden", page: "JagdkalenderMain", icon: Calendar },
+      { label: "Live-Monitor", page: "Jagdkalender", icon: Radio },
+      { label: "Jagdgäste", page: "Jagdgaeste", icon: UserCheck },
+      { label: "Personal", page: "Personal", icon: UserCog }
+    ]
+  },
+  { label: "Aufgaben", page: "Aufgaben", icon: ListTodo },
+  {
+    label: "Personen",
+    page: "Personen",
+    icon: Users,
+    children: [
+      { label: "Berechtigungen", page: "TenantMembers", icon: Shield }
+    ]
+  },
+  { label: "Öffentlichkeit", page: "Oeffentlichkeit", icon: Globe },
+  { label: "Support", page: "SupportTickets", icon: LifeBuoy },
+  { label: "Einstellungen", page: "TenantSettings", icon: Settings }
 ];
 
-const DEMO_AUFGABEN = [
-  { id: 1, title: "Hochsitz 4 reparieren", due: "2026-03-15", priority: "high", status: "open" },
-  { id: 2, title: "Wildkamera Batterie wechseln", due: "2026-03-18", priority: "medium", status: "open" },
-  { id: 3, title: "Kirrung Waldrevier auffüllen", due: "2026-03-20", priority: "low", status: "open" },
-];
+// Demo content pages
+const PAGES = {
+  Dashboard: () => (
+    <div>
+      <h1 className="text-3xl font-bold text-gray-100 mb-8">Dashboard</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {[
+          { label: "Reviere", value: 3 },
+          { label: "Offene Aufgaben", value: 5 },
+          { label: "Strecke (2026)", value: 12 },
+          { label: "Jagden geplant", value: 2 }
+        ].map(({ label, value }) => (
+          <div key={label} className="bg-[#262626] border border-[#3a3a3a] rounded-xl p-4">
+            <p className="text-3xl font-bold text-[#22c55e]">{value}</p>
+            <p className="text-sm text-gray-500 mt-1">{label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  ),
+  Reviere: () => <PageContent title="Reviere" icon={TreePine} />,
+  Jagdeinrichtungen: () => <PageContent title="Jagdeinrichtungen" icon={Building} />,
+  Karte: () => <PageContent title="Karte" icon={Map} />,
+  Wildmanagement: () => <PageContent title="Wildmanagement" icon={Eye} />,
+  WildRotwild: () => <PageContent title="Rotwild" icon={TreePine} />,
+  WildSchwarzwild: () => <PageContent title="Schwarzwild" icon={TreePine} />,
+  WildRehwild: () => <PageContent title="Rehwild" icon={TreePine} />,
+  WildWolf: () => <PageContent title="Wolf" icon={TreePine} />,
+  Strecke: () => <PageContent title="Strecke" icon={Crosshair} />,
+  StreckeAbschussplan: () => <PageContent title="Abschussplan" icon={Crosshair} />,
+  StreckeWildkammer: () => <PageContent title="Wildkammer" icon={Archive} />,
+  WildProdukte: () => <PageContent title="Lager" icon={Archive} />,
+  Wildverkauf: () => <PageContent title="Wildverkauf" icon={Truck} />,
+  StreckeArchiv: () => <PageContent title="Archiv" icon={Archive} />,
+  JagdkalenderMain: () => <PageContent title="Jagdkalender" icon={Calendar} />,
+  Jagdkalender: () => <PageContent title="Live-Monitor" icon={Radio} />,
+  Jagdgaeste: () => <PageContent title="Jagdgäste" icon={UserCheck} />,
+  Personal: () => <PageContent title="Personal" icon={UserCog} />,
+  Aufgaben: () => <PageContent title="Aufgaben" icon={ListTodo} />,
+  Personen: () => <PageContent title="Personen" icon={Users} />,
+  TenantMembers: () => <PageContent title="Berechtigungen" icon={Shield} />,
+  Oeffentlichkeit: () => <PageContent title="Öffentlichkeit" icon={Globe} />,
+  SupportTickets: () => <PageContent title="Support" icon={LifeBuoy} />,
+  TenantSettings: () => <PageContent title="Einstellungen" icon={Settings} />
+};
 
-const DEMO_STRECKE = [
-  { id: 1, species: "Rehwild", gender: "männlich", date: "2026-03-01", revier: "Revier Mühlbach", status: "erfasst" },
-  { id: 2, species: "Schwarzwild", gender: "weiblich", date: "2026-03-03", revier: "Waldrevier Nord", status: "erfasst" },
-  { id: 3, species: "Rotwild", gender: "männlich", date: "2026-03-07", revier: "Feldrevier Süd", status: "bestätigt" },
-];
+function PageContent({ title, icon: Icon }) {
+  return (
+    <div>
+      <h1 className="text-3xl font-bold text-gray-100 mb-8">{title}</h1>
+      <div className="bg-[#262626] border border-[#3a3a3a] rounded-xl p-12 text-center">
+        <Icon className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+        <p className="text-gray-400">{title}-Modul</p>
+      </div>
+    </div>
+  );
+}
 
-const MENU_ITEMS = [
-  { id: "dashboard", label: "Dashboard", icon: Home },
-  { id: "reviere", label: "Reviere", icon: TreePine },
-  { id: "strecke", label: "Strecke", icon: Crosshair },
-  { id: "jagdkalender", label: "Jagdkalender", icon: Calendar },
-  { id: "aufgaben", label: "Aufgaben", icon: ListTodo },
-  { id: "wildkammer", label: "Wildkammer", icon: Archive },
-  { id: "personen", label: "Personen", icon: Users },
-  { id: "settings", label: "Einstellungen", icon: Settings },
-];
+function NavItem({ item, currentPage, onNavigate, depth = 0 }) {
+  const hasChildren = item.children && item.children.length > 0;
+  const isActive = currentPage === item.page;
+  const childIsActive = hasChildren && item.children.some((c) => c.page === currentPage);
+  const [open, setOpen] = useState(childIsActive);
+  const Icon = item.icon;
 
-function DemoSidebar({ activePage, onNavigate, isMobileMenuOpen, onToggleMobileMenu }) {
+  if (!hasChildren) {
+    return (
+      <button
+        onClick={() => onNavigate(item.page)}
+        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${depth > 0 ? "pl-8" : ""} ${
+          isActive
+            ? "bg-[#22c55e] text-[#1e1e1e] shadow-sm"
+            : "text-gray-300 hover:bg-[#2d2d2d] hover:text-gray-100"
+        }`}
+      >
+        <Icon className="w-4 h-4 shrink-0" />
+        {item.label}
+      </button>
+    );
+  }
+
+  return (
+    <div>
+      <button
+        onClick={() => {
+          if (item.page) onNavigate(item.page);
+          setOpen(!open);
+        }}
+        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
+          isActive || childIsActive
+            ? "bg-[#22c55e] text-[#1e1e1e]"
+            : "text-gray-300 hover:bg-[#2d2d2d] hover:text-gray-100"
+        }`}
+      >
+        <Icon className="w-4 h-4 shrink-0" />
+        <span className="flex-1 text-left">{item.label}</span>
+        {open ? (
+          <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
+        ) : (
+          <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
+        )}
+      </button>
+      {open && (
+        <div className="mt-0.5 ml-3 space-y-0.5 border-l-2 border-[#2d2d2d] pl-2">
+          {item.children.map((child) => (
+            <NavItem
+              key={child.page}
+              item={child}
+              currentPage={currentPage}
+              onNavigate={onNavigate}
+              depth={depth + 1}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DemoSidebar({ currentPage, onNavigate, isMobileMenuOpen, onToggleMobileMenu }) {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex fixed left-0 top-0 w-64 h-screen bg-[#1a1a1a] border-r border-[#2d2d2d] flex-col">
+      <aside className="hidden md:flex fixed left-0 top-0 w-64 h-screen bg-[#1e1e1e] border-r border-[#2d2d2d] flex-col z-40">
         {/* Logo */}
-        <div className="p-6 border-b border-[#2d2d2d] flex items-center gap-3">
-          <div className="w-10 h-10 bg-[#22c55e] rounded-xl flex items-center justify-center">
-            <TreePine className="w-5 h-5 text-black" />
-          </div>
-          <div>
-            <p className="font-bold text-gray-100">NextHunt</p>
-            <p className="text-xs text-gray-500">Demo</p>
-          </div>
+        <div className="px-6 py-5 border-b border-[#2d2d2d]">
+          <img
+            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c370741b119950032ab62/7a1f75278_NextHunt_logo_transparent.png"
+            alt="NextHunt Logo"
+            className="w-40 h-auto"
+          />
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-          {MENU_ITEMS.map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              onClick={() => onNavigate(id)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
-                activePage === id
-                  ? "bg-[#22c55e] text-black"
-                  : "text-gray-400 hover:text-gray-200 hover:bg-[#2d2d2d]"
-              }`}
-            >
-              <Icon className="w-4 h-4" />
-              {label}
-            </button>
+        <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+          {NAV.map((item) => (
+            <NavItem
+              key={item.label}
+              item={item}
+              currentPage={currentPage}
+              onNavigate={onNavigate}
+            />
           ))}
         </nav>
 
-        {/* User Info */}
-        <div className="p-4 border-t border-[#2d2d2d]">
-          <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-gray-400 hover:bg-[#2d2d2d] transition-all">
-            <LogOut className="w-4 h-4" />
-            Abmelden
-          </button>
+        {/* User Footer */}
+        <div className="px-3 py-4 border-t border-[#2d2d2d]">
+          <div className="flex items-center gap-3 px-3 py-2">
+            <div className="w-8 h-8 rounded-full bg-[#22c55e] flex items-center justify-center text-[#1e1e1e] text-xs font-bold">
+              D
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-gray-100 truncate">Demo Benutzer</p>
+              <p className="text-[10px] text-gray-500 truncate">demo@nexthunt.de</p>
+            </div>
+            <button className="p-1.5 rounded-lg hover:bg-[#2d2d2d] text-gray-500 hover:text-gray-300 transition-colors">
+              <LogOut className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </aside>
 
@@ -94,32 +244,25 @@ function DemoSidebar({ activePage, onNavigate, isMobileMenuOpen, onToggleMobileM
 
       {/* Mobile Sidebar */}
       {isMobileMenuOpen && (
-        <aside className="md:hidden fixed left-0 top-0 w-56 h-screen bg-[#1a1a1a] z-40 flex flex-col border-r border-[#2d2d2d]">
-          <div className="p-6 border-b border-[#2d2d2d]">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-[#22c55e] rounded-xl flex items-center justify-center">
-                <TreePine className="w-5 h-5 text-black" />
-              </div>
-              <p className="font-bold text-gray-100">NextHunt</p>
-            </div>
+        <aside className="md:hidden fixed left-0 top-0 w-56 h-screen bg-[#1e1e1e] z-40 flex flex-col border-r border-[#2d2d2d]">
+          <div className="px-6 py-5 border-b border-[#2d2d2d]">
+            <img
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c370741b119950032ab62/7a1f75278_NextHunt_logo_transparent.png"
+              alt="NextHunt Logo"
+              className="w-32 h-auto"
+            />
           </div>
-          <nav className="flex-1 p-4 space-y-1">
-            {MENU_ITEMS.map(({ id, label, icon: Icon }) => (
-              <button
-                key={id}
-                onClick={() => {
-                  onNavigate(id);
+          <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+            {NAV.map((item) => (
+              <NavItem
+                key={item.label}
+                item={item}
+                currentPage={currentPage}
+                onNavigate={(page) => {
+                  onNavigate(page);
                   onToggleMobileMenu();
                 }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
-                  activePage === id
-                    ? "bg-[#22c55e] text-black"
-                    : "text-gray-400 hover:text-gray-200 hover:bg-[#2d2d2d]"
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-                {label}
-              </button>
+              />
             ))}
           </nav>
         </aside>
@@ -128,272 +271,23 @@ function DemoSidebar({ activePage, onNavigate, isMobileMenuOpen, onToggleMobileM
   );
 }
 
-function DashboardPage() {
-  return (
-    <div>
-      <h1 className="text-3xl font-bold text-gray-100 mb-6">Dashboard</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        {[
-          { label: "Reviere", value: 3, color: "bg-emerald-900/40 text-emerald-400" },
-          { label: "Offene Aufgaben", value: 3, color: "bg-amber-900/40 text-amber-400" },
-          { label: "Strecke", value: 3, color: "bg-blue-900/40 text-blue-400" },
-          { label: "Wildkammer", value: 8, color: "bg-purple-900/40 text-purple-400" },
-        ].map(({ label, value, color }) => (
-          <div key={label} className={`${color} rounded-xl p-4 border border-gray-700`}>
-            <p className="text-3xl font-bold">{value}</p>
-            <p className="text-sm text-gray-400 mt-1">{label}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="grid lg:grid-cols-2 gap-6">
-        <div className="bg-[#262626] rounded-xl border border-[#3a3a3a] p-6">
-          <h2 className="text-lg font-semibold text-gray-100 mb-4">Ihre Reviere</h2>
-          <div className="space-y-2">
-            {DEMO_REVIERE.map((r) => (
-              <div key={r.id} className="flex items-center gap-3 p-3 bg-[#1e1e1e] rounded-lg border border-[#3a3a3a] hover:border-[#22c55e] transition-colors cursor-pointer">
-                <TreePine className="w-4 h-4 text-emerald-400" />
-                <div className="flex-1">
-                  <p className="text-sm font-medium">{r.name}</p>
-                  <p className="text-xs text-gray-500">{r.size_ha} ha</p>
-                </div>
-                <ChevronRight className="w-4 h-4 text-gray-600" />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="bg-[#262626] rounded-xl border border-[#3a3a3a] p-6">
-          <h2 className="text-lg font-semibold text-gray-100 mb-4">Offene Aufgaben</h2>
-          <div className="space-y-2">
-            {DEMO_AUFGABEN.slice(0, 3).map((a) => (
-              <div key={a.id} className="flex items-center gap-3 p-3 bg-[#1e1e1e] rounded-lg border border-[#3a3a3a]">
-                <div className={`w-2 h-2 rounded-full ${a.priority === 'high' ? 'bg-red-500' : a.priority === 'medium' ? 'bg-amber-400' : 'bg-blue-400'}`} />
-                <div className="flex-1">
-                  <p className="text-sm font-medium">{a.title}</p>
-                  <p className="text-xs text-gray-500">{a.due}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function RevierePage() {
-  return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-gray-100">Reviere</h1>
-        <button className="bg-[#22c55e] text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#16a34a] transition-colors">
-          + Neues Revier
-        </button>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {DEMO_REVIERE.map((r) => (
-          <div key={r.id} className="bg-[#262626] rounded-xl border border-[#3a3a3a] p-6 hover:border-[#22c55e] transition-colors cursor-pointer">
-            <div className="flex items-start justify-between mb-3">
-              <div className="w-10 h-10 bg-emerald-900/40 rounded-lg flex items-center justify-center">
-                <TreePine className="w-5 h-5 text-emerald-400" />
-              </div>
-              <span className={`text-xs px-2 py-1 rounded-full ${r.status === 'active' ? 'bg-green-900/40 text-green-400' : 'bg-gray-900/40 text-gray-400'}`}>
-                {r.status === 'active' ? 'Aktiv' : 'Archiviert'}
-              </span>
-            </div>
-            <h3 className="font-semibold text-gray-100 mb-1">{r.name}</h3>
-            <p className="text-sm text-gray-500 mb-4">{r.region}</p>
-            <div className="pt-4 border-t border-[#3a3a3a] text-xs text-gray-500">
-              {r.size_ha} Hektar
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function StreckeDetaillePage() {
-  return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-gray-100">Strecke</h1>
-        <button className="bg-[#22c55e] text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#16a34a] transition-colors">
-          + Neuer Abschuss
-        </button>
-      </div>
-
-      <div className="space-y-3">
-        {DEMO_STRECKE.map((s) => (
-          <div key={s.id} className="bg-[#262626] rounded-xl border border-[#3a3a3a] p-4 hover:border-[#22c55e] transition-colors cursor-pointer">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4 flex-1">
-                <div className="w-12 h-12 bg-blue-900/40 rounded-lg flex items-center justify-center">
-                  <Crosshair className="w-5 h-5 text-blue-400" />
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-100">{s.species}</p>
-                  <p className="text-sm text-gray-500">{s.revier} · {s.date}</p>
-                </div>
-              </div>
-              <span className="text-xs bg-green-900/40 text-green-400 px-3 py-1 rounded-lg">{s.status}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function JagdkalenderPage() {
-  return (
-    <div>
-      <h1 className="text-3xl font-bold text-gray-100 mb-6">Jagdkalender</h1>
-      <div className="bg-[#262626] rounded-xl border border-[#3a3a3a] p-6">
-        <div className="text-center py-12">
-          <Calendar className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-          <p className="text-gray-400">Keine geplanten Jagden</p>
-          <button className="mt-4 bg-[#22c55e] text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#16a34a] transition-colors">
-            + Jagd planen
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function AufgabenPage() {
-  return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-gray-100">Aufgaben</h1>
-        <button className="bg-[#22c55e] text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#16a34a] transition-colors">
-          + Neue Aufgabe
-        </button>
-      </div>
-
-      <div className="space-y-3">
-        {DEMO_AUFGABEN.map((a) => (
-          <div key={a.id} className="bg-[#262626] rounded-xl border border-[#3a3a3a] p-4 hover:border-[#22c55e] transition-colors cursor-pointer">
-            <div className="flex items-center gap-4">
-              <input type="checkbox" className="w-5 h-5 rounded cursor-pointer" />
-              <div className="flex-1">
-                <p className="font-semibold text-gray-100">{a.title}</p>
-                <p className="text-sm text-gray-500">Fällig: {a.due}</p>
-              </div>
-              <span className={`text-xs px-3 py-1 rounded-lg ${a.priority === 'high' ? 'bg-red-900/40 text-red-400' : a.priority === 'medium' ? 'bg-amber-900/40 text-amber-400' : 'bg-blue-900/40 text-blue-400'}`}>
-                {a.priority}
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function WildkammerPage() {
-  return (
-    <div>
-      <h1 className="text-3xl font-bold text-gray-100 mb-6">Wildkammer</h1>
-      <div className="bg-[#262626] rounded-xl border border-[#3a3a3a] p-6">
-        <div className="text-center py-12">
-          <Archive className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-          <p className="text-gray-400">Keine Einträge</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function PersonenPage() {
-  return (
-    <div>
-      <h1 className="text-3xl font-bold text-gray-100 mb-6">Personen</h1>
-      <div className="bg-[#262626] rounded-xl border border-[#3a3a3a] p-6">
-        <div className="text-center py-12">
-          <Users className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-          <p className="text-gray-400">Keine Personen hinzugefügt</p>
-          <button className="mt-4 bg-[#22c55e] text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#16a34a] transition-colors">
-            + Person hinzufügen
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function SettingsPage() {
-  return (
-    <div>
-      <h1 className="text-3xl font-bold text-gray-100 mb-6">Einstellungen</h1>
-      <div className="grid lg:grid-cols-2 gap-6">
-        <div className="bg-[#262626] rounded-xl border border-[#3a3a3a] p-6">
-          <h2 className="font-semibold text-gray-100 mb-4">Benutzerprofil</h2>
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm text-gray-400">Name</label>
-              <p className="mt-1 text-gray-100">Demo Benutzer</p>
-            </div>
-            <div>
-              <label className="text-sm text-gray-400">E-Mail</label>
-              <p className="mt-1 text-gray-100">demo@nexthunt.de</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-[#262626] rounded-xl border border-[#3a3a3a] p-6">
-          <h2 className="font-semibold text-gray-100 mb-4">Lizenz</h2>
-          <div className="space-y-2">
-            <p className="text-sm text-gray-500">Plan: <span className="text-gray-100 font-semibold">Pro</span></p>
-            <p className="text-sm text-gray-500">Status: <span className="text-green-400 font-semibold">Aktiv</span></p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function Demo() {
-  const [activePage, setActivePage] = useState("dashboard");
+  const [currentPage, setCurrentPage] = useState("Dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const renderPage = () => {
-    switch (activePage) {
-      case "dashboard":
-        return <DashboardPage />;
-      case "reviere":
-        return <RevierePage />;
-      case "strecke":
-        return <StreckeDetaillePage />;
-      case "jagdkalender":
-        return <JagdkalenderPage />;
-      case "aufgaben":
-        return <AufgabenPage />;
-      case "wildkammer":
-        return <WildkammerPage />;
-      case "personen":
-        return <PersonenPage />;
-      case "settings":
-        return <SettingsPage />;
-      default:
-        return <DashboardPage />;
-    }
-  };
+  const PageComponent = PAGES[currentPage] || (() => <PageContent title={currentPage} icon={LayoutDashboard} />);
 
   return (
     <div className="min-h-screen bg-[#1e1e1e] text-gray-100">
       <DemoSidebar
-        activePage={activePage}
-        onNavigate={setActivePage}
+        currentPage={currentPage}
+        onNavigate={setCurrentPage}
         isMobileMenuOpen={isMobileMenuOpen}
         onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       />
 
       <main className="md:ml-64 p-4 md:p-8">
-        {renderPage()}
+        <PageComponent />
       </main>
     </div>
   );
