@@ -42,6 +42,9 @@ export default function MobileNav({ currentPage }) {
 
   return (
     <>
+      {/* Maintenance Overlay – alles außer Karte sperren */}
+      {MAINTENANCE_MODE && currentPage !== "MobileMap" && <MaintenanceOverlay />}
+
       {/* Top bar – auf der Karte ausblenden (Vollbild) */}
       {currentPage !== "MobileMap" && (
         <MobileTopBar 
@@ -54,12 +57,16 @@ export default function MobileNav({ currentPage }) {
       <nav className="fixed bottom-0 left-0 right-0 bg-[#1e1e1e] border-t border-[#3a3a3a] z-50 flex justify-around px-2 py-2 safe-area-pb select-none">
         {tabs.map(({ name, icon: Icon, page }) => {
             const isActive = currentPage === page;
+            const isKarte = page === "MobileMap";
+            const isDisabled = MAINTENANCE_MODE && !isKarte;
+            
             return (
               <Link
                 key={page}
-                to={createPageUrl(page)}
+                to={isDisabled ? "#" : createPageUrl(page)}
+                onClick={(e) => isDisabled && e.preventDefault()}
                 className={`flex flex-col items-center gap-1.5 px-3 py-2 rounded-xl transition-all select-none ${
-                  isActive ? "text-[#22c55e]" : "text-gray-500"
+                  isDisabled ? "opacity-40 cursor-not-allowed" : isActive ? "text-[#22c55e]" : "text-gray-500"
                 }`}
               >
                 <Icon className={`w-5 h-5 ${isActive ? "stroke-[2.5]" : "stroke-[1.5]"}`} />
