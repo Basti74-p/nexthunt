@@ -2,9 +2,11 @@ import React from "react";
 import { AlertCircle, Calendar } from "lucide-react";
 
 export default function TrialWarningBanner({ daysRemaining, onDismiss }) {
-  if (!daysRemaining || daysRemaining > 7) return null;
+  if (!daysRemaining) return null;
 
   const isExpired = daysRemaining <= 0;
+  const isWarning = daysRemaining <= 7;
+  const isInfo = daysRemaining > 7;
 
   return (
     <div className={`${isExpired ? 'bg-red-50 border-red-200' : 'bg-amber-50 border-amber-200'} border rounded-xl p-4 flex items-start gap-3 mb-6`}>
