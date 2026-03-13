@@ -71,10 +71,17 @@ function App() {
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <Router>
-          <NavigationTracker />
-          <AuthenticatedApp />
+          <Routes>
+            <Route path="/Demo" element={<Demo />} />
+            <Route path="*" element={
+              <>
+                <NavigationTracker />
+                <AuthenticatedApp />
+              </>
+            } />
+          </Routes>
+          <Toaster />
         </Router>
-        <Toaster />
       </QueryClientProvider>
     </AuthProvider>
   )
