@@ -72,15 +72,8 @@ function App() {
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <Router>
-          <Routes>
-            <Route path="/Demo" element={<Demo />} />
-            <Route path="*" element={
-              <>
-                <NavigationTracker />
-                <AuthenticatedApp />
-              </>
-            } />
-          </Routes>
+          <NavigationTracker />
+          <AuthenticatedApp />
           <Toaster />
         </Router>
       </QueryClientProvider>
