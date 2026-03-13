@@ -36,7 +36,16 @@ const PLAN_COLORS = {
 
 const STATUS_COLORS = {
   active: "bg-emerald-500/20 text-emerald-300",
+  trial: "bg-blue-500/20 text-blue-300",
   suspended: "bg-red-500/20 text-red-300",
+  expired: "bg-red-500/20 text-red-300",
+};
+
+const STATUS_LABELS = {
+  active: "Aktiv",
+  trial: "Testphase",
+  suspended: "Gesperrt",
+  expired: "Abgelaufen",
 };
 
 export default function SystemAdminTenants() {
