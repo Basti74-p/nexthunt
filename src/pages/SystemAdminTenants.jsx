@@ -316,11 +316,13 @@ export default function SystemAdminTenants() {
                   <Select value={editing.status} onValueChange={(v) => setEditing({ ...editing, status: v })}>
                     <SelectTrigger className="bg-slate-800 border-slate-700 text-white"><SelectValue /></SelectTrigger>
                     <SelectContent className="bg-slate-800 border-slate-700">
+                      <SelectItem value="trial" className="text-white">Testphase</SelectItem>
                       <SelectItem value="active" className="text-white">Aktiv</SelectItem>
                       <SelectItem value="suspended" className="text-white">Gesperrt</SelectItem>
+                      <SelectItem value="expired" className="text-white">Abgelaufen</SelectItem>
                     </SelectContent>
                   </Select>
-                </div>
+                  </div>
                 <div>
                   <Label className="text-slate-300">Paket</Label>
                   <Select value={editing.plan} onValueChange={(v) => setEditing({ ...editing, plan: v })}>
