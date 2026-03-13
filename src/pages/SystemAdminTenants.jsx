@@ -240,7 +240,7 @@ export default function SystemAdminTenants() {
                     <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="font-semibold text-white">{t.name}</h3>
                       <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_COLORS[t.status] || "bg-slate-700 text-slate-300"}`}>
-                        {t.status === "active" ? "Aktiv" : "Gesperrt"}
+                        {STATUS_LABELS[t.status] || t.status}
                       </span>
                       <span className={`text-xs px-2 py-0.5 rounded-full font-medium capitalize ${PLAN_COLORS[t.plan] || "bg-slate-700 text-slate-300"}`}>
                         {t.plan}
