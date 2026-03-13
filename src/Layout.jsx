@@ -34,14 +34,23 @@ function LayoutInner({ children, currentPageName }) {
           setInitializingTrial(true);
           sessionStorage.setItem('trial_init_started', 'true');
           
-          // Check if user has a tenant
+          // Check if user has a tenant via TenantMember
           const members = await base44.entities.TenantMember.filter({ user_email: user.email });
+          
           if (members.length === 0) {
             // No tenant found, initialize trial
-            await base44.functions.invoke('initializeUserTrial', {});
+            console.log('Initializing trial for new user:', user.email);
+            const result = await base44.functions.invoke('initializeUserTrial', {});
+            console.log('Trial initialization result:', result);
+            
+            // Give the backend time to create records, then refresh
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
+          } else {
+            console.log('User already has tenant, skipping trial init');
+            setInitializingTrial(false);
           }
-          
-          setInitializingTrial(false);
         } catch (error) {
           console.error('Error initializing trial:', error);
           sessionStorage.removeItem('trial_init_started');
