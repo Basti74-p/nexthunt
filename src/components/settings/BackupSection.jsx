@@ -65,6 +65,47 @@ export default function BackupSection() {
     }
   };
 
+  const handleDownloadBackup = async () => {
+    if (!activeTenant?.id) {
+      setMessageType('error');
+      setMessage('✗ Fehler: Tenant-ID nicht gefunden');
+      return;
+    }
+    setDownloadLoading(true);
+    setMessage(null);
+    try {
+      const response = await base44.functions.invoke('backupRevierData', {
+        tenant_id: activeTenant.id
+      });
+      if (!response.data.success) {
+        setMessageType('error');
+        setMessage(`✗ Fehler: ${response.data.error}`);
+        return;
+      }
+      // Reload backups and get the latest one to download
+      const backupsResp = await base44.functions.invoke('listBackups', {});
+      const latestBackup = (backupsResp.data.backups || [])[0];
+      if (!latestBackup) throw new Error('Kein Backup gefunden');
+
+      const signedResp = await base44.functions.invoke('downloadBackup', { backupId: latestBackup.id });
+      const url = signedResp.data.signed_url;
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `nexthunt-backup-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setMessageType('success');
+      setMessage('✓ Backup auf PC gespeichert');
+      loadBackups();
+    } catch (error) {
+      setMessageType('error');
+      setMessage(`✗ Fehler beim Download: ${error.response?.data?.error || error.message}`);
+    } finally {
+      setDownloadLoading(false);
+    }
+  };
+
   const handleRestoreFromFile = async (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
