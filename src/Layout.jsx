@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { AuthProvider, useAuth } from "./components/hooks/useAuth";
 import { useMobile } from "./components/hooks/useMobile";
 import DesktopSidebar from "./components/navigation/DesktopSidebar";
@@ -9,6 +9,7 @@ import { base44 } from "@/api/base44Client";
 function LayoutInner({ children, currentPageName }) {
   const { user, loading } = useAuth();
   const isMobile = useMobile();
+  const [initializingTrial, setInitializingTrial] = useState(false);
 
   // Auto-apply dark theme based on system preference
   useEffect(() => {
@@ -19,6 +20,29 @@ function LayoutInner({ children, currentPageName }) {
       }
     }
   }, []);
+
+  // Initialize trial for new users on first login
+  useEffect(() => {
+    if (user && !loading) {
+      const initTrial = async () => {
+        try {
+          setInitializingTrial(true);
+          // Check if user has a tenant
+          const members = await base44.entities.TenantMember.filter({ user_email: user.email });
+          if (members.length === 0) {
+            // No tenant found, initialize trial
+            await base44.functions.invoke('initializeUserTrial', {});
+            // Refresh auth context to pick up new tenant
+            window.location.reload();
+          }
+        } catch (error) {
+          console.error('Error initializing trial:', error);
+          setInitializingTrial(false);
+        }
+      };
+      initTrial();
+    }
+  }, [user, loading]);
 
   if (loading) {
     return (
