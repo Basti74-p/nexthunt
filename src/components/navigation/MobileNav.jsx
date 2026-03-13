@@ -57,16 +57,13 @@ export default function MobileNav({ currentPage }) {
       <nav className="fixed bottom-0 left-0 right-0 bg-[#1e1e1e] border-t border-[#3a3a3a] z-50 flex justify-around px-2 py-2 safe-area-pb select-none">
         {tabs.map(({ name, icon: Icon, page }) => {
             const isActive = currentPage === page;
-            const isKarte = page === "MobileMap";
-            const isDisabled = MAINTENANCE_MODE && !isKarte;
             
             return (
               <Link
                 key={page}
-                to={isDisabled ? "#" : createPageUrl(page)}
-                onClick={(e) => isDisabled && e.preventDefault()}
+                to={createPageUrl(page)}
                 className={`flex flex-col items-center gap-1.5 px-3 py-2 rounded-xl transition-all select-none ${
-                  isDisabled ? "opacity-40 cursor-not-allowed" : isActive ? "text-[#22c55e]" : "text-gray-500"
+                  isActive ? "text-[#22c55e]" : "text-gray-500"
                 }`}
               >
                 <Icon className={`w-5 h-5 ${isActive ? "stroke-[2.5]" : "stroke-[1.5]"}`} />
