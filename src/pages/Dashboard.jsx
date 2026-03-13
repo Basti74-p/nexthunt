@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "@/components/hooks/useAuth";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
@@ -8,6 +8,7 @@ import { Map, Crosshair, ListTodo, Users, Calendar, TreePine, ArrowRight, Pencil
 import PageHeader from "@/components/ui/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import TrialExpiredModal from "@/components/TrialExpiredModal";
 
 export default function Dashboard() {
   const { user, tenant, tenantFeatures } = useAuth();
