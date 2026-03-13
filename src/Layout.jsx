@@ -23,20 +23,28 @@ function LayoutInner({ children, currentPageName }) {
 
   // Initialize trial for new users on first login
   useEffect(() => {
-    if (user && !loading) {
+    if (user && !loading && !initializingTrial) {
       const initTrial = async () => {
+        // Check if we already tried to initialize to prevent infinite loops
+        if (sessionStorage.getItem('trial_init_started')) {
+          return;
+        }
+        
         try {
           setInitializingTrial(true);
+          sessionStorage.setItem('trial_init_started', 'true');
+          
           // Check if user has a tenant
           const members = await base44.entities.TenantMember.filter({ user_email: user.email });
           if (members.length === 0) {
             // No tenant found, initialize trial
             await base44.functions.invoke('initializeUserTrial', {});
-            // Refresh auth context to pick up new tenant
-            window.location.reload();
           }
+          
+          setInitializingTrial(false);
         } catch (error) {
           console.error('Error initializing trial:', error);
+          sessionStorage.removeItem('trial_init_started');
           setInitializingTrial(false);
         }
       };
