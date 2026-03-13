@@ -440,6 +440,123 @@ function AufgabenPage({ aufgaben, onToggle }) {
   );
 }
 
+function WildmanagementPage({ reviere }) {
+  const [wildData] = useState([
+    { id: 1, date: "2026-03-10", species: "rotwild", quantity: 3, location: "Waldrevier Nord", notes: "Hirsche beobachtet" },
+    { id: 2, date: "2026-03-08", species: "schwarzwild", quantity: 7, location: "Revier Mühlbach", notes: "Rotte mit Frischlingen" },
+    { id: 3, date: "2026-03-05", species: "rehwild", quantity: 5, location: "Feldrevier Süd", notes: "Familie gesehen" },
+  ]);
+
+  return (
+    <div className="max-w-6xl mx-auto">
+      <h1 className="text-3xl font-bold text-gray-900 mb-8">Wildmanagement</h1>
+      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-gray-100">
+              <th className="text-left px-4 py-3 text-gray-600 font-medium">Datum</th>
+              <th className="text-left px-4 py-3 text-gray-600 font-medium">Wildart</th>
+              <th className="text-left px-4 py-3 text-gray-600 font-medium">Anzahl</th>
+              <th className="text-left px-4 py-3 text-gray-600 font-medium">Ort</th>
+              <th className="text-left px-4 py-3 text-gray-600 font-medium">Notizen</th>
+            </tr>
+          </thead>
+          <tbody>
+            {wildData.map((item) => (
+              <tr key={item.id} className="border-b border-gray-100 last:border-0 hover:bg-gray-50">
+                <td className="px-4 py-3 text-gray-900">{item.date}</td>
+                <td className="px-4 py-3 font-medium text-gray-900">{item.species.charAt(0).toUpperCase() + item.species.slice(1)}</td>
+                <td className="px-4 py-3 text-gray-600">{item.quantity}</td>
+                <td className="px-4 py-3 text-gray-600">{item.location}</td>
+                <td className="px-4 py-3 text-gray-600">{item.notes}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function JagdkalenderPage() {
+  const [jagden] = useState([
+    { id: 1, title: "Drückjagd Waldrevier", date: "2026-03-22", revier: "Waldrevier Nord", type: "Drückjagd", participants: 8 },
+    { id: 2, title: "Ansitzjagd Mühlbach", date: "2026-03-29", revier: "Revier Mühlbach", type: "Ansitzjagd", participants: 4 },
+  ]);
+
+  return (
+    <div className="max-w-6xl mx-auto">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold text-gray-900">Jagdkalender</h1>
+        <button className="bg-[#22c55e] text-black px-4 py-2 rounded-xl text-sm font-medium hover:bg-[#16a34a] transition-colors flex items-center gap-2">
+          <Plus className="w-4 h-4" /> Jagd planen
+        </button>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {jagden.map((j) => (
+          <div key={j.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <h3 className="font-semibold text-gray-900 mb-3">{j.title}</h3>
+            <div className="space-y-2 text-sm text-gray-600 mb-4">
+              <p><strong>Datum:</strong> {j.date}</p>
+              <p><strong>Revier:</strong> {j.revier}</p>
+              <p><strong>Typ:</strong> {j.type}</p>
+              <p><strong>Teilnehmer:</strong> {j.participants}</p>
+            </div>
+            <div className="flex gap-2">
+              <button className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-gray-900 hover:bg-gray-50 text-sm">Bearbeiten</button>
+              <button className="flex-1 px-3 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 text-sm">Details</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PersonenPage() {
+  const [personen] = useState([
+    { id: 1, name: "Max Müller", email: "max@nexthunt.de", phone: "+49 123 456789", type: "Mitglied", role: "Eigentümer" },
+    { id: 2, name: "Peter Schmidt", email: "peter@nexthunt.de", phone: "+49 234 567890", type: "Mitglied", role: "Mitglied" },
+    { id: 3, name: "Anna Weber", email: "anna@nexthunt.de", phone: "+49 345 678901", type: "Mitglied", role: "Mitglied" },
+    { id: 4, name: "Hans Braun", email: "hans@nexthunt.de", phone: "+49 456 789012", type: "Gast", role: "—" },
+  ]);
+
+  return (
+    <div className="max-w-6xl mx-auto">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold text-gray-900">Personen</h1>
+        <button className="bg-[#22c55e] text-black px-4 py-2 rounded-xl text-sm font-medium hover:bg-[#16a34a] transition-colors flex items-center gap-2">
+          <Plus className="w-4 h-4" /> Person hinzufügen
+        </button>
+      </div>
+      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-gray-100">
+              <th className="text-left px-4 py-3 text-gray-600 font-medium">Name</th>
+              <th className="text-left px-4 py-3 text-gray-600 font-medium">E-Mail</th>
+              <th className="text-left px-4 py-3 text-gray-600 font-medium">Telefon</th>
+              <th className="text-left px-4 py-3 text-gray-600 font-medium">Typ</th>
+              <th className="text-left px-4 py-3 text-gray-600 font-medium">Rolle</th>
+            </tr>
+          </thead>
+          <tbody>
+            {personen.map((p) => (
+              <tr key={p.id} className="border-b border-gray-100 last:border-0 hover:bg-gray-50">
+                <td className="px-4 py-3 font-medium text-gray-900">{p.name}</td>
+                <td className="px-4 py-3 text-gray-600">{p.email}</td>
+                <td className="px-4 py-3 text-gray-600">{p.phone}</td>
+                <td className="px-4 py-3 text-gray-600">{p.type}</td>
+                <td className="px-4 py-3 text-gray-600">{p.role}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 function DefaultPage({ title }) {
   return (
     <div className="max-w-6xl mx-auto">
