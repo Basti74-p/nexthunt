@@ -79,6 +79,13 @@ export default function Dashboard() {
 
   return (
     <div className="max-w-6xl mx-auto">
+      {trialDaysRemaining !== null && (
+        <TrialExpiredModal 
+          daysRemaining={trialDaysRemaining} 
+          onClose={() => setTrialDaysRemaining(null)}
+        />
+      )}
+      
       <PageHeader
         title={`Willkommen, ${user?.full_name?.split(" ")[0] || "Jäger"}`}
         subtitle={tenant.name}
