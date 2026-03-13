@@ -336,6 +336,30 @@ export default function SystemAdminTenants() {
                 </div>
               </div>
               <div>
+                <Label className="text-slate-300 mb-3 block">Trial-Verwaltung</Label>
+                <div className="space-y-3 bg-slate-800 rounded-xl p-4 border border-slate-700">
+                  <div>
+                    <label className="text-xs text-slate-400 block mb-1">Trial-Startdatum</label>
+                    <Input 
+                      type="date" 
+                      value={editing.trial_start_date ? editing.trial_start_date.split('T')[0] : ""} 
+                      onChange={(e) => setEditing({ ...editing, trial_start_date: e.target.value ? new Date(e.target.value).toISOString() : "" })} 
+                      className="bg-slate-700 border-slate-600 text-white text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-slate-400 block mb-1">Trial-Enddatum</label>
+                    <Input 
+                      type="date" 
+                      value={editing.trial_end_date ? editing.trial_end_date.split('T')[0] : ""} 
+                      onChange={(e) => setEditing({ ...editing, trial_end_date: e.target.value ? new Date(e.target.value).toISOString() : "" })} 
+                      className="bg-slate-700 border-slate-600 text-white text-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div>
                 <Label className="text-slate-300 mb-3 block">Module / Features</Label>
                 <div className="space-y-3 bg-slate-800 rounded-xl p-4 border border-slate-700">
                   {FEATURES.map(({ key, label }) => (
