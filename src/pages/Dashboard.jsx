@@ -13,6 +13,7 @@ import TrialExpiredModal from "@/components/TrialExpiredModal";
 export default function Dashboard() {
   const { user, tenant, tenantFeatures } = useAuth();
   const [showBoundaryHelp, setShowBoundaryHelp] = useState(false);
+  const [trialDaysRemaining, setTrialDaysRemaining] = useState(null);
 
   const { data: reviere = [] } = useQuery({
     queryKey: ["reviere", tenant?.id],
