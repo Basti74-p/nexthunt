@@ -44,12 +44,12 @@ function LayoutInner({ children, currentPageName }) {
     }
   }, [user, loading]);
 
-  if (loading) {
+  if (loading || initializingTrial) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#2d2d2d]">
         <div className="flex flex-col items-center gap-3">
           <Loader2 className="w-8 h-8 animate-spin text-[#22c55e]" />
-          <p className="text-sm text-gray-400">Laden...</p>
+          <p className="text-sm text-gray-400">{initializingTrial ? 'Trial wird vorbereitet...' : 'Laden...'}</p>
         </div>
       </div>
     );
