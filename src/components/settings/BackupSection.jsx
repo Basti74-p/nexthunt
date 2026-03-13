@@ -173,11 +173,28 @@ export default function BackupSection() {
             ) : (
               <>
                 <Download className="w-4 h-4" />
-                Backup
+                Backup Server
               </>
             )}
           </Button>
 
+          <Button
+            onClick={handleDownloadBackup}
+            disabled={downloadLoading}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg flex items-center justify-center gap-2"
+          >
+            {downloadLoading ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Lädt...
+              </>
+            ) : (
+              <>
+                <Download className="w-4 h-4" />
+                Download PC
+              </>
+            )}
+          </Button>
         </div>
 
 
