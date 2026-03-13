@@ -39,6 +39,25 @@ export default function Dashboard() {
     enabled: !!tenant?.id && tenantFeatures.feature_driven_hunt,
   });
 
+  // Check trial status on mount and when tenant changes
+  useEffect(() => {
+    if (tenant?.status === 'trial') {
+      const checkTrial = async () => {
+        try {
+          const result = await base44.functions.invoke('checkTrialStatus', {});
+          if (result.data.status === 'expired') {
+            setTrialDaysRemaining(0);
+          } else if (result.data.days_remaining !== undefined) {
+            setTrialDaysRemaining(result.data.days_remaining);
+          }
+        } catch (error) {
+          console.error('Error checking trial:', error);
+        }
+      };
+      checkTrial();
+    }
+  }, [tenant?.id, tenant?.status]);
+
   if (!tenant) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
