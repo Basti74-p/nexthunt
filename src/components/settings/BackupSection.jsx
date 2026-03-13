@@ -89,12 +89,17 @@ export default function BackupSection() {
 
       const signedResp = await base44.functions.invoke('downloadBackup', { backupId: latestBackup.id });
       const url = signedResp.data.signed_url;
+      // Fetch as blob to force download (bypasses cross-origin anchor limitation)
+      const fileRes = await fetch(url);
+      const blob = await fileRes.blob();
+      const blobUrl = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url;
+      a.href = blobUrl;
       a.download = `nexthunt-backup-${new Date().toISOString().split('T')[0]}.json`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
       setMessageType('success');
       setMessage('✓ Backup auf PC gespeichert');
       loadBackups();
