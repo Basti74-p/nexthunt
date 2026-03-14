@@ -87,8 +87,12 @@ export default function MobileMap() {
       setEinrichtungCoords([e.latlng.lat, e.latlng.lng]);
       setEinrichtungMode(false);
       setShowEinrichtungForm(true);
+    } else if (sichtungMode) {
+      setSichtungCoords([e.latlng.lat, e.latlng.lng]);
+      setSichtungMode(false);
+      setShowSichtungForm(true);
     }
-  }, [einrichtungMode]);
+  }, [einrichtungMode, sichtungMode]);
 
   const handleAction = (key) => {
     if (key === "einrichtung") {
