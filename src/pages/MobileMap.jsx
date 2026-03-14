@@ -100,6 +100,8 @@ export default function MobileMap() {
     } else if (key === "boundary") {
       setDrawingBoundary(true);
       setBoundaryPoints([]);
+    } else if (key === "sichtung") {
+      setSichtungMode(true);
     }
   };
 
