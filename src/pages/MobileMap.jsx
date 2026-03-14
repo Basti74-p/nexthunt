@@ -58,7 +58,7 @@ export default function MobileMap() {
   const mapLng = userPos?.[1] ?? 10.4515;
 
   return (
-    <div className="fixed inset-0 bottom-20 z-10">
+    <div className="fixed inset-0 bottom-20 z-10" style={{zIndex: 10}}>
       <div className="absolute inset-0" style={{ borderRadius: 0 }}>
         <RevierMapCore
           revier={selectedRevier}
