@@ -9,6 +9,7 @@ import BoundaryLayer, { REVIER_COLORS } from "@/components/map/layers/BoundaryLa
 import WindLayer from "@/components/map/layers/WindLayer";
 import JagdWetterWidget from "@/components/map/JagdWetterWidget";
 import { Plus } from "lucide-react";
+import MapActionSheet from "@/components/map/MapActionSheet";
 
 export default function MobileMap() {
   const { tenant } = useAuth();
