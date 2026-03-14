@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Map, Eye, Crosshair, ListTodo, Radio, Calendar } from "lucide-react";
+import { Map, Crosshair, ListTodo, Calendar, Warehouse } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import MobileTopBar from "./MobileTopBar";
 import MaintenanceOverlay from "./MaintenanceOverlay";
