@@ -114,100 +114,120 @@ export default function MobileEinrichtungsDetail() {
           </button>
         </div>
 
-        {/* Status Badge */}
-        <div className="px-4 mb-4">
-          <span className={`text-xs px-3 py-1.5 rounded-full ${CONDITION_COLOR[einrichtung.condition]}`}>
-            Zustand: {CONDITION_LABEL[einrichtung.condition] || einrichtung.condition}
-          </span>
-          {einrichtung.condition === "schlecht" && (
-            <div className="mt-2 p-3 bg-red-50 rounded-lg flex items-start gap-2">
-              <AlertTriangle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
-              <p className="text-xs text-red-700">Wartung erforderlich</p>
-            </div>
-          )}
-        </div>
-
-        {/* Info Grid */}
-        <div className="grid grid-cols-2 gap-3 px-4 mb-6">
-          <div className="bg-gray-50 rounded-lg p-3">
-            <p className="text-xs text-gray-500">Typ</p>
-            <p className="text-sm font-medium text-gray-900 mt-1">{TYPE_LABEL[einrichtung.type] || einrichtung.type}</p>
-          </div>
-          <div className="bg-gray-50 rounded-lg p-3">
-            <p className="text-xs text-gray-500">Revier</p>
-            <p className="text-sm font-medium text-gray-900 mt-1">{revier?.name || "–"}</p>
-          </div>
-          {einrichtung.latitude && einrichtung.longitude && (
-            <>
-              <div className="bg-gray-50 rounded-lg p-3">
-                <p className="text-xs text-gray-500">Breite</p>
-                <p className="text-sm font-medium text-gray-900 mt-1">{Number(einrichtung.latitude).toFixed(4)}</p>
-              </div>
-              <div className="bg-gray-50 rounded-lg p-3">
-                <p className="text-xs text-gray-500">Länge</p>
-                <p className="text-sm font-medium text-gray-900 mt-1">{Number(einrichtung.longitude).toFixed(4)}</p>
-              </div>
-            </>
-          )}
-          {einrichtung.orientation && (
-            <div className="bg-gray-50 rounded-lg p-3">
-              <p className="text-xs text-gray-500">Ausrichtung</p>
-              <p className="text-sm font-medium text-gray-900 mt-1">{einrichtung.orientation.toUpperCase()}</p>
-            </div>
-          )}
-        </div>
-
-        {/* Notes */}
-        {einrichtung.notes && (
-          <div className="px-4 mb-6">
-            <div className="flex items-center gap-2 mb-2">
-              <FileText className="w-4 h-4 text-gray-600" />
-              <p className="text-xs font-medium text-gray-600">Notizen</p>
-            </div>
-            <div className="bg-gray-50 rounded-lg p-3">
-              <p className="text-sm text-gray-700">{einrichtung.notes}</p>
-            </div>
-          </div>
-        )}
-
-        {/* Photos */}
-        {einrichtung.photos && einrichtung.photos.length > 0 && (
-          <div className="px-4 mb-6">
-            <div className="flex items-center gap-2 mb-3">
-              <ImageIcon className="w-4 h-4 text-gray-600" />
-              <p className="text-xs font-medium text-gray-600">Fotos ({einrichtung.photos.length})</p>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              {einrichtung.photos.map((url, idx) => (
-                <img
-                  key={idx}
-                  src={url}
-                  alt={`Foto ${idx + 1}`}
-                  className="w-full h-24 rounded-lg object-cover bg-gray-200"
-                  onError={(e) => {
-                    e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23e5e7eb' width='100' height='100'/%3E%3C/svg%3E";
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Schäden */}
-        {schadensprotokolle.length > 0 && (
-          <div className="px-4 mb-6">
-            <div className="flex items-center gap-2 mb-3">
-              <AlertTriangle className="w-4 h-4 text-red-600" />
-              <p className="text-xs font-medium text-gray-600">Schadensberichte ({schadensprotokolle.length})</p>
-            </div>
-            <div className="space-y-2">
-              {schadensprotokolle.map((sp) => (
-                <div key={sp.id} className="bg-red-50 rounded-lg p-3 border border-red-100">
-                  <p className="text-xs font-medium text-red-900">{sp.titel}</p>
-                  <p className="text-xs text-red-700 mt-1">{sp.datum}</p>
+        {/* INFO TAB */}
+        {activeTab === "info" && (
+          <>
+            {/* Status Badge */}
+            <div className="px-4 mb-4">
+              <span className={`text-xs px-3 py-1.5 rounded-full ${CONDITION_COLOR[einrichtung.condition]}`}>
+                Zustand: {CONDITION_LABEL[einrichtung.condition] || einrichtung.condition}
+              </span>
+              {einrichtung.condition === "schlecht" && (
+                <div className="mt-2 p-3 bg-red-50 rounded-lg flex items-start gap-2">
+                  <AlertTriangle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+                  <p className="text-xs text-red-700">Wartung erforderlich</p>
                 </div>
-              ))}
+              )}
             </div>
+
+            {/* Info Grid */}
+            <div className="grid grid-cols-2 gap-3 px-4 mb-6">
+              <div className="bg-gray-50 rounded-lg p-3">
+                <p className="text-xs text-gray-500">Typ</p>
+                <p className="text-sm font-medium text-gray-900 mt-1">{TYPE_LABEL[einrichtung.type] || einrichtung.type}</p>
+              </div>
+              <div className="bg-gray-50 rounded-lg p-3">
+                <p className="text-xs text-gray-500">Revier</p>
+                <p className="text-sm font-medium text-gray-900 mt-1">{revier?.name || "–"}</p>
+              </div>
+              {einrichtung.latitude && einrichtung.longitude && (
+                <>
+                  <div className="bg-gray-50 rounded-lg p-3">
+                    <p className="text-xs text-gray-500">Breite</p>
+                    <p className="text-sm font-medium text-gray-900 mt-1">{Number(einrichtung.latitude).toFixed(4)}</p>
+                  </div>
+                  <div className="bg-gray-50 rounded-lg p-3">
+                    <p className="text-xs text-gray-500">Länge</p>
+                    <p className="text-sm font-medium text-gray-900 mt-1">{Number(einrichtung.longitude).toFixed(4)}</p>
+                  </div>
+                </>
+              )}
+              {einrichtung.orientation && (
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <p className="text-xs text-gray-500">Ausrichtung</p>
+                  <p className="text-sm font-medium text-gray-900 mt-1">{einrichtung.orientation.toUpperCase()}</p>
+                </div>
+              )}
+            </div>
+
+            {/* Notes */}
+            {einrichtung.notes && (
+              <div className="px-4 mb-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <FileText className="w-4 h-4 text-gray-600" />
+                  <p className="text-xs font-medium text-gray-600">Notizen</p>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <p className="text-sm text-gray-700">{einrichtung.notes}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Photos */}
+            {einrichtung.photos && einrichtung.photos.length > 0 && (
+              <div className="px-4 mb-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <ImageIcon className="w-4 h-4 text-gray-600" />
+                  <p className="text-xs font-medium text-gray-600">Fotos ({einrichtung.photos.length})</p>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {einrichtung.photos.map((url, idx) => (
+                    <img
+                      key={idx}
+                      src={url}
+                      alt={`Foto ${idx + 1}`}
+                      className="w-full h-24 rounded-lg object-cover bg-gray-200"
+                      onError={(e) => {
+                        e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23e5e7eb' width='100' height='100'/%3E%3C/svg%3E";
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* SCHADEN TAB */}
+        {activeTab === "schaden" && (
+          <div className="px-4 mb-6">
+            {schadensprotokolle.length === 0 ? (
+              <div className="text-center py-8 text-gray-500">
+                <p className="text-sm">Keine Schadensberichte vorhanden</p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {schadensprotokolle.map((sp) => (
+                  <div key={sp.id} className="bg-red-50 rounded-lg p-4 border border-red-100">
+                    <div className="flex justify-between items-start gap-2 mb-2">
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-red-900">{sp.titel}</p>
+                        <p className="text-xs text-red-700 mt-1">{sp.datum}</p>
+                      </div>
+                      <button
+                        onClick={() => deleteSchadenMutation.mutate(sp.id)}
+                        className="text-red-600 hover:text-red-800 text-xs font-medium"
+                      >
+                        Löschen
+                      </button>
+                    </div>
+                    {sp.beschreibung && (
+                      <p className="text-xs text-red-700 mt-2">{sp.beschreibung}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
