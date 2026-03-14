@@ -145,6 +145,31 @@ export default function AufgabeDialog({ isOpen, onClose, aufgabe, einrichtung, t
               </Select>
             </div>
           )}
+          {schaeden.length > 0 && (
+            <div>
+              <label className="text-xs text-gray-400 mb-1 block">Protokolle anhängen (optional)</label>
+              <div className="space-y-1.5 max-h-32 overflow-y-auto">
+                {schaeden.map((s) => (
+                  <label key={s.id} className="flex items-center gap-2 cursor-pointer p-1.5 rounded hover:bg-[#1a1a1a]">
+                    <input
+                      type="checkbox"
+                      checked={(formData.schadensprotokolle_ids || []).includes(s.id)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          set("schadensprotokolle_ids", [...(formData.schadensprotokolle_ids || []), s.id]);
+                        } else {
+                          set("schadensprotokolle_ids", (formData.schadensprotokolle_ids || []).filter(id => id !== s.id));
+                        }
+                      }}
+                      className="w-4 h-4 rounded cursor-pointer"
+                    />
+                    <span className="text-xs text-gray-300 flex-1">{s.titel}</span>
+                    <span className="text-[10px] text-gray-500">{s.datum}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
           <div className="flex gap-2 pt-1">
             <Button type="button" onClick={onClose} variant="outline" className="flex-1 border-[#3a3a3a]">Abbrechen</Button>
             <Button type="submit" disabled={mutation.isPending} className="flex-1 bg-[#22c55e] text-black hover:bg-[#16a34a]">
