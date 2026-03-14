@@ -1,9 +1,10 @@
 import React from "react";
-import { X, PenLine, Warehouse } from "lucide-react";
+import { X, PenLine, Warehouse, Eye } from "lucide-react";
 
 const actions = [
   { icon: PenLine, label: "Reviergrenze einzeichnen", key: "boundary" },
   { icon: Warehouse, label: "Einrichtung hinzufügen", key: "einrichtung" },
+  { icon: Eye, label: "Sichtung erfassen", key: "sichtung" },
 ];
 
 export default function MapActionSheet({ onClose, onSelect }) {
