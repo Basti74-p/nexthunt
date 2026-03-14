@@ -144,21 +144,7 @@ export default function Aufgaben() {
             <div className="space-y-2">
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">Offen ({open.length})</p>
               {open.map(a => (
-                <div key={a.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 cursor-pointer hover:shadow-md transition-shadow" onClick={() => {
-                  setEditingTask(a);
-                  setForm({
-                    title: a.title,
-                    description: a.description || "",
-                    due_date: a.due_date || "",
-                    priority: a.priority || "medium",
-                    assigned_to: a.assigned_to || "",
-                    assigned_to_name: a.assigned_to_name || "",
-                    einrichtung_id: a.einrichtung_id || "",
-                    einrichtung_name: a.einrichtung_name || "",
-                    schadensprotokolle_ids: a.schadensprotokolle_ids || []
-                  });
-                  setDialogOpen(true);
-                }}>
+                <div key={a.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 cursor-pointer hover:shadow-md transition-shadow" onClick={() => setDetailView(a)}>
                   <div className="flex items-center gap-3">
                     <button onClick={(e) => {
                       e.stopPropagation();
