@@ -144,39 +144,6 @@ export default function MobileMap() {
 
   return (
     <>
-      {/* Revier Selector – oben mittig */}
-      {!drawingBoundary && !showAssignBoundary && !einrichtungMode && reviere.length > 1 && (
-        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-[9999]">
-          <button
-            onClick={() => setShowRevierPicker(p => !p)}
-            className="flex items-center gap-2 bg-[#1e1e1e]/90 backdrop-blur-md border border-[#3a3a3a] rounded-2xl px-4 py-2 shadow-lg"
-          >
-            <span className="text-sm font-semibold text-gray-100 max-w-[160px] truncate">
-              {selectedRevier?.name || "Revier wählen"}
-            </span>
-            <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${showRevierPicker ? "rotate-180" : ""}`} />
-          </button>
-
-          {showRevierPicker && (
-            <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-[#1e1e1e]/95 backdrop-blur-md border border-[#3a3a3a] rounded-2xl overflow-hidden shadow-xl min-w-[200px]">
-              {reviere.map(r => (
-                <button
-                  key={r.id}
-                  onClick={() => { setSelectedRevierId(r.id); setShowRevierPicker(false); }}
-                  className={`w-full text-left px-4 py-3 text-sm border-b border-[#2a2a2a] last:border-0 transition-colors ${
-                    r.id === selectedRevierId
-                      ? "text-[#22c55e] font-semibold bg-[#22c55e]/10"
-                      : "text-gray-200 hover:bg-[#2a2a2a]"
-                  }`}
-                >
-                  {r.name}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
       {/* Einrichtung mode hint banner */}
       {einrichtungMode && (
         <div
