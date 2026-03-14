@@ -85,6 +85,16 @@ export default function MobileMap() {
       )}
 
     </div>
+
+      {/* FAB – Plus Button – außerhalb des Karten-Containers */}
+      <button
+        style={{ zIndex: 9999 }}
+        className="fixed bottom-24 right-4 w-14 h-14 bg-[#22c55e] rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform"
+        onClick={() => {}}
+      >
+        <Plus className="w-7 h-7 text-black stroke-[2.5]" />
+      </button>
+    </>
   );
 }
 }
