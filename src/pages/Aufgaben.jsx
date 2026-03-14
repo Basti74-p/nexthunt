@@ -174,6 +174,24 @@ export default function Aufgaben() {
                 </Select>
               </div>
             </div>
+            <div>
+              <Label>Zuweisen an</Label>
+              <Select value={form.assigned_to} onValueChange={(v) => {
+                const member = tenantMembers.find(m => m.id === v);
+                const person = personen.find(p => p.id === v);
+                setForm({ 
+                  ...form, 
+                  assigned_to: v,
+                  assigned_to_name: member?.first_name + " " + member?.last_name || person?.name || ""
+                });
+              }}>
+                <SelectTrigger><SelectValue placeholder="Person wählen..." /></SelectTrigger>
+                <SelectContent>
+                  {tenantMembers.map(m => <SelectItem key={m.id} value={m.id}>{m.first_name} {m.last_name}</SelectItem>)}
+                  {personen.map(p => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
             <Button onClick={() => createMutation.mutate(form)} disabled={!form.title || createMutation.isPending} className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl">
               {createMutation.isPending ? "Speichern..." : "Erstellen"}
             </Button>
