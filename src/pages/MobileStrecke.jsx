@@ -39,6 +39,7 @@ const EMPTY_FORM = {
   gender: "unbekannt",
   age_class: "",
   date: new Date().toISOString().split("T")[0],
+  wildmark_id: "",
 };
 
 export default function MobileStrecke() {
@@ -56,6 +57,12 @@ export default function MobileStrecke() {
   const { data: strecken = [] } = useQuery({
     queryKey: ["strecke", tenant?.id],
     queryFn: () => base44.entities.Strecke.filter({ tenant_id: tenant?.id }),
+    enabled: !!tenant?.id,
+  });
+
+  const { data: wildmarken = [] } = useQuery({
+    queryKey: ["wildmarken", tenant?.id],
+    queryFn: () => base44.entities.Wildmarke.filter({ tenant_id: tenant?.id, status: "available" }),
     enabled: !!tenant?.id,
   });
 
@@ -136,6 +143,17 @@ export default function MobileStrecke() {
                    {form.species && AGE_CLASSES[form.species]?.map(ac => (
                      <SelectItem key={ac} value={ac}>{ac}</SelectItem>
                    ))}
+                 </SelectContent>
+               </Select>
+             </div>
+             <div>
+               <Label className="text-gray-300 text-xs mb-1 block">Wildmarke</Label>
+               <Select value={form.wildmark_id} onValueChange={(v) => setForm({ ...form, wildmark_id: v })}>
+                 <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
+                   <SelectValue placeholder="Marke wählen" />
+                 </SelectTrigger>
+                 <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
+                   {wildmarken.map(w => <SelectItem key={w.id} value={w.id}>{w.code}</SelectItem>)}
                  </SelectContent>
                </Select>
              </div>
