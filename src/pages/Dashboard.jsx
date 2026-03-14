@@ -82,10 +82,10 @@ export default function Dashboard() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      {trialDaysRemaining !== null && (
+      {showTrialModal && trialDaysRemaining !== null && (
         <TrialExpiredModal 
           daysRemaining={trialDaysRemaining} 
-          onClose={() => setTrialDaysRemaining(null)}
+          onClose={() => setShowTrialModal(false)}
         />
       )}
       
