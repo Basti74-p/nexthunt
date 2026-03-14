@@ -7,14 +7,24 @@ import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import PageTransition from "@/components/ui/PageTransition";
+import CalendarMonth from "@/components/calendar/CalendarMonth";
+import EventDetailDialog from "@/components/calendar/EventDetailDialog";
 
 export default function MobileKalender() {
   const { tenant } = useAuth();
   const [showNewJagdDialog, setShowNewJagdDialog] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [showEventDetail, setShowEventDetail] = useState(false);
 
   const { data: jagden = [] } = useQuery({
     queryKey: ["gesellschaftsjagden-mobile", tenant?.id],
     queryFn: () => base44.entities.GesellschaftsJagd.filter({ tenant_id: tenant?.id }, "-datum", 50),
+    enabled: !!tenant?.id,
+  });
+
+  const { data: termine = [] } = useQuery({
+    queryKey: ["termine-mobile", tenant?.id],
+    queryFn: () => base44.entities.Termin.filter({ tenant_id: tenant?.id }, "-datum", 100),
     enabled: !!tenant?.id,
   });
 
@@ -58,6 +68,15 @@ export default function MobileKalender() {
             <h1 className="text-2xl font-bold text-gray-100">Jagdkalender</h1>
             <p className="text-xs text-gray-400">Gesellschaftsjagden planen und koordinieren</p>
           </div>
+        </div>
+
+        {/* Calendar */}
+        <div className="px-4 mb-6">
+          <CalendarMonth 
+            currentDate={new Date()} 
+            onEventClick={(event) => { setSelectedEvent(event); setShowEventDetail(true); }}
+            events={[...jagden, ...termine]} 
+          />
         </div>
 
         {/* New Hunt Button */}
@@ -150,6 +169,9 @@ export default function MobileKalender() {
             <p className="text-sm text-gray-500 mt-1">Erstellen Sie eine neue Jagd um zu starten</p>
           </div>
         )}
+
+        {/* Event Detail Dialog */}
+        <EventDetailDialog isOpen={showEventDetail} onClose={() => setShowEventDetail(false)} event={selectedEvent} />
       </div>
     </PageTransition>
   );
