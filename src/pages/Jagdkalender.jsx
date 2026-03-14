@@ -108,7 +108,7 @@ export default function Jagdkalender() {
   );
 }
 
-function JagdMonitorCard({ jagd }) {
+export function JagdMonitorCard({ jagd }) {
   const dateStr = jagd.datum ? (() => {
     try { return format(new Date(jagd.datum), "dd. MMM yyyy", { locale: de }); } catch { return jagd.datum; }
   })() : "";
@@ -135,7 +135,7 @@ function JagdMonitorCard({ jagd }) {
   );
 }
 
-function TerminCard({ termin }) {
+export function TerminCard({ termin }) {
   const dateStr = termin.datum ? (() => {
     try { return format(new Date(termin.datum), "dd. MMM yyyy", { locale: de }); } catch { return termin.datum; }
   })() : "";
