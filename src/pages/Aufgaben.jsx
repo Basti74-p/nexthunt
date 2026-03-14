@@ -118,6 +118,10 @@ export default function Aufgaben() {
   const open = aufgaben.filter(a => a.status !== "erledigt");
   const done = aufgaben.filter(a => a.status === "erledigt");
 
+  if (detailView) {
+    return <AufgabeDetailView aufgabe={detailView} onBack={() => setDetailView(null)} tenantId={tenant?.id} />;
+  }
+
   return (
     <div className="max-w-4xl mx-auto">
       <PageHeader
