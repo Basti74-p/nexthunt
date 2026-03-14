@@ -44,6 +44,7 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/Demo" element={<Demo />} />
+      <Route path="/MobileAufgabenDetail" element={<MobileAufgabenDetail />} />
       <Route path="/" element={
         <LayoutWrapper currentPageName={mainPageKey}>
           <MainPage />
