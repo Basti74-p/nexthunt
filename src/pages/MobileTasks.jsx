@@ -7,6 +7,7 @@ import { Check, RefreshCw } from "lucide-react";
 import PageTransition from "@/components/ui/PageTransition";
 
 export default function MobileTasks() {
+  const navigate = useNavigate();
   const { tenant } = useAuth();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const pullStartRef = useRef(null);
