@@ -22,6 +22,7 @@ export default function MobileMap() {
   const [userPos, setUserPos] = useState(null);
   const [showWeather, setShowWeather] = useState(false);
   const [showActionSheet, setShowActionSheet] = useState(false);
+  const [showRevierPicker, setShowRevierPicker] = useState(false);
 
   // Einrichtung state
   const [einrichtungMode, setEinrichtungMode] = useState(false); // waiting for map click
