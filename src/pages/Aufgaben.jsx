@@ -159,21 +159,6 @@ export default function Aufgaben() {
           <DialogHeader><DialogTitle>Neue Aufgabe</DialogTitle></DialogHeader>
           <div className="space-y-4 mt-4">
             <div><Label>Titel *</Label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
-            <div><Label>Beschreibung</Label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
-            <div className="grid grid-cols-2 gap-4">
-              <div><Label>Fällig am</Label><Input type="date" value={form.due_date} onChange={(e) => setForm({ ...form, due_date: e.target.value })} /></div>
-              <div>
-                <Label>Priorität</Label>
-                <Select value={form.priority} onValueChange={(v) => setForm({ ...form, priority: v })}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="low">Niedrig</SelectItem>
-                    <SelectItem value="medium">Mittel</SelectItem>
-                    <SelectItem value="high">Hoch</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
             <div>
               <Label>Zuweisen an</Label>
               <Select value={form.assigned_to} onValueChange={(v) => {
@@ -191,6 +176,21 @@ export default function Aufgaben() {
                   {personen.map(p => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
                 </SelectContent>
               </Select>
+            </div>
+            <div><Label>Beschreibung</Label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
+            <div className="grid grid-cols-2 gap-4">
+              <div><Label>Fällig am</Label><Input type="date" value={form.due_date} onChange={(e) => setForm({ ...form, due_date: e.target.value })} /></div>
+              <div>
+                <Label>Priorität</Label>
+                <Select value={form.priority} onValueChange={(v) => setForm({ ...form, priority: v })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="low">Niedrig</SelectItem>
+                    <SelectItem value="medium">Mittel</SelectItem>
+                    <SelectItem value="high">Hoch</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <Button onClick={() => createMutation.mutate(form)} disabled={!form.title || createMutation.isPending} className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl">
               {createMutation.isPending ? "Speichern..." : "Erstellen"}
