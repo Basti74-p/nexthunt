@@ -42,8 +42,8 @@ export default function MobileNav({ currentPage }) {
 
   return (
     <>
-      {/* Maintenance Overlay – alles außer Karte sperren */}
-      {MAINTENANCE_MODE && currentPage !== "MobileMap" && <MaintenanceOverlay />}
+      {/* Maintenance Overlay – alles außer Strecke sperren */}
+      {MAINTENANCE_MODE && currentPage !== "MobileStrecke" && <MaintenanceOverlay />}
 
       {/* Top bar – auf der Karte ausblenden (Vollbild) */}
       {currentPage !== "MobileMap" && (
