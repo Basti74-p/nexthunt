@@ -51,89 +51,108 @@ export default function AufgabeDetailView({ aufgabe, onBack, tenantId }) {
     try {
       const doc = new jsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();
-      const pageHeight = doc.internal.pageSize.getHeight();
-      let yPos = 10;
+      let yPos = 15;
 
-      // Header
-      doc.setFontSize(20);
+      // Header Box
+      doc.setFillColor(34, 197, 94);
+      doc.rect(0, 0, pageWidth, 25, "F");
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(24);
       doc.setFont(undefined, "bold");
-      doc.text("Arbeitsauftrag", 10, yPos);
-      yPos += 8;
+      doc.text("ARBEITSAUFTRAG", 15, 18);
 
-      // Metadata
-      doc.setFontSize(10);
-      doc.setFont(undefined, "normal");
-      doc.text(`ID: ${aufgabe.id}`, 10, yPos);
-      doc.text(`Erstellt: ${format(new Date(aufgabe.created_date), "dd.MM.yyyy HH:mm", { locale: de })}`, 10, yPos + 5);
-      yPos += 15;
+      // Reset text color
+      doc.setTextColor(50, 50, 50);
+      yPos = 35;
 
-      // Status & Priority
-      doc.setFontSize(11);
+      // Title
+      doc.setFontSize(16);
       doc.setFont(undefined, "bold");
-      doc.text("Status & Priorität", 10, yPos);
-      yPos += 6;
-      doc.setFontSize(10);
-      doc.setFont(undefined, "normal");
-      doc.text(`Status: ${STATUS_LABEL[aufgabe.status]}`, 10, yPos);
-      doc.text(`Priorität: ${PRIO_LABEL[aufgabe.priority]}`, 10, yPos + 5);
-      yPos += 15;
+      doc.text(aufgabe.title, 15, yPos);
+      yPos += 10;
 
-      // Title & Description
-      doc.setFontSize(11);
+      // Status Bar
+      doc.setFillColor(240, 240, 240);
+      doc.rect(15, yPos - 2, pageWidth - 30, 16, "F");
+      doc.setFontSize(10);
       doc.setFont(undefined, "bold");
-      doc.text("Titel", 10, yPos);
-      yPos += 6;
-      doc.setFontSize(10);
-      doc.setFont(undefined, "normal");
-      doc.text(aufgabe.title, 10, yPos, { maxWidth: pageWidth - 20 });
-      yPos += 8;
+      doc.setTextColor(100, 100, 100);
+      
+      const statusColor = aufgabe.status === "offen" ? [59, 130, 246] : aufgabe.status === "in_bearbeitung" ? [251, 191, 36] : [34, 197, 94];
+      doc.setTextColor(...statusColor);
+      doc.text(`Status: ${STATUS_LABEL[aufgabe.status]}`, 15, yPos + 5);
+      
+      const prioColor = aufgabe.priority === "high" ? [239, 68, 68] : aufgabe.priority === "medium" ? [251, 146, 60] : [59, 130, 246];
+      doc.setTextColor(...prioColor);
+      doc.text(`Priorität: ${PRIO_LABEL[aufgabe.priority]}`, 100, yPos + 5);
+      
+      doc.setTextColor(50, 50, 50);
+      yPos += 22;
 
+      // Description
       if (aufgabe.description) {
         doc.setFontSize(11);
         doc.setFont(undefined, "bold");
-        doc.text("Beschreibung", 10, yPos);
+        doc.text("Beschreibung", 15, yPos);
         yPos += 6;
         doc.setFontSize(10);
         doc.setFont(undefined, "normal");
-        const splitDesc = doc.splitTextToSize(aufgabe.description, pageWidth - 20);
-        doc.text(splitDesc, 10, yPos);
-        yPos += splitDesc.length * 5 + 5;
+        const splitDesc = doc.splitTextToSize(aufgabe.description, pageWidth - 30);
+        doc.text(splitDesc, 15, yPos);
+        yPos += splitDesc.length * 5 + 8;
       }
 
-      // Details
-      doc.setFontSize(11);
+      // Details Section
+      doc.setFillColor(245, 245, 245);
+      doc.rect(15, yPos - 2, pageWidth - 30, 1, "F");
+      yPos += 3;
+
+      doc.setFontSize(12);
       doc.setFont(undefined, "bold");
-      doc.text("Details", 10, yPos);
-      yPos += 6;
+      doc.text("Auftragsdetails", 15, yPos);
+      yPos += 8;
+
+      const detailsData = [];
+      if (aufgabe.due_date) detailsData.push([`Fällig am:`, format(new Date(aufgabe.due_date), "dd. MMMM yyyy", { locale: de })]);
+      if (aufgabe.assigned_to_name) detailsData.push([`Zugewiesen an:`, aufgabe.assigned_to_name]);
+      if (aufgabe.einrichtung_name) detailsData.push([`Jagdeinrichtung:`, aufgabe.einrichtung_name]);
+      detailsData.push([`Erstellt:`, format(new Date(aufgabe.created_date), "dd.MM.yyyy HH:mm", { locale: de })]);
+
       doc.setFontSize(10);
       doc.setFont(undefined, "normal");
-      if (aufgabe.due_date) {
-        doc.text(`Fällig am: ${format(new Date(aufgabe.due_date), "dd. MMMM yyyy", { locale: de })}`, 10, yPos);
-        yPos += 5;
-      }
-      if (aufgabe.assigned_to_name) {
-        doc.text(`Zugewiesen an: ${aufgabe.assigned_to_name}`, 10, yPos);
-        yPos += 5;
-      }
-      if (aufgabe.einrichtung_name) {
-        doc.text(`Jagdeinrichtung: ${aufgabe.einrichtung_name}`, 10, yPos);
-        yPos += 5;
-      }
+      detailsData.forEach(([label, value]) => {
+        doc.setFont(undefined, "bold");
+        doc.text(label, 15, yPos);
+        doc.setFont(undefined, "normal");
+        doc.text(value, 75, yPos);
+        yPos += 6;
+      });
 
       // Schadensprotokolle
       if (aufgabe.schadensprotokolle_ids?.length > 0) {
         yPos += 5;
-        doc.setFontSize(11);
+        doc.setFillColor(245, 245, 245);
+        doc.rect(15, yPos - 2, pageWidth - 30, 1, "F");
+        yPos += 3;
+
+        doc.setFontSize(12);
         doc.setFont(undefined, "bold");
-        doc.text(`Angehängte Schadensprotokolle (${aufgabe.schadensprotokolle_ids.length})`, 10, yPos);
-        yPos += 6;
-        doc.setFontSize(9);
+        doc.text(`Angehängte Schadensprotokolle (${aufgabe.schadensprotokolle_ids.length})`, 15, yPos);
+        yPos += 8;
+
+        doc.setFontSize(10);
         doc.setFont(undefined, "normal");
         aufgabe.schadensprotokolle_ids.forEach((id, idx) => {
-          doc.text(`• Protokoll ${idx + 1}: ${id}`, 10, yPos);
-          yPos += 4;
+          doc.text(`${idx + 1}. ${id}`, 20, yPos);
+          yPos += 5;
         });
       }
+
+      // Footer
+      doc.setFontSize(8);
+      doc.setTextColor(150, 150, 150);
+      doc.text(`Arbeitsauftrag ID: ${aufgabe.id}`, 15, doc.internal.pageSize.getHeight() - 10);
+      doc.text(`Generiert: ${format(new Date(), "dd.MM.yyyy HH:mm", { locale: de })}`, pageWidth - 60, doc.internal.pageSize.getHeight() - 10);
 
       doc.save(`Arbeitsauftrag_${aufgabe.id}.pdf`);
     } finally {
