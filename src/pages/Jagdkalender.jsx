@@ -83,14 +83,27 @@ export default function Jagdkalender() {
         </div>
       )}
 
-      {andere.length > 0 && (
+        {andere.length > 0 && (
+          <div>
+            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Weitere Jagden</h2>
+            <div className="space-y-2">
+              {andere.slice(0, 5).map(j => <JagdMonitorCard key={j.id} jagd={j} />)}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Termine */}
+      {termine.length > 0 && (
         <div>
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Weitere Jagden</h2>
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Kommende Termine</h2>
           <div className="space-y-2">
-            {andere.slice(0, 5).map(j => <JagdMonitorCard key={j.id} jagd={j} />)}
+            {termine.filter(t => new Date(t.datum) >= new Date()).slice(0, 5).map(t => <TerminCard key={t.id} termin={t} />)}
           </div>
         </div>
       )}
+
+      <TerminDialog isOpen={showTerminDialog} onClose={() => setShowTerminDialog(false)} selectedDate={selectedDate} tenant={tenant} />
     </div>
   );
 }
