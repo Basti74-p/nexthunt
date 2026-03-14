@@ -10,12 +10,12 @@ const MAINTENANCE_MODE = true; // Toggle für Wartungsmodus
 
 const TAB_NAMES = {
   MobileMap: "Karte",
-  MobileSightings: "Sichtungen",
   MobileStrecke: "Strecke",
   MobileTasks: "Aufgaben",
   MobileMonitor: "Monitor",
-  JagdkalenderMain: "Jagdkalender",
+  JagdkalenderMain: "Kalender",
   JagdDetail: "Jagd",
+  Jagdeinrichtungen: "Einrichtungen",
 };
 
 export default function MobileNav({ currentPage }) {
