@@ -62,6 +62,12 @@ export default function Aufgaben() {
     enabled: !!tenant?.id,
   });
 
+  const { data: einrichtungen = [] } = useQuery({
+    queryKey: ["einrichtungen", tenant?.id],
+    queryFn: () => base44.entities.Jagdeinrichtung.filter({ tenant_id: tenant?.id }),
+    enabled: !!tenant?.id,
+  });
+
   const createMutation = useMutation({
     mutationFn: (data) => {
       if (editingTask) {
