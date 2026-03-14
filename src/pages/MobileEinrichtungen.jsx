@@ -28,7 +28,6 @@ export default function MobileEinrichtungen() {
   const { tenant, tenantMember } = useAuth();
   const queryClient = useQueryClient();
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [showCreateDialog, setShowCreateDialog] = useState(false);
 
   const { data: einrichtungen = [], isLoading } = useQuery({
     queryKey: ["einrichtungen-mobile", tenant?.id],
