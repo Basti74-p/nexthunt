@@ -118,6 +118,15 @@ export default function MobileStrecke() {
     },
   });
 
+  const deleteStrecke = async () => {
+    if (selectedStrecke && confirm("Eintrag wirklich löschen?")) {
+      await base44.entities.Strecke.delete(selectedStrecke.id);
+      queryClient.invalidateQueries({ queryKey: ["strecke"] });
+      setDetailOpen(false);
+      setSelectedStrecke(null);
+    }
+  };
+
   return (
     <div className="pt-4">
       <div className="flex items-center justify-between mb-4">
@@ -286,12 +295,21 @@ export default function MobileStrecke() {
                    >
                      {createWildkammerMutation.isPending ? "Einlagern..." : "In Wildkammer einlagern"}
                    </Button>
-                 </div>
-               </div>
-             </div>
-           )}
-         </DialogContent>
-         </Dialog>
+                   </div>
+                   </div>
+
+                   <div className="border-t border-[#3a3a3a] pt-4">
+                   <Button 
+                   onClick={deleteStrecke}
+                   className="w-full bg-red-900/50 text-red-400 hover:bg-red-900/70 rounded-xl text-sm border border-red-700/30"
+                   >
+                   Eintrag löschen
+                   </Button>
+                   </div>
+                   </div>
+                   )}
+                   </DialogContent>
+                   </Dialog>
          </div>
          );
          }
