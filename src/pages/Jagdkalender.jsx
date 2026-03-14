@@ -40,26 +40,26 @@ export default function Jagdkalender() {
   return (
     <div className="max-w-6xl mx-auto space-y-8">
       {/* Kalender Header */}
-       <div className="flex items-center justify-between mb-6">
-         <div className="flex items-center gap-3">
-           <Calendar className="w-6 h-6 text-[#22c55e]" />
-           <div>
-             <h1 className="text-2xl font-bold text-gray-100">Jagdkalender</h1>
-             <p className="text-sm text-gray-400">Termine & Gesellschaftsjagden</p>
-           </div>
-         </div>
-         <Button onClick={() => { setSelectedDate(null); setShowTerminDialog(true); }} className="gap-2">
-           <Plus className="w-4 h-4" />
-           Neuer Termin
-         </Button>
-       </div>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <Calendar className="w-6 h-6 text-[#22c55e]" />
+          <div>
+            <h1 className="text-2xl font-bold text-gray-100">Jagdkalender</h1>
+            <p className="text-sm text-gray-400">Termine & Gesellschaftsjagden</p>
+          </div>
+        </div>
+        <Button onClick={() => { setSelectedDate(null); setShowTerminDialog(true); }} className="gap-2">
+          <Plus className="w-4 h-4" />
+          Neuer Termin
+        </Button>
+      </div>
 
-       {/* Kalender */}
-       <CalendarMonth currentDate={new Date()} onDateSelect={handleDateSelect} events={[...jagden, ...termine]} />
+      {/* Kalender */}
+      <CalendarMonth currentDate={new Date()} onDateSelect={handleDateSelect} events={[...jagden, ...termine]} />
 
       {/* Live-Monitor */}
       <div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 mb-4">
           <Radio className="w-6 h-6 text-green-400 animate-pulse" />
           <div>
             <h2 className="text-2xl font-bold text-gray-100">Live-Monitor</h2>
@@ -67,24 +67,24 @@ export default function Jagdkalender() {
           </div>
         </div>
 
-      {aktive.length > 0 ? (
-        <div className="space-y-3">
-          <h2 className="text-sm font-semibold text-green-400 uppercase tracking-wider">● Live</h2>
-          {aktive.map(j => <JagdMonitorCard key={j.id} jagd={j} />)}
-        </div>
-      ) : (
-        <div className="bg-[#1e1e1e] rounded-2xl border border-[#2d2d2d] p-10 text-center">
-          <Radio className="w-10 h-10 text-gray-600 mx-auto mb-3" />
-          <p className="text-gray-400 font-medium">Keine aktiven Jagden</p>
-          <p className="text-sm text-gray-500 mt-1">Aktive Jagden werden hier live angezeigt</p>
-          <Link to={createPageUrl("JagdkalenderMain")} className="inline-flex items-center gap-1 text-sm text-[#22c55e] mt-4 hover:underline">
-            Zum Jagdkalender <ChevronRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-      )}
+        {aktive.length > 0 ? (
+          <div className="space-y-3">
+            <h2 className="text-sm font-semibold text-green-400 uppercase tracking-wider">● Live</h2>
+            {aktive.map(j => <JagdMonitorCard key={j.id} jagd={j} />)}
+          </div>
+        ) : (
+          <div className="bg-[#1e1e1e] rounded-2xl border border-[#2d2d2d] p-10 text-center">
+            <Radio className="w-10 h-10 text-gray-600 mx-auto mb-3" />
+            <p className="text-gray-400 font-medium">Keine aktiven Jagden</p>
+            <p className="text-sm text-gray-500 mt-1">Aktive Jagden werden hier live angezeigt</p>
+            <Link to={createPageUrl("JagdkalenderMain")} className="inline-flex items-center gap-1 text-sm text-[#22c55e] mt-4 hover:underline">
+              Zum Jagdkalender <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        )}
 
         {andere.length > 0 && (
-          <div>
+          <div className="mt-6">
             <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Weitere Jagden</h2>
             <div className="space-y-2">
               {andere.slice(0, 5).map(j => <JagdMonitorCard key={j.id} jagd={j} />)}
