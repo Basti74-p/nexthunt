@@ -30,7 +30,7 @@ export default function MobileNav({ currentPage }) {
     { name: "Strecke", icon: Crosshair, page: "MobileStrecke", feature: "feature_strecke" },
     { name: "Aufgaben", icon: ListTodo, page: "MobileTasks", feature: "feature_tasks" },
     { name: "Kalender", icon: Calendar, page: "JagdkalenderMain", feature: "feature_kalender" },
-    { name: "Einrichtungen", icon: Warehouse, page: "Jagdeinrichtungen", feature: "feature_einrichtungen" },
+    { name: "Einrichtungen", icon: Warehouse, page: "MobileEinrichtungen", feature: "feature_einrichtungen" },
   ].filter(t => t.feature === null || tenantFeatures[t.feature] !== false);
 
   // Track tab switches for history management
