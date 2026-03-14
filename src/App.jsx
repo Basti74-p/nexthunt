@@ -11,6 +11,7 @@ import Demo from './pages/Demo';
 import MobileAufgabenDetail from './pages/MobileAufgabenDetail';
 import MobileEinrichtungen from './pages/MobileEinrichtungen';
 import MobileEinrichtungsDetail from './pages/MobileEinrichtungsDetail';
+import JagdkalenderKalender from './pages/JagdkalenderKalender';
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
@@ -59,6 +60,11 @@ const AuthenticatedApp = () => {
       <Route path="/MobileEinrichtungsDetail" element={
         <LayoutWrapper currentPageName="MobileEinrichtungsDetail">
           <MobileEinrichtungsDetail />
+        </LayoutWrapper>
+      } />
+      <Route path="/JagdkalenderKalender" element={
+        <LayoutWrapper currentPageName="JagdkalenderKalender">
+          <JagdkalenderKalender />
         </LayoutWrapper>
       } />
       <Route path="/" element={
