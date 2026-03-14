@@ -151,29 +151,7 @@ class WindCanvasLayer extends L.Layer {
         ctx.stroke();
       }
 
-      // Pfeilspitze am Kopf
-      const head = trail[0];
-      const ref = trail[Math.min(8, tLen - 1)];
-      const angle = Math.atan2(head.y - ref.y, head.x - ref.x);
-      const aw = p.width * 3;
-      const al = p.width * 7;
 
-      ctx.beginPath();
-      ctx.moveTo(
-        head.x + Math.cos(angle) * al * 0.5,
-        head.y + Math.sin(angle) * al * 0.5
-      );
-      ctx.lineTo(
-        head.x - al * Math.cos(angle) + aw * Math.cos(angle - Math.PI / 2),
-        head.y - al * Math.sin(angle) + aw * Math.sin(angle - Math.PI / 2)
-      );
-      ctx.lineTo(
-        head.x - al * Math.cos(angle) + aw * Math.cos(angle + Math.PI / 2),
-        head.y - al * Math.sin(angle) + aw * Math.sin(angle + Math.PI / 2)
-      );
-      ctx.closePath();
-      ctx.fillStyle = `rgba(${r},${g},${b},${p.opacity * 0.9})`;
-      ctx.fill();
 
       // Reset wenn außerhalb oder zu alt
       const out = p.x < -80 || p.x > w + 80 || p.y < -80 || p.y > h + 80;
