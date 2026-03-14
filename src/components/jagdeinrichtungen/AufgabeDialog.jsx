@@ -56,7 +56,7 @@ export default function AufgabeDialog({ isOpen, onClose, aufgabe, einrichtung, t
         : base44.entities.Aufgabe.create({
             ...data,
             tenant_id: tenantId,
-            revier_id: einrichtung.revier_id,
+            revier_id: einrichtung?.revier_id || "",
           }),
     onSuccess: () => {
       queryClient.invalidateQueries(["aufgaben_einrichtung", einrichtung?.id]);
