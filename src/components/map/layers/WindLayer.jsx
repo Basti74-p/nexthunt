@@ -93,7 +93,7 @@ class WindCanvasLayer extends L.Layer {
       trailLen,
       age: Math.floor(Math.random() * trailLen),
       maxAge: 180 + Math.floor(Math.random() * 120),
-      opacity: 0.4 + Math.random() * 0.5,
+      opacity: 0.25 + Math.random() * 0.3,
     };
   }
 
