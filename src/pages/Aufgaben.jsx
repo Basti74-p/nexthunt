@@ -128,9 +128,24 @@ export default function Aufgaben() {
             <div className="space-y-2">
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">Offen ({open.length})</p>
               {open.map(a => (
-                <div key={a.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+                <div key={a.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 cursor-pointer hover:shadow-md transition-shadow" onClick={() => {
+                  setEditingTask(a);
+                  setForm({
+                    title: a.title,
+                    description: a.description || "",
+                    due_date: a.due_date || "",
+                    priority: a.priority || "medium",
+                    assigned_to: a.assigned_to || "",
+                    assigned_to_name: a.assigned_to_name || "",
+                    schadensprotokolle_ids: a.schadensprotokolle_ids || []
+                  });
+                  setDialogOpen(true);
+                }}>
                   <div className="flex items-center gap-3">
-                    <button onClick={() => toggleMutation.mutate({ id: a.id, status: a.status })}
+                    <button onClick={(e) => {
+                      e.stopPropagation();
+                      toggleMutation.mutate({ id: a.id, status: a.status });
+                    }}
                       className="w-6 h-6 rounded-full border-2 border-gray-300 hover:border-[#0F2F23] transition-colors shrink-0" />
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-gray-900">{a.title}</p>
