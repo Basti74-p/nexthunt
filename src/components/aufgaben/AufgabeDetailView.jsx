@@ -26,6 +26,8 @@ const customMarkerIcon = new L.Icon({
 });
 
 export default function AufgabeDetailView({ aufgabe, onBack, tenantId }) {
+  const [exporting, setExporting] = useState(false);
+
   const { data: einrichtung } = useQuery({
     queryKey: ["aufgabe-detail-einrichtung", aufgabe?.einrichtung_id],
     queryFn: () => base44.entities.Jagdeinrichtung.filter({ id: aufgabe.einrichtung_id }),
@@ -43,6 +45,101 @@ export default function AufgabeDetailView({ aufgabe, onBack, tenantId }) {
     },
     enabled: !!aufgabe?.assigned_to,
   });
+
+  const handlePDFExport = async () => {
+    setExporting(true);
+    try {
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      let yPos = 10;
+
+      // Header
+      doc.setFontSize(20);
+      doc.setFont(undefined, "bold");
+      doc.text("Arbeitsauftrag", 10, yPos);
+      yPos += 8;
+
+      // Metadata
+      doc.setFontSize(10);
+      doc.setFont(undefined, "normal");
+      doc.text(`ID: ${aufgabe.id}`, 10, yPos);
+      doc.text(`Erstellt: ${format(new Date(aufgabe.created_date), "dd.MM.yyyy HH:mm", { locale: de })}`, 10, yPos + 5);
+      yPos += 15;
+
+      // Status & Priority
+      doc.setFontSize(11);
+      doc.setFont(undefined, "bold");
+      doc.text("Status & Priorität", 10, yPos);
+      yPos += 6;
+      doc.setFontSize(10);
+      doc.setFont(undefined, "normal");
+      doc.text(`Status: ${STATUS_LABEL[aufgabe.status]}`, 10, yPos);
+      doc.text(`Priorität: ${PRIO_LABEL[aufgabe.priority]}`, 10, yPos + 5);
+      yPos += 15;
+
+      // Title & Description
+      doc.setFontSize(11);
+      doc.setFont(undefined, "bold");
+      doc.text("Titel", 10, yPos);
+      yPos += 6;
+      doc.setFontSize(10);
+      doc.setFont(undefined, "normal");
+      doc.text(aufgabe.title, 10, yPos, { maxWidth: pageWidth - 20 });
+      yPos += 8;
+
+      if (aufgabe.description) {
+        doc.setFontSize(11);
+        doc.setFont(undefined, "bold");
+        doc.text("Beschreibung", 10, yPos);
+        yPos += 6;
+        doc.setFontSize(10);
+        doc.setFont(undefined, "normal");
+        const splitDesc = doc.splitTextToSize(aufgabe.description, pageWidth - 20);
+        doc.text(splitDesc, 10, yPos);
+        yPos += splitDesc.length * 5 + 5;
+      }
+
+      // Details
+      doc.setFontSize(11);
+      doc.setFont(undefined, "bold");
+      doc.text("Details", 10, yPos);
+      yPos += 6;
+      doc.setFontSize(10);
+      doc.setFont(undefined, "normal");
+      if (aufgabe.due_date) {
+        doc.text(`Fällig am: ${format(new Date(aufgabe.due_date), "dd. MMMM yyyy", { locale: de })}`, 10, yPos);
+        yPos += 5;
+      }
+      if (aufgabe.assigned_to_name) {
+        doc.text(`Zugewiesen an: ${aufgabe.assigned_to_name}`, 10, yPos);
+        yPos += 5;
+      }
+      if (aufgabe.einrichtung_name) {
+        doc.text(`Jagdeinrichtung: ${aufgabe.einrichtung_name}`, 10, yPos);
+        yPos += 5;
+      }
+
+      // Schadensprotokolle
+      if (aufgabe.schadensprotokolle_ids?.length > 0) {
+        yPos += 5;
+        doc.setFontSize(11);
+        doc.setFont(undefined, "bold");
+        doc.text(`Angehängte Schadensprotokolle (${aufgabe.schadensprotokolle_ids.length})`, 10, yPos);
+        yPos += 6;
+        doc.setFontSize(9);
+        doc.setFont(undefined, "normal");
+        aufgabe.schadensprotokolle_ids.forEach((id, idx) => {
+          doc.text(`• Protokoll ${idx + 1}: ${id}`, 10, yPos);
+          yPos += 4;
+        });
+      }
+
+      doc.save(`Arbeitsauftrag_${aufgabe.id}.pdf`);
+    } finally {
+      setExporting(false);
+    }
+  };
 
   return (
     <div className="max-w-4xl mx-auto">
