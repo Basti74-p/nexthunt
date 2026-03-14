@@ -42,8 +42,11 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Trial still active
+    // Trial still active – update cached days_remaining
     if (tenant.status === 'trial') {
+      await base44.entities.Tenant.update(tenant.id, {
+        trial_days_remaining: Math.max(0, daysRemaining)
+      });
       return Response.json({
         status: 'active',
         tenant_id: tenant.id,
