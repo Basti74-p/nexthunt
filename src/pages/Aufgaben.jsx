@@ -147,6 +147,8 @@ export default function Aufgaben() {
                     priority: a.priority || "medium",
                     assigned_to: a.assigned_to || "",
                     assigned_to_name: a.assigned_to_name || "",
+                    einrichtung_id: a.einrichtung_id || "",
+                    einrichtung_name: a.einrichtung_name || "",
                     schadensprotokolle_ids: a.schadensprotokolle_ids || []
                   });
                   setDialogOpen(true);
