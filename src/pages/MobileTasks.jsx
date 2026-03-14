@@ -71,9 +71,12 @@ export default function MobileTasks() {
             <h3 className="text-sm font-medium text-gray-400 mb-2 select-none">Erledigt</h3>
             <div className="space-y-2">
               {done.map((a) => (
-                <div key={a.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex items-center gap-3 opacity-50 select-none">
+                <div key={a.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex items-center gap-3 opacity-50 select-none cursor-pointer" onClick={() => navigate(`/MobileAufgabenDetail?id=${a.id}`)}>
                   <button
-                    onClick={() => toggleMutation.mutate({ id: a.id, status: a.status })}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleMutation.mutate({ id: a.id, status: a.status });
+                    }}
                     className="w-6 h-6 rounded-full bg-[#0F2F23] flex items-center justify-center shrink-0 select-none"
                   >
                     <Check className="w-3.5 h-3.5 text-white" />
