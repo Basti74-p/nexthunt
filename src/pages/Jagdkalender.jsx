@@ -1,15 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/components/hooks/useAuth";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-import { Radio, Calendar, ChevronRight } from "lucide-react";
+import { Radio, Calendar, ChevronRight, Plus } from "lucide-react";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
+import CalendarMonth from "@/components/calendar/CalendarMonth";
+import TerminDialog from "@/components/calendar/TerminDialog";
+import { Button } from "@/components/ui/button";
 
 export default function Jagdkalender() {
   const { tenant } = useAuth();
+  const [showTerminDialog, setShowTerminDialog] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const { data: jagden = [] } = useQuery({
     queryKey: ["gesellschaftsjagden-aktiv", tenant?.id],
