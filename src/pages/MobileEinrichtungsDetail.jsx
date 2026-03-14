@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/hooks/useAuth";
 import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, MapPin, AlertTriangle, Image as ImageIcon, FileText } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { ArrowLeft, MapPin, AlertTriangle, Image as ImageIcon, FileText, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PageTransition from "@/components/ui/PageTransition";
+import SchadensprotokollDialog from "@/components/jagdeinrichtungen/SchadensprotokollDialog";
 
 const TYPE_LABEL = {
   hochsitz: "Hochsitz", leiter: "Leiter", erdsitz: "Erdsitz", drueckjagdbock: "Drückjagdbock",
@@ -26,7 +27,11 @@ export default function MobileEinrichtungsDetail() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { tenant } = useAuth();
+  const queryClient = useQueryClient();
   const einrichtungId = searchParams.get("id");
+  const [activeTab, setActiveTab] = useState("info");
+  const [showSchadensDialog, setShowSchadensDialog] = useState(false);
+  const [editingSchaden, setEditingSchaden] = useState(null);
 
   const { data: einrichtung, isLoading } = useQuery({
     queryKey: ["einrichtung", einrichtungId],
