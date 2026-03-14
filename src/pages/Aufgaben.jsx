@@ -155,80 +155,31 @@ export default function Aufgaben() {
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-         <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
-           <DialogHeader><DialogTitle>Neue Aufgabe</DialogTitle></DialogHeader>
-           <div className="space-y-4 mt-4">
-             <div><Label>Titel *</Label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
-             <div><Label>Beschreibung</Label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
-             <div className="grid grid-cols-2 gap-4">
-               <div><Label>Fällig am</Label><Input type="date" value={form.due_date} onChange={(e) => setForm({ ...form, due_date: e.target.value })} /></div>
-               <div>
-                 <Label>Priorität</Label>
-                 <Select value={form.priority} onValueChange={(v) => setForm({ ...form, priority: v })}>
-                   <SelectTrigger><SelectValue /></SelectTrigger>
-                   <SelectContent>
-                     <SelectItem value="low">Niedrig</SelectItem>
-                     <SelectItem value="medium">Mittel</SelectItem>
-                     <SelectItem value="high">Hoch</SelectItem>
-                   </SelectContent>
-                 </Select>
-               </div>
-             </div>
-
-             <div>
-               <Label>Zuweisen an</Label>
-               <Select value={form.assigned_to} onValueChange={(v) => {
-                 const member = tenantMembers.find(m => m.id === v);
-                 const person = personen.find(p => p.id === v);
-                 setForm({ 
-                   ...form, 
-                   assigned_to: v,
-                   assigned_to_name: member?.first_name + " " + member?.last_name || person?.name || ""
-                 });
-               }}>
-                 <SelectTrigger><SelectValue placeholder="Person wählen..." /></SelectTrigger>
-                 <SelectContent>
-                   {tenantMembers.map(m => <SelectItem key={m.id} value={m.id}>{m.first_name} {m.last_name}</SelectItem>)}
-                   {personen.map(p => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
-                 </SelectContent>
-               </Select>
-             </div>
-
-             <div>
-               <Label>Schadensprotokoll verknüpfen</Label>
-               <div className="space-y-1 mt-1 max-h-32 overflow-y-auto border rounded-lg p-2">
-                 {schadensprotokoll.length === 0 ? (
-                   <p className="text-xs text-gray-400">Keine Schadensprotokoll vorhanden</p>
-                 ) : (
-                   schadensprotokoll.map(s => (
-                     <label key={s.id} className="flex items-center gap-2 p-1 cursor-pointer hover:bg-gray-50">
-                       <input 
-                         type="checkbox"
-                         checked={(form.schadensprotokolle_ids || []).includes(s.id)}
-                         onChange={(e) => {
-                           const ids = form.schadensprotokolle_ids || [];
-                           setForm({
-                             ...form,
-                             schadensprotokolle_ids: e.target.checked 
-                               ? [...ids, s.id]
-                               : ids.filter(id => id !== s.id)
-                           });
-                         }}
-                         className="w-4 h-4"
-                       />
-                       <span className="text-xs text-gray-700">{s.titel}</span>
-                     </label>
-                   ))
-                 )}
-               </div>
-             </div>
-
-             <Button onClick={() => createMutation.mutate(form)} disabled={!form.title || createMutation.isPending} className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl">
-               {createMutation.isPending ? "Speichern..." : "Erstellen"}
-             </Button>
-           </div>
-         </DialogContent>
-       </Dialog>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Neue Aufgabe</DialogTitle></DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div><Label>Titel *</Label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
+            <div><Label>Beschreibung</Label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
+            <div className="grid grid-cols-2 gap-4">
+              <div><Label>Fällig am</Label><Input type="date" value={form.due_date} onChange={(e) => setForm({ ...form, due_date: e.target.value })} /></div>
+              <div>
+                <Label>Priorität</Label>
+                <Select value={form.priority} onValueChange={(v) => setForm({ ...form, priority: v })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="low">Niedrig</SelectItem>
+                    <SelectItem value="medium">Mittel</SelectItem>
+                    <SelectItem value="high">Hoch</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <Button onClick={() => createMutation.mutate(form)} disabled={!form.title || createMutation.isPending} className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl">
+              {createMutation.isPending ? "Speichern..." : "Erstellen"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
