@@ -256,17 +256,15 @@ export default function MobileEinrichtungsDetail() {
         {/* Schaden Dialog */}
         {showSchadensDialog &&
         <SchadensprotokollDialog
-          einrichtung={einrichtung}
-          schaden={editingSchaden}
+          isOpen={showSchadensDialog}
           onClose={() => {
             setShowSchadensDialog(false);
             setEditingSchaden(null);
           }}
-          onSuccess={() => {
-            setShowSchadensDialog(false);
-            setEditingSchaden(null);
-            queryClient.invalidateQueries({ queryKey: ["schadensprotokoll"] });
-          }} />
+          schaden={editingSchaden}
+          einrichtung={einrichtung}
+          tenantId={tenant?.id}
+        />
 
         }
       </div>
