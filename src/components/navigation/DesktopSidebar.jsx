@@ -56,7 +56,6 @@ const NAV = [
 },
 {
   label: "Jagdkalender",
-  page: "JagdkalenderMain",
   icon: Calendar,
   module: "kalender",
   children: [
