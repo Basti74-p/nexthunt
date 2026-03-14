@@ -32,15 +32,40 @@ export default function Jagdkalender() {
   const aktive = jagden.filter(j => j.status === "aktiv");
   const andere = jagden.filter(j => j.status !== "aktiv");
 
+  const handleDateSelect = (date) => {
+    setSelectedDate(date);
+    setShowTerminDialog(true);
+  };
+
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      <div className="flex items-center gap-3">
-        <Radio className="w-6 h-6 text-green-400 animate-pulse" />
-        <div>
-          <h1 className="text-2xl font-bold text-gray-100">Live-Monitor</h1>
-          <p className="text-sm text-gray-400">Aktive Gesellschaftsjagden</p>
+    <div className="max-w-6xl mx-auto space-y-8">
+      {/* Kalender */}
+      <div>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <Calendar className="w-6 h-6 text-[#22c55e]" />
+            <div>
+              <h1 className="text-2xl font-bold text-gray-100">Jagdkalender</h1>
+              <p className="text-sm text-gray-400">Termine & Gesellschaftsjagden</p>
+            </div>
+          </div>
+          <Button onClick={() => { setSelectedDate(null); setShowTerminDialog(true); }} className="gap-2">
+            <Plus className="w-4 h-4" />
+            Neuer Termin
+          </Button>
         </div>
+        <CalendarMonth currentDate={new Date()} onDateSelect={handleDateSelect} events={[...jagden, ...termine]} />
       </div>
+
+      {/* Live-Monitor */}
+      <div>
+        <div className="flex items-center gap-3">
+          <Radio className="w-6 h-6 text-green-400 animate-pulse" />
+          <div>
+            <h2 className="text-2xl font-bold text-gray-100">Live-Monitor</h2>
+            <p className="text-sm text-gray-400">Aktive Gesellschaftsjagden</p>
+          </div>
+        </div>
 
       {aktive.length > 0 ? (
         <div className="space-y-3">
