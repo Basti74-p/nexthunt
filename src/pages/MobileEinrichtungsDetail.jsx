@@ -80,7 +80,7 @@ export default function MobileEinrichtungsDetail() {
         {/* Header */}
         <div className="flex items-center gap-3 px-4 mb-4">
           <button
-            onClick={() => navigate("/Jagdeinrichtungen")}
+            onClick={() => navigate("/MobileEinrichtungen")}
             className="w-9 h-9 rounded-lg hover:bg-gray-100 flex items-center justify-center"
           >
             <ArrowLeft className="w-5 h-5 text-gray-600" />
@@ -88,6 +88,30 @@ export default function MobileEinrichtungsDetail() {
           <div className="flex-1">
             <h2 className="text-lg font-bold text-gray-900">{einrichtung.name}</h2>
           </div>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex gap-2 px-4 mb-4 border-b border-gray-200">
+          <button
+            onClick={() => setActiveTab("info")}
+            className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+              activeTab === "info"
+                ? "border-[#0F2F23] text-[#0F2F23]"
+                : "border-transparent text-gray-600 hover:text-gray-900"
+            }`}
+          >
+            Infos
+          </button>
+          <button
+            onClick={() => setActiveTab("schaden")}
+            className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+              activeTab === "schaden"
+                ? "border-[#0F2F23] text-[#0F2F23]"
+                : "border-transparent text-gray-600 hover:text-gray-900"
+            }`}
+          >
+            Schadensberichte ({schadensprotokolle.length})
+          </button>
         </div>
 
         {/* Status Badge */}
