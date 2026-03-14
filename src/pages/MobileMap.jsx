@@ -11,7 +11,8 @@ import WindLayer from "@/components/map/layers/WindLayer";
 import JagdWetterWidget from "@/components/map/JagdWetterWidget";
 import EinrichtungForm from "@/components/map/EinrichtungForm";
 import MapActionSheet from "@/components/map/MapActionSheet";
-import { Plus, X } from "lucide-react";
+import { Plus, X, ChevronDown } from "lucide-react";
+import { useState as useLocalState } from "react";
 
 export default function MobileMap() {
   const { tenant } = useAuth();
