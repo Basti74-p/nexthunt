@@ -169,6 +169,19 @@ export default function MobileMap() {
         </div>
       )}
 
+      {/* Sichtung mode hint banner */}
+      {sichtungMode && (
+        <div
+          className="fixed top-16 left-1/2 -translate-x-1/2 z-[9999] bg-[#3b82f6] text-white text-sm font-semibold px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3"
+          style={{ zIndex: 9999 }}
+        >
+          <span>👁 Auf Karte tippen um Sichtungsort zu setzen</span>
+          <button onClick={() => setSichtungMode(false)}>
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
       <div className="fixed inset-0 bottom-20" style={{ zIndex: 10 }}>
         <div className="absolute inset-0">
           <RevierMapCore
