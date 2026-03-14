@@ -7,12 +7,15 @@ import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import CalendarMonth from "@/components/calendar/CalendarMonth";
 import TerminDialog from "@/components/calendar/TerminDialog";
+import EventDetailDialog from "@/components/calendar/EventDetailDialog";
 import { Button } from "@/components/ui/button";
 
 export default function JagdkalenderKalender() {
   const { tenant } = useAuth();
   const [showTerminDialog, setShowTerminDialog] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [showEventDetail, setShowEventDetail] = useState(false);
 
   const { data: jagden = [] } = useQuery({
     queryKey: ["gesellschaftsjagden", tenant?.id],
@@ -49,7 +52,12 @@ export default function JagdkalenderKalender() {
       </div>
 
       {/* Kalender */}
-      <CalendarMonth currentDate={new Date()} onDateSelect={handleDateSelect} events={[...jagden, ...termine]} />
+      <CalendarMonth 
+        currentDate={new Date()} 
+        onDateSelect={handleDateSelect} 
+        onEventClick={(event) => { setSelectedEvent(event); setShowEventDetail(true); }}
+        events={[...jagden, ...termine]} 
+      />
 
       {/* Kommende Events */}
       <div>
@@ -75,6 +83,7 @@ export default function JagdkalenderKalender() {
       </div>
 
       <TerminDialog isOpen={showTerminDialog} onClose={() => setShowTerminDialog(false)} selectedDate={selectedDate} tenant={tenant} />
+      <EventDetailDialog isOpen={showEventDetail} onClose={() => setShowEventDetail(false)} event={selectedEvent} />
     </div>
   );
 }
