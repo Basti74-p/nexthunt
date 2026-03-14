@@ -29,11 +29,13 @@ export default function MobileMap() {
   const [einrichtungMode, setEinrichtungMode] = useState(false);
   const [einrichtungCoords, setEinrichtungCoords] = useState(null);
   const [showEinrichtungForm, setShowEinrichtungForm] = useState(false);
+  const einrichtungModeRef = useRef(false);
 
   // Sichtung state
   const [sichtungMode, setSichtungMode] = useState(false);
   const [sichtungCoords, setSichtungCoords] = useState(null);
   const [showSichtungForm, setShowSichtungForm] = useState(false);
+  const sichtungModeRef = useRef(false);
 
   // Boundary drawing state
   const [drawingBoundary, setDrawingBoundary] = useState(false);
