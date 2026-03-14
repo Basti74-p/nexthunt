@@ -229,6 +229,29 @@ export default function MobileMap() {
               {showAssignBoundary && (
                 <>
                   <p className="text-sm font-semibold text-gray-200">Revier zuweisen</p>
+
+                  {/* Farbe wählen */}
+                  <div>
+                    <p className="text-xs text-gray-400 mb-2">Grenzfarbe</p>
+                    <div className="flex gap-2 flex-wrap">
+                      {["#22c55e","#ef4444","#3b82f6","#f59e0b","#a855f7","#ffffff"].map(c => (
+                        <button
+                          key={c}
+                          onClick={() => setBoundaryColor(c)}
+                          className="w-8 h-8 rounded-full border-2 transition-transform active:scale-90"
+                          style={{ background: c, borderColor: boundaryColor === c ? "#fff" : "transparent", boxShadow: boundaryColor === c ? "0 0 0 2px #22c55e" : "none" }}
+                        />
+                      ))}
+                      <input
+                        type="color"
+                        value={boundaryColor}
+                        onChange={e => setBoundaryColor(e.target.value)}
+                        className="w-8 h-8 rounded-full cursor-pointer border-0 bg-transparent p-0"
+                        title="Eigene Farbe"
+                      />
+                    </div>
+                  </div>
+
                   <select
                     value={assignRevierIdForBoundary}
                     onChange={e => setAssignRevierIdForBoundary(e.target.value)}
