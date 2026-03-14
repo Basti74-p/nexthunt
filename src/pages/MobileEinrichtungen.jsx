@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/hooks/useAuth";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Building, AlertTriangle, Trash2, MapPin, ChevronRight } from "lucide-react";
+import { Building, AlertTriangle, Trash2, MapPin, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PageTransition from "@/components/ui/PageTransition";
 
