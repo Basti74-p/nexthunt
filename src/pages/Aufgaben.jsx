@@ -16,7 +16,15 @@ import EmptyState from "@/components/ui/EmptyState";
 export default function Aufgaben() {
   const { tenant } = useAuth();
   const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [form, setForm] = React.useState({ title: "", description: "", due_date: "", priority: "medium" });
+  const [form, setForm] = React.useState({ 
+    title: "", 
+    description: "", 
+    due_date: "", 
+    priority: "medium",
+    assigned_to: "",
+    assigned_to_name: "",
+    schadensprotokolle_ids: []
+  });
   const queryClient = useQueryClient();
 
   const { data: aufgaben = [] } = useQuery({
@@ -25,8 +33,31 @@ export default function Aufgaben() {
     enabled: !!tenant?.id,
   });
 
+  const { data: tenantMembers = [] } = useQuery({
+    queryKey: ["tenant-members", tenant?.id],
+    queryFn: () => base44.entities.TenantMember.filter({ tenant_id: tenant?.id }),
+    enabled: !!tenant?.id,
+  });
+
+  const { data: personen = [] } = useQuery({
+    queryKey: ["personen", tenant?.id],
+    queryFn: () => base44.entities.Person.filter({ tenant_id: tenant?.id }),
+    enabled: !!tenant?.id,
+  });
+
+  const { data: schadensprotokoll = [] } = useQuery({
+    queryKey: ["schadensprotokoll", tenant?.id],
+    queryFn: () => base44.entities.Schadensprotokoll.filter({ tenant_id: tenant?.id }),
+    enabled: !!tenant?.id,
+  });
+
   const createMutation = useMutation({
-    mutationFn: (data) => base44.entities.Aufgabe.create({ ...data, tenant_id: tenant.id, status: "offen" }),
+    mutationFn: (data) => base44.entities.Aufgabe.create({ 
+      ...data, 
+      tenant_id: tenant.id, 
+      status: "offen",
+      revier_id: "" // Aufgaben können revier-übergreifend sein
+    }),
     onMutate: (data) => {
       queryClient.setQueryData(["aufgaben-page", tenant?.id], old => [
         ...(old || []),
@@ -36,7 +67,15 @@ export default function Aufgaben() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["aufgaben-page"] });
       setDialogOpen(false);
-      setForm({ title: "", description: "", due_date: "", priority: "medium" });
+      setForm({ 
+        title: "", 
+        description: "", 
+        due_date: "", 
+        priority: "medium",
+        assigned_to: "",
+        assigned_to_name: "",
+        schadensprotokolle_ids: []
+      });
     },
   });
 
@@ -75,17 +114,25 @@ export default function Aufgaben() {
             <div className="space-y-2">
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">Offen ({open.length})</p>
               {open.map(a => (
-                <div key={a.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
-                  <button onClick={() => toggleMutation.mutate({ id: a.id, status: a.status })}
-                    className="w-6 h-6 rounded-full border-2 border-gray-300 hover:border-[#0F2F23] transition-colors shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900">{a.title}</p>
-                    {a.description && <p className="text-xs text-gray-500 mt-0.5 truncate">{a.description}</p>}
+                <div key={a.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+                  <div className="flex items-center gap-3">
+                    <button onClick={() => toggleMutation.mutate({ id: a.id, status: a.status })}
+                      className="w-6 h-6 rounded-full border-2 border-gray-300 hover:border-[#0F2F23] transition-colors shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-gray-900">{a.title}</p>
+                      {a.description && <p className="text-xs text-gray-500 mt-0.5">{a.description}</p>}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <StatusBadge status={a.priority === "high" ? "suspended" : a.priority === "low" ? "planned" : "assigned"} />
+                      {a.due_date && <span className="text-xs text-gray-400">{a.due_date}</span>}
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <StatusBadge status={a.priority === "high" ? "suspended" : a.priority === "low" ? "planned" : "assigned"} />
-                    {a.due_date && <span className="text-xs text-gray-400">{a.due_date}</span>}
-                  </div>
+                  {(a.assigned_to_name || a.schadensprotokolle_ids?.length > 0) && (
+                    <div className="mt-2 pt-2 border-t border-gray-100 flex flex-wrap gap-2">
+                      {a.assigned_to_name && <span className="text-xs bg-[#0F2F23]/10 text-[#0F2F23] px-2 py-1 rounded">{a.assigned_to_name}</span>}
+                      {a.schadensprotokolle_ids?.length > 0 && <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded">{a.schadensprotokolle_ids.length} Schaden</span>}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -108,31 +155,80 @@ export default function Aufgaben() {
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
-          <DialogHeader><DialogTitle>Neue Aufgabe</DialogTitle></DialogHeader>
-          <div className="space-y-4 mt-4">
-            <div><Label>Titel *</Label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
-            <div><Label>Beschreibung</Label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
-            <div className="grid grid-cols-2 gap-4">
-              <div><Label>Fällig am</Label><Input type="date" value={form.due_date} onChange={(e) => setForm({ ...form, due_date: e.target.value })} /></div>
-              <div>
-                <Label>Priorität</Label>
-                <Select value={form.priority} onValueChange={(v) => setForm({ ...form, priority: v })}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="low">Niedrig</SelectItem>
-                    <SelectItem value="medium">Mittel</SelectItem>
-                    <SelectItem value="high">Hoch</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <Button onClick={() => createMutation.mutate(form)} disabled={!form.title || createMutation.isPending} className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl">
-              {createMutation.isPending ? "Speichern..." : "Erstellen"}
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+         <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+           <DialogHeader><DialogTitle>Neue Aufgabe</DialogTitle></DialogHeader>
+           <div className="space-y-4 mt-4">
+             <div><Label>Titel *</Label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
+             <div><Label>Beschreibung</Label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
+             <div className="grid grid-cols-2 gap-4">
+               <div><Label>Fällig am</Label><Input type="date" value={form.due_date} onChange={(e) => setForm({ ...form, due_date: e.target.value })} /></div>
+               <div>
+                 <Label>Priorität</Label>
+                 <Select value={form.priority} onValueChange={(v) => setForm({ ...form, priority: v })}>
+                   <SelectTrigger><SelectValue /></SelectTrigger>
+                   <SelectContent>
+                     <SelectItem value="low">Niedrig</SelectItem>
+                     <SelectItem value="medium">Mittel</SelectItem>
+                     <SelectItem value="high">Hoch</SelectItem>
+                   </SelectContent>
+                 </Select>
+               </div>
+             </div>
+
+             <div>
+               <Label>Zuweisen an</Label>
+               <Select value={form.assigned_to} onValueChange={(v) => {
+                 const member = tenantMembers.find(m => m.id === v);
+                 const person = personen.find(p => p.id === v);
+                 setForm({ 
+                   ...form, 
+                   assigned_to: v,
+                   assigned_to_name: member?.first_name + " " + member?.last_name || person?.name || ""
+                 });
+               }}>
+                 <SelectTrigger><SelectValue placeholder="Person wählen..." /></SelectTrigger>
+                 <SelectContent>
+                   {tenantMembers.map(m => <SelectItem key={m.id} value={m.id}>{m.first_name} {m.last_name}</SelectItem>)}
+                   {personen.map(p => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
+                 </SelectContent>
+               </Select>
+             </div>
+
+             <div>
+               <Label>Schadensprotokoll verknüpfen</Label>
+               <div className="space-y-1 mt-1 max-h-32 overflow-y-auto border rounded-lg p-2">
+                 {schadensprotokoll.length === 0 ? (
+                   <p className="text-xs text-gray-400">Keine Schadensprotokoll vorhanden</p>
+                 ) : (
+                   schadensprotokoll.map(s => (
+                     <label key={s.id} className="flex items-center gap-2 p-1 cursor-pointer hover:bg-gray-50">
+                       <input 
+                         type="checkbox"
+                         checked={(form.schadensprotokolle_ids || []).includes(s.id)}
+                         onChange={(e) => {
+                           const ids = form.schadensprotokolle_ids || [];
+                           setForm({
+                             ...form,
+                             schadensprotokolle_ids: e.target.checked 
+                               ? [...ids, s.id]
+                               : ids.filter(id => id !== s.id)
+                           });
+                         }}
+                         className="w-4 h-4"
+                       />
+                       <span className="text-xs text-gray-700">{s.titel}</span>
+                     </label>
+                   ))
+                 )}
+               </div>
+             </div>
+
+             <Button onClick={() => createMutation.mutate(form)} disabled={!form.title || createMutation.isPending} className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl">
+               {createMutation.isPending ? "Speichern..." : "Erstellen"}
+             </Button>
+           </div>
+         </DialogContent>
+       </Dialog>
     </div>
   );
 }
