@@ -147,15 +147,14 @@ export default function MobileStrecke() {
                </Select>
              </div>
              <div>
-               <Label className="text-gray-300 text-xs mb-1 block">Wildmarke</Label>
-               <Select value={form.wildmark_id} onValueChange={(v) => setForm({ ...form, wildmark_id: v })}>
-                 <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
-                   <SelectValue placeholder="Marke wählen" />
-                 </SelectTrigger>
-                 <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-                   {wildmarken.map(w => <SelectItem key={w.id} value={w.id}>{w.code}</SelectItem>)}
-                 </SelectContent>
-               </Select>
+               <Label className="text-gray-300 text-xs mb-1 block">Wildmarke (Code)</Label>
+               <Input 
+                 type="text" 
+                 placeholder="Marken-Code eingeben oder scannen" 
+                 value={form.wildmark_id} 
+                 onChange={(e) => setForm({ ...form, wildmark_id: e.target.value })}
+                 className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"
+               />
              </div>
              <Button onClick={() => { createMutation.mutate(form); setForm(EMPTY_FORM); }} disabled={createMutation.isPending || !form.species || !form.date} 
                className="w-full bg-[#22c55e] text-black hover:bg-[#16a34a] rounded-xl">
