@@ -48,8 +48,10 @@ export default function Dashboard() {
           const result = await base44.functions.invoke('checkTrialStatus', {});
           if (result.data.status === 'expired') {
             setTrialDaysRemaining(0);
+            setShowTrialModal(true);
           } else if (result.data.days_remaining !== undefined) {
             setTrialDaysRemaining(result.data.days_remaining);
+            setShowTrialModal(true);
           }
         } catch (error) {
           console.error('Error checking trial:', error);
