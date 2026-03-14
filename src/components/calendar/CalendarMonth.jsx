@@ -11,9 +11,9 @@ export default function CalendarMonth({ currentDate, onDateSelect, events = [] }
   const end = endOfMonth(month);
   const days = eachDayOfInterval({ start, end });
 
-  // Fill with previous month's days
-  const firstDayOfWeek = start.getDay();
-  const prevMonthDays = Array.from({ length: firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1 }, (_, i) => null);
+  // Fill with previous month's days (Monday = 0)
+   const firstDayOfWeek = (start.getDay() + 6) % 7;
+   const prevMonthDays = Array.from({ length: firstDayOfWeek }, (_, i) => null);
 
   const allDays = [...prevMonthDays, ...days];
 
