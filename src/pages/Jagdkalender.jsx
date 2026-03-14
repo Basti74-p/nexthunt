@@ -39,23 +39,7 @@ export default function Jagdkalender() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">
-      {/* Kalender Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <Calendar className="w-6 h-6 text-[#22c55e]" />
-          <div>
-            <h1 className="text-2xl font-bold text-gray-100">Jagdkalender</h1>
-            <p className="text-sm text-gray-400">Termine & Gesellschaftsjagden</p>
-          </div>
-        </div>
-        <Button onClick={() => { setSelectedDate(null); setShowTerminDialog(true); }} className="gap-2">
-          <Plus className="w-4 h-4" />
-          Neuer Termin
-        </Button>
-      </div>
 
-      {/* Kalender */}
-      <CalendarMonth currentDate={new Date()} onDateSelect={handleDateSelect} events={[...jagden, ...termine]} />
 
       {/* Live-Monitor */}
       <div>
