@@ -9,8 +9,14 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get user's tenant
-    const tenants = await base44.entities.Tenant.filter({ contact_email: user.email });
+    // Get user's tenant – try contact_email first, then TenantMember lookup
+    let tenants = await base44.entities.Tenant.filter({ contact_email: user.email });
+    if (tenants.length === 0) {
+      const members = await base44.entities.TenantMember.filter({ user_email: user.email });
+      if (members.length > 0) {
+        tenants = await base44.entities.Tenant.filter({ id: members[0].tenant_id });
+      }
+    }
     if (tenants.length === 0) {
       return Response.json({ error: 'No tenant found' }, { status: 404 });
     }
