@@ -85,16 +85,18 @@ export default function MobileMap() {
     .filter(Boolean);
 
   const handleMapClick = useCallback((e) => {
-    if (einrichtungMode) {
+    if (einrichtungModeRef.current) {
+      einrichtungModeRef.current = false;
       setEinrichtungCoords([e.latlng.lat, e.latlng.lng]);
       setEinrichtungMode(false);
       setShowEinrichtungForm(true);
-    } else if (sichtungMode) {
+    } else if (sichtungModeRef.current) {
+      sichtungModeRef.current = false;
       setSichtungCoords([e.latlng.lat, e.latlng.lng]);
       setSichtungMode(false);
       setShowSichtungForm(true);
     }
-  }, [einrichtungMode, sichtungMode]);
+  }, []);
 
   const handleAction = (key) => {
     if (key === "einrichtung") {
