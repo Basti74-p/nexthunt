@@ -12,6 +12,7 @@ import { Plus, ListTodo, Check } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import StatusBadge from "@/components/ui/StatusBadge";
 import EmptyState from "@/components/ui/EmptyState";
+import AufgabeDetailView from "@/components/aufgaben/AufgabeDetailView";
 
 export default function Aufgaben() {
   const { tenant } = useAuth();
