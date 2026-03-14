@@ -269,13 +269,14 @@ export default function EinrichtungDetail({ einrichtung, tenantId, onBack, onEdi
                         : <Circle className="w-4 h-4 text-gray-500" />}
                     </button>
                     <div className="flex-1 min-w-0">
-                      <p className={`text-sm font-medium ${a.status === "erledigt" ? "line-through text-gray-500" : "text-gray-100"}`}>{a.title}</p>
-                      <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                        <span className={`text-[10px] px-1.5 py-0.5 rounded ${PRIO_COLOR[a.priority]}`}>{PRIO_LABEL[a.priority]}</span>
-                        {a.assigned_to_name && <span className="text-xs text-gray-400">{a.assigned_to_name}</span>}
-                        {a.due_date && <span className="text-xs text-gray-500">{format(new Date(a.due_date), "dd.MM.yyyy", { locale: de })}</span>}
-                      </div>
-                    </div>
+                       <p className={`text-sm font-medium ${a.status === "erledigt" ? "line-through text-gray-500" : "text-gray-100"}`}>{a.title}</p>
+                       <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                         <span className={`text-[10px] px-1.5 py-0.5 rounded ${PRIO_COLOR[a.priority]}`}>{PRIO_LABEL[a.priority]}</span>
+                         {a.assigned_to_name && <span className="text-xs text-gray-400">{a.assigned_to_name}</span>}
+                         {a.due_date && <span className="text-xs text-gray-500">{format(new Date(a.due_date), "dd.MM.yyyy", { locale: de })}</span>}
+                       </div>
+                       <AufgabeProtokollView schadensprotokolle_ids={a.schadensprotokolle_ids} />
+                     </div>
                     <div className="flex gap-1 shrink-0">
                       <button onClick={() => setAufgabeDialog({ open: true, aufgabe: a })} className="p-1.5 text-gray-500 hover:text-gray-300 rounded">
                         <Pencil className="w-3.5 h-3.5" />
