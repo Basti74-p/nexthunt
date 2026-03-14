@@ -204,23 +204,41 @@ export default function Aufgaben() {
           <DialogHeader><DialogTitle>{editingTask ? "Aufgabe bearbeiten" : "Neue Aufgabe"}</DialogTitle></DialogHeader>
           <div className="space-y-4 mt-4">
             <div><Label>Titel *</Label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
-            <div>
-              <Label>Zuweisen an (optional)</Label>
-              <Select value={form.assigned_to} onValueChange={(v) => {
-                const member = tenantMembers?.find(m => m.id === v);
-                const person = personen?.find(p => p.id === v);
-                setForm({ 
-                  ...form, 
-                  assigned_to: v,
-                  assigned_to_name: member ? (member.first_name + " " + member.last_name) : (person?.name || "")
-                });
-              }}>
-                <SelectTrigger><SelectValue placeholder="Keine Zuweisung" /></SelectTrigger>
-                <SelectContent>
-                  {tenantMembers?.map(m => <SelectItem key={m.id} value={m.id}>{m.first_name} {m.last_name}</SelectItem>)}
-                  {personen?.map(p => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
-                </SelectContent>
-              </Select>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>Einrichtung (optional)</Label>
+                <Select value={form.einrichtung_id} onValueChange={(v) => {
+                  const e = einrichtungen?.find(ei => ei.id === v);
+                  setForm({ 
+                    ...form, 
+                    einrichtung_id: v,
+                    einrichtung_name: e?.name || ""
+                  });
+                }}>
+                  <SelectTrigger><SelectValue placeholder="Keine Einrichtung" /></SelectTrigger>
+                  <SelectContent>
+                    {einrichtungen?.map(e => <SelectItem key={e.id} value={e.id}>{e.name}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>Zuweisen an (optional)</Label>
+                <Select value={form.assigned_to} onValueChange={(v) => {
+                  const member = tenantMembers?.find(m => m.id === v);
+                  const person = personen?.find(p => p.id === v);
+                  setForm({ 
+                    ...form, 
+                    assigned_to: v,
+                    assigned_to_name: member ? (member.first_name + " " + member.last_name) : (person?.name || "")
+                  });
+                }}>
+                  <SelectTrigger><SelectValue placeholder="Keine Zuweisung" /></SelectTrigger>
+                  <SelectContent>
+                    {tenantMembers?.map(m => <SelectItem key={m.id} value={m.id}>{m.first_name} {m.last_name}</SelectItem>)}
+                    {personen?.map(p => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div><Label>Beschreibung</Label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
             <div className="grid grid-cols-2 gap-4">
