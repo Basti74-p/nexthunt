@@ -82,6 +82,14 @@ export default function MobileMap() {
           onClose={() => setShowWeather(false)}
         />
       )}
+
+      {/* FAB – Plus Button */}
+      <button
+        className="absolute bottom-6 right-4 w-14 h-14 bg-[#22c55e] rounded-full flex items-center justify-center shadow-lg z-20 active:scale-95 transition-transform"
+        onClick={() => {/* TODO: open action menu */}}
+      >
+        <Plus className="w-7 h-7 text-black stroke-[2.5]" />
+      </button>
     </div>
   );
 }
