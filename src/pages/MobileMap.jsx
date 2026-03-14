@@ -10,6 +10,7 @@ import BoundaryDrawer, { BoundaryDrawerControls } from "@/components/map/Boundar
 import WindLayer from "@/components/map/layers/WindLayer";
 import JagdWetterWidget from "@/components/map/JagdWetterWidget";
 import EinrichtungForm from "@/components/map/EinrichtungForm";
+import SichtungForm from "@/components/map/SichtungForm";
 import MapActionSheet from "@/components/map/MapActionSheet";
 import { Plus, X } from "lucide-react";
 
