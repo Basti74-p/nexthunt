@@ -4,7 +4,7 @@ import { de } from "date-fns/locale";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default function CalendarMonth({ currentDate, onDateSelect, events = [] }) {
+export default function CalendarMonth({ currentDate, onDateSelect, onEventClick, events = [] }) {
   const [month, setMonth] = useState(currentDate);
 
   const start = startOfMonth(month);
@@ -82,7 +82,8 @@ export default function CalendarMonth({ currentDate, onDateSelect, events = [] }
                 {dayEvents.slice(0, 2).map((event) => (
                   <div
                     key={event.id}
-                    className="text-[10px] bg-[#22c55e]/20 text-[#22c55e] px-1.5 py-0.5 rounded truncate"
+                    onClick={(e) => { e.stopPropagation(); onEventClick?.(event); }}
+                    className="text-[10px] bg-[#22c55e]/20 text-[#22c55e] px-1.5 py-0.5 rounded truncate cursor-pointer hover:bg-[#22c55e]/30 transition-colors"
                   >
                     {event.titel}
                   </div>
