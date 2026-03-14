@@ -182,7 +182,7 @@ export default function MobileMap() {
           style={{ zIndex: 9999 }}
         >
           <span>👁 Auf Karte tippen um Sichtungsort zu setzen</span>
-          <button onClick={() => setSichtungMode(false)}>
+          <button onClick={() => { sichtungModeRef.current = false; setSichtungMode(false); }}>
             <X className="w-4 h-4" />
           </button>
         </div>
