@@ -14,6 +14,7 @@ export default function Dashboard() {
   const { user, tenant, tenantFeatures } = useAuth();
   const [showBoundaryHelp, setShowBoundaryHelp] = useState(false);
   const [trialDaysRemaining, setTrialDaysRemaining] = useState(null);
+  const [showTrialModal, setShowTrialModal] = useState(false);
 
   const { data: reviere = [] } = useQuery({
     queryKey: ["reviere", tenant?.id],
