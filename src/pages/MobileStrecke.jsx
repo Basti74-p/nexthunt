@@ -30,7 +30,7 @@ export default function MobileStrecke() {
   });
 
   const { data: strecken = [] } = useQuery({
-    queryKey: ["strecke-mobile", tenant?.id],
+    queryKey: ["strecke", tenant?.id],
     queryFn: () => base44.entities.Strecke.filter({ tenant_id: tenant?.id }),
     enabled: !!tenant?.id,
   });
@@ -40,7 +40,7 @@ export default function MobileStrecke() {
       ...data, tenant_id: tenant.id, revier_id: reviere[0]?.id, status: "erfasst",
     }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["strecke-mobile"] });
+      queryClient.invalidateQueries({ queryKey: ["strecke"] });
       setDialogOpen(false);
     },
   });
