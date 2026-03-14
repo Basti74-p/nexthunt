@@ -118,9 +118,8 @@ class WindCanvasLayer extends L.Layer {
     const dir = this._getDirectionVector();
     const pxSpeed = this._getPixelSpeed();
 
-    // Subtiles Fade statt clearRect → erzeugt Ghost-Trail-Effekt
-    ctx.fillStyle = "rgba(0,0,0,0.04)";
-    ctx.fillRect(0, 0, w, h);
+    // Jeden Frame komplett leeren → Karte bleibt sichtbar
+    ctx.clearRect(0, 0, w, h);
 
     for (let i = 0; i < this._particles.length; i++) {
       const p = this._particles[i];
