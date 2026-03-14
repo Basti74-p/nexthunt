@@ -58,7 +58,7 @@ export default function MobileTasks() {
                 onClick={() => toggleMutation.mutate({ id: a.id, status: a.status })}
                 className="w-6 h-6 rounded-full border-2 border-gray-300 shrink-0 select-none"
               />
-              <div className="flex-1">
+              <div className="flex-1 cursor-pointer" onClick={() => navigate(`/MobileAufgabenDetail?id=${a.id}`)}>
                 <p className="font-medium text-gray-900 text-sm">{a.title}</p>
                 {a.due_date && <p className="text-xs text-gray-500">{a.due_date}</p>}
               </div>
