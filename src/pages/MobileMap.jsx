@@ -103,7 +103,7 @@ export default function MobileMap() {
           type: "Polygon",
           coordinates: [[...boundaryPoints.map(p => [p[1], p[0]]), [boundaryPoints[0][1], boundaryPoints[0][0]]]],
         },
-        properties: {},
+        properties: { color: boundaryColor },
       }],
     };
     await base44.entities.Revier.update(assignRevierIdForBoundary, { boundary_geojson: JSON.stringify(geojson) });
