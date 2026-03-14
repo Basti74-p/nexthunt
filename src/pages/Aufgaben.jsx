@@ -183,9 +183,12 @@ export default function Aufgaben() {
         </div>
       )}
 
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      <Dialog open={dialogOpen} onOpenChange={(open) => {
+        setDialogOpen(open);
+        if (!open) setEditingTask(null);
+      }}>
         <DialogContent>
-          <DialogHeader><DialogTitle>Neue Aufgabe</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>{editingTask ? "Aufgabe bearbeiten" : "Neue Aufgabe"}</DialogTitle></DialogHeader>
           <div className="space-y-4 mt-4">
             <div><Label>Titel *</Label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
             <div>
@@ -221,9 +224,17 @@ export default function Aufgaben() {
                 </Select>
               </div>
             </div>
-            <Button onClick={() => createMutation.mutate(form)} disabled={!form.title || createMutation.isPending} className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl">
-              {createMutation.isPending ? "Speichern..." : "Erstellen"}
-            </Button>
+            <div className="flex gap-2">
+              <Button onClick={() => createMutation.mutate(form)} disabled={!form.title || createMutation.isPending} className="flex-1 bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl">
+                {createMutation.isPending ? "Speichern..." : editingTask ? "Aktualisieren" : "Erstellen"}
+              </Button>
+              {editingTask && (
+                <Button onClick={() => {
+                  deleteMutation.mutate(editingTask.id);
+                  setDialogOpen(false);
+                }} variant="outline" className="px-4">Löschen</Button>
+              )}
+            </div>
           </div>
         </DialogContent>
       </Dialog>
