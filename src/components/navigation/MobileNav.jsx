@@ -44,7 +44,7 @@ export default function MobileNav({ currentPage }) {
   return (
     <>
       {/* Maintenance Overlay – alles außer Karte, Strecke, Aufgaben, Aufgabendetail & Einrichtungen sperren */}
-      {MAINTENANCE_MODE && !["MobileStrecke", "MobileMap", "MobileTasks", "MobileAufgabenDetail", "Jagdeinrichtungen"].includes(currentPage) && <MaintenanceOverlay />}
+      {MAINTENANCE_MODE && !["MobileStrecke", "MobileMap", "MobileTasks", "MobileAufgabenDetail", "MobileEinrichtungen", "MobileEinrichtungsDetail"].includes(currentPage) && <MaintenanceOverlay />}
 
       {/* Top bar – auf der Karte ausblenden (Vollbild) */}
       {currentPage !== "MobileMap" && (
