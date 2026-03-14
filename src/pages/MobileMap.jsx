@@ -18,6 +18,7 @@ export default function MobileMap() {
   const [windData, setWindData] = useState({ deg: null, speed: 0 });
   const [userPos, setUserPos] = useState(null);
   const [showWeather, setShowWeather] = useState(false);
+  const [showActionSheet, setShowActionSheet] = useState(false);
 
   const { data: reviere = [] } = useQuery({
     queryKey: ["reviere", tenant?.id],
