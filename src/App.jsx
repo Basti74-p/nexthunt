@@ -9,6 +9,8 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Demo from './pages/Demo';
 import MobileAufgabenDetail from './pages/MobileAufgabenDetail';
+import MobileEinrichtungen from './pages/MobileEinrichtungen';
+import MobileEinrichtungsDetail from './pages/MobileEinrichtungsDetail';
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
