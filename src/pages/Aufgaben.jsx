@@ -61,21 +61,21 @@ export default function Aufgaben() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (data) => base44.entities.Aufgabe.create({ 
-      ...data, 
-      tenant_id: tenant.id, 
-      status: "offen",
-      revier_id: "" // Aufgaben können revier-übergreifend sein
-    }),
-    onMutate: (data) => {
-      queryClient.setQueryData(["aufgaben-page", tenant?.id], old => [
-        ...(old || []),
-        { ...data, id: "temp-" + Date.now(), tenant_id: tenant.id, status: "offen" }
-      ]);
+    mutationFn: (data) => {
+      if (editingTask) {
+        return base44.entities.Aufgabe.update(editingTask.id, data);
+      }
+      return base44.entities.Aufgabe.create({ 
+        ...data, 
+        tenant_id: tenant.id, 
+        status: "offen",
+        revier_id: ""
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["aufgaben-page"] });
       setDialogOpen(false);
+      setEditingTask(null);
       setForm({ 
         title: "", 
         description: "", 
@@ -86,6 +86,11 @@ export default function Aufgaben() {
         schadensprotokolle_ids: []
       });
     },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id) => base44.entities.Aufgabe.delete(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["aufgaben-page"] }),
   });
 
   const toggleMutation = useMutation({
