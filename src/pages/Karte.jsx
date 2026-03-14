@@ -54,14 +54,24 @@ export default function Karte() {
     },
   });
 
-  // Also compute boundaries from reviere directly
+  // Also compute boundaries from reviere directly — supports both Polygon and FeatureCollection format
   const boundaries = reviere
     .filter(r => r.boundary_geojson)
     .map(r => {
       try {
         const gj = JSON.parse(r.boundary_geojson);
-        const coords = gj.coordinates[0].map(([lng, lat]) => [lat, lng]);
-        return { revierId: r.id, revierName: r.name, coords, color: gj.color || "#22c55e" };
+        let rawCoords, color;
+        if (gj.type === "FeatureCollection") {
+          const feat = gj.features?.[0];
+          rawCoords = feat?.geometry?.coordinates?.[0];
+          color = feat?.properties?.color || "#22c55e";
+        } else {
+          rawCoords = gj.coordinates?.[0];
+          color = gj.color || "#22c55e";
+        }
+        if (!rawCoords) return null;
+        const coords = rawCoords.map(([lng, lat]) => [lat, lng]);
+        return { revierId: r.id, revierName: r.name, coords, color };
       } catch { return null; }
     })
     .filter(Boolean);
