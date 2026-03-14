@@ -11,6 +11,7 @@ const TAB_NAMES = {
   MobileStrecke: "Strecke",
   MobileTasks: "Aufgaben",
   MobileMonitor: "Monitor",
+  MobileKalender: "Kalender",
   JagdkalenderMain: "Kalender",
   JagdDetail: "Jagd",
   MobileEinrichtungen: "Einrichtungen",
@@ -27,7 +28,7 @@ export default function MobileNav({ currentPage }) {
     { name: "Karte", icon: Map, page: "MobileMap", feature: "feature_map" },
     { name: "Strecke", icon: Crosshair, page: "MobileStrecke", feature: "feature_strecke" },
     { name: "Aufgaben", icon: ListTodo, page: "MobileTasks", feature: "feature_tasks" },
-    { name: "Kalender", icon: Calendar, page: "JagdkalenderMain", feature: "feature_kalender" },
+    { name: "Kalender", icon: Calendar, page: "MobileKalender", feature: "feature_kalender" },
     { name: "Einrichtungen", icon: Warehouse, page: "MobileEinrichtungen", feature: "feature_einrichtungen" },
   ].filter(t => t.feature === null || tenantFeatures[t.feature] !== false);
 
