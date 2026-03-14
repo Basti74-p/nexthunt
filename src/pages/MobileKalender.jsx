@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import PageTransition from "@/components/ui/PageTransition";
 import CalendarMonth from "@/components/calendar/CalendarMonth";
 import EventDetailDialog from "@/components/calendar/EventDetailDialog";
+import TerminDialog from "@/components/calendar/TerminDialog";
 
 export default function MobileKalender() {
   const { tenant } = useAuth();
