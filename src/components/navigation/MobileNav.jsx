@@ -4,9 +4,7 @@ import { createPageUrl } from "@/utils";
 import { Map, Crosshair, ListTodo, Calendar, Warehouse } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import MobileTopBar from "./MobileTopBar";
-import MaintenanceOverlay from "./MaintenanceOverlay";
 
-const MAINTENANCE_MODE = true; // Toggle für Wartungsmodus
 
 const TAB_NAMES = {
   MobileMap: "Karte",
@@ -43,9 +41,6 @@ export default function MobileNav({ currentPage }) {
 
   return (
     <>
-      {/* Maintenance Overlay – alles außer Karte, Strecke, Aufgaben, Aufgabendetail & Einrichtungen sperren */}
-      {MAINTENANCE_MODE && !["MobileStrecke", "MobileMap", "MobileTasks", "MobileAufgabenDetail", "MobileEinrichtungen", "MobileEinrichtungsDetail"].includes(currentPage) && <MaintenanceOverlay />}
-
       {/* Top bar – auf der Karte ausblenden (Vollbild) */}
       {currentPage !== "MobileMap" && (
         <MobileTopBar 
