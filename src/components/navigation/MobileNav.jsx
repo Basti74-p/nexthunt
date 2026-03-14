@@ -15,7 +15,8 @@ const TAB_NAMES = {
   MobileMonitor: "Monitor",
   JagdkalenderMain: "Kalender",
   JagdDetail: "Jagd",
-  Jagdeinrichtungen: "Einrichtungen",
+  MobileEinrichtungen: "Einrichtungen",
+  MobileEinrichtungsDetail: "Einrichtung",
 };
 
 export default function MobileNav({ currentPage }) {
