@@ -372,6 +372,16 @@ export default function MobileMap() {
         lat={einrichtungCoords?.[0]}
         lng={einrichtungCoords?.[1]}
       />
+
+      {/* Sichtung Form Dialog */}
+      <SichtungForm
+        isOpen={showSichtungForm}
+        onClose={() => { setShowSichtungForm(false); setSichtungCoords(null); }}
+        revierId={selectedRevier?.id}
+        tenantId={tenant?.id}
+        lat={sichtungCoords?.[0]}
+        lng={sichtungCoords?.[1]}
+      />
     </>
   );
 }
