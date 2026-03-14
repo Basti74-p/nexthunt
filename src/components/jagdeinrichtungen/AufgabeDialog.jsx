@@ -20,6 +20,12 @@ export default function AufgabeDialog({ isOpen, onClose, aufgabe, einrichtung, t
     enabled: !!tenant?.id && isOpen,
   });
 
+  const { data: schaeden = [] } = useQuery({
+    queryKey: ["schadensprotokolle", einrichtung?.id],
+    queryFn: () => base44.entities.Schadensprotokoll.filter({ einrichtung_id: einrichtung?.id }),
+    enabled: !!einrichtung?.id && isOpen,
+  });
+
   const [formData, setFormData] = useState({
     title: "", description: "", due_date: "", priority: "medium",
     status: "offen", assigned_to: "", assigned_to_name: "",
