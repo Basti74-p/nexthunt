@@ -120,6 +120,17 @@ export default function MobileMap() {
     setShowAssignBoundary(false);
     setBoundaryPoints([]);
     setAssignRevierIdForBoundary("");
+    setNewRevierName("");
+    setShowNewRevierInput(false);
+  };
+
+  const handleCreateNewRevier = async () => {
+    if (!newRevierName.trim()) return;
+    const newRevier = await base44.entities.Revier.create({ tenant_id: tenant.id, name: newRevierName.trim() });
+    queryClient.invalidateQueries(["reviere", tenant?.id]);
+    setAssignRevierIdForBoundary(newRevier.id);
+    setNewRevierName("");
+    setShowNewRevierInput(false);
   };
 
   if (!selectedRevier) {
