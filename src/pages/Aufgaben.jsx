@@ -160,27 +160,20 @@ export default function Aufgaben() {
           <div className="space-y-4 mt-4">
             <div><Label>Titel *</Label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
             <div>
-              <Label>Zuweisen an</Label>
+              <Label>Zuweisen an (optional)</Label>
               <Select value={form.assigned_to} onValueChange={(v) => {
-                const member = tenantMembers.find(m => m.id === v);
-                const person = personen.find(p => p.id === v);
+                const member = tenantMembers?.find(m => m.id === v);
+                const person = personen?.find(p => p.id === v);
                 setForm({ 
                   ...form, 
                   assigned_to: v,
-                  assigned_to_name: member?.first_name + " " + member?.last_name || person?.name || ""
+                  assigned_to_name: member ? (member.first_name + " " + member.last_name) : (person?.name || "")
                 });
               }}>
-                <SelectTrigger><SelectValue placeholder="Person wählen..." /></SelectTrigger>
+                <SelectTrigger><SelectValue placeholder="Keine Zuweisung" /></SelectTrigger>
                 <SelectContent>
-                  {tenantMembers && tenantMembers.length > 0 ? (
-                    tenantMembers.map(m => <SelectItem key={m.id} value={m.id}>{m.first_name} {m.last_name}</SelectItem>)
-                  ) : null}
-                  {personen && personen.length > 0 ? (
-                    personen.map(p => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)
-                  ) : null}
-                  {(!tenantMembers || tenantMembers.length === 0) && (!personen || personen.length === 0) && (
-                    <SelectItem value={null} disabled>Keine Personen verfügbar</SelectItem>
-                  )}
+                  {tenantMembers?.map(m => <SelectItem key={m.id} value={m.id}>{m.first_name} {m.last_name}</SelectItem>)}
+                  {personen?.map(p => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
