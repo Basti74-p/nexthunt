@@ -46,9 +46,21 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/Demo" element={<Demo />} />
-      <Route path="/MobileAufgabenDetail" element={<MobileAufgabenDetail />} />
-      <Route path="/MobileEinrichtungen" element={<MobileEinrichtungen />} />
-      <Route path="/MobileEinrichtungsDetail" element={<MobileEinrichtungsDetail />} />
+      <Route path="/MobileAufgabenDetail" element={
+        <LayoutWrapper currentPageName="MobileAufgabenDetail">
+          <MobileAufgabenDetail />
+        </LayoutWrapper>
+      } />
+      <Route path="/MobileEinrichtungen" element={
+        <LayoutWrapper currentPageName="MobileEinrichtungen">
+          <MobileEinrichtungen />
+        </LayoutWrapper>
+      } />
+      <Route path="/MobileEinrichtungsDetail" element={
+        <LayoutWrapper currentPageName="MobileEinrichtungsDetail">
+          <MobileEinrichtungsDetail />
+        </LayoutWrapper>
+      } />
       <Route path="/" element={
         <LayoutWrapper currentPageName={mainPageKey}>
           <MainPage />
