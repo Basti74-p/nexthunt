@@ -35,13 +35,21 @@ export default function Aufgaben() {
 
   const { data: tenantMembers = [] } = useQuery({
     queryKey: ["tenant-members", tenant?.id],
-    queryFn: () => base44.entities.TenantMember.filter({ tenant_id: tenant?.id }),
+    queryFn: async () => {
+      const result = await base44.entities.TenantMember.filter({ tenant_id: tenant?.id });
+      console.log("TenantMembers loaded:", result);
+      return result;
+    },
     enabled: !!tenant?.id,
   });
 
   const { data: personen = [] } = useQuery({
     queryKey: ["personen", tenant?.id],
-    queryFn: () => base44.entities.Person.filter({ tenant_id: tenant?.id }),
+    queryFn: async () => {
+      const result = await base44.entities.Person.filter({ tenant_id: tenant?.id });
+      console.log("Personen loaded:", result);
+      return result;
+    },
     enabled: !!tenant?.id,
   });
 
