@@ -40,10 +40,12 @@ const EMPTY_FORM = {
   age_class: "",
   date: new Date().toISOString().split("T")[0],
   wildmark_id: "",
+  weight_kg: "",
+  shooter_email: "",
 };
 
 export default function MobileStrecke() {
-  const { tenant } = useAuth();
+  const { tenant, user } = useAuth();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [form, setForm] = useState(EMPTY_FORM);
   const queryClient = useQueryClient();
@@ -68,11 +70,17 @@ export default function MobileStrecke() {
 
   const createMutation = useMutation({
     mutationFn: (data) => base44.entities.Strecke.create({
-      ...data, tenant_id: tenant.id, revier_id: reviere[0]?.id, status: "erfasst",
+      ...data, 
+      tenant_id: tenant.id, 
+      revier_id: reviere[0]?.id, 
+      status: "erfasst",
+      weight_kg: data.weight_kg ? parseFloat(data.weight_kg) : undefined,
+      shooter_email: data.shooter_email || user?.email,
     }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["strecke"] });
       setDialogOpen(false);
+      setForm(EMPTY_FORM);
     },
   });
 
@@ -146,15 +154,34 @@ export default function MobileStrecke() {
                  </SelectContent>
                </Select>
              </div>
+             <div className="grid grid-cols-2 gap-3">
+               <div>
+                 <Label className="text-gray-300 text-xs mb-1 block">Wildmarke (Code)</Label>
+                 <Input 
+                   type="text" 
+                   placeholder="Code/scannen" 
+                   value={form.wildmark_id} 
+                   onChange={(e) => setForm({ ...form, wildmark_id: e.target.value })}
+                   className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"
+                 />
+               </div>
+               <div>
+                 <Label className="text-gray-300 text-xs mb-1 block">Gewicht (kg)</Label>
+                 <Input 
+                   type="number" 
+                   step="0.1"
+                   placeholder="z.B. 24.5" 
+                   value={form.weight_kg} 
+                   onChange={(e) => setForm({ ...form, weight_kg: e.target.value })}
+                   className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"
+                 />
+               </div>
+             </div>
              <div>
-               <Label className="text-gray-300 text-xs mb-1 block">Wildmarke (Code)</Label>
-               <Input 
-                 type="text" 
-                 placeholder="Marken-Code eingeben oder scannen" 
-                 value={form.wildmark_id} 
-                 onChange={(e) => setForm({ ...form, wildmark_id: e.target.value })}
-                 className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"
-               />
+               <Label className="text-gray-300 text-xs mb-1 block">Erleger</Label>
+               <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg px-3 py-2 text-gray-300 text-sm">
+                 {user?.full_name || user?.email}
+               </div>
              </div>
              <Button onClick={() => { createMutation.mutate(form); setForm(EMPTY_FORM); }} disabled={createMutation.isPending || !form.species || !form.date} 
                className="w-full bg-[#22c55e] text-black hover:bg-[#16a34a] rounded-xl">
