@@ -142,11 +142,21 @@ export default function MobileEinrichtungen() {
         )}
 
         <Button
-          onClick={() => navigate("/MobileEinrichtungen")}
+          onClick={() => setShowCreateDialog(true)}
           className="fixed bottom-24 right-4 w-12 h-12 rounded-full bg-[#22c55e] hover:bg-[#16a34a] text-black shadow-lg flex items-center justify-center"
         >
           <Plus className="w-5 h-5" />
         </Button>
+
+        {showCreateDialog && (
+          <EinrichtungDialog
+            onClose={() => setShowCreateDialog(false)}
+            onSuccess={() => {
+              setShowCreateDialog(false);
+              queryClient.invalidateQueries({ queryKey: ["einrichtungen-mobile"] });
+            }}
+          />
+        )}
       </div>
     </PageTransition>
   );
