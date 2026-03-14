@@ -44,6 +44,7 @@ export default function AufgabeDialog({ isOpen, onClose, aufgabe, einrichtung, t
         assigned_to_name: aufgabe.assigned_to_name || "",
         einrichtung_id: aufgabe.einrichtung_id || "",
         einrichtung_name: aufgabe.einrichtung_name || "",
+        schadensprotokolle_ids: aufgabe.schadensprotokolle_ids || [],
       });
     } else {
       setFormData({
