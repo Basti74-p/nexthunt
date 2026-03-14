@@ -16,6 +16,7 @@ import EmptyState from "@/components/ui/EmptyState";
 export default function Aufgaben() {
   const { tenant } = useAuth();
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [editingTask, setEditingTask] = React.useState(null);
   const [form, setForm] = React.useState({ 
     title: "", 
     description: "", 
