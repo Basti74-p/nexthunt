@@ -13,7 +13,7 @@ function LayoutInner({ children, currentPageName }) {
   const [showLogoAnimation, setShowLogoAnimation] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowLogoAnimation(false), 3000);
+    const timer = setTimeout(() => setShowLogoAnimation(false), 7000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -71,20 +71,40 @@ function LayoutInner({ children, currentPageName }) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#2d2d2d]">
         <style>{`
-          @keyframes logoScale {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+          @keyframes logoPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+          }
+          @keyframes circlePulse {
+            0%, 100% { r: 60px; opacity: 1; }
+            100% { r: 120px; opacity: 0; }
+          }
+          .logo-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
           }
           .logo-animate {
-            animation: logoScale 3s ease-in-out forwards;
+            animation: logoPulse 7s ease-in-out forwards;
+            position: relative;
+            z-index: 2;
+          }
+          .pulse-circle {
+            position: absolute;
+            animation: circlePulse 7s ease-out forwards;
           }
         `}</style>
-        <img
-          src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c370741b119950032ab62/7a1f75278_NextHunt_logo_transparent.png"
-          alt="NextHunt Logo"
-          className="w-32 h-auto logo-animate"
-        />
+        <div className="logo-container">
+          <svg className="pulse-circle" width="200" height="200" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="60" fill="none" stroke="#22c55e" strokeWidth="2" />
+          </svg>
+          <img
+            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c370741b119950032ab62/7a1f75278_NextHunt_logo_transparent.png"
+            alt="NextHunt Logo"
+            className="w-32 h-auto logo-animate"
+          />
+        </div>
       </div>
     );
   }
