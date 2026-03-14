@@ -8,14 +8,12 @@ import WildmanagementLayer from "@/components/map/layers/WildmanagementLayer";
 import BoundaryLayer, { REVIER_COLORS } from "@/components/map/layers/BoundaryLayer";
 import WindLayer from "@/components/map/layers/WindLayer";
 import JagdWetterWidget from "@/components/map/JagdWetterWidget";
-
 import { Plus } from "lucide-react";
 
 export default function MobileMap() {
   const { tenant } = useAuth();
   const [activeLayers] = useState(new Set(["einrichtungen", "sichtungen"]));
   const [selectedRevierId, setSelectedRevierId] = useState(null);
-  const [showRevierPicker, setShowRevierPicker] = useState(false);
   const [windData, setWindData] = useState({ deg: null, speed: 0 });
   const [userPos, setUserPos] = useState(null);
   const [showWeather, setShowWeather] = useState(false);
@@ -53,40 +51,37 @@ export default function MobileMap() {
     );
   }
 
-  // Extract map center for weather (use revier center or Germany fallback)
-  const mapLat = userPos?.[0] ?? 51.1657;
-  const mapLng = userPos?.[1] ?? 10.4515;
-
   return (
     <>
-    <div className="fixed inset-0 bottom-20 z-10" style={{zIndex: 10}}>
-      <div className="absolute inset-0" style={{ borderRadius: 0 }}>
-        <RevierMapCore
-          revier={selectedRevier}
-          height="100%"
-          className="!rounded-none !border-0 !shadow-none"
-          onUserLocation={(pos) => setUserPos(pos)}
-          onWeatherButtonClick={() => setShowWeather(true)}
-        >
-          {reviere.map((r, i) => <BoundaryLayer key={r.id} revier={r} color={REVIER_COLORS[i % REVIER_COLORS.length]} />)}
-          {activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} />}
-          {activeLayers.has("sichtungen") && <WildmanagementLayer items={wildmanagement} />}
-          {windData.deg !== null && <WindLayer windDeg={windData.deg} windSpeed={windData.speed} />}
-        </RevierMapCore>
+      <div className="fixed inset-0 bottom-20" style={{ zIndex: 10 }}>
+        <div className="absolute inset-0">
+          <RevierMapCore
+            revier={selectedRevier}
+            height="100%"
+            className="!rounded-none !border-0 !shadow-none"
+            onUserLocation={(pos) => setUserPos(pos)}
+            onWeatherButtonClick={() => setShowWeather(true)}
+          >
+            {reviere.map((r, i) => (
+              <BoundaryLayer key={r.id} revier={r} color={REVIER_COLORS[i % REVIER_COLORS.length]} />
+            ))}
+            {activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} />}
+            {activeLayers.has("sichtungen") && <WildmanagementLayer items={wildmanagement} />}
+            {windData.deg !== null && <WindLayer windDeg={windData.deg} windSpeed={windData.speed} />}
+          </RevierMapCore>
+        </div>
+
+        {showWeather && (
+          <JagdWetterWidget
+            lat={userPos?.[0] ?? 51.1657}
+            lng={userPos?.[1] ?? 10.4515}
+            onWeatherLoaded={(deg, speed) => setWindData({ deg, speed })}
+            onClose={() => setShowWeather(false)}
+          />
+        )}
       </div>
 
-      {showWeather && (
-        <JagdWetterWidget
-          lat={userPos?.[0] ?? 51.1657}
-          lng={userPos?.[1] ?? 10.4515}
-          onWeatherLoaded={(deg, speed) => setWindData({ deg, speed })}
-          onClose={() => setShowWeather(false)}
-        />
-      )}
-
-    </div>
-
-      {/* FAB – Plus Button – außerhalb des Karten-Containers */}
+      {/* FAB – Plus Button außerhalb des Karten-Containers */}
       <button
         style={{ zIndex: 9999 }}
         className="fixed bottom-24 right-4 w-14 h-14 bg-[#22c55e] rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform"
@@ -96,5 +91,4 @@ export default function MobileMap() {
       </button>
     </>
   );
-}
 }
