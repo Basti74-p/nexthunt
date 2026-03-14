@@ -10,6 +10,12 @@ function LayoutInner({ children, currentPageName }) {
   const { user, loading } = useAuth();
   const isMobile = useMobile();
   const [initializingTrial, setInitializingTrial] = useState(false);
+  const [showLogoAnimation, setShowLogoAnimation] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowLogoAnimation(false), 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Auto-apply dark theme based on system preference
   useEffect(() => {
@@ -60,6 +66,28 @@ function LayoutInner({ children, currentPageName }) {
       initTrial();
     }
   }, [user, loading]);
+
+  if (showLogoAnimation) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#2d2d2d]">
+        <style>{`
+          @keyframes logoScale {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+          }
+          .logo-animate {
+            animation: logoScale 3s ease-in-out forwards;
+          }
+        `}</style>
+        <img
+          src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c370741b119950032ab62/7a1f75278_NextHunt_logo_transparent.png"
+          alt="NextHunt Logo"
+          className="w-32 h-auto logo-animate"
+        />
+      </div>
+    );
+  }
 
   if (loading || initializingTrial) {
     return (
