@@ -134,3 +134,25 @@ function JagdMonitorCard({ jagd }) {
     </Link>
   );
 }
+
+function TerminCard({ termin }) {
+  const dateStr = termin.datum ? (() => {
+    try { return format(new Date(termin.datum), "dd. MMM yyyy", { locale: de }); } catch { return termin.datum; }
+  })() : "";
+
+  return (
+    <div className="block bg-[#1e1e1e] rounded-2xl border border-[#2d2d2d] p-4 hover:border-[#22c55e]/40 transition-all group">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xs font-medium text-blue-400">{termin.status || "geplant"}</span>
+          </div>
+          <h3 className="font-semibold text-gray-100">{termin.titel}</h3>
+          <p className="text-xs text-gray-500 mt-1">{dateStr}{termin.uhrzeit_start ? ` · ${termin.uhrzeit_start}` : ""}{termin.ort ? ` · ${termin.ort}` : ""}</p>
+          {termin.gast_ids?.length > 0 && <p className="text-xs text-gray-400 mt-2">{termin.gast_ids.length} Personen eingeladen</p>}
+        </div>
+        <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-[#22c55e] transition-colors" />
+      </div>
+    </div>
+  );
+}
