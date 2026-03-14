@@ -39,13 +39,19 @@ export default function Karte() {
     queryFn: () => base44.entities.Revier.filter({ tenant_id: tenant.id }),
     enabled: !!tenant?.id,
     onSuccess: (data) => {
-      // Rebuild boundaries
       const b = data
         .filter(r => r.boundary_geojson)
         .map(r => {
           try {
             const gj = JSON.parse(r.boundary_geojson);
-            const coords = gj.coordinates[0].map(([lng, lat]) => [lat, lng]);
+            let rawCoords;
+            if (gj.type === "FeatureCollection") {
+              rawCoords = gj.features?.[0]?.geometry?.coordinates?.[0];
+            } else {
+              rawCoords = gj.coordinates?.[0];
+            }
+            if (!rawCoords) return null;
+            const coords = rawCoords.map(([lng, lat]) => [lat, lng]);
             return { revierId: r.id, revierName: r.name, coords };
           } catch { return null; }
         })
