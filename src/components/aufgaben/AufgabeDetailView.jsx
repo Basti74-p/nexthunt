@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, MapPin, AlertTriangle, User, Clock, Flag } from "lucide-react";
+import { ArrowLeft, MapPin, AlertTriangle, User, Clock, Flag, Download } from "lucide-react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
+import jsPDF from "jspdf";
 import AufgabeProtokollView from "./AufgabeProtokollView";
 
 const PRIO_COLOR = { low: "bg-blue-100 text-blue-700", medium: "bg-yellow-100 text-yellow-700", high: "bg-red-100 text-red-700" };
