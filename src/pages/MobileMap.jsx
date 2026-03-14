@@ -98,11 +98,13 @@ export default function MobileMap() {
 
   const handleAction = (key) => {
     if (key === "einrichtung") {
+      einrichtungModeRef.current = true;
       setEinrichtungMode(true);
     } else if (key === "boundary") {
       setDrawingBoundary(true);
       setBoundaryPoints([]);
     } else if (key === "sichtung") {
+      sichtungModeRef.current = true;
       setSichtungMode(true);
     }
   };
