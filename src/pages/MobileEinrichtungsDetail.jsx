@@ -53,6 +53,13 @@ export default function MobileEinrichtungsDetail() {
     enabled: !!einrichtung?.id,
   });
 
+  const deleteSchadenMutation = useMutation({
+    mutationFn: (id) => base44.entities.Schadensprotokoll.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["schadensprotokoll"] });
+    },
+  });
+
   if (isLoading) {
     return (
       <div className="text-center py-12 text-gray-400">Laden...</div>
