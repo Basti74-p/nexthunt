@@ -172,8 +172,15 @@ export default function Aufgaben() {
               }}>
                 <SelectTrigger><SelectValue placeholder="Person wählen..." /></SelectTrigger>
                 <SelectContent>
-                  {tenantMembers.map(m => <SelectItem key={m.id} value={m.id}>{m.first_name} {m.last_name}</SelectItem>)}
-                  {personen.map(p => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
+                  {tenantMembers && tenantMembers.length > 0 ? (
+                    tenantMembers.map(m => <SelectItem key={m.id} value={m.id}>{m.first_name} {m.last_name}</SelectItem>)
+                  ) : null}
+                  {personen && personen.length > 0 ? (
+                    personen.map(p => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)
+                  ) : null}
+                  {(!tenantMembers || tenantMembers.length === 0) && (!personen || personen.length === 0) && (
+                    <SelectItem value={null} disabled>Keine Personen verfügbar</SelectItem>
+                  )}
                 </SelectContent>
               </Select>
             </div>
