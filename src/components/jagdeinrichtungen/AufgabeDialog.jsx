@@ -23,6 +23,7 @@ export default function AufgabeDialog({ isOpen, onClose, aufgabe, einrichtung, t
   const [formData, setFormData] = useState({
     title: "", description: "", due_date: "", priority: "medium",
     status: "offen", assigned_to: "", assigned_to_name: "",
+    einrichtung_id: "", einrichtung_name: "",
   });
 
   useEffect(() => {
@@ -35,11 +36,18 @@ export default function AufgabeDialog({ isOpen, onClose, aufgabe, einrichtung, t
         status: aufgabe.status || "offen",
         assigned_to: aufgabe.assigned_to || "",
         assigned_to_name: aufgabe.assigned_to_name || "",
+        einrichtung_id: aufgabe.einrichtung_id || "",
+        einrichtung_name: aufgabe.einrichtung_name || "",
       });
     } else {
-      setFormData({ title: "", description: "", due_date: "", priority: "medium", status: "offen", assigned_to: "", assigned_to_name: "" });
+      setFormData({
+        title: "", description: "", due_date: "", priority: "medium", status: "offen",
+        assigned_to: "", assigned_to_name: "",
+        einrichtung_id: einrichtung?.id || "",
+        einrichtung_name: einrichtung?.name || "",
+      });
     }
-  }, [aufgabe, isOpen]);
+  }, [aufgabe, einrichtung, isOpen]);
 
   const mutation = useMutation({
     mutationFn: (data) =>
