@@ -169,7 +169,7 @@ export default function MobileMap() {
           style={{ zIndex: 9999 }}
         >
           <span>📍 Auf Karte tippen um Standort zu setzen</span>
-          <button onClick={() => setEinrichtungMode(false)}>
+          <button onClick={() => { einrichtungModeRef.current = false; setEinrichtungMode(false); }}>
             <X className="w-4 h-4" />
           </button>
         </div>
