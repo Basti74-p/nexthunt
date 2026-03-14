@@ -29,7 +29,7 @@ export default function AufgabeDialog({ isOpen, onClose, aufgabe, einrichtung, t
   const [formData, setFormData] = useState({
     title: "", description: "", due_date: "", priority: "medium",
     status: "offen", assigned_to: "", assigned_to_name: "",
-    einrichtung_id: "", einrichtung_name: "",
+    einrichtung_id: "", einrichtung_name: "", schadensprotokolle_ids: [],
   });
 
   useEffect(() => {
