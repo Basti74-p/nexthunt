@@ -232,7 +232,7 @@ export default function MobileEinrichtungsDetail() {
         }
 
         {/* Action Buttons */}
-        <div className="fixed bottom-6 left-4 right-4 space-y-2">
+        <div className="fixed bottom-24 left-4 right-4 space-y-2">
           {activeTab === "schaden" &&
           <Button
             onClick={() => {
