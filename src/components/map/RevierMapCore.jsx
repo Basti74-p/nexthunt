@@ -169,7 +169,7 @@ function SearchControl({ onResult }) {
   };
 
   return (
-    <div className={`absolute z-[1000] flex flex-col gap-1 ${isMobile ? "top-4 left-4 w-auto" : "top-3 left-3 w-80"}`}>
+    <div className={`absolute z-[1000] flex flex-col gap-1 ${isMobile ? "top-4 left-4 w-auto" : "top-3 left-3 w-80"}`} style={isMobile ? { maxWidth: "calc(100% - 80px)" } : {}}>
       {!open ? (
         <button
           onClick={() => setOpen(true)}
