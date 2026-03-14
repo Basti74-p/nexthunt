@@ -231,15 +231,44 @@ export default function MobileEinrichtungsDetail() {
           </div>
         )}
 
-        {/* Action Button */}
-        <div className="fixed bottom-6 left-4 right-4">
+        {/* Action Buttons */}
+        <div className="fixed bottom-6 left-4 right-4 space-y-2">
+          {activeTab === "schaden" && (
+            <Button
+              onClick={() => {
+                setEditingSchaden(null);
+                setShowSchadensDialog(true);
+              }}
+              className="w-full bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-lg flex items-center justify-center gap-2"
+            >
+              <Plus className="w-4 h-4" />
+              Schadenbericht hinzufügen
+            </Button>
+          )}
           <Button
-            onClick={() => navigate("/Jagdeinrichtungen")}
+            onClick={() => navigate("/MobileEinrichtungen")}
             className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] text-white rounded-lg"
           >
             Zurück zu Einrichtungen
           </Button>
         </div>
+
+        {/* Schaden Dialog */}
+        {showSchadensDialog && (
+          <SchadensprotokollDialog
+            einrichtung={einrichtung}
+            schaden={editingSchaden}
+            onClose={() => {
+              setShowSchadensDialog(false);
+              setEditingSchaden(null);
+            }}
+            onSuccess={() => {
+              setShowSchadensDialog(false);
+              setEditingSchaden(null);
+              queryClient.invalidateQueries({ queryKey: ["schadensprotokoll"] });
+            }}
+          />
+        )}
       </div>
     </PageTransition>
   );
