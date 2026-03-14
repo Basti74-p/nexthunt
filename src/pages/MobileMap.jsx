@@ -26,9 +26,14 @@ export default function MobileMap() {
 
 
   // Einrichtung state
-  const [einrichtungMode, setEinrichtungMode] = useState(false); // waiting for map click
+  const [einrichtungMode, setEinrichtungMode] = useState(false);
   const [einrichtungCoords, setEinrichtungCoords] = useState(null);
   const [showEinrichtungForm, setShowEinrichtungForm] = useState(false);
+
+  // Sichtung state
+  const [sichtungMode, setSichtungMode] = useState(false);
+  const [sichtungCoords, setSichtungCoords] = useState(null);
+  const [showSichtungForm, setShowSichtungForm] = useState(false);
 
   // Boundary drawing state
   const [drawingBoundary, setDrawingBoundary] = useState(false);
