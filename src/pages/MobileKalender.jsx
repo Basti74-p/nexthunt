@@ -75,7 +75,8 @@ export default function MobileKalender() {
           <CalendarMonth 
             currentDate={new Date()} 
             onEventClick={(event) => { setSelectedEvent(event); setShowEventDetail(true); }}
-            events={[...jagden, ...termine]} 
+            events={[...jagden, ...termine]}
+            isMobile={true}
           />
         </div>
 
