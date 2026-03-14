@@ -24,6 +24,8 @@ export default function Aufgaben() {
     priority: "medium",
     assigned_to: "",
     assigned_to_name: "",
+    einrichtung_id: "",
+    einrichtung_name: "",
     schadensprotokolle_ids: []
   });
   const queryClient = useQueryClient();
