@@ -152,6 +152,16 @@ export default function AufgabeDetailView({ aufgabe, onBack, tenantId }) {
           <h1 className="text-2xl font-bold text-gray-900">{aufgabe.title}</h1>
           <p className={`text-sm font-medium ${STATUS_COLOR[aufgabe.status]}`}>{STATUS_LABEL[aufgabe.status]}</p>
         </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handlePDFExport}
+          disabled={exporting}
+          className="gap-2 border-gray-300 text-gray-700 hover:bg-gray-50"
+        >
+          <Download className="w-4 h-4" />
+          {exporting ? "Exportiert..." : "PDF"}
+        </Button>
       </div>
 
       <div className="grid grid-cols-3 gap-6">
