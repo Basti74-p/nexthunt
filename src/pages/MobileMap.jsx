@@ -35,6 +35,8 @@ export default function MobileMap() {
   const [boundaryColor, setBoundaryColor] = useState("#22c55e");
   const [assignRevierIdForBoundary, setAssignRevierIdForBoundary] = useState("");
   const [savingBoundary, setSavingBoundary] = useState(false);
+  const [newRevierName, setNewRevierName] = useState("");
+  const [showNewRevierInput, setShowNewRevierInput] = useState(false);
 
   const { data: reviere = [] } = useQuery({
     queryKey: ["reviere", tenant?.id],
