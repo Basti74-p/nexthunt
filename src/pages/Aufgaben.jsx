@@ -168,8 +168,9 @@ export default function Aufgaben() {
                       {a.due_date && <span className="text-xs text-gray-400">{a.due_date}</span>}
                     </div>
                   </div>
-                  {(a.assigned_to_name || a.schadensprotokolle_ids?.length > 0) && (
+                  {(a.assigned_to_name || a.einrichtung_name || a.schadensprotokolle_ids?.length > 0) && (
                     <div className="mt-2 pt-2 border-t border-gray-100 flex flex-wrap gap-2">
+                      {a.einrichtung_name && <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">Stand: {a.einrichtung_name}</span>}
                       {a.assigned_to_name && <span className="text-xs bg-[#0F2F23]/10 text-[#0F2F23] px-2 py-1 rounded">{a.assigned_to_name}</span>}
                       {a.schadensprotokolle_ids?.length > 0 && <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded">{a.schadensprotokolle_ids.length} Schaden</span>}
                     </div>
