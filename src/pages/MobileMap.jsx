@@ -343,7 +343,7 @@ export default function MobileMap() {
       </div>
 
       {/* FAB – verstecken wenn Drawing-Modus aktiv */}
-      {!drawingBoundary && !showAssignBoundary && !einrichtungMode && (
+      {!drawingBoundary && !showAssignBoundary && !einrichtungMode && !sichtungMode && (
         <button
           style={{ zIndex: 9999 }}
           className="fixed bottom-24 right-4 w-14 h-14 bg-[#22c55e] rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform"
