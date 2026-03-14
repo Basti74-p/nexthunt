@@ -242,7 +242,7 @@ export default function MobileEinrichtungsDetail() {
             className="w-full bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-lg flex items-center justify-center gap-2">
 
               <Plus className="w-4 h-4" />
-              Schadenbericht hinzufügen
+              Protokoll hinzufügen
             </Button>
           }
           <Button
