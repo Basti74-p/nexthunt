@@ -26,10 +26,10 @@ export default function MobileNav({ currentPage }) {
 
   const tabs = [
     { name: "Karte", icon: Map, page: "MobileMap", feature: "feature_map" },
-    { name: "Sichtungen", icon: Eye, page: "MobileSightings", feature: "feature_sightings" },
     { name: "Strecke", icon: Crosshair, page: "MobileStrecke", feature: "feature_strecke" },
     { name: "Aufgaben", icon: ListTodo, page: "MobileTasks", feature: "feature_tasks" },
-    { name: "Jagd", icon: Calendar, page: "JagdkalenderMain", feature: "feature_kalender" },
+    { name: "Kalender", icon: Calendar, page: "JagdkalenderMain", feature: "feature_kalender" },
+    { name: "Einrichtungen", icon: Warehouse, page: "Jagdeinrichtungen", feature: "feature_einrichtungen" },
   ].filter(t => t.feature === null || tenantFeatures[t.feature] !== false);
 
   // Track tab switches for history management
