@@ -52,6 +52,7 @@ export default function AufgabeDialog({ isOpen, onClose, aufgabe, einrichtung, t
         assigned_to: "", assigned_to_name: "",
         einrichtung_id: einrichtung?.id || "",
         einrichtung_name: einrichtung?.name || "",
+        schadensprotokolle_ids: [],
       });
     }
   }, [aufgabe, einrichtung, isOpen]);
