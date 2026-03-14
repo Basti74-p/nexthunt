@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import SchadensprotokollDialog from "./SchadensprotokollDialog";
 import AufgabeDialog from "./AufgabeDialog";
+import AufgabeProtokollView from "./AufgabeProtokollView";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 
