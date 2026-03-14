@@ -239,6 +239,41 @@ export default function MobileMap() {
                       <option key={r.id} value={r.id}>{r.name}</option>
                     ))}
                   </select>
+
+                  {!showNewRevierInput ? (
+                    <button
+                      onClick={() => setShowNewRevierInput(true)}
+                      className="w-full text-sm px-3 py-2.5 rounded-xl border border-dashed border-[#22c55e]/50 text-[#22c55e] hover:bg-[#22c55e]/10 transition-colors"
+                    >
+                      + Neues Revier erstellen
+                    </button>
+                  ) : (
+                    <div className="flex gap-2">
+                      <input
+                        autoFocus
+                        type="text"
+                        placeholder="Reviername..."
+                        value={newRevierName}
+                        onChange={e => setNewRevierName(e.target.value)}
+                        onKeyDown={e => e.key === "Enter" && handleCreateNewRevier()}
+                        className="flex-1 text-sm bg-[#2a2a2a] border border-[#3a3a3a] rounded-xl px-3 py-2.5 text-gray-100 focus:outline-none focus:border-[#22c55e]"
+                      />
+                      <button
+                        onClick={handleCreateNewRevier}
+                        disabled={!newRevierName.trim()}
+                        className="px-3 py-2.5 rounded-xl bg-[#22c55e] text-black font-semibold disabled:opacity-40"
+                      >
+                        OK
+                      </button>
+                      <button
+                        onClick={() => { setShowNewRevierInput(false); setNewRevierName(""); }}
+                        className="px-3 py-2.5 rounded-xl border border-[#3a3a3a] text-gray-400"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  )}
+
                   <div className="flex gap-2">
                     <button onClick={cancelBoundary} className="flex-1 text-sm px-3 py-2.5 rounded-xl border border-[#3a3a3a] text-gray-300 hover:bg-[#2a2a2a]">
                       Abbrechen
