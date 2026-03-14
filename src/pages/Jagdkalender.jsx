@@ -23,6 +23,12 @@ export default function Jagdkalender() {
     refetchInterval: 15000,
   });
 
+  const { data: termine = [] } = useQuery({
+    queryKey: ["termine", tenant?.id],
+    queryFn: () => base44.entities.Termin.filter({ tenant_id: tenant?.id }, "-datum", 100),
+    enabled: !!tenant?.id,
+  });
+
   const aktive = jagden.filter(j => j.status === "aktiv");
   const andere = jagden.filter(j => j.status !== "aktiv");
 
