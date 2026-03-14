@@ -13,8 +13,10 @@ import EventDetailDialog from "@/components/calendar/EventDetailDialog";
 export default function MobileKalender() {
   const { tenant } = useAuth();
   const [showNewJagdDialog, setShowNewJagdDialog] = useState(false);
+  const [showTerminDialog, setShowTerminDialog] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showEventDetail, setShowEventDetail] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const { data: jagden = [] } = useQuery({
     queryKey: ["gesellschaftsjagden-mobile", tenant?.id],
@@ -74,15 +76,20 @@ export default function MobileKalender() {
         <div className="px-4 mb-6">
           <CalendarMonth 
             currentDate={new Date()} 
+            onDateSelect={(date) => { setSelectedDate(date); setShowTerminDialog(true); }}
             onEventClick={(event) => { setSelectedEvent(event); setShowEventDetail(true); }}
             events={[...jagden, ...termine]}
             isMobile={true}
           />
         </div>
 
-        {/* New Hunt Button */}
-        <div className="px-4 mb-6">
-          <Button className="w-full bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-lg flex items-center justify-center gap-2">
+        {/* Action Buttons */}
+        <div className="px-4 mb-6 space-y-2">
+          <Button onClick={() => { setSelectedDate(null); setShowTerminDialog(true); }} className="w-full bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-lg flex items-center justify-center gap-2">
+            <Plus className="w-4 h-4" />
+            Neuer Termin
+          </Button>
+          <Button className="w-full bg-slate-700 hover:bg-slate-600 text-white rounded-lg flex items-center justify-center gap-2">
             <Plus className="w-4 h-4" />
             Neue Jagd
           </Button>
@@ -173,6 +180,9 @@ export default function MobileKalender() {
 
         {/* Event Detail Dialog */}
         <EventDetailDialog isOpen={showEventDetail} onClose={() => setShowEventDetail(false)} event={selectedEvent} />
+        
+        {/* Termin Dialog */}
+        <TerminDialog isOpen={showTerminDialog} onClose={() => setShowTerminDialog(false)} selectedDate={selectedDate} tenant={tenant} />
       </div>
     </PageTransition>
   );
