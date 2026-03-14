@@ -56,7 +56,7 @@ export default function MobileEinrichtungsDetail() {
   const deleteSchadenMutation = useMutation({
     mutationFn: (id) => base44.entities.Schadensprotokoll.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["schadensprotokoll"] });
+      queryClient.invalidateQueries({ queryKey: ["schadensprotokoll", einrichtung?.id] });
     }
   });
 
