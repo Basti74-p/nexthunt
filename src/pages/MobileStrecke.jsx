@@ -15,12 +15,36 @@ const SPECIES = [
   { value: "schwarzwild", label: "Schwarzwild" },
   { value: "rehwild", label: "Rehwild" },
   { value: "damwild", label: "Damwild" },
+  { value: "sikawild", label: "Sikawild" },
+  { value: "wolf", label: "Wolf" },
 ];
+
+const GENDER = [
+  { value: "maennlich", label: "Männlich" },
+  { value: "weiblich", label: "Weiblich" },
+  { value: "unbekannt", label: "Unbekannt" },
+];
+
+const AGE_CLASSES = {
+  rotwild: ["Hirsch Klasse I", "Hirsch Klasse II", "Hirsch Klasse III", "Tier", "Schmaltier"],
+  schwarzwild: ["Keiler (stark)", "Keiler (mittel)", "Bache", "Überläufer (m)", "Überläufer (w)", "Frischling (m)", "Frischling (w)"],
+  rehwild: ["Bock Klasse I", "Bock Klasse II", "Bock Klasse III", "Schmalreh (m)", "Schmalreh (w)", "Ricke", "Kitz (m)", "Kitz (w)"],
+  damwild: ["Schaufler Klasse I", "Schaufler Klasse II", "Schaufler Klasse III", "Damtier", "Schmaltier"],
+  sikawild: ["Hirsch Klasse I", "Hirsch Klasse II", "Hirsch Klasse III", "Tier", "Schmaltier"],
+  wolf: ["Rüde", "Fähe", "Welpe"],
+};
+
+const EMPTY_FORM = {
+  species: "",
+  gender: "unbekannt",
+  age_class: "",
+  date: new Date().toISOString().split("T")[0],
+};
 
 export default function MobileStrecke() {
   const { tenant } = useAuth();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [form, setForm] = useState({ species: "rehwild", gender: "maennlich", date: new Date().toISOString().split("T")[0] });
+  const [form, setForm] = useState(EMPTY_FORM);
   const queryClient = useQueryClient();
 
   const { data: reviere = [] } = useQuery({
@@ -67,36 +91,61 @@ export default function MobileStrecke() {
         ))}
       </div>
 
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
-          <DialogHeader><DialogTitle>Strecke erfassen</DialogTitle></DialogHeader>
-          <div className="space-y-4 mt-4">
-            <div>
-              <Label>Wildart</Label>
-              <Select value={form.species} onValueChange={(v) => setForm({ ...form, species: v })}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>{SPECIES.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}</SelectContent>
-              </Select>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label>Geschlecht</Label>
-                <Select value={form.gender} onValueChange={(v) => setForm({ ...form, gender: v })}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="maennlich">Männlich</SelectItem>
-                    <SelectItem value="weiblich">Weiblich</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div><Label>Datum</Label><Input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} /></div>
-            </div>
-            <Button onClick={() => createMutation.mutate(form)} disabled={createMutation.isPending} className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl">
-              {createMutation.isPending ? "Speichern..." : "Erfassen"}
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <Dialog open={dialogOpen} onOpenChange={(v) => { setDialogOpen(v); if (!v) setForm(EMPTY_FORM); }}>
+         <DialogContent className="bg-[#2d2d2d] border-[#3a3a3a] max-w-md rounded-2xl">
+           <DialogHeader>
+             <DialogTitle className="text-gray-100">Strecke erfassen</DialogTitle>
+           </DialogHeader>
+           <div className="space-y-3 mt-2">
+             <div>
+               <Label className="text-gray-300 text-xs mb-1 block">Wildart *</Label>
+               <Select value={form.species} onValueChange={(v) => setForm({ ...form, species: v })}>
+                 <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
+                   <SelectValue placeholder="Wildart wählen" />
+                 </SelectTrigger>
+                 <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
+                   {SPECIES.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
+                 </SelectContent>
+               </Select>
+             </div>
+             <div className="grid grid-cols-2 gap-3">
+               <div>
+                 <Label className="text-gray-300 text-xs mb-1 block">Geschlecht</Label>
+                 <Select value={form.gender} onValueChange={(v) => setForm({ ...form, gender: v })}>
+                   <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
+                     <SelectValue />
+                   </SelectTrigger>
+                   <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
+                     {GENDER.map(g => <SelectItem key={g.value} value={g.value}>{g.label}</SelectItem>)}
+                   </SelectContent>
+                 </Select>
+               </div>
+               <div>
+                 <Label className="text-gray-300 text-xs mb-1 block">Datum *</Label>
+                 <Input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} 
+                   className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+               </div>
+             </div>
+             <div>
+               <Label className="text-gray-300 text-xs mb-1 block">Altersklasse</Label>
+               <Select value={form.age_class} onValueChange={(v) => setForm({ ...form, age_class: v })}>
+                 <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
+                   <SelectValue placeholder="Altersklasse wählen" />
+                 </SelectTrigger>
+                 <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
+                   {form.species && AGE_CLASSES[form.species]?.map(ac => (
+                     <SelectItem key={ac} value={ac}>{ac}</SelectItem>
+                   ))}
+                 </SelectContent>
+               </Select>
+             </div>
+             <Button onClick={() => { createMutation.mutate(form); setForm(EMPTY_FORM); }} disabled={createMutation.isPending || !form.species || !form.date} 
+               className="w-full bg-[#22c55e] text-black hover:bg-[#16a34a] rounded-xl">
+               {createMutation.isPending ? "Erfassen..." : "Erfassen"}
+             </Button>
+           </div>
+         </DialogContent>
+       </Dialog>
     </div>
   );
 }
