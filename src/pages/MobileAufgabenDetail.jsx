@@ -184,8 +184,8 @@ export default function MobileAufgabenDetail() {
             <div className="flex items-start gap-3">
               <Clock className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-xs text-gray-600">Fällig am</p>
-                <p className="text-sm font-medium text-gray-900">
+                <p className="text-xs text-gray-500">Fällig am</p>
+                <p className="text-sm font-medium text-gray-100">
                   {format(new Date(aufgabe.due_date), "dd. MMMM yyyy", { locale: de })}
                 </p>
               </div>
@@ -196,8 +196,8 @@ export default function MobileAufgabenDetail() {
             <div className="flex items-start gap-3">
               <User className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-xs text-gray-600">Zugewiesen an</p>
-                <p className="text-sm font-medium text-gray-900">{aufgabe.assigned_to_name}</p>
+                <p className="text-xs text-gray-500">Zugewiesen an</p>
+                <p className="text-sm font-medium text-gray-100">{aufgabe.assigned_to_name}</p>
               </div>
             </div>
           )}
@@ -206,8 +206,8 @@ export default function MobileAufgabenDetail() {
             <div className="flex items-start gap-3">
               <Flag className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-xs text-gray-600">Jagdeinrichtung</p>
-                <p className="text-sm font-medium text-gray-900">{aufgabe.einrichtung_name}</p>
+                <p className="text-xs text-gray-500">Jagdeinrichtung</p>
+                <p className="text-sm font-medium text-gray-100">{aufgabe.einrichtung_name}</p>
                 {einrichtung?.condition && (
                   <p className="text-xs text-gray-500 mt-1">
                     Zustand: <span className="capitalize">{einrichtung.condition}</span>

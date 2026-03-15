@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Map, Crosshair, ListTodo, Calendar, Warehouse } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import MobileTopBar from "./MobileTopBar";
 
+// Root (tab) pages — navigating to these resets to the tab root
+const TAB_ROOT_PAGES = ["MobileMap", "MobileStrecke", "MobileTasks", "MobileKalender", "MobileEinrichtungen"];
 
 const TAB_NAMES = {
   MobileMap: "Karte",
@@ -16,13 +18,23 @@ const TAB_NAMES = {
   JagdDetail: "Jagd",
   MobileEinrichtungen: "Einrichtungen",
   MobileEinrichtungsDetail: "Einrichtung",
+  MobileAufgabenDetail: "Aufgabe",
+};
+
+// Child → parent tab mapping
+const CHILD_TO_TAB = {
+  MobileAufgabenDetail: "MobileTasks",
+  MobileEinrichtungsDetail: "MobileEinrichtungen",
+  JagdDetail: "MobileKalender",
+  JagdkalenderMain: "MobileKalender",
+  MobileMonitor: "MobileKalender",
 };
 
 export default function MobileNav({ currentPage }) {
   const { tenantFeatures } = useAuth();
-  const [tabHistories, setTabHistories] = useState({});
-
-
+  const navigate = useNavigate();
+  // Per-tab last visited page: { MobileTasks: "/MobileAufgabenDetail?id=123", ... }
+  const tabLastPage = useRef({});
 
   const tabs = [
     { name: "Karte", icon: Map, page: "MobileMap", feature: "feature_map" },
@@ -32,42 +44,55 @@ export default function MobileNav({ currentPage }) {
     { name: "Einrichtungen", icon: Warehouse, page: "MobileEinrichtungen", feature: "feature_einrichtungen" },
   ].filter(t => t.feature === null || tenantFeatures[t.feature] !== false);
 
-  // Track tab switches for history management
+  // Track current page in its tab's history slot
   useEffect(() => {
-    setTabHistories(prev => ({
-      ...prev,
-      [currentPage]: (prev[currentPage] || []).concat(currentPage)
-    }));
+    const ownerTab = CHILD_TO_TAB[currentPage] || (TAB_ROOT_PAGES.includes(currentPage) ? currentPage : null);
+    if (ownerTab) {
+      tabLastPage.current[ownerTab] = window.location.pathname + window.location.search;
+    }
   }, [currentPage]);
+
+  const handleTabPress = (tabPage) => {
+    const savedPath = tabLastPage.current[tabPage];
+    if (savedPath && currentPage !== tabPage) {
+      navigate(savedPath);
+    } else {
+      navigate(createPageUrl(tabPage));
+    }
+  };
+
+  // Determine which tab is "active" (includes child pages)
+  const activeTab = CHILD_TO_TAB[currentPage] || currentPage;
+  const isChildPage = !!CHILD_TO_TAB[currentPage];
 
   return (
     <>
-      {/* Top bar – auf der Karte ausblenden (Vollbild) */}
+      {/* Top bar */}
       {currentPage !== "MobileMap" && (
-        <MobileTopBar 
-          title={TAB_NAMES[currentPage] || "NextHunt"} 
-          showBackButton={false}
+        <MobileTopBar
+          title={TAB_NAMES[currentPage] || "NextHunt"}
+          showBackButton={isChildPage}
+          onBack={() => navigate(-1)}
         />
       )}
 
       {/* Bottom tabs */}
       <nav className="fixed bottom-0 left-0 right-0 bg-[#1e1e1e] border-t border-[#3a3a3a] z-50 flex justify-around px-2 py-2 safe-area-pb select-none">
         {tabs.map(({ name, icon: Icon, page }) => {
-            const isActive = currentPage === page;
-            
-            return (
-              <Link
-                key={page}
-                to={createPageUrl(page)}
-                className={`flex flex-col items-center gap-1.5 px-3 py-2 rounded-xl transition-all select-none ${
-                  isActive ? "text-[#22c55e]" : "text-gray-500"
-                }`}
-              >
-                <Icon className={`w-5 h-5 ${isActive ? "stroke-[2.5]" : "stroke-[1.5]"}`} />
-                <span className={`text-[10px] font-medium ${isActive ? "text-[#22c55e]" : "text-gray-500"}`}>{name}</span>
-              </Link>
-            );
-          })}
+          const isActive = activeTab === page;
+          return (
+            <button
+              key={page}
+              onClick={() => handleTabPress(page)}
+              className={`flex flex-col items-center gap-1.5 px-3 py-2 rounded-xl transition-all select-none ${
+                isActive ? "text-[#22c55e]" : "text-gray-500"
+              }`}
+            >
+              <Icon className={`w-5 h-5 ${isActive ? "stroke-[2.5]" : "stroke-[1.5]"}`} />
+              <span className={`text-[10px] font-medium ${isActive ? "text-[#22c55e]" : "text-gray-500"}`}>{name}</span>
+            </button>
+          );
+        })}
       </nav>
     </>
   );
