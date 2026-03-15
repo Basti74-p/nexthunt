@@ -13,6 +13,7 @@ import MobileEinrichtungen from './pages/MobileEinrichtungen';
 import MobileEinrichtungsDetail from './pages/MobileEinrichtungsDetail';
 import MobileKalender from './pages/MobileKalender';
 import JagdkalenderKalender from './pages/JagdkalenderKalender';
+import SystemAdminDebug from './pages/SystemAdminDebug';
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
