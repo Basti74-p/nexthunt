@@ -134,36 +134,22 @@ export default function MobileAufgabenDetail() {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-20">
-      {/* Header */}
-      <div className="sticky top-0 z-10 bg-white border-b border-gray-200 p-4 flex items-center gap-3">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => navigate("/MobileTasks")}
-          className="text-gray-600"
-        >
-          <ArrowLeft className="w-5 h-5" />
-        </Button>
-        <div className="flex-1 min-w-0">
-          <h1 className="font-bold text-gray-900 truncate">{aufgabe.title}</h1>
-          <p className={`text-xs font-medium ${STATUS_COLOR[aufgabe.status]}`}>
-            {STATUS_LABEL[aufgabe.status]}
-          </p>
-        </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handlePDFExport}
-          disabled={exporting}
-          className="text-gray-600"
-        >
-          <Download className="w-5 h-5" />
-        </Button>
-      </div>
+    <div className="bg-[#1e1e1e] min-h-screen pb-20">
+      <MobileTopBar
+        title={aufgabe.title}
+        showBackButton={true}
+        onBack={() => navigate("/MobileTasks")}
+      />
+      <button
+        onClick={handlePDFExport}
+        disabled={exporting}
+        className="fixed top-3 right-4 z-50 w-9 h-9 flex items-center justify-center rounded-xl bg-[#2d2d2d] text-gray-300 hover:bg-[#3a3a3a]"
+      >
+        <Download className="w-4 h-4" />
+      </button>
 
       {/* Content */}
-      <div className="space-y-3 p-4">
+      <div className="space-y-3 p-4 pt-20">
         {/* Status & Priority */}
         <div className="bg-white rounded-lg p-4 space-y-3 border border-gray-200">
           <div className="flex gap-3">
