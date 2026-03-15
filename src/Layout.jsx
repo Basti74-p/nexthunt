@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from "./components/hooks/useAuth";
 import { useMobile } from "./components/hooks/useMobile";
 import DesktopSidebar from "./components/navigation/DesktopSidebar";
 import MobileNav from "./components/navigation/MobileNav";
+import OfflineIndicator from "./components/OfflineIndicator";
 import { Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
@@ -144,6 +145,7 @@ function LayoutInner({ children, currentPageName }) {
   if (isMobile) {
     return (
       <div className="min-h-screen bg-[#1e1e1e] overflow-x-hidden">
+        <OfflineIndicator />
         <MobileNav currentPage={currentPageName} />
         <main className="pt-14 pb-20 px-4 max-w-full w-full">
           {children}
@@ -155,6 +157,7 @@ function LayoutInner({ children, currentPageName }) {
   // Desktop mode
   return (
     <div className="min-h-screen bg-[#2d2d2d]">
+      <OfflineIndicator />
       <DesktopSidebar currentPage={currentPageName} />
       <main className="ml-64 p-8">
         {children}
