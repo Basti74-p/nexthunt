@@ -192,29 +192,29 @@ export default function Aufgaben() {
         setDialogOpen(open);
         if (!open) setEditingTask(null);
       }}>
-        <DialogContent>
+        <DialogContent className="bg-[#2d2d2d] border-[#3a3a3a]">
           <DialogHeader><DialogTitle>{editingTask ? "Aufgabe bearbeiten" : "Neue Aufgabe"}</DialogTitle></DialogHeader>
           <div className="space-y-4 mt-4">
-            <div><Label>Titel *</Label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
+            <div><Label className="text-gray-100">Titel *</Label><Input className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label>Einrichtung (optional)</Label>
-                <Select value={form.einrichtung_id} onValueChange={(v) => {
-                  const e = einrichtungen?.find(ei => ei.id === v);
-                  setForm({ 
-                    ...form, 
-                    einrichtung_id: v,
-                    einrichtung_name: e?.name || ""
-                  });
-                }}>
-                  <SelectTrigger><SelectValue placeholder="Keine Einrichtung" /></SelectTrigger>
-                  <SelectContent>
-                    {einrichtungen?.map(e => <SelectItem key={e.id} value={e.id}>{e.name}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
+                  <Label className="text-gray-100">Einrichtung (optional)</Label>
+                  <Select value={form.einrichtung_id} onValueChange={(v) => {
+                    const e = einrichtungen?.find(ei => ei.id === v);
+                    setForm({ 
+                      ...form, 
+                      einrichtung_id: v,
+                      einrichtung_name: e?.name || ""
+                    });
+                  }}>
+                    <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue placeholder="Keine Einrichtung" /></SelectTrigger>
+                    <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
+                      {einrichtungen?.map(e => <SelectItem key={e.id} value={e.id}>{e.name}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
               <div>
-                <Label>Zuweisen an (optional)</Label>
+                <Label className="text-gray-100">Zuweisen an (optional)</Label>
                 <Select value={form.assigned_to} onValueChange={(v) => {
                   const member = tenantMembers?.find(m => m.id === v);
                   const person = personen?.find(p => p.id === v);
@@ -224,22 +224,22 @@ export default function Aufgaben() {
                     assigned_to_name: member ? (member.first_name + " " + member.last_name) : (person?.name || "")
                   });
                 }}>
-                  <SelectTrigger><SelectValue placeholder="Keine Zuweisung" /></SelectTrigger>
-                  <SelectContent>
+                  <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue placeholder="Keine Zuweisung" /></SelectTrigger>
+                  <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
                     {tenantMembers?.map(m => <SelectItem key={m.id} value={m.id}>{m.first_name} {m.last_name}</SelectItem>)}
                     {personen?.map(p => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
             </div>
-            <div><Label>Beschreibung</Label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
+            <div><Label className="text-gray-100">Beschreibung</Label><Textarea className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
             <div className="flex gap-4">
-              <div className="flex-1"><Label>Fällig am</Label><Input type="date" value={form.due_date} onChange={(e) => setForm({ ...form, due_date: e.target.value })} /></div>
+              <div className="flex-1"><Label className="text-gray-100">Fällig am</Label><Input type="date" className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" value={form.due_date} onChange={(e) => setForm({ ...form, due_date: e.target.value })} /></div>
               <div className="flex-1">
-                <Label>Priorität</Label>
+                <Label className="text-gray-100">Priorität</Label>
                 <Select value={form.priority} onValueChange={(v) => setForm({ ...form, priority: v })}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
+                  <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue /></SelectTrigger>
+                  <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
                     <SelectItem value="low">Niedrig</SelectItem>
                     <SelectItem value="medium">Mittel</SelectItem>
                     <SelectItem value="high">Hoch</SelectItem>
