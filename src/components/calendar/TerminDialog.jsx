@@ -61,7 +61,7 @@ export default function TerminDialog({ isOpen, onClose, selectedDate, tenant, on
           <DrawerTitle className="text-gray-100 text-base">Neuer Termin</DrawerTitle>
         </DrawerHeader>
 
-        <div className="overflow-y-auto px-4 space-y-4 pb-2">
+        <div className="overflow-y-auto px-4 space-y-4 pb-2 max-w-sm mx-auto w-full">
           {/* Titel */}
           <div>
             <label className="text-xs font-medium text-gray-400 mb-1 block">Titel *</label>
