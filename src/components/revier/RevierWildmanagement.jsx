@@ -54,38 +54,38 @@ export default function RevierWildmanagement({ revier }) {
   return (
     <div>
       <div className="flex justify-end mb-4">
-        <Button onClick={() => setDialogOpen(true)} className="bg-[#0F2F23] hover:bg-[#1a4a36] text-white rounded-xl gap-2">
-          <Plus className="w-4 h-4" /> Neuer Eintrag
-        </Button>
-      </div>
+         <Button onClick={() => setDialogOpen(true)} className="bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-xl gap-2">
+           <Plus className="w-4 h-4" /> Neuer Eintrag
+         </Button>
+       </div>
 
       {entries.length === 0 ? (
         <EmptyState icon={Eye} title="Keine Einträge" description="Erfassen Sie Sichtungen, Bestandsdaten und mehr." />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
-          {grouped.filter(g => g.count > 0).map(g => (
-            <div key={g.value} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-              <h3 className="font-medium text-gray-900 capitalize">{g.label}</h3>
-              <p className="text-2xl font-bold text-gray-900 mt-1">{g.count}</p>
-              <p className="text-xs text-gray-500">Einträge • {g.observations} Sichtungen</p>
-            </div>
-          ))}
-        </div>
+           {grouped.filter(g => g.count > 0).map(g => (
+             <div key={g.value} className="bg-[#3a3a3a] rounded-2xl border border-[#4a4a4a] shadow-sm p-5">
+               <h3 className="font-medium text-gray-100 capitalize">{g.label}</h3>
+               <p className="text-2xl font-bold text-gray-100 mt-1">{g.count}</p>
+               <p className="text-xs text-gray-400">Einträge • {g.observations} Sichtungen</p>
+             </div>
+           ))}
+         </div>
       )}
 
       {/* Recent entries */}
       {entries.length > 0 && (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-          <div className="p-4 border-b border-gray-50">
-            <h3 className="font-semibold text-gray-900">Letzte Einträge</h3>
+        <div className="bg-[#3a3a3a] rounded-2xl border border-[#4a4a4a] shadow-sm overflow-hidden">
+          <div className="p-4 border-b border-[#4a4a4a]">
+            <h3 className="font-semibold text-gray-100">Letzte Einträge</h3>
           </div>
-          <div className="divide-y divide-gray-50">
+          <div className="divide-y divide-[#4a4a4a]">
             {entries.slice(0, 20).map(e => (
               <div key={e.id} className="px-5 py-3 flex items-center gap-4 text-sm">
-                <span className="capitalize font-medium text-gray-900 w-28">{SPECIES.find(s => s.value === e.species)?.label}</span>
-                <span className="text-gray-500 w-20">{ENTRY_TYPES.find(t => t.value === e.type)?.label}</span>
-                <span className="text-gray-700">{e.quantity}×</span>
-                <span className="text-gray-400 ml-auto">{e.date}</span>
+                <span className="capitalize font-medium text-gray-100 w-28">{SPECIES.find(s => s.value === e.species)?.label}</span>
+                <span className="text-gray-400 w-20">{ENTRY_TYPES.find(t => t.value === e.type)?.label}</span>
+                <span className="text-gray-300">{e.quantity}×</span>
+                <span className="text-gray-500 ml-auto">{e.date}</span>
               </div>
             ))}
           </div>
@@ -117,7 +117,7 @@ export default function RevierWildmanagement({ revier }) {
               <div><Label>Datum</Label><Input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} /></div>
             </div>
             <div><Label>Notizen</Label><Textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></div>
-            <Button onClick={() => createMutation.mutate(form)} disabled={createMutation.isPending} className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl">
+            <Button onClick={() => createMutation.mutate(form)} disabled={createMutation.isPending} className="w-full bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-xl">
               {createMutation.isPending ? "Speichern..." : "Speichern"}
             </Button>
           </div>
