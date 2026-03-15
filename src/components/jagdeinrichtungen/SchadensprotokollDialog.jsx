@@ -280,21 +280,11 @@ export default function SchadensprotokollDialog({ isOpen, onClose, schaden, einr
                 <div className="grid grid-cols-2 gap-2">
                   <div>
                     <label className="text-xs text-gray-400 mb-1 block">Schadensart</label>
-                    <Select value={formData.schadensart} onValueChange={(v) => set("schadensart", v)}>
-                      <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue /></SelectTrigger>
-                      <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-                        {SCHADENSART_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
+                    <MobileSelect value={formData.schadensart} onValueChange={(v) => set("schadensart", v)} label="Schadensart" items={SCHADENSART_OPTIONS} />
                   </div>
                   <div>
                     <label className="text-xs text-gray-400 mb-1 block">Schwere</label>
-                    <Select value={formData.schwere} onValueChange={(v) => set("schwere", v)}>
-                      <SelectTrigger className={`border text-sm font-medium ${SCHWERE_COLOR[formData.schwere]}`}><SelectValue /></SelectTrigger>
-                      <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-                        {SCHWERE_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
+                    <MobileSelect value={formData.schwere} onValueChange={(v) => set("schwere", v)} label="Schwere" items={SCHWERE_OPTIONS} />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -326,12 +316,7 @@ export default function SchadensprotokollDialog({ isOpen, onClose, schaden, einr
           <section>
             <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Bearbeitungsstatus</p>
             <div className="space-y-2">
-              <Select value={formData.status} onValueChange={(v) => set("status", v)}>
-                <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue /></SelectTrigger>
-                <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-                  {STATUS_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
-                </SelectContent>
-              </Select>
+              <MobileSelect value={formData.status} onValueChange={(v) => set("status", v)} label="Bearbeitungsstatus" items={STATUS_OPTIONS} />
               {formData.status === "abgeschlossen" && (
                 <div className="grid grid-cols-2 gap-2">
                   <div>

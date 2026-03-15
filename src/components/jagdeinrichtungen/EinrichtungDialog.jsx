@@ -106,18 +106,19 @@ export default function EinrichtungDialog({ isOpen, onClose, einrichtung, revier
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-3">
           <Input placeholder="Name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
-          <Select value={formData.type} onValueChange={(v) => setFormData({ ...formData, type: v })}>
-            <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue placeholder="Typ auswählen" /></SelectTrigger>
-            <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-              {TYPE_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
-            </SelectContent>
-          </Select>
-          <Select value={formData.condition} onValueChange={(v) => setFormData({ ...formData, condition: v })}>
-            <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue /></SelectTrigger>
-            <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-              {CONDITION_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
-            </SelectContent>
-          </Select>
+          <MobileSelect
+            value={formData.type}
+            onValueChange={(v) => setFormData({ ...formData, type: v })}
+            label="Typ auswählen"
+            placeholder="Typ auswählen"
+            items={TYPE_OPTIONS}
+          />
+          <MobileSelect
+            value={formData.condition}
+            onValueChange={(v) => setFormData({ ...formData, condition: v })}
+            label="Zustand"
+            items={CONDITION_OPTIONS}
+          />
           <div className="grid grid-cols-2 gap-2">
             <Input type="number" step="0.0001" placeholder="Breitengrad" value={formData.latitude} onChange={(e) => setFormData({ ...formData, latitude: e.target.value })} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 text-xs" />
             <Input type="number" step="0.0001" placeholder="Längengrad" value={formData.longitude} onChange={(e) => setFormData({ ...formData, longitude: e.target.value })} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 text-xs" />
