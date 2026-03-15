@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "@/components/hooks/useAuth";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -21,7 +21,20 @@ export default function TenantMembers() {
     queryKey: ["members", tenant?.id],
     queryFn: () => base44.entities.TenantMember.filter({ tenant_id: tenant?.id }),
     enabled: !!tenant?.id,
+    staleTime: 0,
+    gcTime: 0,
   });
+
+  // Live sync: subscribe to TenantMember changes
+  useEffect(() => {
+    if (!tenant?.id) return;
+    
+    const unsubscribe = base44.entities.TenantMember.subscribe(() => {
+      queryClient.invalidateQueries({ queryKey: ["members"] });
+    });
+    
+    return unsubscribe;
+  }, [tenant?.id, queryClient]);
 
   const createMutation = useMutation({
     mutationFn: (data) => base44.entities.TenantMember.create({ ...data, tenant_id: tenant.id, status: "active" }),

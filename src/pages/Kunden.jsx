@@ -35,27 +35,22 @@ export default function Kunden() {
   const [editItem, setEditItem] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
 
-  const { data: kunden = [], isLoading, refetch } = useQuery({
+  const { data: kunden = [], isLoading } = useQuery({
     queryKey: ["kunden", tenant?.id],
     queryFn: () => base44.entities.Kunde.filter({ tenant_id: tenant?.id }),
     enabled: !!tenant?.id,
-    staleTime: 0,
-    gcTime: 0,
   });
 
   // Live sync: subscribe to Kunde changes
   useEffect(() => {
     if (!tenant?.id) return;
     
-    const unsubscribe = base44.entities.Kunde.subscribe((event) => {
+    const unsubscribe = base44.entities.Kunde.subscribe(() => {
       queryClient.invalidateQueries({ queryKey: ["kunden"] });
     });
     
-    // Initial fetch
-    refetch();
-    
     return unsubscribe;
-  }, [tenant?.id, refetch, queryClient]);
+  }, [tenant?.id, queryClient]);
 
   const createMutation = useMutation({
     mutationFn: (data) => base44.entities.Kunde.create({ ...data, tenant_id: tenant.id }),
