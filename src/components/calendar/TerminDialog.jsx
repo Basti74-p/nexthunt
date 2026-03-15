@@ -164,7 +164,7 @@ export default function TerminDialog({ isOpen, onClose, selectedDate, tenant, on
           )}
         </div>
 
-        <DrawerFooter className="pt-2 pb-safe" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
+        <DrawerFooter className="pt-2 pb-safe max-w-sm mx-auto w-full" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
           <Button
             onClick={handleSubmit}
             disabled={!formData.titel || !formData.datum || createTermin.isPending}
