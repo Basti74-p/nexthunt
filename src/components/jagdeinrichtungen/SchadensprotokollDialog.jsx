@@ -179,7 +179,7 @@ export default function SchadensprotokollDialog({ isOpen, onClose, schaden, einr
         </DrawerHeader>
 
         <form onSubmit={handleSubmit} className="flex flex-col overflow-hidden">
-          <div className="overflow-y-auto px-4 space-y-5 pb-2">
+           <div className="overflow-y-auto px-4 space-y-5 pb-2 max-w-sm mx-auto w-full">
 
           {/* Protokolltyp Auswahl */}
           <div className="grid grid-cols-2 gap-2">
