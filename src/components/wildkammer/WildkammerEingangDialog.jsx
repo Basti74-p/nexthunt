@@ -74,11 +74,11 @@ export default function WildkammerEingangDialog({ open, onClose, onSave, reviere
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-3">
             <div>
               <Label className="text-gray-300 text-xs mb-1 block">Wildart *</Label>
               <Select value={form.species} onValueChange={v => set("species", v)}>
-                <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
+                <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full">
                   <SelectValue placeholder="Wildart" />
                 </SelectTrigger>
                 <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
@@ -89,7 +89,7 @@ export default function WildkammerEingangDialog({ open, onClose, onSave, reviere
             <div>
               <Label className="text-gray-300 text-xs mb-1 block">Revier *</Label>
               <Select value={form.revier_id} onValueChange={v => set("revier_id", v)}>
-                <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
+                <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full">
                   <SelectValue placeholder="Revier" />
                 </SelectTrigger>
                 <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
@@ -97,13 +97,10 @@ export default function WildkammerEingangDialog({ open, onClose, onSave, reviere
                 </SelectContent>
               </Select>
             </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
             <div>
               <Label className="text-gray-300 text-xs mb-1 block">Geschlecht</Label>
               <Select value={form.gender} onValueChange={v => set("gender", v)}>
-                <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
+                <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
@@ -113,47 +110,33 @@ export default function WildkammerEingangDialog({ open, onClose, onSave, reviere
             </div>
             <div>
               <Label className="text-gray-300 text-xs mb-1 block">Wildmarke</Label>
-              <Input 
-                value={form.wildmark_id} 
-                onChange={e => set("wildmark_id", e.target.value)}
-                placeholder="Code scannen oder eingeben" 
-                className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" 
-                autoFocus
-              />
+              <Input value={form.wildmark_id} onChange={e => set("wildmark_id", e.target.value)}
+                placeholder="Code scannen oder eingeben" className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full" />
             </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
             <div>
               <Label className="text-gray-300 text-xs mb-1 block">Altersklasse</Label>
               <Input value={form.age_class} onChange={e => set("age_class", e.target.value)}
-                placeholder="z.B. Bock Kl. II" className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+                placeholder="z.B. Bock Kl. II" className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full" />
             </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
             <div>
               <Label className="text-gray-300 text-xs mb-1 block">Eingangsdatum *</Label>
               <Input type="date" value={form.eingang_datum} onChange={e => set("eingang_datum", e.target.value)}
-                className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+                className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full" />
             </div>
             <div>
               <Label className="text-gray-300 text-xs mb-1 block">Eingangszeit</Label>
               <Input type="time" value={form.eingang_zeit} onChange={e => set("eingang_zeit", e.target.value)}
-                className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+                className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full" />
             </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
             <div>
               <Label className="text-gray-300 text-xs mb-1 block">Gewicht aufgebrochen (kg)</Label>
               <Input type="number" step="0.1" value={form.gewicht_aufgebrochen} onChange={e => set("gewicht_aufgebrochen", e.target.value)}
-                placeholder="z.B. 18.5" className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+                placeholder="z.B. 18.5" className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full" />
             </div>
             <div>
               <Label className="text-gray-300 text-xs mb-1 block">Kühltemperatur (°C)</Label>
               <Input type="number" step="0.5" value={form.kuehltemperatur} onChange={e => set("kuehltemperatur", e.target.value)}
-                placeholder="z.B. 4" className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+                placeholder="z.B. 4" className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full" />
             </div>
           </div>
 

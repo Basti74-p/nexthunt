@@ -26,16 +26,16 @@ export default function WildkammerAusgabeDialog({ open, onClose, onSave, item, k
           <DrawerTitle className="text-gray-100 text-base">Ausgabe / Verkauf buchen</DrawerTitle>
         </DrawerHeader>
         <div className="overflow-y-auto px-4 space-y-3 pb-2">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-3">
             <div>
               <Label className="text-gray-300 text-xs mb-1 block">Ausgabedatum *</Label>
               <Input type="date" value={form.ausgabe_datum} onChange={e => set("ausgabe_datum", e.target.value)}
-                className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+                className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full" />
             </div>
             <div>
               <Label className="text-gray-300 text-xs mb-1 block">Ausgabeart *</Label>
               <Select value={form.ausgabe_typ} onValueChange={v => set("ausgabe_typ", v)}>
-                <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
+                <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
