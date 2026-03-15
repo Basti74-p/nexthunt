@@ -82,27 +82,25 @@ export default function CalendarMonth({ currentDate, onDateSelect, onEventClick,
               <div className={`font-semibold ${isCurrentMonth ? "text-gray-200" : "text-gray-500"} ${isMobile ? "text-[10px] mb-0.5" : "text-xs mb-1"}`}>
                 {date && format(date, "d")}
               </div>
-              {!isMobile && (
-                <div className="space-y-1">
-                  {dayEvents.slice(0, 2).map((event) => (
-                    <div
-                      key={event.id}
-                      onClick={(e) => { e.stopPropagation(); onEventClick?.(event); }}
-                      className="text-[10px] bg-[#22c55e]/20 text-[#22c55e] px-1.5 py-0.5 rounded truncate cursor-pointer hover:bg-[#22c55e]/30 transition-colors"
-                    >
-                      {event.titel}
-                    </div>
-                  ))}
-                  {dayEvents.length > 2 && (
-                    <div className="text-[10px] text-gray-400">+{dayEvents.length - 2}</div>
-                  )}
-                </div>
-              )}
-              {isMobile && dayEvents.length > 0 && (
-                <div className={`text-[8px] font-semibold text-[#22c55e]`}>
-                  {dayEvents.length} {dayEvents.length === 1 ? "J" : "J"}
-                </div>
-              )}
+              <div className="space-y-1">
+                {dayEvents.slice(0, isMobile ? 0 : 2).map((event) => (
+                  <div
+                    key={event.id}
+                    onClick={(e) => { e.stopPropagation(); onEventClick?.(event); }}
+                    className={`${isMobile ? "text-[8px] bg-[#22c55e]/30 text-[#22c55e] px-1 py-0.5" : "text-[10px] bg-[#22c55e]/20 text-[#22c55e] px-1.5 py-0.5"} rounded truncate cursor-pointer hover:bg-[#22c55e]/30 transition-colors`}
+                  >
+                    {event.titel}
+                  </div>
+                ))}
+                {!isMobile && dayEvents.length > 2 && (
+                  <div className="text-[10px] text-gray-400">+{dayEvents.length - 2}</div>
+                )}
+                {isMobile && dayEvents.length > 0 && (
+                  <div className={`text-[8px] font-semibold text-[#22c55e]`}>
+                    {dayEvents.length} {dayEvents.length === 1 ? "E" : "E"}
+                  </div>
+                )}
+              </div>
             </div>
           );
         })}
