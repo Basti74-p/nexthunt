@@ -4,7 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import AdminLayout from "@/components/admin/AdminLayout";
 import AccessDenied from "@/components/ui/AccessDenied";
-import { AlertCircle, RefreshCw, CheckCircle2 } from "lucide-react";
+import { AlertCircle, RefreshCw, CheckCircle2, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function SystemAdminDebug() {
