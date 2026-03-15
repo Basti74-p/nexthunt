@@ -41,10 +41,11 @@ function LayoutInner({ children, currentPageName }) {
           setInitializingTrial(true);
           sessionStorage.setItem('trial_init_started', 'true');
           
-          // Check if user has a tenant via TenantMember
+          // Check if user already has a tenant (via tenant_id or TenantMember)
+          const hasTenantId = !!user.tenant_id;
           const members = await base44.entities.TenantMember.filter({ user_email: user.email });
           
-          if (members.length === 0) {
+          if (!hasTenantId && members.length === 0) {
             // No tenant found, initialize trial
             console.log('Initializing trial for new user:', user.email);
             const result = await base44.functions.invoke('initializeUserTrial', {});
