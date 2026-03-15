@@ -43,10 +43,19 @@ export default function Kunden() {
     gcTime: 0,
   });
 
-  // Force sync with Einstellungen
-  React.useEffect(() => {
-    if (tenant?.id) refetch();
-  }, [tenant?.id, refetch]);
+  // Live sync: subscribe to Kunde changes
+  useEffect(() => {
+    if (!tenant?.id) return;
+    
+    const unsubscribe = base44.entities.Kunde.subscribe((event) => {
+      queryClient.invalidateQueries({ queryKey: ["kunden"] });
+    });
+    
+    // Initial fetch
+    refetch();
+    
+    return unsubscribe;
+  }, [tenant?.id, refetch, queryClient]);
 
   const createMutation = useMutation({
     mutationFn: (data) => base44.entities.Kunde.create({ ...data, tenant_id: tenant.id }),
