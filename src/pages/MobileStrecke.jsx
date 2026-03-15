@@ -172,11 +172,11 @@ export default function MobileStrecke() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-3">
               <div>
                 <Label className="text-gray-400 text-xs mb-1 block">Geschlecht</Label>
                 <Select value={form.gender} onValueChange={(v) => setForm({ ...form, gender: v })}>
-                  <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full"><SelectValue /></SelectTrigger>
                   <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
                     {GENDER.map((g) => <SelectItem key={g.value} value={g.value}>{g.label}</SelectItem>)}
                   </SelectContent>
@@ -184,7 +184,7 @@ export default function MobileStrecke() {
               </div>
               <div>
                 <Label className="text-gray-400 text-xs mb-1 block">Datum *</Label>
-                <Input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+                <Input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full" />
               </div>
             </div>
             <div>
@@ -196,14 +196,14 @@ export default function MobileStrecke() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-3">
               <div>
                 <Label className="text-gray-400 text-xs mb-1 block">Wildmarke (Code)</Label>
-                <Input type="text" placeholder="Code/scannen" value={form.wildmark_id} onChange={(e) => setForm({ ...form, wildmark_id: e.target.value })} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+                <Input type="text" placeholder="Code/scannen" value={form.wildmark_id} onChange={(e) => setForm({ ...form, wildmark_id: e.target.value })} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full" />
               </div>
               <div>
                 <Label className="text-gray-400 text-xs mb-1 block">Gewicht (kg)</Label>
-                <Input type="number" step="0.1" placeholder="z.B. 24.5" value={form.weight_kg} onChange={(e) => setForm({ ...form, weight_kg: e.target.value })} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+                <Input type="number" step="0.1" placeholder="z.B. 24.5" value={form.weight_kg} onChange={(e) => setForm({ ...form, weight_kg: e.target.value })} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full" />
               </div>
             </div>
             <div>
