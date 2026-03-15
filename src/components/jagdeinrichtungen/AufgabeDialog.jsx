@@ -112,39 +112,33 @@ export default function AufgabeDialog({ isOpen, onClose, aufgabe, einrichtung, t
             </div>
             <div>
               <label className="text-xs text-gray-400 mb-1 block">Priorität</label>
-              <Select value={formData.priority} onValueChange={(v) => set("priority", v)}>
-                <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue /></SelectTrigger>
-                <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-                  <SelectItem value="low">Niedrig</SelectItem>
-                  <SelectItem value="medium">Mittel</SelectItem>
-                  <SelectItem value="high">Hoch</SelectItem>
-                </SelectContent>
-              </Select>
+              <MobileSelect
+                value={formData.priority}
+                onValueChange={(v) => set("priority", v)}
+                label="Priorität"
+                items={[{ value: "low", label: "Niedrig" }, { value: "medium", label: "Mittel" }, { value: "high", label: "Hoch" }]}
+              />
             </div>
           </div>
           <div>
             <label className="text-xs text-gray-400 mb-1 block">Zuweisen an</label>
-            <Select value={formData.assigned_to || "__none__"} onValueChange={handleMemberSelect}>
-              <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue placeholder="Person auswählen" /></SelectTrigger>
-              <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-                <SelectItem value="__none__">Nicht zugewiesen</SelectItem>
-                {members.map((m) => (
-                  <SelectItem key={m.id} value={m.id}>{m.first_name} {m.last_name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <MobileSelect
+              value={formData.assigned_to || "__none__"}
+              onValueChange={handleMemberSelect}
+              label="Zuweisen an"
+              placeholder="Person auswählen"
+              items={[{ value: "__none__", label: "Nicht zugewiesen" }, ...members.map((m) => ({ value: m.id, label: `${m.first_name} ${m.last_name}` }))]}
+            />
           </div>
           {isEdit && (
             <div>
               <label className="text-xs text-gray-400 mb-1 block">Status</label>
-              <Select value={formData.status} onValueChange={(v) => set("status", v)}>
-                <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue /></SelectTrigger>
-                <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-                  <SelectItem value="offen">Offen</SelectItem>
-                  <SelectItem value="in_bearbeitung">In Bearbeitung</SelectItem>
-                  <SelectItem value="erledigt">Erledigt</SelectItem>
-                </SelectContent>
-              </Select>
+              <MobileSelect
+                value={formData.status}
+                onValueChange={(v) => set("status", v)}
+                label="Status"
+                items={[{ value: "offen", label: "Offen" }, { value: "in_bearbeitung", label: "In Bearbeitung" }, { value: "erledigt", label: "Erledigt" }]}
+              />
             </div>
           )}
           {schaeden.length > 0 && (
