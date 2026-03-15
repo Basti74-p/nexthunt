@@ -40,7 +40,6 @@ function LayoutInner({ children, currentPageName }) {
           const members = await base44.entities.TenantMember.filter({ user_email: user.email });
           
           if (!hasTenantId && members.length === 0) {
-            // No tenant found, initialize trial directly
             console.log('Initializing trial for new user:', user.email);
             
             const now = new Date();
@@ -70,7 +69,9 @@ function LayoutInner({ children, currentPageName }) {
               feature_einrichtungen: true
             });
 
-            await base44.entities.TenantMember.create({
+            console.log('Tenant created:', newTenant.id);
+
+            const tmResult = await base44.entities.TenantMember.create({
               tenant_id: newTenant.id,
               user_email: user.email,
               first_name: user.full_name.split(' ')[0],
@@ -86,11 +87,9 @@ function LayoutInner({ children, currentPageName }) {
               perm_oeffentlichkeit: true,
               perm_einrichtungen: true
             });
-            
-            console.log('Trial initialized, reloading...');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
+
+            console.log('TenantMember created:', tmResult.id, 'Trial initialized, reloading...');
+            setTimeout(() => window.location.reload(), 1000);
           } else {
             console.log('User already has tenant, skipping trial init');
             setInitializingTrial(false);
