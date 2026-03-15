@@ -134,7 +134,7 @@ export default function Dashboard() {
            <div className="flex items-center gap-2">
              <button
                onClick={() => setShowBoundaryHelp(true)}
-               className="text-sm text-[#0F2F23] font-medium flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50 border border-gray-100 transition-colors"
+               className="text-sm text-[#22c55e] font-medium flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-[#4a4a4a] border border-[#4a4a4a] transition-colors"
              >
                <Pencil className="w-3.5 h-3.5" />
                Grenzen einzeichnen
