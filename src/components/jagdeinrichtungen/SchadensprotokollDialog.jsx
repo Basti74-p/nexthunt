@@ -167,18 +167,19 @@ export default function SchadensprotokollDialog({ isOpen, onClose, schaden, einr
   const zustandInfo = ZUSTAND_OPTIONS.find((z) => z.value === formData.zustand_gesamt);
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl bg-[#2d2d2d] border-[#3a3a3a] max-h-[85dvh] overflow-y-auto pb-safe" style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
-        <DialogHeader>
-          <DialogTitle className="text-gray-100 text-base">
+    <Drawer open={isOpen} onOpenChange={onClose}>
+      <DrawerContent className="bg-[#2d2d2d] border-t border-[#3a3a3a] max-h-[92dvh]">
+        <DrawerHeader className="pb-2">
+          <DrawerTitle className="text-gray-100 text-base">
             {isEdit ? "Protokoll bearbeiten" : "Neues Protokoll"}
-          </DialogTitle>
+          </DrawerTitle>
           {einrichtung && (
             <p className="text-xs text-gray-400 mt-0.5">{einrichtung.name}</p>
           )}
-        </DialogHeader>
+        </DrawerHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="flex flex-col overflow-hidden">
+        <div className="overflow-y-auto px-4 space-y-5 pb-2">
 
           {/* Protokolltyp Auswahl */}
           <div className="grid grid-cols-2 gap-2">

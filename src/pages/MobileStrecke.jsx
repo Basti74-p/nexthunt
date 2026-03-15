@@ -156,160 +156,113 @@ export default function MobileStrecke() {
         )}
        </div>
 
-      <Dialog open={dialogOpen} onOpenChange={(v) => {setDialogOpen(v);if (!v) setForm(EMPTY_FORM);}}>
-         <DialogContent className="bg-[#2d2d2d] border-[#3a3a3a] max-w-md rounded-2xl">
-           <DialogHeader>
-             <DialogTitle className="text-gray-100">Strecke erfassen</DialogTitle>
-           </DialogHeader>
-           <div className="space-y-3 mt-2">
-             <div>
-               <Label className="text-gray-300 text-xs mb-1 block">Wildart *</Label>
-               <Select value={form.species} onValueChange={(v) => setForm({ ...form, species: v })}>
-                 <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
-                   <SelectValue placeholder="Wildart wählen" />
-                 </SelectTrigger>
-                 <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-                   {SPECIES.map((s) => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
-                 </SelectContent>
-               </Select>
-             </div>
-             <div className="grid grid-cols-2 gap-3">
-               <div>
-                 <Label className="text-gray-300 text-xs mb-1 block">Geschlecht</Label>
-                 <Select value={form.gender} onValueChange={(v) => setForm({ ...form, gender: v })}>
-                   <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
-                     <SelectValue />
-                   </SelectTrigger>
-                   <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-                     {GENDER.map((g) => <SelectItem key={g.value} value={g.value}>{g.label}</SelectItem>)}
-                   </SelectContent>
-                 </Select>
-               </div>
-               <div>
-                 <Label className="text-gray-300 text-xs mb-1 block">Datum *</Label>
-                 <Input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })}
-                className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
-               </div>
-             </div>
-             <div>
-               <Label className="text-gray-300 text-xs mb-1 block">Altersklasse</Label>
-               <Select value={form.age_class} onValueChange={(v) => setForm({ ...form, age_class: v })}>
-                 <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
-                   <SelectValue placeholder="Altersklasse wählen" />
-                 </SelectTrigger>
-                 <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-                   {form.species && AGE_CLASSES[form.species]?.map((ac) =>
-                  <SelectItem key={ac} value={ac}>{ac}</SelectItem>
-                  )}
-                 </SelectContent>
-               </Select>
-             </div>
-             <div className="grid grid-cols-2 gap-3">
-               <div>
-                 <Label className="text-gray-300 text-xs mb-1 block">Wildmarke (Code)</Label>
-                 <Input
-                  type="text"
-                  placeholder="Code/scannen"
-                  value={form.wildmark_id}
-                  onChange={(e) => setForm({ ...form, wildmark_id: e.target.value })}
-                  className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+      {/* Erfassen Drawer */}
+      <Drawer open={dialogOpen} onOpenChange={(v) => { setDialogOpen(v); if (!v) setForm(EMPTY_FORM); }}>
+        <DrawerContent className="bg-[#2d2d2d] border-t border-[#3a3a3a] max-h-[92dvh]">
+          <DrawerHeader className="pb-2">
+            <DrawerTitle className="text-gray-100 text-base">Strecke erfassen</DrawerTitle>
+          </DrawerHeader>
+          <div className="overflow-y-auto px-4 space-y-3 pb-2">
+            <div>
+              <Label className="text-gray-400 text-xs mb-1 block">Wildart *</Label>
+              <Select value={form.species} onValueChange={(v) => setForm({ ...form, species: v })}>
+                <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue placeholder="Wildart wählen" /></SelectTrigger>
+                <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
+                  {SPECIES.map((s) => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-gray-400 text-xs mb-1 block">Geschlecht</Label>
+                <Select value={form.gender} onValueChange={(v) => setForm({ ...form, gender: v })}>
+                  <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue /></SelectTrigger>
+                  <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
+                    {GENDER.map((g) => <SelectItem key={g.value} value={g.value}>{g.label}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-gray-400 text-xs mb-1 block">Datum *</Label>
+                <Input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+              </div>
+            </div>
+            <div>
+              <Label className="text-gray-400 text-xs mb-1 block">Altersklasse</Label>
+              <Select value={form.age_class} onValueChange={(v) => setForm({ ...form, age_class: v })}>
+                <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue placeholder="Altersklasse wählen" /></SelectTrigger>
+                <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
+                  {form.species && AGE_CLASSES[form.species]?.map((ac) => <SelectItem key={ac} value={ac}>{ac}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-gray-400 text-xs mb-1 block">Wildmarke (Code)</Label>
+                <Input type="text" placeholder="Code/scannen" value={form.wildmark_id} onChange={(e) => setForm({ ...form, wildmark_id: e.target.value })} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+              </div>
+              <div>
+                <Label className="text-gray-400 text-xs mb-1 block">Gewicht (kg)</Label>
+                <Input type="number" step="0.1" placeholder="z.B. 24.5" value={form.weight_kg} onChange={(e) => setForm({ ...form, weight_kg: e.target.value })} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+              </div>
+            </div>
+            <div>
+              <Label className="text-gray-400 text-xs mb-1 block">Erleger</Label>
+              <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg px-3 py-2 text-gray-300 text-sm">{user?.full_name || user?.email}</div>
+            </div>
+          </div>
+          <DrawerFooter style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
+            <Button onClick={() => { createMutation.mutate(form); }} disabled={createMutation.isPending || !form.species || !form.date} className="w-full bg-[#22c55e] text-black hover:bg-[#16a34a]">
+              {createMutation.isPending ? "Erfassen..." : "Erfassen"}
+            </Button>
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="w-full border-[#3a3a3a]">Abbrechen</Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
 
-               </div>
-               <div>
-                 <Label className="text-gray-300 text-xs mb-1 block">Gewicht (kg)</Label>
-                 <Input
-                  type="number"
-                  step="0.1"
-                  placeholder="z.B. 24.5"
-                  value={form.weight_kg}
-                  onChange={(e) => setForm({ ...form, weight_kg: e.target.value })}
-                  className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
-
-               </div>
-             </div>
-             <div>
-               <Label className="text-gray-300 text-xs mb-1 block">Erleger</Label>
-               <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg px-3 py-2 text-gray-300 text-sm">
-                 {user?.full_name || user?.email}
-               </div>
-             </div>
-             <Button onClick={() => {createMutation.mutate(form);setForm(EMPTY_FORM);}} disabled={createMutation.isPending || !form.species || !form.date}
-            className="w-full bg-[#22c55e] text-black hover:bg-[#16a34a] rounded-xl">
-               {createMutation.isPending ? "Erfassen..." : "Erfassen"}
-             </Button>
-           </div>
-         </DialogContent>
-         </Dialog>
-
-         {/* Detail Dialog */}
-         <Dialog open={detailOpen} onOpenChange={(v) => {setDetailOpen(v);if (!v) setSelectedStrecke(null);}}>
-         <DialogContent className="bg-[#2d2d2d] border-[#3a3a3a] max-w-md rounded-2xl">
-           <DialogHeader>
-             <DialogTitle className="text-gray-100">
-               {selectedStrecke && `${SPECIES.find((s) => s.value === selectedStrecke.species)?.label || selectedStrecke.species}`}
-             </DialogTitle>
-           </DialogHeader>
-           {selectedStrecke &&
-          <div className="space-y-4">
-               <div className="bg-[#1a1a1a] rounded-lg p-3 space-y-2 border border-[#3a3a3a]">
-                 <p className="text-xs text-gray-400">Datum: <span className="text-gray-200">{selectedStrecke.date}</span></p>
-                 <p className="text-xs text-gray-400">Gewicht: <span className="text-gray-200">{selectedStrecke.weight_kg ? `${selectedStrecke.weight_kg} kg` : "–"}</span></p>
-                 <p className="text-xs text-gray-400">Altersklasse: <span className="text-gray-200">{selectedStrecke.age_class || "–"}</span></p>
-               </div>
-
-               <div className="border-t border-[#3a3a3a] pt-4">
-                 <h3 className="text-sm font-semibold text-gray-200 mb-3">Wildkammer-Einlagerung</h3>
-                 <div className="space-y-3">
-                   <div>
-                     <Label className="text-gray-300 text-xs mb-1 block">Eingangsdatum</Label>
-                     <Input
-                    type="date"
-                    value={wildkammerForm.eingang_datum}
-                    onChange={(e) => setWildkammerForm({ ...wildkammerForm, eingang_datum: e.target.value })}
-                    className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 text-sm" />
-
-                   </div>
-                   <div>
-                     <Label className="text-gray-300 text-xs mb-1 block">Eingangszeit</Label>
-                     <Input
-                    type="time"
-                    value={wildkammerForm.eingang_zeit}
-                    onChange={(e) => setWildkammerForm({ ...wildkammerForm, eingang_zeit: e.target.value })}
-                    className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 text-sm" />
-
-                   </div>
-                   <div className="flex items-center gap-2">
-                     <input
-                    type="checkbox"
-                    id="aufbruch_ok"
-                    checked={wildkammerForm.aufbruch_ok}
-                    onChange={(e) => setWildkammerForm({ ...wildkammerForm, aufbruch_ok: e.target.checked })}
-                    className="w-4 h-4 rounded" />
-
-                     <label htmlFor="aufbruch_ok" className="text-xs text-gray-300">Aufbruch durchgeführt</label>
-                   </div>
-                   <Button
-                  onClick={() => createWildkammerMutation.mutate(wildkammerForm)}
-                  disabled={createWildkammerMutation.isPending}
-                  className="w-full bg-[#22c55e] text-black hover:bg-[#16a34a] rounded-xl text-sm">
-
-                     {createWildkammerMutation.isPending ? "Einlagern..." : "In Wildkammer einlagern"}
-                   </Button>
-                   </div>
-                   </div>
-
-                   <div className="border-t border-[#3a3a3a] pt-4">
-                   <Button
-                onClick={deleteStrecke}
-                className="w-full bg-red-900/50 text-red-400 hover:bg-red-900/70 rounded-xl text-sm border border-red-700/30">
-
-                   Eintrag löschen
-                   </Button>
-                   </div>
-                   </div>
-          }
-                   </DialogContent>
-                   </Dialog>
+      {/* Detail Drawer */}
+      <Drawer open={detailOpen} onOpenChange={(v) => { setDetailOpen(v); if (!v) setSelectedStrecke(null); }}>
+        <DrawerContent className="bg-[#2d2d2d] border-t border-[#3a3a3a] max-h-[92dvh]">
+          <DrawerHeader className="pb-2">
+            <DrawerTitle className="text-gray-100 text-base">
+              {selectedStrecke && (SPECIES.find((s) => s.value === selectedStrecke.species)?.label || selectedStrecke.species)}
+            </DrawerTitle>
+          </DrawerHeader>
+          {selectedStrecke && (
+            <div className="overflow-y-auto px-4 space-y-4 pb-2">
+              <div className="bg-[#1a1a1a] rounded-lg p-3 space-y-2 border border-[#3a3a3a]">
+                <p className="text-xs text-gray-400">Datum: <span className="text-gray-200">{selectedStrecke.date}</span></p>
+                <p className="text-xs text-gray-400">Gewicht: <span className="text-gray-200">{selectedStrecke.weight_kg ? `${selectedStrecke.weight_kg} kg` : "–"}</span></p>
+                <p className="text-xs text-gray-400">Altersklasse: <span className="text-gray-200">{selectedStrecke.age_class || "–"}</span></p>
+              </div>
+              <div className="border-t border-[#3a3a3a] pt-4">
+                <h3 className="text-sm font-semibold text-gray-200 mb-3">Wildkammer-Einlagerung</h3>
+                <div className="space-y-3">
+                  <div>
+                    <Label className="text-gray-400 text-xs mb-1 block">Eingangsdatum</Label>
+                    <Input type="date" value={wildkammerForm.eingang_datum} onChange={(e) => setWildkammerForm({ ...wildkammerForm, eingang_datum: e.target.value })} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 text-sm" />
+                  </div>
+                  <div>
+                    <Label className="text-gray-400 text-xs mb-1 block">Eingangszeit</Label>
+                    <Input type="time" value={wildkammerForm.eingang_zeit} onChange={(e) => setWildkammerForm({ ...wildkammerForm, eingang_zeit: e.target.value })} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 text-sm" />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input type="checkbox" id="aufbruch_ok" checked={wildkammerForm.aufbruch_ok} onChange={(e) => setWildkammerForm({ ...wildkammerForm, aufbruch_ok: e.target.checked })} className="w-4 h-4 rounded" />
+                    <label htmlFor="aufbruch_ok" className="text-xs text-gray-300">Aufbruch durchgeführt</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          <DrawerFooter style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
+            <Button onClick={() => createWildkammerMutation.mutate(wildkammerForm)} disabled={createWildkammerMutation.isPending} className="w-full bg-[#22c55e] text-black hover:bg-[#16a34a]">
+              {createWildkammerMutation.isPending ? "Einlagern..." : "In Wildkammer einlagern"}
+            </Button>
+            <Button onClick={deleteStrecke} className="w-full bg-red-900/50 text-red-400 hover:bg-red-900/70 border border-red-700/30">Eintrag löschen</Button>
+            <Button variant="outline" onClick={() => setDetailOpen(false)} className="w-full border-[#3a3a3a]">Schließen</Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
          </div>);
 
 }
