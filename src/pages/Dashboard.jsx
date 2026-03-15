@@ -130,7 +130,7 @@ export default function Dashboard() {
       {/* Reviere Quick Access */}
        <div className="bg-[#3a3a3a] rounded-2xl border border-[#4a4a4a] shadow-sm p-6 mb-6">
          <div className="flex items-center justify-between mb-4">
-           <h2 className="text-lg font-semibold text-gray-900">Ihre Reviere</h2>
+           <h2 className="text-lg font-semibold text-gray-100">Ihre Reviere</h2>
            <div className="flex items-center gap-2">
              <button
                onClick={() => setShowBoundaryHelp(true)}
