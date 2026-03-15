@@ -373,14 +373,13 @@ export default function SchadensprotokollDialog({ isOpen, onClose, schaden, einr
             />
           </section>
 
-        </div>
-        <div className="px-4 pt-2 border-t border-[#3a3a3a] flex gap-2" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
-          <Button type="button" onClick={onClose} variant="outline" className="flex-1 border-[#3a3a3a]">Abbrechen</Button>
-          <Button type="submit" disabled={mutation.isPending} className="flex-1 bg-[#22c55e] text-black hover:bg-[#16a34a]">
-            {mutation.isPending && <Loader2 className="w-3 h-3 mr-1 animate-spin" />}
-            {isEdit ? "Aktualisieren" : "Protokoll speichern"}
-          </Button>
-        </div>
+          <div className="px-4 pt-2 border-t border-[#3a3a3a] flex gap-2" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
+            <Button type="button" onClick={onClose} variant="outline" className="flex-1 border-[#3a3a3a]">Abbrechen</Button>
+            <Button type="submit" disabled={mutation.isPending} className="flex-1 bg-[#22c55e] text-black hover:bg-[#16a34a]">
+              {mutation.isPending && <Loader2 className="w-3 h-3 mr-1 animate-spin" />}
+              {isEdit ? "Aktualisieren" : "Protokoll speichern"}
+            </Button>
+          </div>
         </form>
       </DrawerContent>
     </Drawer>
