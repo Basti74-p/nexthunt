@@ -38,9 +38,8 @@ function LayoutInner({ children, currentPageName }) {
           // Check if user already has a tenant (via tenant_id or TenantMember)
           const hasTenantId = !!user.tenant_id;
           const members = await base44.entities.TenantMember.filter({ user_email: user.email });
-          const tenants = await base44.entities.Tenant.filter({ contact_email: user.email });
           
-          if (!hasTenantId && members.length === 0 && tenants.length === 0) {
+          if (!hasTenantId && members.length === 0) {
             // No tenant found, initialize trial directly
             console.log('Initializing trial for new user:', user.email);
             
