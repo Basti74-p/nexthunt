@@ -115,14 +115,14 @@ export default function Dashboard() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {stats.map(({ label, value, icon: Icon, color }) => (
-          <div key={label} className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+          <div key={label} className="bg-[#3a3a3a] rounded-2xl p-5 border border-[#4a4a4a] shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${color}`}>
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${color.replace('bg-', 'bg-').replace('50', '900/20').replace('text-', 'text-')}`}>
                 <Icon className="w-5 h-5" />
               </div>
             </div>
-            <p className="text-2xl font-bold text-gray-900">{value}</p>
-            <p className="text-xs text-gray-500 mt-1">{label}</p>
+            <p className="text-2xl font-bold text-gray-100">{value}</p>
+            <p className="text-xs text-gray-400 mt-1">{label}</p>
           </div>
         ))}
       </div>
