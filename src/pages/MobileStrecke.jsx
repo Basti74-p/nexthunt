@@ -145,7 +145,7 @@ export default function MobileStrecke() {
 
              <Crosshair className="w-5 h-5 text-[#22c55e]" />
              <div className="flex-1">
-               <p className="font-medium text-gray-900 capitalize">{SPECIES.find((sp) => sp.value === s.species)?.label || s.species}</p>
+               <p className="text-slate-50 font-medium capitalize">{SPECIES.find((sp) => sp.value === s.species)?.label || s.species}</p>
                <p className="text-xs text-gray-500">{s.gender === "maennlich" ? "♂" : "♀"} • {s.date}</p>
              </div>
              <div className="flex items-center gap-2">
