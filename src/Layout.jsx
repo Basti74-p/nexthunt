@@ -32,14 +32,8 @@ function LayoutInner({ children, currentPageName }) {
   useEffect(() => {
     if (user && !loading && !initializingTrial) {
       const initTrial = async () => {
-        // Check if we already tried to initialize to prevent infinite loops
-        if (sessionStorage.getItem('trial_init_started')) {
-          return;
-        }
-        
         try {
           setInitializingTrial(true);
-          sessionStorage.setItem('trial_init_started', 'true');
           
           // Check if user already has a tenant (via tenant_id or TenantMember)
           const hasTenantId = !!user.tenant_id;
