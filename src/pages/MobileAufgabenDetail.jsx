@@ -151,7 +151,7 @@ export default function MobileAufgabenDetail() {
       {/* Content */}
       <div className="space-y-3 p-4 pt-20">
         {/* Status & Priority */}
-        <div className="bg-white rounded-lg p-4 space-y-3 border border-gray-200">
+        <div className="bg-[#2d2d2d] rounded-lg p-4 space-y-3 border border-[#3a3a3a]">
           <div className="flex gap-3">
             <div className="flex-1">
               <div className="text-xs text-gray-600 mb-1">Status</div>
@@ -170,15 +170,15 @@ export default function MobileAufgabenDetail() {
 
         {/* Description */}
         {aufgabe.description && (
-          <div className="bg-white rounded-lg p-4 border border-gray-200">
-            <h2 className="font-semibold text-gray-900 mb-2 text-sm">Beschreibung</h2>
-            <p className="text-gray-600 text-sm leading-relaxed">{aufgabe.description}</p>
+          <div className="bg-[#2d2d2d] rounded-lg p-4 border border-[#3a3a3a]">
+            <h2 className="font-semibold text-gray-100 mb-2 text-sm">Beschreibung</h2>
+            <p className="text-gray-400 text-sm leading-relaxed">{aufgabe.description}</p>
           </div>
         )}
 
         {/* Details */}
-        <div className="bg-white rounded-lg p-4 border border-gray-200 space-y-3">
-          <h2 className="font-semibold text-gray-900 text-sm">Auftragsdetails</h2>
+        <div className="bg-[#2d2d2d] rounded-lg p-4 border border-[#3a3a3a] space-y-3">
+          <h2 className="font-semibold text-gray-100 text-sm">Auftragsdetails</h2>
           
           {aufgabe.due_date && (
             <div className="flex items-start gap-3">
@@ -220,21 +220,21 @@ export default function MobileAufgabenDetail() {
 
         {/* Schadensprotokolle */}
         {aufgabe.schadensprotokolle_ids?.length > 0 && (
-          <div className="bg-white rounded-lg p-4 border border-gray-200">
+          <div className="bg-[#2d2d2d] rounded-lg p-4 border border-[#3a3a3a]">
             <div className="flex items-center gap-2 mb-3">
-              <AlertTriangle className="w-4 h-4 text-orange-600" />
-              <h2 className="font-semibold text-gray-900 text-sm">
+              <AlertTriangle className="w-4 h-4 text-orange-400" />
+              <h2 className="font-semibold text-gray-100 text-sm">
                 Angehängte Schadensprotokolle
               </h2>
             </div>
-            <div className="text-xs text-gray-600 bg-orange-50 rounded p-2">
-              {aufgabe.schadensprotokolle_ids.length} Protokoll(e) anhängt
+            <div className="text-xs text-gray-400 bg-orange-900/20 rounded p-2">
+              {aufgabe.schadensprotokolle_ids.length} Protokoll(e) angehängt
             </div>
           </div>
         )}
 
         {/* Metadata */}
-        <div className="bg-gray-100 rounded-lg p-3 text-xs text-gray-600 space-y-1">
+        <div className="bg-[#2d2d2d] rounded-lg p-3 text-xs text-gray-500 space-y-1 border border-[#3a3a3a]">
           <p>ID: {aufgabe.id}</p>
           <p>Erstellt: {format(new Date(aufgabe.created_date), "dd.MM.yyyy HH:mm", { locale: de })}</p>
         </div>
