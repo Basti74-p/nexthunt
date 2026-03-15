@@ -141,16 +141,16 @@ export default function MobileStrecke() {
         <button
           key={s.id}
           onClick={() => {setSelectedStrecke(s);setDetailOpen(true);}}
-          className="w-full text-left bg-[#3a3a3a] rounded-xl border border-[#4a4a4a] shadow-sm p-4 flex items-center gap-3 hover:border-[#22c55e]/30 hover:shadow-md transition-all">
+          className="w-full text-left bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex items-center gap-3 hover:border-gray-200 hover:shadow-md transition-all">
 
              <Crosshair className="w-5 h-5 text-[#22c55e]" />
              <div className="flex-1">
-               <p className="font-medium text-gray-100 capitalize">{SPECIES.find((sp) => sp.value === s.species)?.label || s.species}</p>
-               <p className="text-xs text-gray-400">{s.gender === "maennlich" ? "♂" : "♀"} • {s.date}</p>
+               <p className="font-medium text-gray-900 capitalize">{SPECIES.find((sp) => sp.value === s.species)?.label || s.species}</p>
+               <p className="text-xs text-gray-500">{s.gender === "maennlich" ? "♂" : "♀"} • {s.date}</p>
              </div>
              <div className="flex items-center gap-2">
                <StatusBadge status={s.status} />
-               <ChevronRight className="w-4 h-4 text-gray-500" />
+               <ChevronRight className="w-4 h-4 text-gray-400" />
              </div>
            </button>
         )}
