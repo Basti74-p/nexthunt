@@ -160,13 +160,13 @@ export default function WildkammerEingangDialog({ open, onClose, onSave, reviere
               className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 resize-none" />
           </div>
 
-          <div className="flex gap-2 pt-1">
+          <div className="flex gap-2 pt-2 pb-safe" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
             <Button variant="outline" onClick={onClose} className="flex-1 border-[#3a3a3a]">Abbrechen</Button>
             <Button onClick={() => onSave(form)} disabled={!canSave}
               className="flex-1 bg-[#22c55e] text-black hover:bg-[#16a34a]">Eingang buchen</Button>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </DrawerContent>
+    </Drawer>
   );
 }
