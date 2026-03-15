@@ -188,6 +188,11 @@ function LayoutInner({ children, currentPageName }) {
     return (
       <div className="min-h-screen bg-[#1e1e1e] overflow-x-hidden">
         <OfflineIndicator />
+        {tenant?.status === 'trial' && trialDaysRemaining !== null && (
+          <div className="bg-[#22c55e] text-black px-4 py-2 text-center text-sm font-medium">
+            🎉 30-Tage Vollversion – {trialDaysRemaining} {trialDaysRemaining === 1 ? 'Tag' : 'Tage'} verbleibend
+          </div>
+        )}
         <MobileNav currentPage={currentPageName} />
         <main className="pt-14 pb-20 px-4 max-w-full w-full">
           {children}
@@ -200,6 +205,11 @@ function LayoutInner({ children, currentPageName }) {
   return (
     <div className="min-h-screen bg-[#2d2d2d]">
       <OfflineIndicator />
+      {tenant?.status === 'trial' && trialDaysRemaining !== null && (
+        <div className="bg-[#22c55e] text-black px-4 py-2 text-center text-sm font-medium">
+          🎉 30-Tage Vollversion – {trialDaysRemaining} {trialDaysRemaining === 1 ? 'Tag' : 'Tage'} verbleibend
+        </div>
+      )}
       <DesktopSidebar currentPage={currentPageName} />
       <main className="ml-64 p-8">
         {children}
