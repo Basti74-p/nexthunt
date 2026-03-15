@@ -168,7 +168,7 @@ export default function SchadensprotokollDialog({ isOpen, onClose, schaden, einr
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl bg-[#2d2d2d] border-[#3a3a3a] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl bg-[#2d2d2d] border-[#3a3a3a] max-h-[85dvh] overflow-y-auto pb-safe" style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
         <DialogHeader>
           <DialogTitle className="text-gray-100 text-base">
             {isEdit ? "Protokoll bearbeiten" : "Neues Protokoll"}
