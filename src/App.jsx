@@ -74,6 +74,11 @@ const AuthenticatedApp = () => {
           <JagdkalenderKalender />
         </LayoutWrapper>
       } />
+      <Route path="/SystemAdminDebug" element={
+        <LayoutWrapper currentPageName="SystemAdminDebug">
+          <SystemAdminDebug />
+        </LayoutWrapper>
+      } />
       <Route path="/" element={
         <LayoutWrapper currentPageName={mainPageKey}>
           <MainPage />
