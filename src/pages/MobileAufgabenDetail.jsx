@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { AlertTriangle, User, Clock, Flag, Download } from "lucide-react";
 import MobileTopBar from "@/components/navigation/MobileTopBar";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
