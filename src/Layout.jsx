@@ -8,7 +8,7 @@ import { Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 function LayoutInner({ children, currentPageName }) {
-  const { user, loading } = useAuth();
+  const { user, loading, tenant } = useAuth();
   const isMobile = useMobile();
   const [initializingTrial, setInitializingTrial] = useState(false);
   const [showLogoAnimation, setShowLogoAnimation] = useState(true);
