@@ -98,7 +98,6 @@ function LayoutInner({ children, currentPageName }) {
           }
         } catch (error) {
           console.error('Error initializing trial:', error);
-          sessionStorage.removeItem('trial_init_started');
           setInitializingTrial(false);
         }
       };
