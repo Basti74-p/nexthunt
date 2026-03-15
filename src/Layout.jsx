@@ -158,6 +158,11 @@ function LayoutInner({ children, currentPageName }) {
     );
   }
 
+  // Calculate trial days remaining
+  const trialDaysRemaining = tenant && tenant.trial_end_date
+    ? Math.ceil((new Date(tenant.trial_end_date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+    : null;
+
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#2d2d2d]">
