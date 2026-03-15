@@ -124,19 +124,19 @@ export default function Aufgaben() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <PageHeader
-        title="Aufgaben"
-        subtitle={`${open.length} offen`}
-        actions={
-          <Button onClick={() => setDialogOpen(true)} className="bg-[#0F2F23] hover:bg-[#1a4a36] text-white rounded-xl gap-2">
-            <Plus className="w-4 h-4" /> Neue Aufgabe
-          </Button>
-        }
-      />
+    <PageHeader
+      title="Aufgaben"
+      subtitle={`${open.length} offen`}
+      actions={
+        <Button onClick={() => setDialogOpen(true)} className="bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-xl gap-2">
+          <Plus className="w-4 h-4" /> Neue Aufgabe
+        </Button>
+      }
+    />
 
       {aufgaben.length === 0 ? (
         <EmptyState icon={ListTodo} title="Keine Aufgaben" description="Erstellen Sie die erste Aufgabe für Ihr Team." action={
-          <Button onClick={() => setDialogOpen(true)} className="bg-[#0F2F23] hover:bg-[#1a4a36] text-white rounded-xl gap-2"><Plus className="w-4 h-4" /> Aufgabe erstellen</Button>
+          <Button onClick={() => setDialogOpen(true)} className="bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-xl gap-2"><Plus className="w-4 h-4" /> Aufgabe erstellen</Button>
         } />
       ) : (
         <div className="space-y-4">
@@ -144,16 +144,16 @@ export default function Aufgaben() {
             <div className="space-y-2">
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">Offen ({open.length})</p>
               {open.map(a => (
-                <div key={a.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 cursor-pointer hover:shadow-md transition-shadow" onClick={() => setDetailView(a)}>
+                <div key={a.id} className="bg-[#3a3a3a] rounded-2xl border border-[#4a4a4a] shadow-sm p-4 cursor-pointer hover:shadow-md transition-shadow" onClick={() => setDetailView(a)}>
                   <div className="flex items-center gap-3">
                     <button onClick={(e) => {
                       e.stopPropagation();
                       toggleMutation.mutate({ id: a.id, status: a.status });
                     }}
-                      className="w-6 h-6 rounded-full border-2 border-gray-300 hover:border-[#0F2F23] transition-colors shrink-0" />
+                      className="w-6 h-6 rounded-full border-2 border-gray-600 hover:border-[#22c55e] transition-colors shrink-0" />
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-gray-900">{a.title}</p>
-                      {a.description && <p className="text-xs text-gray-500 mt-0.5">{a.description}</p>}
+                      <p className="font-medium text-gray-100">{a.title}</p>
+                      {a.description && <p className="text-xs text-gray-400 mt-0.5">{a.description}</p>}
                     </div>
                     <div className="flex items-center gap-2">
                       <StatusBadge status={a.priority === "high" ? "suspended" : a.priority === "low" ? "planned" : "assigned"} />
@@ -161,11 +161,11 @@ export default function Aufgaben() {
                     </div>
                   </div>
                   {(a.assigned_to_name || a.einrichtung_name || a.schadensprotokolle_ids?.length > 0) && (
-                    <div className="mt-2 pt-2 border-t border-gray-100 flex flex-wrap gap-2">
-                      {a.einrichtung_name && <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">Stand: {a.einrichtung_name}</span>}
-                      {a.assigned_to_name && <span className="text-xs bg-[#0F2F23]/10 text-[#0F2F23] px-2 py-1 rounded">{a.assigned_to_name}</span>}
-                      {a.schadensprotokolle_ids?.length > 0 && <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded">{a.schadensprotokolle_ids.length} Schaden</span>}
-                    </div>
+                  <div className="mt-2 pt-2 border-t border-[#4a4a4a] flex flex-wrap gap-2">
+                    {a.einrichtung_name && <span className="text-xs bg-blue-900/30 text-blue-300 px-2 py-1 rounded">Stand: {a.einrichtung_name}</span>}
+                    {a.assigned_to_name && <span className="text-xs bg-green-900/30 text-green-300 px-2 py-1 rounded">{a.assigned_to_name}</span>}
+                    {a.schadensprotokolle_ids?.length > 0 && <span className="text-xs bg-orange-900/30 text-orange-300 px-2 py-1 rounded">{a.schadensprotokolle_ids.length} Schaden</span>}
+                  </div>
                   )}
                 </div>
               ))}
@@ -175,12 +175,12 @@ export default function Aufgaben() {
             <div className="space-y-2">
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">Erledigt ({done.length})</p>
               {done.map(a => (
-                <div key={a.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3 opacity-50">
+                <div key={a.id} className="bg-[#3a3a3a] rounded-2xl border border-[#4a4a4a] shadow-sm p-4 flex items-center gap-3 opacity-50">
                   <button onClick={() => toggleMutation.mutate({ id: a.id, status: a.status })}
-                    className="w-6 h-6 rounded-full bg-[#0F2F23] flex items-center justify-center shrink-0">
-                    <Check className="w-3.5 h-3.5 text-white" />
+                    className="w-6 h-6 rounded-full bg-[#22c55e] flex items-center justify-center shrink-0">
+                    <Check className="w-3.5 h-3.5 text-black" />
                   </button>
-                  <p className="font-medium text-gray-500 line-through">{a.title}</p>
+                  <p className="font-medium text-gray-400 line-through">{a.title}</p>
                 </div>
               ))}
             </div>
@@ -248,7 +248,7 @@ export default function Aufgaben() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button onClick={() => createMutation.mutate(form)} disabled={!form.title || createMutation.isPending} className="flex-1 bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl">
+              <Button onClick={() => createMutation.mutate(form)} disabled={!form.title || createMutation.isPending} className="flex-1 bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-xl">
                 {createMutation.isPending ? "Speichern..." : editingTask ? "Aktualisieren" : "Erstellen"}
               </Button>
               {editingTask && (
