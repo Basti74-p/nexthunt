@@ -141,7 +141,7 @@ export default function Dashboard() {
              </button>
              <Link
                to={createPageUrl("Reviere")}
-               className="text-sm text-[#0F2F23] font-medium flex items-center gap-1 hover:underline"
+               className="text-sm text-[#22c55e] font-medium flex items-center gap-1 hover:underline"
              >
                Alle anzeigen <ArrowRight className="w-4 h-4" />
              </Link>
