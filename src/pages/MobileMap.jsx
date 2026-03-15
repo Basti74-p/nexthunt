@@ -13,7 +13,7 @@ import EinrichtungForm from "@/components/map/EinrichtungForm";
 import SichtungForm from "@/components/map/SichtungForm";
 import MapActionSheet from "@/components/map/MapActionSheet";
 import SchonzeitenDialog from "@/components/map/SchonzeitenDialog";
-import { Plus, X } from "lucide-react";
+import { Plus, X, Calendar } from "lucide-react";
 
 export default function MobileMap() {
   const { tenant } = useAuth();
