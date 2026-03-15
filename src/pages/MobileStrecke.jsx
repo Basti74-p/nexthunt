@@ -140,8 +140,8 @@ export default function MobileStrecke() {
          {strecken.map((s) =>
         <button
           key={s.id}
-          onClick={() => {setSelectedStrecke(s);setDetailOpen(true);}}
-          className="w-full text-left bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex items-center gap-3 hover:border-gray-200 hover:shadow-md transition-all">
+          onClick={() => {setSelectedStrecke(s);setDetailOpen(true);}} className="bg-[#3a3a3a] p-4 text-left rounded-xl w-full border border-gray-100 shadow-sm flex items-center gap-3 hover:border-gray-200 hover:shadow-md transition-all">
+
 
              <Crosshair className="w-5 h-5 text-[#22c55e]" />
              <div className="flex-1">
@@ -157,7 +157,7 @@ export default function MobileStrecke() {
        </div>
 
       {/* Erfassen Drawer */}
-      <Drawer open={dialogOpen} onOpenChange={(v) => { setDialogOpen(v); if (!v) setForm(EMPTY_FORM); }}>
+      <Drawer open={dialogOpen} onOpenChange={(v) => {setDialogOpen(v);if (!v) setForm(EMPTY_FORM);}}>
         <DrawerContent className="bg-[#2d2d2d] border-t border-[#3a3a3a] max-h-[92dvh]">
           <DrawerHeader className="pb-2">
             <DrawerTitle className="text-gray-100 text-base">Strecke erfassen</DrawerTitle>
@@ -212,7 +212,7 @@ export default function MobileStrecke() {
             </div>
           </div>
           <DrawerFooter style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
-            <Button onClick={() => { createMutation.mutate(form); }} disabled={createMutation.isPending || !form.species || !form.date} className="w-full bg-[#22c55e] text-black hover:bg-[#16a34a]">
+            <Button onClick={() => {createMutation.mutate(form);}} disabled={createMutation.isPending || !form.species || !form.date} className="w-full bg-[#22c55e] text-black hover:bg-[#16a34a]">
               {createMutation.isPending ? "Erfassen..." : "Erfassen"}
             </Button>
             <Button variant="outline" onClick={() => setDialogOpen(false)} className="w-full border-[#3a3a3a]">Abbrechen</Button>
@@ -221,15 +221,15 @@ export default function MobileStrecke() {
       </Drawer>
 
       {/* Detail Drawer */}
-      <Drawer open={detailOpen} onOpenChange={(v) => { setDetailOpen(v); if (!v) setSelectedStrecke(null); }}>
+      <Drawer open={detailOpen} onOpenChange={(v) => {setDetailOpen(v);if (!v) setSelectedStrecke(null);}}>
         <DrawerContent className="bg-[#2d2d2d] border-t border-[#3a3a3a] max-h-[92dvh]">
           <DrawerHeader className="pb-2">
             <DrawerTitle className="text-gray-100 text-base">
               {selectedStrecke && (SPECIES.find((s) => s.value === selectedStrecke.species)?.label || selectedStrecke.species)}
             </DrawerTitle>
           </DrawerHeader>
-          {selectedStrecke && (
-            <div className="overflow-y-auto px-4 space-y-4 pb-2">
+          {selectedStrecke &&
+          <div className="overflow-y-auto px-4 space-y-4 pb-2">
               <div className="bg-[#1a1a1a] rounded-lg p-3 space-y-2 border border-[#3a3a3a]">
                 <p className="text-xs text-gray-400">Datum: <span className="text-gray-200">{selectedStrecke.date}</span></p>
                 <p className="text-xs text-gray-400">Gewicht: <span className="text-gray-200">{selectedStrecke.weight_kg ? `${selectedStrecke.weight_kg} kg` : "–"}</span></p>
@@ -253,7 +253,7 @@ export default function MobileStrecke() {
                 </div>
               </div>
             </div>
-          )}
+          }
           <DrawerFooter style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
             <Button onClick={() => createWildkammerMutation.mutate(wildkammerForm)} disabled={createWildkammerMutation.isPending} className="w-full bg-[#22c55e] text-black hover:bg-[#16a34a]">
               {createWildkammerMutation.isPending ? "Einlagern..." : "In Wildkammer einlagern"}
