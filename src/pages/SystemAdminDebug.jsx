@@ -104,6 +104,24 @@ export default function SystemAdminDebug() {
     }
   };
 
+  const deleteUserCompletely = async (email) => {
+    if (!window.confirm(`Benutzer ${email} und ALLE zugehörigen Daten wirklich löschen?`)) {
+      return;
+    }
+
+    try {
+      setFixing(true);
+      const res = await base44.functions.invoke('deleteUserCompletely', { email });
+      alert(`✓ Benutzer gelöscht\nTenantMembers: ${res.data.deleted.members}\nTenants: ${res.data.deleted.tenants}`);
+      refetchUsers();
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      alert(`Fehler: ${error.message}`);
+    } finally {
+      setFixing(false);
+    }
+  };
+
   return (
     <AdminLayout currentPage="SystemAdmin">
       <div className="max-w-4xl mx-auto space-y-6">
