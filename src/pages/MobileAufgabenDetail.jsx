@@ -9,7 +9,7 @@ import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import jsPDF from "jspdf";
 
-const PRIO_COLOR = { low: "bg-blue-100 text-blue-700", medium: "bg-yellow-100 text-yellow-700", high: "bg-red-100 text-red-700" };
+const PRIO_COLOR = { low: "bg-blue-900/40 text-blue-300", medium: "bg-yellow-900/40 text-yellow-300", high: "bg-red-900/40 text-red-300" };
 const PRIO_LABEL = { low: "Niedrig", medium: "Mittel", high: "Hoch" };
 const STATUS_LABEL = { offen: "Offen", in_bearbeitung: "In Bearbeitung", erledigt: "Erledigt" };
 const STATUS_COLOR = { offen: "text-blue-600", in_bearbeitung: "text-yellow-600", erledigt: "text-green-600" };
@@ -154,13 +154,13 @@ export default function MobileAufgabenDetail() {
         <div className="bg-[#2d2d2d] rounded-lg p-4 space-y-3 border border-[#3a3a3a]">
           <div className="flex gap-3">
             <div className="flex-1">
-              <div className="text-xs text-gray-600 mb-1">Status</div>
+              <div className="text-xs text-gray-500 mb-1">Status</div>
               <p className={`font-medium ${STATUS_COLOR[aufgabe.status]}`}>
                 {STATUS_LABEL[aufgabe.status]}
               </p>
             </div>
             <div className="flex-1">
-              <div className="text-xs text-gray-600 mb-1">Priorität</div>
+              <div className="text-xs text-gray-500 mb-1">Priorität</div>
               <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${PRIO_COLOR[aufgabe.priority]}`}>
                 {PRIO_LABEL[aufgabe.priority]}
               </span>

@@ -131,7 +131,7 @@ export default function MobileStrecke() {
     <div className="pt-4">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-slate-50 text-xl font-bold">Strecke</h2>
-        <Button onClick={() => setDialogOpen(true)} size="sm" className="bg-[#0F2F23] hover:bg-[#1a4a36] text-white rounded-xl gap-1">
+        <Button onClick={() => setDialogOpen(true)} size="sm" className="bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-xl gap-1">
           <Plus className="w-4 h-4" /> Erfassen
         </Button>
       </div>
@@ -141,16 +141,16 @@ export default function MobileStrecke() {
         <button
           key={s.id}
           onClick={() => {setSelectedStrecke(s);setDetailOpen(true);}}
-          className="w-full text-left bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex items-center gap-3 hover:border-gray-200 hover:shadow-md transition-all">
+          className="w-full text-left bg-[#3a3a3a] rounded-xl border border-[#4a4a4a] shadow-sm p-4 flex items-center gap-3 hover:border-[#22c55e]/30 hover:shadow-md transition-all">
 
-             <Crosshair className="w-5 h-5 text-[#0F2F23]" />
+             <Crosshair className="w-5 h-5 text-[#22c55e]" />
              <div className="flex-1">
-               <p className="font-medium text-gray-900 capitalize">{SPECIES.find((sp) => sp.value === s.species)?.label || s.species}</p>
-               <p className="text-xs text-gray-500">{s.gender === "maennlich" ? "♂" : "♀"} • {s.date}</p>
+               <p className="font-medium text-gray-100 capitalize">{SPECIES.find((sp) => sp.value === s.species)?.label || s.species}</p>
+               <p className="text-xs text-gray-400">{s.gender === "maennlich" ? "♂" : "♀"} • {s.date}</p>
              </div>
              <div className="flex items-center gap-2">
                <StatusBadge status={s.status} />
-               <ChevronRight className="w-4 h-4 text-gray-400" />
+               <ChevronRight className="w-4 h-4 text-gray-500" />
              </div>
            </button>
         )}
