@@ -20,12 +20,12 @@ export default function WildkammerAusgabeDialog({ open, onClose, onSave, item, k
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
   return (
-    <Dialog open={open} onOpenChange={v => !v && onClose()}>
-      <DialogContent className="bg-[#2d2d2d] border-[#3a3a3a] max-w-md">
-        <DialogHeader>
-          <DialogTitle className="text-gray-100">Ausgabe / Verkauf buchen</DialogTitle>
-        </DialogHeader>
-        <div className="space-y-3 mt-2">
+    <Drawer open={open} onOpenChange={v => !v && onClose()}>
+      <DrawerContent className="bg-[#2d2d2d] border-t border-[#3a3a3a] max-h-[92dvh]">
+        <DrawerHeader className="pb-2">
+          <DrawerTitle className="text-gray-100 text-base">Ausgabe / Verkauf buchen</DrawerTitle>
+        </DrawerHeader>
+        <div className="overflow-y-auto px-4 space-y-3 pb-2">
           <div className="grid grid-cols-2 gap-3">
             <div>
               <Label className="text-gray-300 text-xs mb-1 block">Ausgabedatum *</Label>

@@ -47,12 +47,12 @@ export default function WildkammerEingangDialog({ open, onClose, onSave, reviere
   const canSave = form.species && form.revier_id && form.eingang_datum;
 
   return (
-    <Dialog open={open} onOpenChange={v => !v && onClose()}>
-      <DialogContent className="bg-[#2d2d2d] border-[#3a3a3a] max-w-lg max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-gray-100">Wildkammer – Eingang erfassen</DialogTitle>
-        </DialogHeader>
-        <div className="space-y-4 mt-2">
+    <Drawer open={open} onOpenChange={v => !v && onClose()}>
+      <DrawerContent className="bg-[#2d2d2d] border-t border-[#3a3a3a] max-h-[92dvh]">
+        <DrawerHeader className="pb-2">
+          <DrawerTitle className="text-gray-100 text-base">Wildkammer – Eingang erfassen</DrawerTitle>
+        </DrawerHeader>
+        <div className="overflow-y-auto px-4 space-y-4 pb-2">
 
           {/* Link to Strecke */}
           {strecken.length > 0 && (

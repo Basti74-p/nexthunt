@@ -96,19 +96,20 @@ export default function AufgabeDialog({ isOpen, onClose, aufgabe, einrichtung, t
   const set = (k, v) => setFormData((p) => ({ ...p, [k]: v }));
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md bg-[#2d2d2d] border-[#3a3a3a]">
-        <DialogHeader>
-          <DialogTitle className="text-gray-100">{isEdit ? "Aufgabe bearbeiten" : "Neue Aufgabe"}</DialogTitle>
+    <Drawer open={isOpen} onOpenChange={onClose}>
+      <DrawerContent className="bg-[#2d2d2d] border-t border-[#3a3a3a] max-h-[92dvh]">
+        <DrawerHeader className="pb-2">
+          <DrawerTitle className="text-gray-100 text-base">{isEdit ? "Aufgabe bearbeiten" : "Neue Aufgabe"}</DrawerTitle>
           {einrichtung && <p className="text-xs text-gray-400 mt-0.5">{einrichtung.name}</p>}
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-3">
+        </DrawerHeader>
+        <form onSubmit={handleSubmit} className="flex flex-col overflow-hidden">
+          <div className="overflow-y-auto px-4 space-y-3 pb-2">
           <Input placeholder="Titel" value={formData.title} onChange={(e) => set("title", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
           <Textarea placeholder="Beschreibung" value={formData.description} onChange={(e) => set("description", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 text-xs resize-none h-16" />
-          <div className="grid grid-cols-2 gap-2">
+          <div className="space-y-2">
             <div>
               <label className="text-xs text-gray-400 mb-1 block">Fälligkeitsdatum</label>
-              <Input type="date" value={formData.due_date} onChange={(e) => set("due_date", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+              <Input type="date" value={formData.due_date} onChange={(e) => set("due_date", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full" />
             </div>
             <div>
               <label className="text-xs text-gray-400 mb-1 block">Priorität</label>
