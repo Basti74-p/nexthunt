@@ -278,7 +278,7 @@ export default function SchadensprotokollDialog({ isOpen, onClose, schaden, einr
 
             {formData.hat_schaden && (
               <div className="mt-3 space-y-2 p-3 bg-red-950/10 border border-red-900/30 rounded-xl">
-                <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-2">
                   <div>
                     <label className="text-xs text-gray-400 mb-1 block">Schadensart</label>
                     <MobileSelect value={formData.schadensart} onValueChange={(v) => set("schadensart", v)} label="Schadensart" items={SCHADENSART_OPTIONS} />
@@ -287,15 +287,13 @@ export default function SchadensprotokollDialog({ isOpen, onClose, schaden, einr
                     <label className="text-xs text-gray-400 mb-1 block">Schwere</label>
                     <MobileSelect value={formData.schwere} onValueChange={(v) => set("schwere", v)} label="Schwere" items={SCHWERE_OPTIONS} />
                   </div>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
                   <div>
                     <label className="text-xs text-gray-400 mb-1 block">Geschätzte Kosten (€)</label>
-                    <Input type="number" step="0.01" placeholder="0,00" value={formData.kosten_geschaetzt} onChange={(e) => set("kosten_geschaetzt", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+                    <Input type="number" step="0.01" placeholder="0,00" value={formData.kosten_geschaetzt} onChange={(e) => set("kosten_geschaetzt", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full" />
                   </div>
                   <div>
                     <label className="text-xs text-gray-400 mb-1 block">Tatsächliche Kosten (€)</label>
-                    <Input type="number" step="0.01" placeholder="0,00" value={formData.kosten_tatsaechlich} onChange={(e) => set("kosten_tatsaechlich", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+                    <Input type="number" step="0.01" placeholder="0,00" value={formData.kosten_tatsaechlich} onChange={(e) => set("kosten_tatsaechlich", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full" />
                   </div>
                 </div>
               </div>
