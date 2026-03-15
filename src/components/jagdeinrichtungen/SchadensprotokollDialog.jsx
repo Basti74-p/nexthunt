@@ -317,14 +317,14 @@ export default function SchadensprotokollDialog({ isOpen, onClose, schaden, einr
             <div className="space-y-2">
               <MobileSelect value={formData.status} onValueChange={(v) => set("status", v)} label="Bearbeitungsstatus" items={STATUS_OPTIONS} />
               {formData.status === "abgeschlossen" && (
-                <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-2">
                   <div>
                     <label className="text-xs text-gray-400 mb-1 block">Erledigt am</label>
-                    <Input type="date" value={formData.erledigt_am} onChange={(e) => set("erledigt_am", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+                    <Input type="date" value={formData.erledigt_am} onChange={(e) => set("erledigt_am", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full" />
                   </div>
                   <div>
                     <label className="text-xs text-gray-400 mb-1 block">Erledigt durch</label>
-                    <Input placeholder="Name / Firma" value={formData.erledigt_durch} onChange={(e) => set("erledigt_durch", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+                    <Input placeholder="Name / Firma" value={formData.erledigt_durch} onChange={(e) => set("erledigt_durch", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full" />
                   </div>
                 </div>
               )}
