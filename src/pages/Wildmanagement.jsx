@@ -8,10 +8,10 @@ import { TreePine, ArrowRight, Eye } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 
 const SPECIES = [
-  { key: "rotwild", label: "Rotwild", page: "WildRotwild", color: "bg-red-50 text-red-700" },
-  { key: "schwarzwild", label: "Schwarzwild", page: "WildSchwarzwild", color: "bg-gray-100 text-gray-700" },
-  { key: "rehwild", label: "Rehwild", page: "WildRehwild", color: "bg-amber-50 text-amber-700" },
-  { key: "wolf", label: "Wolf", page: "WildWolf", color: "bg-blue-50 text-blue-700" },
+  { key: "rotwild", label: "Rotwild", page: "WildRotwild", color: "bg-red-900/30 text-red-400" },
+  { key: "schwarzwild", label: "Schwarzwild", page: "WildSchwarzwild", color: "bg-gray-900/30 text-gray-400" },
+  { key: "rehwild", label: "Rehwild", page: "WildRehwild", color: "bg-amber-900/30 text-amber-400" },
+  { key: "wolf", label: "Wolf", page: "WildWolf", color: "bg-blue-900/30 text-blue-400" },
 ];
 
 export default function Wildmanagement() {
@@ -33,17 +33,17 @@ export default function Wildmanagement() {
           const observations = entries.filter(e => e.species === key && e.type === "observation").length;
           return (
             <Link key={key} to={createPageUrl(page)}
-              className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover:border-[#0F2F23]/20 hover:shadow-md transition-all group flex items-center justify-between">
+              className="bg-[#3a3a3a] rounded-2xl border border-[#4a4a4a] shadow-sm p-6 hover:border-[#22c55e]/30 hover:shadow-md transition-all group flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${color} bg-opacity-20`}>
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${color}`}>
                   <TreePine className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 group-hover:text-[#0F2F23]">{label}</h3>
-                  <p className="text-sm text-gray-500">{count} Einträge · {observations} Sichtungen</p>
+                  <h3 className="text-lg font-semibold text-gray-100 group-hover:text-[#22c55e]">{label}</h3>
+                  <p className="text-sm text-gray-400">{count} Einträge · {observations} Sichtungen</p>
                 </div>
               </div>
-              <ArrowRight className="w-5 h-5 text-gray-300 group-hover:text-[#0F2F23] transition-colors" />
+              <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-[#22c55e] transition-colors" />
             </Link>
           );
         })}
