@@ -153,21 +153,35 @@ export default function SystemAdminDebug() {
                     <p className="text-sm font-medium text-white">{user.full_name}</p>
                     <p className="text-xs text-slate-400">{user.email}</p>
                   </div>
-                  {fixed.includes(user.email) ? (
-                    <span className="text-xs px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 font-medium">
-                      ✓ Repariert
-                    </span>
-                  ) : (
-                    <Button
-                      onClick={() => fixOrphanedUser(user)}
-                      disabled={fixing}
-                      size="sm"
-                      className="bg-emerald-600 hover:bg-emerald-700"
-                    >
-                      <RefreshCw className="w-3 h-3 mr-1" />
-                      Reparieren
-                    </Button>
-                  )}
+                  <div className="flex gap-2">
+                    {fixed.includes(user.email) ? (
+                      <span className="text-xs px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 font-medium">
+                        ✓ Repariert
+                      </span>
+                    ) : (
+                      <>
+                        <Button
+                          onClick={() => fixOrphanedUser(user)}
+                          disabled={fixing}
+                          size="sm"
+                          className="bg-emerald-600 hover:bg-emerald-700"
+                        >
+                          <RefreshCw className="w-3 h-3 mr-1" />
+                          Reparieren
+                        </Button>
+                        <Button
+                          onClick={() => deleteUserCompletely(user.email)}
+                          disabled={fixing}
+                          size="sm"
+                          variant="destructive"
+                          className="bg-red-600 hover:bg-red-700"
+                        >
+                          <Trash2 className="w-3 h-3 mr-1" />
+                          Löschen
+                        </Button>
+                      </>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
