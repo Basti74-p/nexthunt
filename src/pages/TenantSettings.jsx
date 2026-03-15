@@ -50,6 +50,13 @@ export default function TenantSettings() {
         setEtikettSettings({ ...DEFAULT_ETIKETT_SETTINGS, ...u.etikett_settings });
       }
     });
+    
+    // Force refresh: stale data detection
+    const interval = setInterval(() => {
+      base44.auth.me();
+    }, 1000);
+    
+    return () => clearInterval(interval);
   }, []);
 
   const handleSave = async () => {
