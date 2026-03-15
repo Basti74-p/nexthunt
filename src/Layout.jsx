@@ -44,17 +44,60 @@ function LayoutInner({ children, currentPageName }) {
           // Check if user already has a tenant (via tenant_id or TenantMember)
           const hasTenantId = !!user.tenant_id;
           const members = await base44.entities.TenantMember.filter({ user_email: user.email });
+          const tenants = await base44.entities.Tenant.filter({ contact_email: user.email });
           
-          if (!hasTenantId && members.length === 0) {
-            // No tenant found, initialize trial
+          if (!hasTenantId && members.length === 0 && tenants.length === 0) {
+            // No tenant found, initialize trial directly
             console.log('Initializing trial for new user:', user.email);
-            const result = await base44.functions.invoke('initializeUserTrial', {});
-            console.log('Trial initialization result:', result);
             
-            // Give the backend time to create records, then refresh
+            const now = new Date();
+            const trialEndDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+            
+            const newTenant = await base44.entities.Tenant.create({
+              name: `${user.full_name}'s Revier`,
+              contact_person: user.full_name,
+              contact_email: user.email,
+              status: 'trial',
+              plan: 'free_trial',
+              trial_start_date: now.toISOString(),
+              trial_end_date: trialEndDate.toISOString(),
+              trial_days_remaining: 30,
+              feature_map: true,
+              feature_sightings: true,
+              feature_strecke: true,
+              feature_wildkammer: true,
+              feature_tasks: true,
+              feature_driven_hunt: true,
+              feature_public_portal: true,
+              feature_wildmarken: true,
+              feature_dashboard: true,
+              feature_reviere: true,
+              feature_kalender: true,
+              feature_personen: true,
+              feature_einrichtungen: true
+            });
+
+            await base44.entities.TenantMember.create({
+              tenant_id: newTenant.id,
+              user_email: user.email,
+              first_name: user.full_name.split(' ')[0],
+              last_name: user.full_name.split(' ').slice(1).join(' ') || 'User',
+              role: 'tenant_owner',
+              status: 'active',
+              perm_wildmanagement: true,
+              perm_strecke: true,
+              perm_wildkammer: true,
+              perm_kalender: true,
+              perm_aufgaben: true,
+              perm_personen: true,
+              perm_oeffentlichkeit: true,
+              perm_einrichtungen: true
+            });
+            
+            console.log('Trial initialized, reloading...');
             setTimeout(() => {
               window.location.reload();
-            }, 1500);
+            }, 500);
           } else {
             console.log('User already has tenant, skipping trial init');
             setInitializingTrial(false);
