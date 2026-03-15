@@ -21,9 +21,20 @@ export default function MobileTasks() {
 
   const toggleMutation = useMutation({
     mutationFn: ({ id, status }) =>
-    base44.entities.Aufgabe.update(id, {
-      status: status === "erledigt" ? "offen" : "erledigt"
-    }),
+      base44.entities.Aufgabe.update(id, {
+        status: status === "erledigt" ? "offen" : "erledigt"
+      }),
+    onMutate: async ({ id, status }) => {
+      await queryClient.cancelQueries({ queryKey: ["aufgaben-mobile", tenant?.id] });
+      const previous = queryClient.getQueryData(["aufgaben-mobile", tenant?.id]);
+      queryClient.setQueryData(["aufgaben-mobile", tenant?.id], (old = []) =>
+        old.map(a => a.id === id ? { ...a, status: status === "erledigt" ? "offen" : "erledigt" } : a)
+      );
+      return { previous };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previous) queryClient.setQueryData(["aufgaben-mobile", tenant?.id], context.previous);
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["aufgaben-mobile"] })
   });
 
