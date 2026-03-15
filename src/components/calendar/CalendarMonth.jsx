@@ -83,11 +83,11 @@ export default function CalendarMonth({ currentDate, onDateSelect, onEventClick,
                 {date && format(date, "d")}
               </div>
               <div className="space-y-1">
-                {dayEvents.slice(0, isMobile ? 0 : 2).map((event) => (
+                {!isMobile && dayEvents.slice(0, 2).map((event) => (
                   <div
                     key={event.id}
                     onClick={(e) => { e.stopPropagation(); onEventClick?.(event); }}
-                    className={`${isMobile ? "text-[8px] bg-[#22c55e]/30 text-[#22c55e] px-1 py-0.5" : "text-[10px] bg-[#22c55e]/20 text-[#22c55e] px-1.5 py-0.5"} rounded truncate cursor-pointer hover:bg-[#22c55e]/30 transition-colors`}
+                    className="text-[10px] bg-[#22c55e]/20 text-[#22c55e] px-1.5 py-0.5 rounded truncate cursor-pointer hover:bg-[#22c55e]/30 transition-colors"
                   >
                     {event.titel}
                   </div>
@@ -96,8 +96,11 @@ export default function CalendarMonth({ currentDate, onDateSelect, onEventClick,
                   <div className="text-[10px] text-gray-400">+{dayEvents.length - 2}</div>
                 )}
                 {isMobile && dayEvents.length > 0 && (
-                  <div className={`text-[8px] font-semibold text-[#22c55e]`}>
-                    {dayEvents.length} {dayEvents.length === 1 ? "E" : "E"}
+                  <div
+                    onClick={(e) => { e.stopPropagation(); onEventClick?.(dayEvents[0]); }}
+                    className="text-[8px] font-semibold text-[#22c55e] cursor-pointer"
+                  >
+                    {dayEvents.length}×
                   </div>
                 )}
               </div>
