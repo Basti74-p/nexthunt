@@ -209,14 +209,14 @@ export default function SchadensprotokollDialog({ isOpen, onClose, schaden, einr
                 onChange={(e) => set("titel", e.target.value)}
                 className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"
               />
-              <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-2">
                 <div>
                   <label className="text-xs text-gray-400 mb-1 block">Datum *</label>
-                  <Input type="date" value={formData.datum} onChange={(e) => set("datum", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+                  <Input type="date" value={formData.datum} onChange={(e) => set("datum", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full" />
                 </div>
                 <div>
                   <label className="text-xs text-gray-400 mb-1 block">Kontrolleur / Ersteller</label>
-                  <Input placeholder="Name" value={formData.kontrolleur} onChange={(e) => set("kontrolleur", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+                  <Input placeholder="Name" value={formData.kontrolleur} onChange={(e) => set("kontrolleur", e.target.value)} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 w-full" />
                 </div>
               </div>
             </div>
