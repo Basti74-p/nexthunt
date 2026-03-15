@@ -12,8 +12,7 @@ import JagdWetterWidget from "@/components/map/JagdWetterWidget";
 import EinrichtungForm from "@/components/map/EinrichtungForm";
 import SichtungForm from "@/components/map/SichtungForm";
 import MapActionSheet from "@/components/map/MapActionSheet";
-import SchonzeitenDialog from "@/components/map/SchonzeitenDialog";
-import { Plus, X, Calendar } from "lucide-react";
+import { Plus, X } from "lucide-react";
 
 export default function MobileMap() {
   const { tenant } = useAuth();
@@ -24,7 +23,6 @@ export default function MobileMap() {
   const [userPos, setUserPos] = useState(null);
   const [showWeather, setShowWeather] = useState(false);
   const [showActionSheet, setShowActionSheet] = useState(false);
-  const [showSchonzeiten, setShowSchonzeiten] = useState(false);
 
 
   // Einrichtung state
@@ -352,21 +350,13 @@ export default function MobileMap() {
 
       {/* FAB – verstecken wenn Drawing-Modus aktiv */}
       {!drawingBoundary && !showAssignBoundary && !einrichtungMode && !sichtungMode && (
-        <div className="fixed bottom-24 right-4 flex flex-col gap-3" style={{ zIndex: 9999 }}>
-          <button
-            className="w-14 h-14 bg-[#3b82f6] rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform"
-            onClick={() => setShowSchonzeiten(true)}
-            title="Schonzeiten"
-          >
-            <Calendar className="w-6 h-6 text-white stroke-[2.5]" />
-          </button>
-          <button
-            className="w-14 h-14 bg-[#22c55e] rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform"
-            onClick={() => setShowActionSheet(true)}
-          >
-            <Plus className="w-7 h-7 text-black stroke-[2.5]" />
-          </button>
-        </div>
+        <button
+          style={{ zIndex: 9999 }}
+          className="fixed bottom-24 right-4 w-14 h-14 bg-[#22c55e] rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform"
+          onClick={() => setShowActionSheet(true)}
+        >
+          <Plus className="w-7 h-7 text-black stroke-[2.5]" />
+        </button>
       )}
 
       {showActionSheet && (
@@ -399,11 +389,7 @@ export default function MobileMap() {
         lng={sichtungCoords?.[1]}
       />
 
-      {/* Schonzeiten Dialog */}
-      <SchonzeitenDialog
-        isOpen={showSchonzeiten}
-        onClose={() => setShowSchonzeiten(false)}
-      />
+
     </>
   );
 }
