@@ -35,11 +35,18 @@ export default function Kunden() {
   const [editItem, setEditItem] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
 
-  const { data: kunden = [], isLoading } = useQuery({
+  const { data: kunden = [], isLoading, refetch } = useQuery({
     queryKey: ["kunden", tenant?.id],
     queryFn: () => base44.entities.Kunde.filter({ tenant_id: tenant?.id }),
     enabled: !!tenant?.id,
+    staleTime: 0,
+    gcTime: 0,
   });
+
+  // Force sync with Einstellungen
+  React.useEffect(() => {
+    if (tenant?.id) refetch();
+  }, [tenant?.id, refetch]);
 
   const createMutation = useMutation({
     mutationFn: (data) => base44.entities.Kunde.create({ ...data, tenant_id: tenant.id }),
