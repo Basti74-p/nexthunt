@@ -5,9 +5,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "@/components/hooks/useAuth";
+import MobileSelect from "@/components/ui/MobileSelect";
 
 export default function AufgabeDialog({ isOpen, onClose, aufgabe, einrichtung, tenantId }) {
   const queryClient = useQueryClient();
