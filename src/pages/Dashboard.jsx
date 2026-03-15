@@ -148,23 +148,23 @@ export default function Dashboard() {
            </div>
          </div>
         {reviere.length === 0 ? (
-          <p className="text-sm text-gray-500">Noch keine Reviere angelegt.</p>
+          <p className="text-sm text-gray-400">Noch keine Reviere angelegt.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {reviere.slice(0, 6).map((r) => (
               <Link
                 key={r.id}
                 to={createPageUrl(`RevierDetail?id=${r.id}`)}
-                className="flex items-center gap-3 p-4 rounded-xl border border-gray-100 hover:border-[#0F2F23]/20 hover:shadow-sm transition-all group"
+                className="flex items-center gap-3 p-4 rounded-xl border border-[#4a4a4a] hover:border-[#22c55e]/30 hover:shadow-sm transition-all group"
               >
-                <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
-                  <TreePine className="w-5 h-5 text-emerald-600" />
+                <div className="w-10 h-10 rounded-xl bg-emerald-900/20 flex items-center justify-center">
+                  <TreePine className="w-5 h-5 text-emerald-500" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate group-hover:text-[#0F2F23]">{r.name}</p>
+                  <p className="text-sm font-medium text-gray-100 truncate group-hover:text-[#22c55e]">{r.name}</p>
                   <p className="text-xs text-gray-400">{r.size_ha ? `${r.size_ha} ha` : r.region || "—"}</p>
                 </div>
-                <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-[#0F2F23] transition-colors" />
+                <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-[#22c55e] transition-colors" />
               </Link>
             ))}
           </div>
