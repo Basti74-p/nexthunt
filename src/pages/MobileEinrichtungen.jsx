@@ -78,21 +78,21 @@ export default function MobileEinrichtungen() {
     <PageTransition>
       <div className="pt-20 pb-24 px-4" onTouchMove={handlePullToRefresh}>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-slate-50 text-xl font-bold select-none">Einrichtungen</h2>
-          {isRefreshing && <div className="w-4 h-4 rounded-full border-2 border-transparent border-t-[#0F2F23] animate-spin" />}
-        </div>
+           <h2 className="text-slate-50 text-xl font-bold select-none">Einrichtungen</h2>
+           {isRefreshing && <div className="w-4 h-4 rounded-full border-2 border-transparent border-t-[#22c55e] animate-spin" />}
+         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 gap-3 mb-5">
-          <div className="bg-white rounded-lg p-3 text-center">
-            <p className="text-lg font-bold text-gray-900">{einrichtungen.length}</p>
-            <p className="text-xs text-gray-500">Gesamt</p>
-          </div>
-          <div className="bg-red-50 rounded-lg p-3 text-center">
-            <p className="text-lg font-bold text-red-600">{schlecht + maessig}</p>
-            <p className="text-xs text-red-600">Wartung nötig</p>
-          </div>
-        </div>
+         {/* Stats */}
+         <div className="grid grid-cols-2 gap-3 mb-5">
+           <div className="bg-[#3a3a3a] rounded-lg p-3 text-center border border-[#4a4a4a]">
+             <p className="text-lg font-bold text-gray-100">{einrichtungen.length}</p>
+             <p className="text-xs text-gray-400">Gesamt</p>
+           </div>
+           <div className="bg-red-900/30 rounded-lg p-3 text-center border border-red-900/50">
+             <p className="text-lg font-bold text-red-400">{schlecht + maessig}</p>
+             <p className="text-xs text-red-400">Wartung nötig</p>
+           </div>
+         </div>
 
         {isLoading ? (
           <div className="text-center py-8 text-gray-400">Laden...</div>
@@ -106,23 +106,23 @@ export default function MobileEinrichtungen() {
             {einrichtungen.map((e) => (
               <div
                 key={e.id}
-                className="bg-white rounded-lg border border-gray-100 shadow-sm p-3 flex items-center justify-between cursor-pointer hover:shadow-md transition-shadow"
+                className="bg-[#3a3a3a] rounded-lg border border-[#4a4a4a] shadow-sm p-3 flex items-center justify-between cursor-pointer hover:shadow-md transition-shadow"
                 onClick={() => navigate(`/MobileEinrichtungsDetail?id=${e.id}`)}
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <p className="font-medium text-gray-900 text-sm truncate">{e.name}</p>
+                    <p className="font-medium text-gray-100 text-sm truncate">{e.name}</p>
                     <span className={`text-[10px] px-1.5 py-0.5 rounded ${CONDITION_COLOR[e.condition]}`}>
                       {CONDITION_LABEL[e.condition] || e.condition}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
+                  <div className="flex items-center gap-2 mt-1 text-xs text-gray-400">
                     <span>{TYPE_LABEL[e.type] || e.type}</span>
                     <span>·</span>
                     <span>{revierName(e.revier_id)}</span>
                   </div>
                   {e.latitude && e.longitude && (
-                    <div className="flex items-center gap-1 mt-1 text-xs text-gray-400">
+                    <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
                       <MapPin className="w-3 h-3" />
                       {Number(e.latitude).toFixed(2)}, {Number(e.longitude).toFixed(2)}
                     </div>
@@ -133,7 +133,7 @@ export default function MobileEinrichtungen() {
                   <AlertTriangle className="w-4 h-4 text-red-500 shrink-0 ml-2" />
                 )}
 
-                <ChevronRight className="w-4 h-4 text-gray-400 shrink-0 ml-2" />
+                <ChevronRight className="w-4 h-4 text-gray-500 shrink-0 ml-2" />
               </div>
             ))}
           </div>
