@@ -39,7 +39,7 @@ const FEATURE_LABELS = {
 };
 
 export default function TenantSettings() {
-  const { tenant } = useAuth();
+  const { tenant, user } = useAuth();
   const [etikettSettings, setEtikettSettings] = useState(DEFAULT_ETIKETT_SETTINGS);
   const [saving, setSaving] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -72,16 +72,18 @@ export default function TenantSettings() {
       <PageHeader title="Einstellungen" subtitle="Mandanten-Informationen und Features" />
 
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Allgemein</h2>
-        <div className="grid grid-cols-2 gap-y-4 gap-x-8 text-sm">
-          <div><span className="text-gray-500">Name</span><p className="font-medium text-gray-900 mt-0.5">{tenant.name}</p></div>
-          <div><span className="text-gray-500">Kontakt</span><p className="font-medium text-gray-900 mt-0.5">{tenant.contact_person || "—"}</p></div>
-          <div><span className="text-gray-500">E-Mail</span><p className="font-medium text-gray-900 mt-0.5">{tenant.contact_email}</p></div>
-          <div><span className="text-gray-500">Telefon</span><p className="font-medium text-gray-900 mt-0.5">{tenant.phone || "—"}</p></div>
-          <div><span className="text-gray-500">Plan</span><div className="mt-1"><StatusBadge status={tenant.plan} /></div></div>
-          <div><span className="text-gray-500">Status</span><div className="mt-1"><StatusBadge status={tenant.status} /></div></div>
-        </div>
-      </div>
+         <h2 className="text-lg font-semibold text-gray-900 mb-4">Allgemein</h2>
+         <div className="grid grid-cols-2 gap-y-4 gap-x-8 text-sm">
+           <div><span className="text-gray-500">Name</span><p className="font-medium text-gray-900 mt-0.5">{tenant.name}</p></div>
+           <div><span className="text-gray-500">Kontakt</span><p className="font-medium text-gray-900 mt-0.5">{tenant.contact_person || "—"}</p></div>
+           <div><span className="text-gray-500">E-Mail</span><p className="font-medium text-gray-900 mt-0.5">{tenant.contact_email}</p></div>
+           <div><span className="text-gray-500">Telefon</span><p className="font-medium text-gray-900 mt-0.5">{tenant.phone || "—"}</p></div>
+           <div><span className="text-gray-500">Plan</span><div className="mt-1"><StatusBadge status={tenant.plan} /></div></div>
+           <div><span className="text-gray-500">Status</span><div className="mt-1"><StatusBadge status={tenant.status} /></div></div>
+           <div><span className="text-gray-500">Mandanten-ID</span><p className="font-medium text-gray-900 mt-0.5 font-mono text-xs">{tenant.id}</p></div>
+           <div><span className="text-gray-500">Benutzer-ID</span><p className="font-medium text-gray-900 mt-0.5 font-mono text-xs">{user?.id}</p></div>
+         </div>
+       </div>
 
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Etikett-Einstellungen</h2>
