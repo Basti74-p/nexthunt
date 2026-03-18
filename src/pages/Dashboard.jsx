@@ -68,18 +68,18 @@ export default function Dashboard() {
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center space-y-3">
           <TreePine className="w-12 h-12 text-gray-300 mx-auto" />
-          <h2 className="text-xl font-bold text-gray-900">Willkommen bei NextHunt</h2>
-          <p className="text-sm text-gray-500">Sie sind noch keinem Mandanten zugewiesen.</p>
+          <h2 className="text-xl font-bold text-gray-900">{t("willkommen_nexthunt")}</h2>
+          <p className="text-sm text-gray-500">{t("noch_kein_mandant")}</p>
         </div>
       </div>
     );
   }
 
   const stats = [
-    { label: "Reviere", value: reviere.length, icon: Map, color: "bg-emerald-50 text-emerald-600" },
-    { label: "Offene Aufgaben", value: aufgaben.length, icon: ListTodo, color: "bg-amber-50 text-amber-600" },
-    { label: "Strecke (gesamt)", value: strecken.length, icon: Crosshair, color: "bg-blue-50 text-blue-600" },
-    { label: "Geplante Jagden", value: events.length, icon: Calendar, color: "bg-purple-50 text-purple-600" },
+    { label: t("stat_reviere"), value: reviere.length, icon: Map, color: "bg-emerald-50 text-emerald-600" },
+    { label: t("stat_offene_aufgaben"), value: aufgaben.length, icon: ListTodo, color: "bg-amber-50 text-amber-600" },
+    { label: t("stat_strecke"), value: strecken.length, icon: Crosshair, color: "bg-blue-50 text-blue-600" },
+    { label: t("stat_geplante_jagden"), value: events.length, icon: Calendar, color: "bg-purple-50 text-purple-600" },
   ];
 
   return (
