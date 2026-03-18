@@ -39,12 +39,12 @@ export default function MobileNav({ currentPage }) {
   const tabLastPage = useRef({});
 
   const tabs = [
-    { name: "Karte", icon: Map, page: "MobileMap", feature: "feature_map" },
-    { name: "Strecke", icon: Crosshair, page: "MobileStrecke", feature: "feature_strecke" },
-    { name: "Aufgaben", icon: ListTodo, page: "MobileTasks", feature: "feature_tasks" },
-    { name: "Kalender", icon: Calendar, page: "MobileKalender", feature: "feature_kalender" },
-    { name: "Einrichtungen", icon: Warehouse, page: "MobileEinrichtungen", feature: "feature_einrichtungen" },
-  ].filter(t => t.feature === null || tenantFeatures[t.feature] !== false);
+    { nameKey: "tab_map", icon: Map, page: "MobileMap", feature: "feature_map" },
+    { nameKey: "tab_strecke", icon: Crosshair, page: "MobileStrecke", feature: "feature_strecke" },
+    { nameKey: "tab_aufgaben", icon: ListTodo, page: "MobileTasks", feature: "feature_tasks" },
+    { nameKey: "tab_kalender", icon: Calendar, page: "MobileKalender", feature: "feature_kalender" },
+    { nameKey: "tab_einrichtungen", icon: Warehouse, page: "MobileEinrichtungen", feature: "feature_einrichtungen" },
+  ].filter(tab => tab.feature === null || tenantFeatures[tab.feature] !== false);
 
   // Track current page in its tab's history slot
   useEffect(() => {
