@@ -263,15 +263,15 @@ export default function Strecke() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-[#3a3a3a]">
-                    <th className="text-left px-4 py-3 text-gray-400 font-medium">Datum</th>
-                    <th className="text-left px-4 py-3 text-gray-400 font-medium">Wildart</th>
-                    <th className="text-left px-4 py-3 text-gray-400 font-medium">Geschlecht</th>
-                    <th className="text-left px-4 py-3 text-gray-400 font-medium">Altersklasse</th>
-                    <th className="text-left px-4 py-3 text-gray-400 font-medium">Revier</th>
-                    <th className="text-left px-4 py-3 text-gray-400 font-medium">Wildmarke</th>
-                    <th className="text-left px-4 py-3 text-gray-400 font-medium">Gewicht</th>
-                    <th className="text-left px-4 py-3 text-gray-400 font-medium">Status</th>
-                    <th className="text-right px-4 py-3 text-gray-400 font-medium">Aktionen</th>
+                    <th className="text-left px-4 py-3 text-gray-400 font-medium">{t("strecke_datum")}</th>
+                    <th className="text-left px-4 py-3 text-gray-400 font-medium">{t("strecke_wildart")}</th>
+                    <th className="text-left px-4 py-3 text-gray-400 font-medium">{t("strecke_geschlecht")}</th>
+                    <th className="text-left px-4 py-3 text-gray-400 font-medium">{t("strecke_altersklasse")}</th>
+                    <th className="text-left px-4 py-3 text-gray-400 font-medium">{t("strecke_revier")}</th>
+                    <th className="text-left px-4 py-3 text-gray-400 font-medium">{t("strecke_wildmarke")}</th>
+                    <th className="text-left px-4 py-3 text-gray-400 font-medium">{t("strecke_gewicht")}</th>
+                    <th className="text-left px-4 py-3 text-gray-400 font-medium">{t("strecke_status")}</th>
+                    <th className="text-right px-4 py-3 text-gray-400 font-medium">{t("strecke_aktionen")}</th>
                   </tr>
                 </thead>
                 <tbody>
