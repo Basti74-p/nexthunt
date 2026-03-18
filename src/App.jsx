@@ -7,6 +7,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+import { I18nProvider, useI18n } from '@/lib/i18n';
+import LanguageSelector from '@/components/LanguageSelector';
 import Demo from './pages/Demo';
 import MobileAufgabenDetail from './pages/MobileAufgabenDetail';
 import MobileEinrichtungen from './pages/MobileEinrichtungen';
