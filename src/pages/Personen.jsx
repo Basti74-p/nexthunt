@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Users, Shield, ArrowRight, Phone, BookUser, MapPin } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import RevierMembersManager from "@/components/personen/RevierMembersManager";
+import { useI18n } from "@/lib/i18n";
 
 export default function Personen() {
   const { tenant } = useAuth();

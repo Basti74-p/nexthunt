@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Plus, Users, Mail, Phone, Ban } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import StatusBadge from "@/components/ui/StatusBadge";
+import { useI18n } from "@/lib/i18n";
 
 export default function TenantMembers() {
   const { tenant, isTenantOwner, isPlatformAdmin } = useAuth();

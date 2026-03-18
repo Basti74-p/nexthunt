@@ -13,6 +13,7 @@ import PageHeader from "@/components/ui/PageHeader";
 import StatusBadge from "@/components/ui/StatusBadge";
 import EmptyState from "@/components/ui/EmptyState";
 import AufgabeDetailView from "@/components/aufgaben/AufgabeDetailView";
+import { useI18n } from "@/lib/i18n";
 
 export default function Aufgaben() {
   const { tenant } = useAuth();

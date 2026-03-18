@@ -13,6 +13,7 @@ import { Plus, TreePine, ArrowRight, MapPin, Trash2 } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import StatusBadge from "@/components/ui/StatusBadge";
 import EmptyState from "@/components/ui/EmptyState";
+import { useI18n } from "@/lib/i18n";
 
 export default function Reviere() {
   const { tenant, isTenantOwner, isPlatformAdmin } = useAuth();

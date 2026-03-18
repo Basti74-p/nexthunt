@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/components/hooks/useAuth";
 import EinrichtungDialog from "@/components/jagdeinrichtungen/EinrichtungDialog";
 import EinrichtungDetail from "@/components/jagdeinrichtungen/EinrichtungDetail";
+import { useI18n } from "@/lib/i18n";
 
 const TYPE_LABEL = {
   hochsitz: "Hochsitz", leiter: "Leiter", erdsitz: "Erdsitz", drueckjagdbock: "Drückjagdbock",
