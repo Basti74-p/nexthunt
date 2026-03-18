@@ -421,7 +421,7 @@ export default function Strecke() {
                    placeholder={t("strecke_gewicht_placeholder")} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
               </div>
               <div>
-                <Label className="text-gray-300 text-xs mb-1 block">Status</Label>
+                <Label className="text-gray-300 text-xs mb-1 block">{t("strecke_status")}</Label>
                 <Select value={form.status} onValueChange={v => setForm({ ...form, status: v })}>
                   <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
                     <SelectValue />
