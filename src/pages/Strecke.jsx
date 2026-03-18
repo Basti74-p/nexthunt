@@ -316,13 +316,13 @@ export default function Strecke() {
                     <p className="font-medium text-gray-100">{speciesLabel(item.species)}</p>
                     <p className="text-xs text-gray-400">{item.date ? format(new Date(item.date), "dd.MM.yyyy", { locale: de }) : "–"}</p>
                   </div>
-                  <StatusSelect value={item.status || "erfasst"} onChange={(v) => handleStatusChange(item, v)} />
-                </div>
-                <div className="text-xs text-gray-400 space-y-1">
-                  <p>Geschlecht: {genderLabel(item.gender)}</p>
-                  {item.age_class && <p>Alter: {item.age_class}</p>}
-                  <p>Revier: {revierName(item.revier_id)}</p>
-                  {item.weight_kg && <p>Gewicht: {item.weight_kg} kg</p>}
+                  <StatusSelect value={item.status || "erfasst"} onChange={(v) => handleStatusChange(item, v)} t={t} statusKeys={STATUS_KEYS} />
+                  </div>
+                  <div className="text-xs text-gray-400 space-y-1">
+                  <p>{t("strecke_geschlecht")}: {genderLabel(item.gender)}</p>
+                  {item.age_class && <p>{t("strecke_altersklasse")}: {item.age_class}</p>}
+                  <p>{t("strecke_revier")}: {revierName(item.revier_id)}</p>
+                  {item.weight_kg && <p>{t("strecke_gewicht")}: {item.weight_kg} kg</p>}
                 </div>
                 <div className="flex gap-2 pt-2 border-t border-[#3a3a3a]">
                   <button onClick={() => openEdit(item)} className="flex-1 p-2 rounded-lg hover:bg-[#3a3a3a] text-gray-400 hover:text-gray-200 transition-colors text-sm">
