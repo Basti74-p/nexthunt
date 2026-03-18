@@ -74,9 +74,18 @@ function StatusSelect({ value, onChange, t, statusKeys }) {
   );
 }
 
+const STATUS_KEYS = ["erfasst", "bestaetigt", "wildkammer", "verkauft", "archiviert"];
+
 export default function Strecke() {
   const { tenant } = useAuth();
+  const { t } = useI18n();
   const queryClient = useQueryClient();
+  const SPECIES = SPECIES_KEYS.map(s => ({ value: s.value, label: s.labelDe }));
+  const GENDER = [
+    { value: "maennlich", label: t("geschlecht_maennlich") },
+    { value: "weiblich", label: t("geschlecht_weiblich") },
+    { value: "unbekannt", label: t("geschlecht_unbekannt") },
+  ];
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editItem, setEditItem] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
