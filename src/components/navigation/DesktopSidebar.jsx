@@ -169,6 +169,7 @@ function TenantSwitcher() {
 
 export default function DesktopSidebar({ currentPage }) {
   const { user, tenant, isPlatformAdmin } = useAuth();
+  const { t } = useI18n();
 
   return (
     <aside className="w-64 h-screen bg-[#1e1e1e] border-r border-[#2d2d2d] flex flex-col fixed left-0 top-0 z-40">
