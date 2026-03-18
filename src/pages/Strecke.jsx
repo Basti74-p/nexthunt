@@ -343,7 +343,7 @@ export default function Strecke() {
       <Dialog open={dialogOpen} onOpenChange={(v) => { setDialogOpen(v); if (!v) { setEditItem(null); setForm(EMPTY_FORM); } }}>
         <DialogContent className="bg-[#2d2d2d] border-[#3a3a3a] max-w-lg sm:max-w-lg max-h-[90vh] w-[calc(100vw-2rem)] sm:w-auto rounded-2xl">
           <DialogHeader>
-            <DialogTitle className="text-gray-100">{editItem ? "Eintrag bearbeiten" : "Neuer Strecken-Eintrag"}</DialogTitle>
+            <DialogTitle className="text-gray-100">{editItem ? t("strecke_bearbeiten_titel") : t("strecke_neu_titel")}</DialogTitle>
           </DialogHeader>
           <div className="space-y-3 mt-2">
             <div className="grid grid-cols-2 gap-3">
