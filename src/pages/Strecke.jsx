@@ -348,10 +348,10 @@ export default function Strecke() {
           <div className="space-y-3 mt-2">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label className="text-gray-300 text-xs mb-1 block">Wildart *</Label>
-                <Select value={form.species} onValueChange={v => setForm({ ...form, species: v })}>
-                  <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
-                    <SelectValue placeholder="Wildart wählen" />
+                <Label className="text-gray-300 text-xs mb-1 block">{t("strecke_wildart")} *</Label>
+                 <Select value={form.species} onValueChange={v => setForm({ ...form, species: v })}>
+                   <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
+                     <SelectValue placeholder={t("strecke_wildart_waehlen")} />
                   </SelectTrigger>
                   <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
                     {SPECIES.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
