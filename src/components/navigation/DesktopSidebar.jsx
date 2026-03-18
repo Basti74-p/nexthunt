@@ -66,6 +66,8 @@ const NAV_CONFIG = [
 
 function NavItem({ item, currentPage, depth = 0 }) {
   const { canAccess, isPlatformAdmin } = useAuth();
+  const { t } = useI18n();
+  const label = item.key ? t(item.key) : item.label;
   const isActive = item.page && currentPage === item.page;
   const hasChildren = item.children && item.children.length > 0;
   const childIsActive = hasChildren && item.children.some((c) => c.page === currentPage);
