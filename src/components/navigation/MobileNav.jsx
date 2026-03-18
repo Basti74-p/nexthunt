@@ -4,6 +4,7 @@ import { createPageUrl } from "@/utils";
 import { Map, Crosshair, ListTodo, Calendar, Warehouse } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import MobileTopBar from "./MobileTopBar";
+import { useI18n } from "@/lib/i18n";
 
 // Root (tab) pages — navigating to these resets to the tab root
 const TAB_ROOT_PAGES = ["MobileMap", "MobileStrecke", "MobileTasks", "MobileKalender", "MobileEinrichtungen"];
