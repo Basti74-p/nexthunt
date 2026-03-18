@@ -48,7 +48,7 @@ const LANGUAGES = [
 
 export default function TenantSettings() {
   const { tenant, user } = useAuth();
-  const { lang, setLanguage } = useI18n();
+  const { lang, setLanguage, t } = useI18n();
   const [etikettSettings, setEtikettSettings] = useState(DEFAULT_ETIKETT_SETTINGS);
   const [saving, setSaving] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
