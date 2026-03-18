@@ -392,10 +392,10 @@ export default function Strecke() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label className="text-gray-300 text-xs mb-1 block">Revier</Label>
-                <Select value={form.revier_id} onValueChange={v => setForm({ ...form, revier_id: v })}>
-                  <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
-                    <SelectValue placeholder="Revier wählen" />
+                <Label className="text-gray-300 text-xs mb-1 block">{t("strecke_revier")}</Label>
+                   <Select value={form.revier_id} onValueChange={v => setForm({ ...form, revier_id: v })}>
+                     <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
+                       <SelectValue placeholder={t("strecke_revier_waehlen")} />
                   </SelectTrigger>
                   <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
                     {reviere.map(r => <SelectItem key={r.id} value={r.id}>{r.name}</SelectItem>)}
