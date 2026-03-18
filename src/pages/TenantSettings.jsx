@@ -11,6 +11,8 @@ import RechnungPrint from "@/components/wildverkauf/RechnungPrint";
 import DeleteAccountDialog from "@/components/wildverkauf/DeleteAccountDialog";
 import BackupSection from "@/components/settings/BackupSection";
 import { base44 } from "@/api/base44Client";
+import { useI18n } from "@/lib/i18n";
+import { Globe } from "lucide-react";
 
 const DEFAULT_ETIKETT_SETTINGS = {
   betriebsname: "",
@@ -38,8 +40,15 @@ const FEATURE_LABELS = {
   feature_wildmarken: "Wildmarken",
 };
 
+const LANGUAGES = [
+  { code: "de", label: "Deutsch", flag: "🇩🇪" },
+  { code: "en", label: "English", flag: "🇬🇧" },
+  { code: "lt", label: "Lietuvių", flag: "🇱🇹" },
+];
+
 export default function TenantSettings() {
   const { tenant, user } = useAuth();
+  const { lang, setLanguage } = useI18n();
   const [etikettSettings, setEtikettSettings] = useState(DEFAULT_ETIKETT_SETTINGS);
   const [saving, setSaving] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -164,6 +173,28 @@ export default function TenantSettings() {
                 <span className="flex items-center gap-1 text-xs text-gray-400 font-medium"><X className="w-3.5 h-3.5" /> Deaktiviert</span>
               )}
             </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <Globe className="w-5 h-5 text-gray-500" /> Sprache / Language
+        </h2>
+        <div className="flex gap-3 flex-wrap">
+          {LANGUAGES.map((l) => (
+            <button
+              key={l.code}
+              onClick={() => setLanguage(l.code)}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 text-sm font-medium transition-all ${
+                lang === l.code
+                  ? "border-[#22c55e] bg-[#22c55e]/10 text-[#22c55e]"
+                  : "border-gray-200 text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              <span className="text-lg">{l.flag}</span>
+              {l.label}
+            </button>
           ))}
         </div>
       </div>
