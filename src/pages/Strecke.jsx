@@ -427,7 +427,7 @@ export default function Strecke() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-                    {STATUS_OPTIONS.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
+                     {STATUS_KEYS.map(s => <SelectItem key={s} value={s}>{t(`status_${s}`)}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
