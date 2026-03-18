@@ -208,11 +208,11 @@ export default function Strecke() {
 
       {/* Summary */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-        {STATUS_OPTIONS.filter(s => s.value !== "archiviert").map(({ value, label, color }) => (
+        {STATUS_KEYS.filter(v => v !== "archiviert").map((value) => (
           <div key={value} className="bg-[#232323] rounded-2xl border border-[#3a3a3a] p-4 text-center cursor-pointer hover:border-[#22c55e]/40 transition-colors"
             onClick={() => setFilterStatus(filterStatus === value ? "alle" : value)}>
             <p className="text-2xl font-bold text-gray-100">{byStatus(value)}</p>
-            <p className="text-xs text-gray-400 mt-1">{label}</p>
+            <p className="text-xs text-gray-400 mt-1">{t(`status_${value}`)}</p>
           </div>
         ))}
       </div>
