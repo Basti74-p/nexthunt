@@ -104,8 +104,9 @@ const AuthenticatedApp = () => {
 };
 
 
-function App() {
-
+function AppWithLanguage() {
+  const { isLanguageSelected } = useI18n();
+  if (!isLanguageSelected) return <LanguageSelector />;
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
@@ -116,7 +117,15 @@ function App() {
         </Router>
       </QueryClientProvider>
     </AuthProvider>
-  )
+  );
+}
+
+function App() {
+  return (
+    <I18nProvider>
+      <AppWithLanguage />
+    </I18nProvider>
+  );
 }
 
 export default App
