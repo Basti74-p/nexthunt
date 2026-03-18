@@ -150,7 +150,7 @@ export default function Dashboard() {
            </div>
          </div>
         {reviere.length === 0 ? (
-          <p className="text-sm text-gray-400">Noch keine Reviere angelegt.</p>
+          <p className="text-sm text-gray-400">{t("keine_reviere")}</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {reviere.slice(0, 6).map((r) => (
