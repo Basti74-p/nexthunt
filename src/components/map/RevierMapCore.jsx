@@ -374,8 +374,37 @@ export default function RevierMapCore({
   const [userHeading, setUserHeading] = useState(null);
   const [searchResult, setSearchResult] = useState(null);
 
-  const defaultCenter = center || [51.1657, 10.4515]; // Germany center fallback
+  // Compute center from revier boundary or fall back to Germany center
+  const reviercenter = React.useMemo(() => {
+    if (center) return center;
+    if (revier?.boundary_geojson) {
+      try {
+        const gj = JSON.parse(revier.boundary_geojson);
+        let rawCoords;
+        if (gj.type === "FeatureCollection") rawCoords = gj.features?.[0]?.geometry?.coordinates?.[0];
+        else rawCoords = gj.coordinates?.[0];
+        if (rawCoords?.length > 0) {
+          const lats = rawCoords.map(([, lat]) => lat);
+          const lngs = rawCoords.map(([lng]) => lng);
+          return [
+            (Math.min(...lats) + Math.max(...lats)) / 2,
+            (Math.min(...lngs) + Math.max(...lngs)) / 2,
+          ];
+        }
+      } catch { /* ignore */ }
+    }
+    return null;
+  }, [revier?.id, revier?.boundary_geojson, center]);
+
+  const defaultCenter = reviercenter || [51.1657, 10.4515];
   const [flyTarget, setFlyTarget] = useState(null);
+
+  // Fly to revier center whenever revier changes (on mount or selection change)
+  useEffect(() => {
+    if (reviercenter) {
+      setFlyTarget({ center: reviercenter, zoom: zoom });
+    }
+  }, [revier?.id]);
 
   const handleStyleChange = (style) => {
     setMapStyle(style);
