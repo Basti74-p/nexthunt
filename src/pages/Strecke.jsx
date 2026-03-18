@@ -225,7 +225,7 @@ export default function Strecke() {
           onChange={e => setFilterSpecies(e.target.value)}
           className="text-sm bg-[#2d2d2d] border border-[#3a3a3a] text-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:border-[#22c55e]"
         >
-          <option value="alle">Alle Wildarten</option>
+          <option value="alle">{t("strecke_alle_wildarten")}</option>
           {SPECIES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
         </select>
         <select
@@ -233,7 +233,7 @@ export default function Strecke() {
           onChange={e => setFilterRevier(e.target.value)}
           className="text-sm bg-[#2d2d2d] border border-[#3a3a3a] text-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:border-[#22c55e]"
         >
-          <option value="alle">Alle Reviere</option>
+          <option value="alle">{t("strecke_alle_reviere")}</option>
           {reviere.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
         </select>
         <select
@@ -241,13 +241,13 @@ export default function Strecke() {
           onChange={e => setFilterStatus(e.target.value)}
           className="text-sm bg-[#2d2d2d] border border-[#3a3a3a] text-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:border-[#22c55e]"
         >
-          <option value="alle">Alle Status</option>
-          {STATUS_OPTIONS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+          <option value="alle">{t("strecke_alle_status")}</option>
+          {STATUS_KEYS.map(s => <option key={s} value={s}>{t(`status_${s}`)}</option>)}
         </select>
         {(filterSpecies !== "alle" || filterRevier !== "alle" || filterStatus !== "alle") && (
           <button onClick={() => { setFilterSpecies("alle"); setFilterRevier("alle"); setFilterStatus("alle"); }}
             className="text-xs text-gray-400 hover:text-gray-200 underline">
-            Filter zurücksetzen
+            {t("strecke_filter_reset")}
           </button>
         )}
       </div>
