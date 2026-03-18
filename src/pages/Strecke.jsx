@@ -438,12 +438,12 @@ export default function Strecke() {
                 placeholder={t("strecke_notizen_placeholder")} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 resize-none h-16" />
               </div>
             <div className="flex gap-2 pt-1">
-              <Button variant="outline" onClick={() => setDialogOpen(false)} className="flex-1 border-[#3a3a3a]">Abbrechen</Button>
+              <Button variant="outline" onClick={() => setDialogOpen(false)} className="flex-1 border-[#3a3a3a]">{t("abbrechen")}</Button>
               <Button
                 onClick={handleSubmit}
                 disabled={!form.species || !form.date || createMutation.isPending || updateMutation.isPending}
                 className="flex-1 bg-[#22c55e] text-black hover:bg-[#16a34a]">
-                {createMutation.isPending || updateMutation.isPending ? "Speichern..." : editItem ? "Aktualisieren" : "Erfassen"}
+                {createMutation.isPending || updateMutation.isPending ? t("laden") : editItem ? t("strecke_aktualisieren") : t("strecke_erfassen")}
               </Button>
             </div>
           </div>
