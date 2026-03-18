@@ -17,6 +17,7 @@ import { useI18n } from "@/lib/i18n";
 
 export default function Aufgaben() {
   const { tenant } = useAuth();
+  const { t } = useI18n();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [editingTask, setEditingTask] = React.useState(null);
   const [detailView, setDetailView] = React.useState(null);

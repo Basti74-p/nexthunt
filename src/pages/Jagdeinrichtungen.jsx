@@ -42,6 +42,7 @@ const TYPE_ICON_COLOR = {
 
 export default function Jagdeinrichtungen() {
   const { tenant, user, tenantMember } = useAuth();
+  const { t } = useI18n();
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState("all");

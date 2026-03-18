@@ -11,6 +11,7 @@ import { useI18n } from "@/lib/i18n";
 
 export default function Personen() {
   const { tenant } = useAuth();
+  const { t } = useI18n();
   const [selectedRevier, setSelectedRevier] = useState(null);
   const [autoSelected, setAutoSelected] = useState(false);
 

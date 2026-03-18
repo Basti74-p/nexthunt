@@ -17,6 +17,7 @@ import { useI18n } from "@/lib/i18n";
 
 export default function Reviere() {
   const { tenant, isTenantOwner, isPlatformAdmin } = useAuth();
+  const { t } = useI18n();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [form, setForm] = useState({ name: "", region: "", size_ha: "", notes: "" });
   const queryClient = useQueryClient();

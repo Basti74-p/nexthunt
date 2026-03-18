@@ -14,6 +14,7 @@ import { useI18n } from "@/lib/i18n";
 
 export default function TenantMembers() {
   const { tenant, isTenantOwner, isPlatformAdmin } = useAuth();
+  const { t } = useI18n();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [form, setForm] = useState({ first_name: "", last_name: "", user_email: "", phone: "", callsign: "", role: "tenant_member" });
   const queryClient = useQueryClient();
