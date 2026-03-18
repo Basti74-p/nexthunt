@@ -359,7 +359,7 @@ export default function Strecke() {
                 </Select>
               </div>
               <div>
-                <Label className="text-gray-300 text-xs mb-1 block">Geschlecht</Label>
+                <Label className="text-gray-300 text-xs mb-1 block">{t("strecke_geschlecht")}</Label>
                 <Select value={form.gender} onValueChange={v => setForm({ ...form, gender: v })}>
                   <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
                     <SelectValue />
