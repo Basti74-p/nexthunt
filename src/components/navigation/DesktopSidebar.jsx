@@ -13,91 +13,55 @@ import { useI18n } from "@/lib/i18n";
 
 
 
-// module key maps to canAccess() key. undefined = always visible
-const NAV = [
+// Navigation config uses translation keys instead of hardcoded labels
+const NAV_CONFIG = [
+{ key: "nav_dashboard", page: "Dashboard", icon: LayoutDashboard },
 {
-  label: "Dashboard",
-  page: "Dashboard",
-  icon: LayoutDashboard
-},
-{
-  label: "Karte",
-  page: "Karte",
-  icon: Map,
-  module: "einrichtungen",
+  key: "nav_map", page: "Karte", icon: Map, module: "einrichtungen",
   children: [
-  { label: "Reviere", page: "Reviere", icon: TreePine },
-  { label: "Jagdeinrichtungen", page: "Jagdeinrichtungen", icon: Building, module: "einrichtungen" }]
-
+    { key: "nav_reviere", page: "Reviere", icon: TreePine },
+    { key: "nav_jagdeinrichtungen", page: "Jagdeinrichtungen", icon: Building, module: "einrichtungen" }
+  ]
 },
 {
-  label: "Wildmanagement",
-  page: "Wildmanagement",
-  icon: Eye,
-  module: "wildmanagement",
+  key: "nav_wildmanagement", page: "Wildmanagement", icon: Eye, module: "wildmanagement",
   children: [
-  { label: "Rotwild", page: "WildRotwild", icon: TreePine, module: "wildmanagement" },
-  { label: "Schwarzwild", page: "WildSchwarzwild", icon: TreePine, module: "wildmanagement" },
-  { label: "Rehwild", page: "WildRehwild", icon: TreePine, module: "wildmanagement" },
-  { label: "Wolf", page: "WildWolf", icon: TreePine, module: "wildmanagement" }]
-
+    { key: "nav_rotwild", page: "WildRotwild", icon: TreePine, module: "wildmanagement" },
+    { key: "nav_schwarzwild", page: "WildSchwarzwild", icon: TreePine, module: "wildmanagement" },
+    { key: "nav_rehwild", page: "WildRehwild", icon: TreePine, module: "wildmanagement" },
+    { key: "nav_wolf", page: "WildWolf", icon: TreePine, module: "wildmanagement" }
+  ]
 },
 {
-  label: "Strecke",
-  page: "Strecke",
-  icon: Crosshair,
-  module: "strecke",
+  key: "nav_strecke", page: "Strecke", icon: Crosshair, module: "strecke",
   children: [
-  { label: "Abschussplan", page: "StreckeAbschussplan", icon: Crosshair, module: "strecke" },
-  { label: "Wildkammer", page: "StreckeWildkammer", icon: Archive, module: "wildkammer" },
-  { label: "Lager", page: "WildProdukte", icon: Archive, module: "wildkammer" },
-  { label: "Wildverkauf", page: "Wildverkauf", icon: Truck, module: "strecke" },
-  { label: "Archiv", page: "StreckeArchiv", icon: Archive, module: "strecke" }]
-
+    { key: "nav_abschussplan", page: "StreckeAbschussplan", icon: Crosshair, module: "strecke" },
+    { key: "nav_wildkammer", page: "StreckeWildkammer", icon: Archive, module: "wildkammer" },
+    { key: "nav_lager", page: "WildProdukte", icon: Archive, module: "wildkammer" },
+    { key: "nav_wildverkauf", page: "Wildverkauf", icon: Truck, module: "strecke" },
+    { key: "nav_archiv", page: "StreckeArchiv", icon: Archive, module: "strecke" }
+  ]
 },
 {
-  label: "Jagdkalender",
-  page: "JagdkalenderKalender",
-  icon: Calendar,
-  module: "kalender",
+  key: "nav_jagdkalender", page: "JagdkalenderKalender", icon: Calendar, module: "kalender",
   children: [
-  { label: "Alle Jagden", page: "JagdkalenderMain", icon: Calendar, module: "kalender" },
-  { label: "Live-Monitor", page: "Jagdkalender", icon: Radio, module: "kalender" },
-  { label: "Jagdgäste", page: "Jagdgaeste", icon: UserCheck, module: "kalender" },
-  { label: "Personal", page: "Personal", icon: UserCog, module: "kalender" }]
-
+    { key: "nav_alle_jagden", page: "JagdkalenderMain", icon: Calendar, module: "kalender" },
+    { key: "nav_live_monitor", page: "Jagdkalender", icon: Radio, module: "kalender" },
+    { key: "nav_jagdgaeste", page: "Jagdgaeste", icon: UserCheck, module: "kalender" },
+    { key: "nav_personal", page: "Personal", icon: UserCog, module: "kalender" }
+  ]
 },
+{ key: "nav_aufgaben", page: "Aufgaben", icon: ListTodo, module: "aufgaben" },
 {
-  label: "Aufgaben",
-  page: "Aufgaben",
-  icon: ListTodo,
-  module: "aufgaben"
-},
-{
-  label: "Personen",
-  page: "Personen",
-  icon: Users,
-  module: "personen",
+  key: "nav_personen", page: "Personen", icon: Users, module: "personen",
   children: [
-  { label: "Berechtigungen", page: "TenantMembers", icon: Shield, module: "personen" }]
-
+    { key: "nav_berechtigungen", page: "TenantMembers", icon: Shield, module: "personen" }
+  ]
 },
-{
-  label: "Öffentlichkeit",
-  page: "Oeffentlichkeit",
-  icon: Globe,
-  module: "oeffentlichkeit"
-},
-{
-  label: "Support",
-  page: "SupportTickets",
-  icon: LifeBuoy
-},
-{
-  label: "Einstellungen",
-  page: "TenantSettings",
-  icon: Settings
-}];
+{ key: "nav_oeffentlichkeit", page: "Oeffentlichkeit", icon: Globe, module: "oeffentlichkeit" },
+{ key: "nav_support", page: "SupportTickets", icon: LifeBuoy },
+{ key: "nav_einstellungen", page: "TenantSettings", icon: Settings },
+];
 
 
 function NavItem({ item, currentPage, depth = 0 }) {
