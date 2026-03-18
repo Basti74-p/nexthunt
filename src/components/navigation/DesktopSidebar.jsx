@@ -131,6 +131,7 @@ function NavItem({ item, currentPage, depth = 0 }) {
 
 function TenantSwitcher() {
   const { tenant, switchTenant } = useAuth();
+  const { t } = useI18n();
   const [tenants, setTenants] = useState([]);
   const [open, setOpen] = useState(false);
 
