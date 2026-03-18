@@ -211,8 +211,8 @@ export default function DesktopSidebar({ currentPage }) {
           </div>
         }
 
-        {NAV.map((item) =>
-        <NavItem key={item.label} item={item} currentPage={currentPage} />
+        {NAV_CONFIG.map((item) =>
+        <NavItem key={item.key} item={item} currentPage={currentPage} />
         )}
       </nav>
 
