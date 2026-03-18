@@ -53,22 +53,22 @@ const EMPTY_FORM = {
   status: "erfasst",
 };
 
-function StatusBadge({ status }) {
-  const opt = STATUS_OPTIONS.find(s => s.value === status) || STATUS_OPTIONS[0];
+function StatusBadge({ status, t }) {
+  const key = `status_${status}`;
   return (
-    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${opt.color}`}>{opt.label}</span>
+    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${STATUS_COLORS[status] || "bg-gray-100 text-gray-500"}`}>{t(key)}</span>
   );
 }
 
-function StatusSelect({ value, onChange }) {
+function StatusSelect({ value, onChange, t, statusKeys }) {
   return (
     <select
       value={value}
       onChange={e => onChange(e.target.value)}
       className="text-xs bg-[#2d2d2d] border border-[#3a3a3a] text-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:border-[#22c55e]"
     >
-      {STATUS_OPTIONS.map(s => (
-        <option key={s.value} value={s.value}>{s.label}</option>
+      {statusKeys.map(s => (
+        <option key={s} value={s}>{t(`status_${s}`)}</option>
       ))}
     </select>
   );
