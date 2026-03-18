@@ -201,10 +201,10 @@ export default function DesktopSidebar({ currentPage }) {
             }>
 
               <Shield className="w-4 h-4" />
-              System-Administration
+              {t("nav_system_admin")}
             </Link>
             <div className="mt-3 px-0">
-              <p className="px-3 mb-1.5 text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Aktiver Tenant</p>
+              <p className="px-3 mb-1.5 text-[10px] font-semibold text-gray-500 uppercase tracking-wider">{t("nav_aktiver_tenant")}</p>
               <TenantSwitcher />
             </div>
             <div className="my-3 border-t border-[#2d3a4f]" />
