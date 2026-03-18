@@ -416,9 +416,9 @@ export default function Strecke() {
               </div>
               <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label className="text-gray-300 text-xs mb-1 block">Gewicht (kg)</Label>
-                <Input type="number" step="0.1" value={form.weight_kg} onChange={e => setForm({ ...form, weight_kg: e.target.value })}
-                  placeholder="z.B. 24.5" className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
+                <Label className="text-gray-300 text-xs mb-1 block">{t("strecke_gewicht")} (kg)</Label>
+                 <Input type="number" step="0.1" value={form.weight_kg} onChange={e => setForm({ ...form, weight_kg: e.target.value })}
+                   placeholder={t("strecke_gewicht_placeholder")} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
               </div>
               <div>
                 <Label className="text-gray-300 text-xs mb-1 block">Status</Label>
