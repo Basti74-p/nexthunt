@@ -254,7 +254,7 @@ export default function Strecke() {
 
       {/* Table / Card View */}
       {filtered.length === 0 && !isLoading ? (
-        <EmptyState icon={Crosshair} title="Keine Einträge" description="Erfassen Sie erlegtes Wild mit dem Button oben rechts." />
+        <EmptyState icon={Crosshair} title={t("strecke_keine_eintraege")} description={t("strecke_keine_desc")} />
       ) : (
         <>
           {/* Desktop Table */}
