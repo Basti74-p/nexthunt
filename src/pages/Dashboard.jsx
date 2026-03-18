@@ -13,6 +13,7 @@ import TrialExpiredModal from "@/components/TrialExpiredModal";
 
 export default function Dashboard() {
   const { user, tenant, tenantFeatures } = useAuth();
+  const { t } = useI18n();
   const [showBoundaryHelp, setShowBoundaryHelp] = useState(false);
   const [trialDaysRemaining, setTrialDaysRemaining] = useState(null);
   const [showTrialModal, setShowTrialModal] = useState(false);
