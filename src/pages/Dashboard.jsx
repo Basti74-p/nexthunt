@@ -101,16 +101,16 @@ export default function Dashboard() {
         <div className="mb-6 flex items-center gap-3 px-4 py-3 rounded-xl bg-[#22c55e]/10 border border-[#22c55e]/30">
           <div className="w-2 h-2 rounded-full bg-[#22c55e] flex-shrink-0" />
           <p className="text-sm text-[#22c55e] font-medium flex-1">
-            Testphase aktiv – noch <strong>{trialDaysRemaining} {trialDaysRemaining === 1 ? 'Tag' : 'Tage'}</strong> kostenloser Zugriff
+            {t("testphase_aktiv")} <strong>{trialDaysRemaining} {trialDaysRemaining === 1 ? t("tag") : t("tage")}</strong> {t("kostenloser_zugriff")}
           </p>
-          <a href="#" className="text-xs text-[#22c55e] underline font-semibold whitespace-nowrap">Lizenz kaufen</a>
+          <a href="#" className="text-xs text-[#22c55e] underline font-semibold whitespace-nowrap">{t("lizenz_kaufen")}</a>
         </div>
       )}
       {tenant?.status === 'trial' && trialDaysRemaining !== null && trialDaysRemaining <= 0 && (
         <div className="mb-6 flex items-center gap-3 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/30">
           <div className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0" />
-          <p className="text-sm text-red-400 font-medium flex-1">Testphase abgelaufen – bitte Lizenz erwerben.</p>
-          <a href="#" className="text-xs text-red-400 underline font-semibold whitespace-nowrap">Lizenz kaufen</a>
+          <p className="text-sm text-red-400 font-medium flex-1">{t("testphase_abgelaufen")}</p>
+          <a href="#" className="text-xs text-red-400 underline font-semibold whitespace-nowrap">{t("lizenz_kaufen")}</a>
         </div>
       )}
 
