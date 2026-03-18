@@ -287,7 +287,7 @@ export default function Strecke() {
                        <td className="px-4 py-3 text-gray-300 text-xs">{item.wildmark_id ? wildmarken.find(w => w.id === item.wildmark_id)?.code || "–" : "–"}</td>
                        <td className="px-4 py-3 text-gray-300">{item.weight_kg ? `${item.weight_kg} kg` : "–"}</td>
                       <td className="px-4 py-3">
-                        <StatusSelect value={item.status || "erfasst"} onChange={(v) => handleStatusChange(item, v)} />
+                        <StatusSelect value={item.status || "erfasst"} onChange={(v) => handleStatusChange(item, v)} t={t} statusKeys={STATUS_KEYS} />
                       </td>
                       <td className="px-4 py-3 text-right">
                         <div className="flex items-center justify-end gap-2">
