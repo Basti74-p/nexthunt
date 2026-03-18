@@ -433,9 +433,9 @@ export default function Strecke() {
               </div>
               </div>
               <div>
-              <Label className="text-gray-300 text-xs mb-1 block">Notizen</Label>
+              <Label className="text-gray-300 text-xs mb-1 block">{t("strecke_notizen")}</Label>
               <Textarea value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })}
-                placeholder="Optionale Anmerkungen" className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 resize-none h-16" />
+                placeholder={t("strecke_notizen_placeholder")} className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100 resize-none h-16" />
               </div>
             <div className="flex gap-2 pt-1">
               <Button variant="outline" onClick={() => setDialogOpen(false)} className="flex-1 border-[#3a3a3a]">Abbrechen</Button>
