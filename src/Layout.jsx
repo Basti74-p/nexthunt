@@ -6,6 +6,7 @@ import MobileNav from "./components/navigation/MobileNav";
 import OfflineIndicator from "./components/OfflineIndicator";
 import { Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { useI18n } from "@/lib/i18n";
 
 function LayoutInner({ children, currentPageName }) {
   const { user, loading, tenant } = useAuth();
