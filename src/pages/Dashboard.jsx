@@ -193,18 +193,18 @@ export default function Dashboard() {
        <Dialog open={showBoundaryHelp} onOpenChange={setShowBoundaryHelp}>
          <DialogContent>
            <DialogHeader>
-             <DialogTitle>Reviergrenzen einzeichnen</DialogTitle>
-           </DialogHeader>
-           <div className="space-y-3 text-sm text-gray-600">
-             <p>Um Reviergrenzen einzuzeichnen, gehen Sie zur <strong>Karte</strong> und nutzen Sie den Button "Reviergrenze einzeichnen".</p>
-             <p>So funktioniert es:</p>
+             <DialogTitle>{t("reviergrenzen_einzeichnen")}</DialogTitle>
+             </DialogHeader>
+             <div className="space-y-3 text-sm text-gray-600">
+             <p>{t("boundary_help_text")}</p>
+             <p>{t("so_funktioniert")}</p>
              <ol className="list-decimal list-inside space-y-2 ml-2">
-               <li>Klicken Sie auf den Button "Reviergrenze einzeichnen"</li>
-               <li>Klicken Sie auf die Karte, um Punkte zu setzen</li>
-               <li>Setzen Sie mindestens 3 Punkte</li>
-               <li>Klicken Sie "Fertig", um die Grenze zu speichern</li>
-               <li>Wählen Sie ein Revier und eine Farbe</li>
-               <li>Klicken Sie "Speichern"</li>
+               <li>{t("boundary_step1")}</li>
+               <li>{t("boundary_step2")}</li>
+               <li>{t("boundary_step3")}</li>
+               <li>{t("boundary_step4")}</li>
+               <li>{t("boundary_step5")}</li>
+               <li>{t("boundary_step6")}</li>
              </ol>
              <div className="pt-2">
                <Link
@@ -212,7 +212,7 @@ export default function Dashboard() {
                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0F2F23] text-white text-sm font-medium hover:opacity-90 transition-opacity"
                >
                  <Map className="w-4 h-4" />
-                 Zur Karte
+                 {t("zur_karte")}
                </Link>
              </div>
            </div>
