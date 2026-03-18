@@ -13,20 +13,15 @@ import PageHeader from "@/components/ui/PageHeader";
 import EmptyState from "@/components/ui/EmptyState";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
+import { useI18n } from "@/lib/i18n";
 
-const SPECIES = [
-  { value: "rotwild", label: "Rotwild" },
-  { value: "schwarzwild", label: "Schwarzwild" },
-  { value: "rehwild", label: "Rehwild" },
-  { value: "damwild", label: "Damwild" },
-  { value: "sikawild", label: "Sikawild" },
-  { value: "wolf", label: "Wolf" },
-];
-
-const GENDER = [
-  { value: "maennlich", label: "Männlich" },
-  { value: "weiblich", label: "Weiblich" },
-  { value: "unbekannt", label: "Unbekannt" },
+const SPECIES_KEYS = [
+  { value: "rotwild", labelDe: "Rotwild" },
+  { value: "schwarzwild", labelDe: "Schwarzwild" },
+  { value: "rehwild", labelDe: "Rehwild" },
+  { value: "damwild", labelDe: "Damwild" },
+  { value: "sikawild", labelDe: "Sikawild" },
+  { value: "wolf", labelDe: "Wolf" },
 ];
 
 const AGE_CLASSES = {
