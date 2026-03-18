@@ -9,6 +9,7 @@ import {
 "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { base44 } from "@/api/base44Client";
+import { useI18n } from "@/lib/i18n";
 
 
 
