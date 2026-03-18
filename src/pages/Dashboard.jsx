@@ -92,7 +92,7 @@ export default function Dashboard() {
       )}
       
       <PageHeader
-        title={`Willkommen, ${user?.full_name?.split(" ")[0] || "Jäger"}`}
+        title={`${t("welcome")}, ${user?.full_name?.split(" ")[0] || t("jaeger")}`}
         subtitle={tenant.name}
       />
 
