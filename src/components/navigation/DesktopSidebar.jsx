@@ -145,7 +145,7 @@ function TenantSwitcher() {
         onClick={() => setOpen(!open)}
         className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg bg-[#2d2d2d] hover:bg-[#3a3a3a] text-xs text-gray-300 transition-colors">
 
-        <span className="flex-1 text-left truncate">{tenant?.name || "Tenant wählen..."}</span>
+        <span className="flex-1 text-left truncate">{tenant?.name || t("nav_tenant_waehlen")}</span>
         <ChevronsUpDown className="w-3 h-3 text-gray-500 shrink-0" />
       </button>
       {open &&
