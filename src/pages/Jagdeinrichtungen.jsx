@@ -108,7 +108,7 @@ export default function Jagdeinrichtungen() {
     return (
       <div className="max-w-6xl mx-auto py-12 text-center text-gray-400">
         <Building className="w-12 h-12 mx-auto mb-3 opacity-30" />
-        <p>Bitte wählen Sie einen Tenant aus.</p>
+        <p>{t("einrichtungen_bitte_tenant")}</p>
       </div>
     );
   }
@@ -118,11 +118,11 @@ export default function Jagdeinrichtungen() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-100">Jagdeinrichtungen</h1>
-          <p className="text-sm text-gray-400 mt-0.5">Hochsitze, Kanzeln, Kirrungen und mehr</p>
+          <h1 className="text-2xl font-bold text-gray-100">{t("einrichtungen_titel")}</h1>
+          <p className="text-sm text-gray-400 mt-0.5">{t("einrichtungen_subtitle")}</p>
         </div>
         <Button onClick={() => setDialog({ open: true, einrichtung: null })} className="bg-[#22c55e] text-black hover:bg-[#16a34a]">
-          <Plus className="w-4 h-4 mr-2" /> Neue Einrichtung
+          <Plus className="w-4 h-4 mr-2" /> {t("einrichtungen_neue")}
         </Button>
       </div>
 
@@ -130,15 +130,15 @@ export default function Jagdeinrichtungen() {
       <div className="grid grid-cols-3 gap-3 mb-6">
         <div className="bg-[#1e1e1e] border border-[#2d2d2d] rounded-xl p-4 text-center">
           <p className="text-2xl font-bold text-gray-100">{stats.gesamt}</p>
-          <p className="text-xs text-gray-400 mt-0.5">Einrichtungen gesamt</p>
+          <p className="text-xs text-gray-400 mt-0.5">{t("einrichtungen_gesamt")}</p>
         </div>
         <div className="bg-[#1e1e1e] border border-yellow-900/40 rounded-xl p-4 text-center">
           <p className="text-2xl font-bold text-yellow-400">{stats.maessig}</p>
-          <p className="text-xs text-gray-400 mt-0.5">Zustand mäßig</p>
+          <p className="text-xs text-gray-400 mt-0.5">{t("einrichtungen_maessig")}</p>
         </div>
         <div className="bg-[#1e1e1e] border border-red-900/40 rounded-xl p-4 text-center">
           <p className="text-2xl font-bold text-red-400">{stats.schlecht}</p>
-          <p className="text-xs text-gray-400 mt-0.5">Zustand schlecht</p>
+          <p className="text-xs text-gray-400 mt-0.5">{t("einrichtungen_schlecht")}</p>
         </div>
       </div>
 
@@ -150,7 +150,7 @@ export default function Jagdeinrichtungen() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
               <Input
-                placeholder="Suchen..."
+                placeholder={t("einrichtungen_suchen")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-9 bg-[#1e1e1e] border-[#3a3a3a] text-gray-100"
@@ -161,7 +161,7 @@ export default function Jagdeinrichtungen() {
                 <SelectValue placeholder="Typ" />
               </SelectTrigger>
               <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-                <SelectItem value="all">Alle Typen</SelectItem>
+                <SelectItem value="all">{t("einrichtungen_alle_typen")}</SelectItem>
                 {Object.entries(TYPE_LABEL).map(([k, v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}
               </SelectContent>
             </Select>
@@ -170,23 +170,23 @@ export default function Jagdeinrichtungen() {
                 <SelectValue placeholder="Zustand" />
               </SelectTrigger>
               <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-                <SelectItem value="all">Alle Zustände</SelectItem>
-                <SelectItem value="gut">Gut</SelectItem>
-                <SelectItem value="maessig">Mäßig</SelectItem>
-                <SelectItem value="schlecht">Schlecht</SelectItem>
-                <SelectItem value="neu">Neu</SelectItem>
+                <SelectItem value="all">{t("einrichtungen_alle_zustaende")}</SelectItem>
+                <SelectItem value="gut">{t("zustand_gut")}</SelectItem>
+                <SelectItem value="maessig">{t("zustand_maessig")}</SelectItem>
+                <SelectItem value="schlecht">{t("zustand_schlecht")}</SelectItem>
+                <SelectItem value="neu">{t("zustand_neu")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           {/* List */}
           {isLoading ? (
-            <div className="text-center py-12 text-gray-400">Laden...</div>
+            <div className="text-center py-12 text-gray-400">{t("einrichtungen_laden")}</div>
           ) : filtered.length === 0 ? (
             <div className="text-center py-16">
               <Building className="w-12 h-12 mx-auto mb-3 text-gray-600" />
-              <p className="text-gray-400">Keine Einrichtungen gefunden</p>
-              <p className="text-xs text-gray-500 mt-1">Legen Sie die erste Jagdeinrichtung an</p>
+              <p className="text-gray-400">{t("einrichtungen_keine")}</p>
+              <p className="text-xs text-gray-500 mt-1">{t("einrichtungen_keine_desc")}</p>
             </div>
           ) : (
             <div className="space-y-2">
@@ -272,14 +272,14 @@ export default function Jagdeinrichtungen() {
       <Dialog open={moveDialog.open} onOpenChange={(o) => !o && setMoveDialog({ open: false, einrichtung: null })}>
         <DialogContent className="bg-[#2d2d2d] border-[#3a3a3a]">
           <DialogHeader>
-            <DialogTitle>Einrichtung verschieben</DialogTitle>
+            <DialogTitle>{t("einrichtungen_verschieben")}</DialogTitle>
           </DialogHeader>
-          <p className="text-sm text-gray-400">„{moveDialog.einrichtung?.name}" in ein anderes Revier verschieben</p>
+          <p className="text-sm text-gray-400">„{moveDialog.einrichtung?.name}" {t("einrichtungen_verschieben_desc")}</p>
           <div className="mt-2">
-            <Label className="text-xs mb-1 block">Ziel-Revier</Label>
+            <Label className="text-xs mb-1 block">{t("einrichtungen_ziel_revier")}</Label>
             <Select value={moveRevierTarget} onValueChange={setMoveRevierTarget}>
               <SelectTrigger className="bg-[#1e1e1e] border-[#3a3a3a]">
-                <SelectValue placeholder="Revier wählen" />
+                <SelectValue placeholder={t("einrichtungen_revier_waehlen")} />
               </SelectTrigger>
               <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
                 {reviere.map(r => (
@@ -289,13 +289,13 @@ export default function Jagdeinrichtungen() {
             </Select>
           </div>
           <div className="flex gap-2 mt-4">
-            <Button variant="outline" onClick={() => setMoveDialog({ open: false, einrichtung: null })} className="flex-1">Abbrechen</Button>
+            <Button variant="outline" onClick={() => setMoveDialog({ open: false, einrichtung: null })} className="flex-1">{t("abbrechen")}</Button>
             <Button
               onClick={() => moveEinrichtung.mutate({ id: moveDialog.einrichtung.id, revier_id: moveRevierTarget })}
               disabled={!moveRevierTarget || moveRevierTarget === moveDialog.einrichtung?.revier_id || moveEinrichtung.isPending}
               className="flex-1 bg-[#22c55e] hover:bg-[#16a34a] text-black"
             >
-              Verschieben
+              {t("speichern")}
             </Button>
           </div>
         </DialogContent>

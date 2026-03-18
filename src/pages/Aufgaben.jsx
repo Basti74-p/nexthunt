@@ -127,24 +127,24 @@ export default function Aufgaben() {
   return (
     <div className="max-w-4xl mx-auto">
     <PageHeader
-      title="Aufgaben"
-      subtitle={`${open.length} offen`}
+      title={t("nav_aufgaben")}
+      subtitle={`${open.length} ${t("aufgaben_offen")}`}
       actions={
         <Button onClick={() => setDialogOpen(true)} className="bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-xl gap-2">
-          <Plus className="w-4 h-4" /> Neue Aufgabe
+          <Plus className="w-4 h-4" /> {t("aufgaben_neue")}
         </Button>
       }
     />
 
       {aufgaben.length === 0 ? (
-        <EmptyState icon={ListTodo} title="Keine Aufgaben" description="Erstellen Sie die erste Aufgabe für Ihr Team." action={
-          <Button onClick={() => setDialogOpen(true)} className="bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-xl gap-2"><Plus className="w-4 h-4" /> Aufgabe erstellen</Button>
+        <EmptyState icon={ListTodo} title={t("aufgaben_keine")} description={t("aufgaben_keine_desc")} action={
+          <Button onClick={() => setDialogOpen(true)} className="bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-xl gap-2"><Plus className="w-4 h-4" /> {t("aufgaben_erstellen")}</Button>
         } />
       ) : (
         <div className="space-y-4">
           {open.length > 0 && (
             <div className="space-y-2">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">Offen ({open.length})</p>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">{t("aufgaben_offen_section")} ({open.length})</p>
               {open.map(a => (
                 <div key={a.id} className="bg-[#3a3a3a] rounded-2xl border border-[#4a4a4a] shadow-sm p-4 cursor-pointer hover:shadow-md transition-shadow" onClick={() => setDetailView(a)}>
                   <div className="flex items-center gap-3">
@@ -164,7 +164,7 @@ export default function Aufgaben() {
                   </div>
                   {(a.assigned_to_name || a.einrichtung_name || a.schadensprotokolle_ids?.length > 0) && (
                   <div className="mt-2 pt-2 border-t border-[#4a4a4a] flex flex-wrap gap-2">
-                    {a.einrichtung_name && <span className="text-xs bg-blue-900/30 text-blue-300 px-2 py-1 rounded">Stand: {a.einrichtung_name}</span>}
+                    {a.einrichtung_name && <span className="text-xs bg-blue-900/30 text-blue-300 px-2 py-1 rounded">{t("aufgaben_stand")}: {a.einrichtung_name}</span>}
                     {a.assigned_to_name && <span className="text-xs bg-green-900/30 text-green-300 px-2 py-1 rounded">{a.assigned_to_name}</span>}
                     {a.schadensprotokolle_ids?.length > 0 && <span className="text-xs bg-orange-900/30 text-orange-300 px-2 py-1 rounded">{a.schadensprotokolle_ids.length} Schaden</span>}
                   </div>
@@ -175,7 +175,7 @@ export default function Aufgaben() {
           )}
           {done.length > 0 && (
             <div className="space-y-2">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">Erledigt ({done.length})</p>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">{t("aufgaben_erledigt_section")} ({done.length})</p>
               {done.map(a => (
                 <div key={a.id} className="bg-[#3a3a3a] rounded-2xl border border-[#4a4a4a] shadow-sm p-4 flex items-center gap-3 opacity-50">
                   <button onClick={() => toggleMutation.mutate({ id: a.id, status: a.status })}
@@ -195,12 +195,12 @@ export default function Aufgaben() {
         if (!open) setEditingTask(null);
       }}>
         <DialogContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-          <DialogHeader><DialogTitle>{editingTask ? "Aufgabe bearbeiten" : "Neue Aufgabe"}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>{editingTask ? t("aufgaben_bearbeiten") : t("aufgaben_neue")}</DialogTitle></DialogHeader>
           <div className="space-y-4 mt-4">
-            <div><Label className="text-gray-100">Titel *</Label><Input className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
+            <div><Label className="text-gray-100">{t("aufgaben_titel_label")}</Label><Input className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                  <Label className="text-gray-100">Einrichtung (optional)</Label>
+                  <Label className="text-gray-100">{t("aufgaben_einrichtung")}</Label>
                   <Select value={form.einrichtung_id} onValueChange={(v) => {
                     const e = einrichtungen?.find(ei => ei.id === v);
                     setForm({ 
@@ -209,14 +209,14 @@ export default function Aufgaben() {
                       einrichtung_name: e?.name || ""
                     });
                   }}>
-                    <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue placeholder="Keine Einrichtung" /></SelectTrigger>
+                    <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue placeholder={t("aufgaben_keine_einrichtung")} /></SelectTrigger>
                     <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
                       {einrichtungen?.map(e => <SelectItem key={e.id} value={e.id}>{e.name}</SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
               <div>
-                <Label className="text-gray-100">Zuweisen an (optional)</Label>
+                <Label className="text-gray-100">{t("aufgaben_zuweisen")}</Label>
                 <Select value={form.assigned_to} onValueChange={(v) => {
                   const member = tenantMembers?.find(m => m.id === v);
                   const person = personen?.find(p => p.id === v);
@@ -226,7 +226,7 @@ export default function Aufgaben() {
                     assigned_to_name: member ? (member.first_name + " " + member.last_name) : (person?.name || "")
                   });
                 }}>
-                  <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue placeholder="Keine Zuweisung" /></SelectTrigger>
+                  <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue placeholder={t("aufgaben_keine_zuweisung")} /></SelectTrigger>
                   <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
                     {tenantMembers?.map(m => <SelectItem key={m.id} value={m.id}>{m.first_name} {m.last_name}</SelectItem>)}
                     {personen?.map(p => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
@@ -234,30 +234,30 @@ export default function Aufgaben() {
                 </Select>
               </div>
             </div>
-            <div><Label className="text-gray-100">Beschreibung</Label><Textarea className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
+            <div><Label className="text-gray-100">{t("aufgaben_beschreibung")}</Label><Textarea className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
             <div className="flex gap-4">
-              <div className="flex-1"><Label className="text-gray-100">Fällig am</Label><Input type="date" className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" value={form.due_date} onChange={(e) => setForm({ ...form, due_date: e.target.value })} /></div>
+              <div className="flex-1"><Label className="text-gray-100">{t("aufgaben_faellig")}</Label><Input type="date" className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" value={form.due_date} onChange={(e) => setForm({ ...form, due_date: e.target.value })} /></div>
               <div className="flex-1">
-                <Label className="text-gray-100">Priorität</Label>
+                <Label className="text-gray-100">{t("aufgaben_prioritaet")}</Label>
                 <Select value={form.priority} onValueChange={(v) => setForm({ ...form, priority: v })}>
                   <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100"><SelectValue /></SelectTrigger>
                   <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
-                    <SelectItem value="low">Niedrig</SelectItem>
-                    <SelectItem value="medium">Mittel</SelectItem>
-                    <SelectItem value="high">Hoch</SelectItem>
+                    <SelectItem value="low">{t("aufgaben_prio_low")}</SelectItem>
+                    <SelectItem value="medium">{t("aufgaben_prio_medium")}</SelectItem>
+                    <SelectItem value="high">{t("aufgaben_prio_high")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
             <div className="flex gap-2">
               <Button onClick={() => createMutation.mutate(form)} disabled={!form.title || createMutation.isPending} className="flex-1 bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-xl">
-                {createMutation.isPending ? "Speichern..." : editingTask ? "Aktualisieren" : "Erstellen"}
+                {createMutation.isPending ? t("laden") : editingTask ? t("strecke_aktualisieren") : t("erstellen")}
               </Button>
               {editingTask && (
                 <Button onClick={() => {
                   deleteMutation.mutate(editingTask.id);
                   setDialogOpen(false);
-                }} variant="outline" className="px-4">Löschen</Button>
+                }} variant="outline" className="px-4">{t("loeschen")}</Button>
               )}
             </div>
           </div>

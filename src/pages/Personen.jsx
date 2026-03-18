@@ -43,7 +43,7 @@ export default function Personen() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <PageHeader title="Personen" subtitle="Mitglieder, Gäste und Berechtigungen" />
+      <PageHeader title={t("personen_titel")} subtitle={t("personen_subtitle")} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
         <Link to={createPageUrl("Persons")}
@@ -53,8 +53,8 @@ export default function Personen() {
               <BookUser className="w-6 h-6 text-blue-400" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-100 group-hover:text-[#22c55e]">Adressbuch</h3>
-              <p className="text-sm text-gray-400">{persons.length} Personen</p>
+              <h3 className="text-lg font-semibold text-gray-100 group-hover:text-[#22c55e]">{t("personen_adressbuch")}</h3>
+              <p className="text-sm text-gray-400">{persons.length} {t("personen_personen")}</p>
             </div>
           </div>
           <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-[#22c55e]" />
@@ -67,8 +67,8 @@ export default function Personen() {
               <Shield className="w-6 h-6 text-green-400" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-100 group-hover:text-[#22c55e]">Berechtigungen</h3>
-              <p className="text-sm text-gray-400">{members.length} Mitglieder</p>
+              <h3 className="text-lg font-semibold text-gray-100 group-hover:text-[#22c55e]">{t("personen_berechtigungen")}</h3>
+              <p className="text-sm text-gray-400">{members.length} {t("personen_mitglieder")}</p>
             </div>
           </div>
           <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-[#22c55e]" />
@@ -79,10 +79,10 @@ export default function Personen() {
       {reviere.length > 0 && (
         <div className="bg-[#3a3a3a] rounded-2xl border border-[#4a4a4a] shadow-sm p-6 mb-8">
           <h2 className="text-lg font-semibold text-gray-100 mb-4 flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-[#22c55e]" /> Reviermitglieder verwalten
+            <MapPin className="w-5 h-5 text-[#22c55e]" /> {t("personen_reviermitglieder")}
           </h2>
           <div className="space-y-2 mb-6">
-            <p className="text-sm text-gray-400">Wählen Sie ein Revier aus, um Mitglieder zu verwalten:</p>
+            <p className="text-sm text-gray-400">{t("personen_revier_waehlen")}</p>
             <div className="flex flex-wrap gap-2">
               {reviere.map(r => (
                 <button
@@ -109,7 +109,7 @@ export default function Personen() {
       {/* Recent persons */}
       {persons.length > 0 && (
         <div className="bg-[#3a3a3a] rounded-2xl border border-[#4a4a4a] shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-100 mb-4">Letzte Personen</h2>
+          <h2 className="text-lg font-semibold text-gray-100 mb-4">{t("personen_letzte")}</h2>
           <div className="space-y-3">
             {persons.slice(0, 5).map(p => (
               <div key={p.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#2a2a2a]">

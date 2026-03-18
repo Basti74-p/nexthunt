@@ -47,12 +47,12 @@ export default function Reviere() {
   return (
     <div className="max-w-6xl mx-auto">
       <PageHeader
-        title="Reviere"
-        subtitle={`${reviere.length} Revier${reviere.length !== 1 ? "e" : ""} verwaltet`}
+        title={t("reviere_titel")}
+        subtitle={`${reviere.length} ${t("reviere_verwaltet")}`}
         actions={
         canManage &&
         <Button onClick={() => setDialogOpen(true)} className="bg-[#22c55e] text-[#000000] px-4 py-2 text-sm font-medium rounded-xl inline-flex items-center justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-9 hover:bg-[#1a4a36] gap-2">
-              <Plus className="w-4 h-4" /> Neues Revier
+              <Plus className="w-4 h-4" /> {t("reviere_neu")}
             </Button>
 
         } />
@@ -61,12 +61,12 @@ export default function Reviere() {
       {reviere.length === 0 && !isLoading ?
       <EmptyState
         icon={TreePine}
-        title="Keine Reviere vorhanden"
-        description="Legen Sie Ihr erstes Revier an, um die Verwaltung zu starten."
+        title={t("reviere_keine")}
+        description={t("reviere_keine_desc")}
         action={
         canManage &&
         <Button onClick={() => setDialogOpen(true)} className="bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-xl gap-2">
-                <Plus className="w-4 h-4" /> Revier anlegen
+                <Plus className="w-4 h-4" /> {t("reviere_anlegen")}
               </Button>
 
         } /> :
@@ -79,7 +79,7 @@ export default function Reviere() {
               <button
                 onClick={(e) => {
                   e.preventDefault();
-                  if (window.confirm(`Revier "${r.name}" wirklich löschen?`)) deleteMutation.mutate(r.id);
+                  if (window.confirm(`${r.name} ${t("reviere_loeschen_confirm")}`)) deleteMutation.mutate(r.id);
                 }}
                 className="absolute top-3 right-3 z-10 p-1.5 rounded-lg bg-white hover:bg-red-50 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
               >
@@ -99,7 +99,7 @@ export default function Reviere() {
                 {r.size_ha && <span>{r.size_ha} ha</span>}
               </div>
               <div className="mt-4 flex items-center gap-1 text-xs text-[#0F2F23] font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                Öffnen <ArrowRight className="w-3 h-3" />
+                {t("reviere_oeffnen")} <ArrowRight className="w-3 h-3" />
               </div>
             </Link>
           </div>
@@ -110,32 +110,31 @@ export default function Reviere() {
       {/* Create Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
-          <DialogHeader><DialogTitle>Neues Revier</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>{t("reviere_neues_dialog")}</DialogTitle></DialogHeader>
           <div className="space-y-4 mt-4">
             <div>
-              <Label>Name *</Label>
-              <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Reviername" />
+              <Label>{t("reviere_name")}</Label>
+              <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder={t("reviere_name_placeholder")} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label>Region</Label>
-                <Input value={form.region} onChange={(e) => setForm({ ...form, region: e.target.value })} placeholder="z.B. Harz" />
+                <Label>{t("reviere_region")}</Label>
+                <Input value={form.region} onChange={(e) => setForm({ ...form, region: e.target.value })} placeholder={t("reviere_region_placeholder")} />
               </div>
               <div>
-                <Label>Größe (ha)</Label>
-                <Input type="number" value={form.size_ha} onChange={(e) => setForm({ ...form, size_ha: e.target.value })} placeholder="z.B. 500" />
+                <Label>{t("reviere_groesse")}</Label>
+                <Input type="number" value={form.size_ha} onChange={(e) => setForm({ ...form, size_ha: e.target.value })} placeholder={t("reviere_groesse_placeholder")} />
               </div>
             </div>
             <div>
-              <Label>Notizen</Label>
-              <Textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Optionale Bemerkungen" />
+              <Label>{t("reviere_notizen")}</Label>
+              <Textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder={t("reviere_notizen_placeholder")} />
             </div>
             <Button
               onClick={() => createMutation.mutate({ ...form, size_ha: form.size_ha ? Number(form.size_ha) : undefined })}
               disabled={!form.name || createMutation.isPending}
               className="w-full bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-xl">
-
-              {createMutation.isPending ? "Erstellen..." : "Revier erstellen"}
+              {createMutation.isPending ? t("reviere_erstellen_loading") : t("reviere_erstellen")}
             </Button>
           </div>
         </DialogContent>

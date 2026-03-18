@@ -59,12 +59,12 @@ export default function TenantMembers() {
   return (
     <div className="max-w-4xl mx-auto">
       <PageHeader
-        title="Mitglieder"
-        subtitle={`${members.length} Mitglied${members.length !== 1 ? "er" : ""}`}
+        title={t("members_titel")}
+        subtitle={`${members.length} ${members.length !== 1 ? t("members_mitglieder_pl") : t("members_mitglied")}`}
         actions={
           canManage && (
             <Button onClick={() => setDialogOpen(true)} className="bg-[#0F2F23] hover:bg-[#1a4a36] text-white rounded-xl gap-2">
-              <Plus className="w-4 h-4" /> Mitglied hinzufügen
+              <Plus className="w-4 h-4" /> {t("members_hinzufuegen")}
             </Button>
           )
         }
@@ -105,24 +105,24 @@ export default function TenantMembers() {
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
-          <DialogHeader><DialogTitle>Mitglied hinzufügen</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>{t("members_dialog_titel")}</DialogTitle></DialogHeader>
           <div className="space-y-4 mt-4">
             <div className="grid grid-cols-2 gap-4">
-              <div><Label>Vorname *</Label><Input value={form.first_name} onChange={(e) => setForm({ ...form, first_name: e.target.value })} /></div>
-              <div><Label>Nachname *</Label><Input value={form.last_name} onChange={(e) => setForm({ ...form, last_name: e.target.value })} /></div>
+              <div><Label>{t("members_vorname")}</Label><Input value={form.first_name} onChange={(e) => setForm({ ...form, first_name: e.target.value })} /></div>
+              <div><Label>{t("members_nachname")}</Label><Input value={form.last_name} onChange={(e) => setForm({ ...form, last_name: e.target.value })} /></div>
             </div>
-            <div><Label>E-Mail *</Label><Input type="email" value={form.user_email} onChange={(e) => setForm({ ...form, user_email: e.target.value })} /></div>
+            <div><Label>{t("members_email")}</Label><Input type="email" value={form.user_email} onChange={(e) => setForm({ ...form, user_email: e.target.value })} /></div>
             <div className="grid grid-cols-2 gap-4">
-              <div><Label>Telefon</Label><Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></div>
-              <div><Label>Rufzeichen</Label><Input value={form.callsign} onChange={(e) => setForm({ ...form, callsign: e.target.value })} /></div>
+              <div><Label>{t("members_telefon")}</Label><Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></div>
+              <div><Label>{t("members_rufzeichen")}</Label><Input value={form.callsign} onChange={(e) => setForm({ ...form, callsign: e.target.value })} /></div>
             </div>
             <div>
-              <Label>Rolle</Label>
+              <Label>{t("members_rolle")}</Label>
               <Select value={form.role} onValueChange={(v) => setForm({ ...form, role: v })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="tenant_member">Mitglied</SelectItem>
-                  <SelectItem value="tenant_owner">Eigentümer</SelectItem>
+                  <SelectItem value="tenant_member">{t("members_rolle_mitglied")}</SelectItem>
+                  <SelectItem value="tenant_owner">{t("members_rolle_eigentuemer")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -131,7 +131,7 @@ export default function TenantMembers() {
               disabled={!form.first_name || !form.last_name || !form.user_email || createMutation.isPending}
               className="w-full bg-[#0F2F23] hover:bg-[#1a4a36] rounded-xl"
             >
-              {createMutation.isPending ? "Speichern..." : "Hinzufügen"}
+              {createMutation.isPending ? t("laden") : t("hinzufuegen")}
             </Button>
           </div>
         </DialogContent>

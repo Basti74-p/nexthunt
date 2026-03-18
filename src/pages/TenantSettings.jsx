@@ -78,24 +78,24 @@ export default function TenantSettings() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <PageHeader title="Einstellungen" subtitle="Mandanten-Informationen und Features" />
+      <PageHeader title={t("einstellungen_titel")} subtitle={t("einstellungen_subtitle")} />
 
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
-         <h2 className="text-lg font-semibold text-gray-900 mb-4">Allgemein</h2>
+         <h2 className="text-lg font-semibold text-gray-900 mb-4">{t("einstellungen_allgemein")}</h2>
          <div className="grid grid-cols-2 gap-y-4 gap-x-8 text-sm">
-           <div><span className="text-gray-500">Name</span><p className="font-medium text-gray-900 mt-0.5">{tenant.name}</p></div>
-           <div><span className="text-gray-500">Kontakt</span><p className="font-medium text-gray-900 mt-0.5">{tenant.contact_person || "—"}</p></div>
-           <div><span className="text-gray-500">E-Mail</span><p className="font-medium text-gray-900 mt-0.5">{tenant.contact_email}</p></div>
-           <div><span className="text-gray-500">Telefon</span><p className="font-medium text-gray-900 mt-0.5">{tenant.phone || "—"}</p></div>
-           <div><span className="text-gray-500">Plan</span><div className="mt-1"><StatusBadge status={tenant.plan} /></div></div>
-           <div><span className="text-gray-500">Status</span><div className="mt-1"><StatusBadge status={tenant.status} /></div></div>
-           <div><span className="text-gray-500">Mandanten-ID</span><p className="font-medium text-gray-900 mt-0.5 font-mono text-xs">{tenant.id}</p></div>
-           <div><span className="text-gray-500">Benutzer-ID</span><p className="font-medium text-gray-900 mt-0.5 font-mono text-xs">{user?.id}</p></div>
+           <div><span className="text-gray-500">{t("einstellungen_name")}</span><p className="font-medium text-gray-900 mt-0.5">{tenant.name}</p></div>
+           <div><span className="text-gray-500">{t("einstellungen_kontakt")}</span><p className="font-medium text-gray-900 mt-0.5">{tenant.contact_person || "—"}</p></div>
+           <div><span className="text-gray-500">{t("einstellungen_email")}</span><p className="font-medium text-gray-900 mt-0.5">{tenant.contact_email}</p></div>
+           <div><span className="text-gray-500">{t("einstellungen_telefon")}</span><p className="font-medium text-gray-900 mt-0.5">{tenant.phone || "—"}</p></div>
+           <div><span className="text-gray-500">{t("einstellungen_plan")}</span><div className="mt-1"><StatusBadge status={tenant.plan} /></div></div>
+           <div><span className="text-gray-500">{t("einstellungen_status")}</span><div className="mt-1"><StatusBadge status={tenant.status} /></div></div>
+           <div><span className="text-gray-500">{t("einstellungen_mandant_id")}</span><p className="font-medium text-gray-900 mt-0.5 font-mono text-xs">{tenant.id}</p></div>
+           <div><span className="text-gray-500">{t("einstellungen_benutzer_id")}</span><p className="font-medium text-gray-900 mt-0.5 font-mono text-xs">{user?.id}</p></div>
          </div>
        </div>
 
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Etikett-Einstellungen</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">{t("einstellungen_etikett")}</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <EtikettSettings
             settings={etikettSettings}
@@ -104,7 +104,7 @@ export default function TenantSettings() {
             saving={saving}
           />
           <div>
-            <p className="text-xs text-gray-500 mb-3 font-medium uppercase tracking-wider">Vorschau</p>
+            <p className="text-xs text-gray-500 mb-3 font-medium uppercase tracking-wider">{t("einstellungen_vorschau")}</p>
             <div className="scale-90 origin-top-left">
               <EtikettPrintView
                 product={{
@@ -125,7 +125,7 @@ export default function TenantSettings() {
       </div>
 
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-6">Rechnungs-Vorlage</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-6">{t("einstellungen_rechnung")}</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <RechnungSettings
             settings={etikettSettings}
@@ -134,7 +134,7 @@ export default function TenantSettings() {
             saving={saving}
           />
           <div>
-            <p className="text-xs text-gray-500 mb-3 font-medium uppercase tracking-wider">Live-Vorschau</p>
+            <p className="text-xs text-gray-500 mb-3 font-medium uppercase tracking-wider">{t("einstellungen_live_vorschau")}</p>
             <div style={{ transform: "scale(0.45)", transformOrigin: "top left", width: "222%", pointerEvents: "none" }}>
               <RechnungPrint
                 tenantSettings={etikettSettings}
@@ -162,15 +162,15 @@ export default function TenantSettings() {
       </div>
 
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Features</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">{t("einstellungen_features")}</h2>
         <div className="space-y-3">
           {Object.entries(FEATURE_LABELS).map(([key, label]) => (
             <div key={key} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
               <span className="text-sm text-gray-700">{label}</span>
               {tenant[key] ? (
-                <span className="flex items-center gap-1 text-xs text-emerald-600 font-medium"><Check className="w-3.5 h-3.5" /> Aktiviert</span>
+                <span className="flex items-center gap-1 text-xs text-emerald-600 font-medium"><Check className="w-3.5 h-3.5" /> {t("einstellungen_aktiviert")}</span>
               ) : (
-                <span className="flex items-center gap-1 text-xs text-gray-400 font-medium"><X className="w-3.5 h-3.5" /> Deaktiviert</span>
+                <span className="flex items-center gap-1 text-xs text-gray-400 font-medium"><X className="w-3.5 h-3.5" /> {t("einstellungen_deaktiviert")}</span>
               )}
             </div>
           ))}
@@ -179,7 +179,7 @@ export default function TenantSettings() {
 
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-          <Globe className="w-5 h-5 text-gray-500" /> Sprache / Language
+          <Globe className="w-5 h-5 text-gray-500" /> {t("einstellungen_sprache")}
         </h2>
         <div className="flex gap-3 flex-wrap">
           {LANGUAGES.map((l) => (
@@ -202,10 +202,10 @@ export default function TenantSettings() {
       <BackupSection />
 
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mt-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Kontoverwaltung</h2>
-        <p className="text-sm text-gray-600 mb-4">Löschen Sie Ihr Konto dauerhaft. Diese Aktion kann nicht rückgängig gemacht werden.</p>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">{t("einstellungen_konto")}</h2>
+        <p className="text-sm text-gray-600 mb-4">{t("einstellungen_konto_desc")}</p>
         <Button variant="destructive" onClick={() => setDeleteDialogOpen(true)}>
-          Konto löschen
+          {t("einstellungen_konto_loeschen")}
         </Button>
       </div>
 
