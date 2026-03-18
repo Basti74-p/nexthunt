@@ -33,6 +33,7 @@ const CHILD_TO_TAB = {
 
 export default function MobileNav({ currentPage }) {
   const { tenantFeatures } = useAuth();
+  const { t } = useI18n();
   const navigate = useNavigate();
   // Per-tab last visited page: { MobileTasks: "/MobileAufgabenDetail?id=123", ... }
   const tabLastPage = useRef({});
