@@ -377,10 +377,10 @@ export default function Strecke() {
                   className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
               </div>
               <div>
-                <Label className="text-gray-300 text-xs mb-1 block">Altersklasse</Label>
-                <Select value={form.age_class} onValueChange={v => setForm({ ...form, age_class: v })}>
-                  <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
-                    <SelectValue placeholder="Altersklasse wählen" />
+                <Label className="text-gray-300 text-xs mb-1 block">{t("strecke_altersklasse")}</Label>
+                   <Select value={form.age_class} onValueChange={v => setForm({ ...form, age_class: v })}>
+                     <SelectTrigger className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100">
+                       <SelectValue placeholder={t("strecke_altersklasse_waehlen")} />
                   </SelectTrigger>
                   <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
                     {form.species && AGE_CLASSES[form.species]?.map(ac => (
