@@ -197,11 +197,11 @@ export default function Strecke() {
   return (
     <div className="max-w-6xl mx-auto">
       <PageHeader
-        title="Strecke"
-        subtitle={`${strecken.length} Einträge gesamt`}
+        title={t("strecke_titel")}
+        subtitle={`${strecken.length} ${t("strecke_eintraege")}`}
         actions={
           <Button onClick={openCreate} className="bg-[#22c55e] text-black hover:bg-[#16a34a] rounded-xl gap-2">
-            <Plus className="w-4 h-4" /> Neuer Eintrag
+            <Plus className="w-4 h-4" /> {t("strecke_neuer_eintrag")}
           </Button>
         }
       />
