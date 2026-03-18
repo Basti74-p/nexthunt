@@ -33,13 +33,13 @@ const AGE_CLASSES = {
   wolf: ["Rüde", "Fähe", "Welpe"],
 };
 
-const STATUS_OPTIONS = [
-  { value: "erfasst", label: "Erfasst", color: "bg-amber-100 text-amber-700" },
-  { value: "bestaetigt", label: "Bestätigt", color: "bg-blue-100 text-blue-700" },
-  { value: "wildkammer", label: "Wildkammer", color: "bg-purple-100 text-purple-700" },
-  { value: "verkauft", label: "Verkauft", color: "bg-emerald-100 text-emerald-700" },
-  { value: "archiviert", label: "Archiviert", color: "bg-gray-100 text-gray-500" },
-];
+const STATUS_COLORS = {
+  erfasst: "bg-amber-100 text-amber-700",
+  bestaetigt: "bg-blue-100 text-blue-700",
+  wildkammer: "bg-purple-100 text-purple-700",
+  verkauft: "bg-emerald-100 text-emerald-700",
+  archiviert: "bg-gray-100 text-gray-500",
+};
 
 const EMPTY_FORM = {
   species: "",
