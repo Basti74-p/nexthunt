@@ -132,21 +132,21 @@ export default function Dashboard() {
       {/* Reviere Quick Access */}
        <div className="bg-[#3a3a3a] rounded-2xl border border-[#4a4a4a] shadow-sm p-6 mb-6">
          <div className="flex items-center justify-between mb-4">
-           <h2 className="text-lg font-semibold text-gray-100">Ihre Reviere</h2>
-           <div className="flex items-center gap-2">
-             <button
-               onClick={() => setShowBoundaryHelp(true)}
-               className="text-sm text-[#22c55e] font-medium flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-[#4a4a4a] border border-[#4a4a4a] transition-colors"
-             >
-               <Pencil className="w-3.5 h-3.5" />
-               Grenzen einzeichnen
-             </button>
-             <Link
-               to={createPageUrl("Reviere")}
-               className="text-sm text-[#22c55e] font-medium flex items-center gap-1 hover:underline"
-             >
-               Alle anzeigen <ArrowRight className="w-4 h-4" />
-             </Link>
+           <h2 className="text-lg font-semibold text-gray-100">{t("ihre_reviere")}</h2>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setShowBoundaryHelp(true)}
+                className="text-sm text-[#22c55e] font-medium flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-[#4a4a4a] border border-[#4a4a4a] transition-colors"
+              >
+                <Pencil className="w-3.5 h-3.5" />
+                {t("grenzen_einzeichnen")}
+              </button>
+              <Link
+                to={createPageUrl("Reviere")}
+                className="text-sm text-[#22c55e] font-medium flex items-center gap-1 hover:underline"
+              >
+                {t("alle_anzeigen")} <ArrowRight className="w-4 h-4" />
+              </Link>
            </div>
          </div>
         {reviere.length === 0 ? (
