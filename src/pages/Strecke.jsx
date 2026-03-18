@@ -372,7 +372,7 @@ export default function Strecke() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label className="text-gray-300 text-xs mb-1 block">Datum *</Label>
+                <Label className="text-gray-300 text-xs mb-1 block">{t("strecke_datum")} *</Label>
                 <Input type="date" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })}
                   className="bg-[#1a1a1a] border-[#3a3a3a] text-gray-100" />
               </div>
