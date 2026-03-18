@@ -90,7 +90,7 @@ function NavItem({ item, currentPage, depth = 0 }) {
         }>
 
         <item.icon className="w-4 h-4 shrink-0" />
-        {item.label}
+        {label}
       </Link>);
 
   }
