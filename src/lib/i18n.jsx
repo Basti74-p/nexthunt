@@ -279,9 +279,9 @@ export const translations = {
     boundary_step1: "Spustelėkite mygtuką 'Žymėti ribas'",
     boundary_step2: "Spustelėkite žemėlapyje, kad nustatytumėte taškus",
     boundary_step3: "Nustatykite bent 3 taškus",
-    boundary_step4: "Spustelėkite „Baigta", kad išsaugotumėte ribą",
+    boundary_step4: "Spustelėkite 'Baigta', kad išsaugotumėte ribą",
     boundary_step5: "Pasirinkite plotą ir spalvą",
-    boundary_step6: "Spustelėkite „Išsaugoti"",
+    boundary_step6: "Spustelėkite 'Išsaugoti'",
     zur_karte: "Į žemėlapį",
 
     // Common
