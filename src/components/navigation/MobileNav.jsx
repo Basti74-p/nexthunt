@@ -80,7 +80,7 @@ export default function MobileNav({ currentPage }) {
 
       {/* Bottom tabs */}
       <nav className="fixed bottom-0 left-0 right-0 bg-[#1e1e1e] border-t border-[#3a3a3a] z-50 flex justify-around px-2 py-2 safe-area-pb select-none">
-        {tabs.map(({ name, icon: Icon, page }) => {
+        {tabs.map(({ nameKey, icon: TabIcon, page }) => {
           const isActive = activeTab === page;
           return (
             <button
@@ -90,8 +90,8 @@ export default function MobileNav({ currentPage }) {
                 isActive ? "text-[#22c55e]" : "text-gray-500"
               }`}
             >
-              <Icon className={`w-5 h-5 ${isActive ? "stroke-[2.5]" : "stroke-[1.5]"}`} />
-              <span className={`text-[10px] font-medium ${isActive ? "text-[#22c55e]" : "text-gray-500"}`}>{name}</span>
+              <TabIcon className={`w-5 h-5 ${isActive ? "stroke-[2.5]" : "stroke-[1.5]"}`} />
+              <span className={`text-[10px] font-medium ${isActive ? "text-[#22c55e]" : "text-gray-500"}`}>{t(nameKey)}</span>
             </button>
           );
         })}
