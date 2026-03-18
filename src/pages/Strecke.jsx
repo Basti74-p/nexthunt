@@ -328,7 +328,7 @@ export default function Strecke() {
                   <button onClick={() => openEdit(item)} className="flex-1 p-2 rounded-lg hover:bg-[#3a3a3a] text-gray-400 hover:text-gray-200 transition-colors text-sm">
                     <Pencil className="w-4 h-4 mx-auto" />
                   </button>
-                  <button onClick={() => { if (confirm("Eintrag wirklich löschen?")) deleteMutation.mutate(item.id); }}
+                  <button onClick={() => { if (confirm(t("strecke_loeschen_confirm"))) deleteMutation.mutate(item.id); }}
                     className="flex-1 p-2 rounded-lg hover:bg-red-900/30 text-gray-400 hover:text-red-400 transition-colors text-sm">
                     <Trash2 className="w-4 h-4 mx-auto" />
                   </button>
