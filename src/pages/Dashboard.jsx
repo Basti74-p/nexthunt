@@ -176,7 +176,7 @@ export default function Dashboard() {
       {/* Open Tasks */}
        {aufgaben.length > 0 && (
          <div className="bg-[#3a3a3a] rounded-2xl border border-[#4a4a4a] shadow-sm p-6">
-           <h2 className="text-lg font-semibold text-gray-100 mb-4">Offene Aufgaben</h2>
+           <h2 className="text-lg font-semibold text-gray-100 mb-4">{t("offene_aufgaben")}</h2>
            <div className="space-y-2">
              {aufgaben.slice(0, 5).map((a) => (
                <div key={a.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#2a2a2a]">
