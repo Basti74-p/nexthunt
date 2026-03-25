@@ -115,6 +115,21 @@ export default function RevierMembersManager({ revierId }) {
     },
   });
 
+  const resendInviteMutation = useMutation({
+    mutationFn: async (member) => {
+      const revier = await base44.entities.Revier.filter({ id: revierId });
+      const revierName = revier[0]?.name || "Revier";
+      const tenantName = tenant?.name || "NextHunt";
+      
+      await base44.functions.invoke('sendRevierInvitation', {
+        user_email: member.user_email,
+        first_name: member.first_name,
+        revier_name: revierName,
+        tenant_name: tenantName,
+      });
+    },
+  });
+
   const handleInvite = async () => {
     if (!form.user_email) return;
     // Convert tenant role to app role for invitation
@@ -164,6 +179,15 @@ export default function RevierMembersManager({ revierId }) {
                   {m.phone && <span className="flex items-center gap-1"><Phone className="w-3 h-3" />{m.phone}</span>}
                 </div>
               </div>
+              <Button
+                onClick={() => resendInviteMutation.mutate(m)}
+                disabled={resendInviteMutation.isPending}
+                variant="ghost"
+                size="icon"
+                className="text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+              >
+                {resendInviteMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Mail className="w-4 h-4" />}
+              </Button>
               <Button
                 onClick={() => {
                   setEditForm({ first_name: m.first_name, last_name: m.last_name, phone: m.phone });
