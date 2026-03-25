@@ -12,6 +12,8 @@ import LanguageSelector from '@/components/LanguageSelector';
 import Demo from './pages/Demo';
 import AdminNewRegistrations from './pages/AdminNewRegistrations';
 import AdminPersonTracking from './pages/AdminPersonTracking';
+import SystemAdminDashboard from './pages/SystemAdminDashboard';
+import SystemAdminBilling from './pages/SystemAdminBilling';
 import MobileAufgabenDetail from './pages/MobileAufgabenDetail';
 import MobileEinrichtungen from './pages/MobileEinrichtungen';
 import MobileEinrichtungsDetail from './pages/MobileEinrichtungsDetail';
@@ -91,6 +93,16 @@ const AuthenticatedApp = () => {
       <Route path="/AdminPersonTracking" element={
         <LayoutWrapper currentPageName="AdminPersonTracking">
           <AdminPersonTracking />
+        </LayoutWrapper>
+      } />
+      <Route path="/SystemAdminDashboard" element={
+        <LayoutWrapper currentPageName="SystemAdminDashboard">
+          <SystemAdminDashboard />
+        </LayoutWrapper>
+      } />
+      <Route path="/SystemAdminBilling" element={
+        <LayoutWrapper currentPageName="SystemAdminBilling">
+          <SystemAdminBilling />
         </LayoutWrapper>
       } />
       <Route path="/" element={
