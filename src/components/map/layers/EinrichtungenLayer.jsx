@@ -23,11 +23,13 @@ const TYPE_COLORS = {
 function makeIcon(type, suitability) {
   let color = TYPE_COLORS[type] || "#0F2F23";
   let size = 12;
+  let animation = '';
   
   // Override color and size based on KI-Analyse
   if (suitability === 'green') {
     color = '#22c55e';
     size = 18;
+    animation = 'animation: pulse 1.5s infinite;';
   } else if (suitability === 'red') {
     color = '#dc2626';
     size = 18;
@@ -36,8 +38,7 @@ function makeIcon(type, suitability) {
     size = 18;
   }
   
-  const blink = suitability ? `animation: blink 0.8s infinite;` : '';
-  const html = `<div style="width:${size}px;height:${size}px;background:${color};border:2.5px solid white;border-radius:50%;box-shadow:0 0 8px ${color};${blink}"></div>`;
+  const html = `<div style="width:${size}px;height:${size}px;background:${color};border:2.5px solid white;border-radius:50%;box-shadow:0 0 8px ${color};${animation}"></div>`;
   
   return L.divIcon({
     className: "",
@@ -76,10 +77,10 @@ const CONDITION_COLORS = {
 };
 
 export default function EinrichtungenLayer({ items = [], onDelete, onEdit, analyzeResults = [] }) {
-  // CSS für Blinking Animation
+  // CSS für Pulse Animation (nur grüne Marker)
   React.useEffect(() => {
     const style = document.createElement('style');
-    style.textContent = `@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }`;
+    style.textContent = `@keyframes pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 8px #22c55e; } 50% { transform: scale(1.3); box-shadow: 0 0 16px #22c55e; } }`;
     document.head.appendChild(style);
     return () => document.head.removeChild(style);
   }, []);
