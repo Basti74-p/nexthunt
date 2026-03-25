@@ -63,27 +63,40 @@ Deno.serve(async (req) => {
       west: Math.min(...lngs) - 0.02,
     } : null;
 
-    // KI-Analyse mit Flächenerkennung
+    // KI-Analyse mit verbesserter Bewertungslogik
     const analysisPrompt = `
-Du bist ein erfahrener Jagdberater und Kartenanalyst. Analysiere die Jagdstände UND erkenne Waldfiächen im Revier.
+Du bist ein erfahrener Jagdberater mit 20+ Jahren Erfahrung. Analysiere die Jagdstände präzise basierend auf mehreren Faktoren.
 
-REVIER-INFORMATIONEN:
-Jagdstände: ${JSON.stringify(einrichtungenForAnalysis, null, 2)}
+JAGDSTÄNDE (mit Positionen):
+${einrichtungenForAnalysis.map((e, idx) => {
+  const idx_num = idx + 1;
+  return `Stand ${idx_num}: ${e.name} (${e.type}) - Lat: ${e.latitude}, Lng: ${e.longitude}, Ausrichtung: ${e.orientation}, Zustand: ${e.condition}`;
+}).join('\n')}
 
-${revierBounds ? `REVIER-GRENZEN (ungefähr):
-- Nord: ${revierBounds.north}
-- Süd: ${revierBounds.south}
-- Ost: ${revierBounds.east}
-- West: ${revierBounds.west}` : ''}
+${revierBounds ? `REVIER-GRENZEN:
+- Nord: ${revierBounds.north}, Süd: ${revierBounds.south}, Ost: ${revierBounds.east}, West: ${revierBounds.west}` : ''}
+
+AKTUELLE WINDRICHTUNG (für Deutschland):
+${new Date().toLocaleDateString('de-DE')} - Recherchiere die aktuelle Windrichtung und -stärke für Mitteleuropa.
 
 WILDAKTIVITÄT (letzte 30 Tage):
-${Object.entries(wildActivity).map(([wild, count]) => `- ${wild}: ${count} Sichtungen/Strecken`).join('\n')}
+${Object.entries(wildActivity).map(([wild, count]) => `- ${wild}: ${count} Nachweise`).join('\n')}
+
+BEWERTUNGSKRITERIEN:
+1. WINDPOSITION: Ist der Stand GEGEN den Wind für das Wild (ideal) oder vor dem Wind (schlecht)?
+2. WALDDECKUNG: Liegt der Stand in/an Waldkante (versteckt) oder im offenen Feld (sichtbar)?
+3. ZUGANGSWEGE: Kann man vom Sammelplatz unbemerkt zum Stand gehen?
+4. WILDAKTIVITÄT: Wurden in der Nähe des Standes Tiere gesichtet/erlegt?
+5. STANDTYP: Hochsitz/Leiter sind besser als offene Stände, Erdsitze sind diskret.
+
+ANALYSE-BEISPIELE aus erfahrener Praxis:
+- Stände in/an Waldkanten mit Ausblick auf freie Flächen = GRÜN (sehr gut)
+- Stände auf Feldern aber mit guter Ansteller-Position zum Anfahrtsweg = GELB (bedingt brauchbar)
+- Stände in dichter Nähe zu Waldwegen/Straßen wo das Wild wahrscheinlich Lärm von dort kommt = ROT (schlecht)
 
 AUFGABEN:
-1. Bewerte jeden Stand basierend auf aktueller Windrichtung (recherchieren für Deutschland heute), Wildaktivität und Standorttyp.
-2. Erkenne Waldfiächen und Wiesenflächen im Revier anhand von Satellitenbildern und gib sie als GeoJSON-Polygone zurück.
-   - Waldfiächen (forest): dicht bewaldete Gebiete (grün markieren)
-   - Wiesenflächen (meadow): offene Acker- und Grünlandflächen (gelb markieren)
+1. Bewerte JEDEN Stand (1, 2, 3... bis zur Anzahl) basierend auf obigen Kriterien mit Windrichtung, Waldposition, Zugänglichkeit.
+2. Erkenne Waldfiächen und Wiesenflächen im Revier und gib sie als GeoJSON-Polygone zurück.
 
 Antworte NUR als JSON (kein zusätzlicher Text):
 {
@@ -91,7 +104,7 @@ Antworte NUR als JSON (kein zusätzlicher Text):
     {
       "einrichtung_id": "...",
       "suitability": "green|yellow|red",
-      "reason": "..."
+      "reason": "kurze Erklärung basierend auf Wind, Walddeckung und Zugänglichkeit"
     }
   ],
   "landcover": [
