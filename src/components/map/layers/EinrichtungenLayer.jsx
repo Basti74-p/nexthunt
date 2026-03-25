@@ -22,20 +22,28 @@ const TYPE_COLORS = {
 
 function makeIcon(type, suitability) {
   let color = TYPE_COLORS[type] || "#0F2F23";
+  let size = 12;
   
-  // Override color based on KI-Analyse
-  if (suitability === 'green') color = '#22c55e';
-  else if (suitability === 'red') color = '#dc2626';
-  else if (suitability === 'yellow') color = '#eab308';
+  // Override color and size based on KI-Analyse
+  if (suitability === 'green') {
+    color = '#22c55e';
+    size = 18;
+  } else if (suitability === 'red') {
+    color = '#dc2626';
+    size = 18;
+  } else if (suitability === 'yellow') {
+    color = '#eab308';
+    size = 18;
+  }
   
-  const blink = suitability ? `animation: blink 1s infinite;` : '';
-  const html = `<div style="width:14px;height:14px;background:${color};border:2.5px solid white;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.3);${blink}"></div>`;
+  const blink = suitability ? `animation: blink 0.8s infinite;` : '';
+  const html = `<div style="width:${size}px;height:${size}px;background:${color};border:2.5px solid white;border-radius:50%;box-shadow:0 0 8px ${color};${blink}"></div>`;
   
   return L.divIcon({
     className: "",
     html,
-    iconSize: [14, 14],
-    iconAnchor: [7, 7],
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2],
   });
 }
 
