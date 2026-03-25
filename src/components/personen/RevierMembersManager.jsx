@@ -46,6 +46,20 @@ export default function RevierMembersManager({ revierId }) {
           status: "active",
           allowed_reviere: [revierId],
         });
+        
+        // Send invitation email
+        try {
+          await base44.functions.invoke('sendRevierInvitation', {
+            user_email: data.email,
+            first_name: data.email.split("@")[0],
+            revier_name: data.revierName,
+            tenant_name: data.tenantName,
+          });
+        } catch (emailError) {
+          console.error('Email sending failed (non-blocking):', emailError);
+          // Don't fail the whole operation if email fails
+        }
+        
         return { success: true };
       } finally {
         setInviteLoading(false);
@@ -101,11 +115,23 @@ export default function RevierMembersManager({ revierId }) {
     },
   });
 
-  const handleInvite = () => {
+  const handleInvite = async () => {
     if (!form.user_email) return;
     // Convert tenant role to app role for invitation
     const appRole = form.role === "tenant_owner" ? "admin" : "user";
-    inviteMutation.mutate({ email: form.user_email, role: appRole });
+    
+    // Get revier name and tenant name for email
+    const revier = await base44.entities.Revier.filter({ id: revierId });
+    const revierName = revier[0]?.name || "Revier";
+    const tenantName = tenant?.name || "NextHunt";
+
+    inviteMutation.mutate({ 
+      email: form.user_email, 
+      role: appRole,
+      revierId,
+      revierName,
+      tenantName,
+    });
   };
 
   return (
