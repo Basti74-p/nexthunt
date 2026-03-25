@@ -79,7 +79,7 @@ export default function EinrichtungenLayer({ items = [], onDelete, onEdit, analy
   return items
     .filter(i => i.latitude && i.longitude)
     .map(i => {
-      const result = analyzeResults.find(r => r.einrichtung_id === i.id);
+      const result = analyzeResults?.find(r => r.einrichtung_id === i.id);
       return (
       <Marker key={i.id} position={[i.latitude, i.longitude]} icon={makeIcon(i.type, result?.suitability)}>
         <Popup>
