@@ -11,6 +11,7 @@ import { I18nProvider, useI18n } from '@/lib/i18n';
 import LanguageSelector from '@/components/LanguageSelector';
 import Demo from './pages/Demo';
 import AdminNewRegistrations from './pages/AdminNewRegistrations';
+import AdminPersonTracking from './pages/AdminPersonTracking';
 import MobileAufgabenDetail from './pages/MobileAufgabenDetail';
 import MobileEinrichtungen from './pages/MobileEinrichtungen';
 import MobileEinrichtungsDetail from './pages/MobileEinrichtungsDetail';
@@ -85,6 +86,11 @@ const AuthenticatedApp = () => {
       <Route path="/AdminNewRegistrations" element={
         <LayoutWrapper currentPageName="AdminNewRegistrations">
           <AdminNewRegistrations />
+        </LayoutWrapper>
+      } />
+      <Route path="/AdminPersonTracking" element={
+        <LayoutWrapper currentPageName="AdminPersonTracking">
+          <AdminPersonTracking />
         </LayoutWrapper>
       } />
       <Route path="/" element={
