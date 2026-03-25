@@ -123,8 +123,8 @@ Antworte NUR als JSON (kein zusätzlicher Text):
 
     const aiResponse = await base44.integrations.Core.InvokeLLM({
       prompt: analysisPrompt,
-      add_context_from_internet: true,
-      model: 'gemini_3_pro',
+      add_context_from_internet: false,
+      model: 'gemini_3_flash',
       response_json_schema: {
         type: 'object',
         properties: {
