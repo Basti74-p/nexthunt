@@ -58,9 +58,16 @@ export default function DebugUserAccess() {
           </section>
 
           <section className="bg-[#1e1e1e] border border-[#2d2d2d] rounded-lg p-4">
-            <h2 className="font-bold text-gray-100 mb-3">Reviere</h2>
+            <h2 className="font-bold text-gray-100 mb-3">Reviere für Tenant</h2>
             <pre className="text-sm text-gray-300 bg-[#0a0a0a] p-3 rounded overflow-auto">
               {JSON.stringify(data.reviere, null, 2)}
+            </pre>
+          </section>
+
+          <section className="bg-[#1e1e1e] border border-[#2d2d2d] rounded-lg p-4">
+            <h2 className="font-bold text-gray-100 mb-3">Alle Reviere im System (DEBUG)</h2>
+            <pre className="text-sm text-gray-300 bg-[#0a0a0a] p-3 rounded overflow-auto max-h-96">
+              {JSON.stringify(data.debug_all_reviere, null, 2)}
             </pre>
           </section>
 

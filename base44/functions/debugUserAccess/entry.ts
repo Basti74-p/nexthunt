@@ -24,6 +24,9 @@ Deno.serve(async (req) => {
     // Get reviere for this tenant
     const reviere = await base44.asServiceRole.entities.Revier.filter({ tenant_id: member.tenant_id });
     
+    // Also get ALL reviere to debug
+    const allReviere = await base44.asServiceRole.entities.Revier.list();
+    
     // Get all einrichtungen for this tenant
     const allEinrichtungen = await base44.asServiceRole.entities.Jagdeinrichtung.filter({ tenant_id: member.tenant_id });
     
@@ -34,13 +37,15 @@ Deno.serve(async (req) => {
 
     return Response.json({
       user: { email, id: user.id },
+      tenant: { id: member.tenant_id },
       tenantMember: {
         id: member.id,
         role: member.role,
         allowed_reviere: member.allowed_reviere,
         allowed_reviere_count: member.allowed_reviere?.length || 0
       },
-      reviere: reviere.map(r => ({ id: r.id, name: r.name })),
+      reviere: reviere.map(r => ({ id: r.id, name: r.name, tenant_id: r.tenant_id })),
+      debug_all_reviere: allReviere.map(r => ({ id: r.id, name: r.name, tenant_id: r.tenant_id })),
       einrichtungen_total: allEinrichtungen.length,
       einrichtungen_by_revier: Object.fromEntries(
         reviere.map(r => [r.name, allEinrichtungen.filter(e => e.revier_id === r.id).length])
