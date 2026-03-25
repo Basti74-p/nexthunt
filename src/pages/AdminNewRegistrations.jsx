@@ -18,7 +18,7 @@ export default function AdminNewRegistrations() {
   const [role, setRole] = useState("tenant_member");
 
   // Fetch all users
-  const { data: allUsers = [] } = useQuery({
+  const { data: allUsers = [], refetch: refetchUsers } = useQuery({
     queryKey: ["allUsers"],
     queryFn: () => base44.entities.User.list(),
     enabled: isPlatformAdmin,
@@ -95,6 +95,11 @@ export default function AdminNewRegistrations() {
       <PageHeader
         title="Neue Registrierungen"
         subtitle={`${pendingUsers.length} ${pendingUsers.length === 1 ? "Benutzer" : "Benutzer"} warten auf Freigabe`}
+        actions={
+          <Button size="sm" variant="outline" onClick={() => refetchUsers()}>
+            Aktualisieren
+          </Button>
+        }
       />
 
       {pendingUsers.length === 0 ? (
