@@ -11,7 +11,6 @@ import { useI18n } from "@/lib/i18n";
 function LayoutInner({ children, currentPageName }) {
   const { user, loading, tenant } = useAuth();
   const isMobile = useMobile();
-  const [initializingTrial, setInitializingTrial] = useState(false);
   const [showLogoAnimation, setShowLogoAnimation] = useState(true);
 
   useEffect(() => {
@@ -28,32 +27,6 @@ function LayoutInner({ children, currentPageName }) {
       }
     }
   }, []);
-
-  // Initialize trial for new users on first login
-  // DISABLED: Auto-trial creation removed to prevent duplicate tenants
-  useEffect(() => {
-    if (user && !loading && !initializingTrial) {
-      const checkUser = async () => {
-        try {
-          setInitializingTrial(true);
-          
-          // Check if user already has a tenant (via tenant_id or TenantMember)
-          const hasTenantId = !!user.tenant_id;
-          const members = await base44.entities.TenantMember.filter({ user_email: user.email });
-          
-          if (hasTenantId || members.length > 0) {
-            console.log('User has existing tenant(s), skipping trial init');
-          }
-          // If no tenant found, user must be invited/assigned by admin
-          setInitializingTrial(false);
-        } catch (error) {
-          console.error('Error checking user tenant:', error);
-          setInitializingTrial(false);
-        }
-      };
-      checkUser();
-    }
-  }, [user, loading]);
 
   if (showLogoAnimation) {
     return (
@@ -97,12 +70,12 @@ function LayoutInner({ children, currentPageName }) {
     );
   }
 
-  if (loading || initializingTrial) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#2d2d2d]">
         <div className="flex flex-col items-center gap-3">
           <Loader2 className="w-8 h-8 animate-spin text-[#22c55e]" />
-          <p className="text-sm text-gray-400">{initializingTrial ? 'Trial wird vorbereitet...' : 'Laden...'}</p>
+          <p className="text-sm text-gray-400">Laden...</p>
         </div>
       </div>
     );
@@ -127,6 +100,27 @@ function LayoutInner({ children, currentPageName }) {
             className="px-6 py-2.5 bg-[#22c55e] text-black rounded-xl text-sm font-medium hover:bg-[#16a34a] transition-colors"
           >
             Anmelden
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // No tenant access: user must be invited by admin
+  if (!tenant) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#2d2d2d]">
+        <div className="text-center space-y-4">
+          <div className="w-14 h-14 bg-gray-700 rounded-2xl flex items-center justify-center mx-auto">
+            <svg className="w-7 h-7 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+          </div>
+          <h2 className="text-xl font-bold text-gray-100">Kein Zugriff</h2>
+          <p className="text-sm text-gray-400 max-w-xs">Sie wurden noch nicht zu einem Revier/Mandanten hinzugefügt. Bitte warten Sie auf die Freigabe durch einen Administrator.</p>
+          <button
+            onClick={() => base44.auth.logout()}
+            className="px-6 py-2.5 bg-gray-700 text-gray-300 rounded-xl text-sm font-medium hover:bg-gray-600 transition-colors"
+          >
+            Abmelden
           </button>
         </div>
       </div>
