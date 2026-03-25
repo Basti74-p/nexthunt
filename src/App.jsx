@@ -20,6 +20,7 @@ import MobileEinrichtungsDetail from './pages/MobileEinrichtungsDetail';
 import MobileKalender from './pages/MobileKalender';
 import JagdkalenderKalender from './pages/JagdkalenderKalender';
 import SystemAdminDebug from './pages/SystemAdminDebug';
+import DebugUserAccess from './pages/DebugUserAccess';
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
@@ -83,6 +84,11 @@ const AuthenticatedApp = () => {
       <Route path="/SystemAdminDebug" element={
         <LayoutWrapper currentPageName="SystemAdminDebug">
           <SystemAdminDebug />
+        </LayoutWrapper>
+      } />
+      <Route path="/DebugUserAccess" element={
+        <LayoutWrapper currentPageName="DebugUserAccess">
+          <DebugUserAccess />
         </LayoutWrapper>
       } />
       <Route path="/AdminNewRegistrations" element={
