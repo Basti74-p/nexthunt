@@ -168,9 +168,13 @@ export default function Karte() {
       const response = await base44.functions.invoke('analyzeJagdstaende', { 
         revier_id: selectedRevier.id 
       });
-      setAnalyzeResults(response.data.analyzeResults || []);
+      console.log('Analyse Response:', response.data);
+      const results = response.data?.analyzeResults || [];
+      console.log('Analyse Ergebnisse:', results);
+      setAnalyzeResults(results);
     } catch (error) {
       console.error('Analyse fehlgeschlagen:', error);
+      alert('Analyse fehlgeschlagen: ' + error.message);
     } finally {
       setAnalyzing(false);
     }
