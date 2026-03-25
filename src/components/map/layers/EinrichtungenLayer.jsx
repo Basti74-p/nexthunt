@@ -38,7 +38,7 @@ function makeIcon(type, suitability, number) {
     size = 18;
   }
   
-  const html = `<div style="width:${size}px;height:${size}px;background:${color};border:2.5px solid white;border-radius:50%;box-shadow:0 0 8px ${color};display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:10px;color:white;${animation}">${number || ''}</div>`;
+  const html = `<div style="width:${size}px;height:${size}px;background:${color};border:2.5px solid white;border-radius:50%;box-shadow:0 0 8px ${color};display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:10px;color:white;${animation}"></div>`;
   
   return L.divIcon({
     className: "",
@@ -90,7 +90,7 @@ export default function EinrichtungenLayer({ items = [], onDelete, onEdit, analy
     .map((i, idx) => {
       const result = analyzeResults?.find(r => r.einrichtung_id === i.id);
       return (
-      <Marker key={i.id} position={[i.latitude, i.longitude]} icon={makeIcon(i.type, result?.suitability, idx + 1)}>
+      <Marker key={i.id} position={[i.latitude, i.longitude]} icon={makeIcon(i.type, result?.suitability)}>
         <Popup>
           <div style={{ minWidth: 220, maxWidth: 280 }}>
             {/* Header mit Name und Typ */}
