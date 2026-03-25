@@ -7,6 +7,7 @@ import EinrichtungenLayer from "@/components/map/layers/EinrichtungenLayer";
 import WildmanagementLayer from "@/components/map/layers/WildmanagementLayer";
 import BoundaryDrawer, { BoundaryDrawerControls } from "@/components/map/BoundaryDrawer";
 import EinrichtungForm from "@/components/map/EinrichtungForm";
+import WindLayer from "@/components/map/layers/WindLayer";
 import { Building2, Eye, Map as MapIcon, Plus, Pencil, Zap } from "lucide-react";
 
 const LAYERS = [
@@ -35,6 +36,7 @@ export default function Karte() {
   const [placingEinrichtung, setPlacingEinrichtung] = useState(false);
   const [analyzeResults, setAnalyzeResults] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
+  const [windData, setWindData] = useState(null);
 
   const { data: reviere = [] } = useQuery({
     queryKey: ["reviere", tenant?.id],
@@ -243,6 +245,30 @@ export default function Karte() {
                 <Zap className="w-3.5 h-3.5" />
                 {analyzing ? "Analysiere..." : "KI Analyse"}
               </button>
+              <button
+                onClick={async () => {
+                  try {
+                    const response = await base44.integrations.Core.InvokeLLM({
+                      prompt: `Was ist die aktuelle Windrichtung und -geschwindigkeit für die Region um Mitteleuropa (Deutschland) heute? Antworte NUR als JSON: {"deg": <0-359>, "speed": <km/h>}`,
+                      add_context_from_internet: true,
+                      response_json_schema: {
+                        type: 'object',
+                        properties: {
+                          deg: { type: 'number', minimum: 0, maximum: 359 },
+                          speed: { type: 'number', minimum: 0 }
+                        },
+                        required: ['deg', 'speed']
+                      }
+                    });
+                    setWindData(response);
+                  } catch (error) {
+                    console.error('Wind fetch error:', error);
+                  }
+                }}
+                className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl bg-cyan-600 text-white font-medium hover:bg-cyan-700 transition-all"
+              >
+                💨 Wind
+              </button>
           </div>
         </div>
       </div>
@@ -250,9 +276,15 @@ export default function Karte() {
       {selectedRevier ? (
         <>
           <div className="relative">
-            <RevierMapCore revier={selectedRevier} height="calc(100vh - 180px)" onMapClick={handleMapClick}>
+            <RevierMapCore 
+            revier={selectedRevier} 
+            height="calc(100vh - 180px)" 
+            onMapClick={handleMapClick}
+            onWeatherButtonClick={() => {}}
+          >
               {activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} analyzeResults={analyzeResults} />}
               {activeLayers.has("sichtungen") && <WildmanagementLayer items={wildmanagement} />}
+              {windData && <WindLayer windDeg={windData.deg} windSpeed={windData.speed} />}
               <BoundaryDrawer
                 reviere={reviere}
                 drawing={drawing}
