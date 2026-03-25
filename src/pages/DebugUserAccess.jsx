@@ -13,12 +13,15 @@ export default function DebugUserAccess() {
       try {
         if (!user?.email) {
           setError("Kein User eingeloggt");
+          setLoading(false);
           return;
         }
         const res = await base44.functions.invoke('debugUserAccess', { email: user.email });
         setData(res.data);
+        setError(null);
       } catch (e) {
-        setError(e.message);
+        setError(e.response?.data?.error || e.message);
+        setData(null);
       } finally {
         setLoading(false);
       }

@@ -5,11 +5,12 @@ Deno.serve(async (req) => {
     const base44 = createClientFromRequest(req);
     const user = await base44.auth.me();
 
-    if (user?.role !== 'admin' && user?.role !== 'platform_admin') {
-      return Response.json({ error: 'Admin only' }, { status: 403 });
+    if (user?.role !== 'platform_admin') {
+      return Response.json({ error: 'Platform admin only' }, { status: 403 });
     }
 
-    const { email } = await req.json();
+    const body = await req.json();
+    const { email } = body;
 
     // Get tenant members for this email
     const members = await base44.asServiceRole.entities.TenantMember.filter({ user_email: email });
