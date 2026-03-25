@@ -8,6 +8,7 @@ import WildmanagementLayer from "@/components/map/layers/WildmanagementLayer";
 import BoundaryDrawer, { BoundaryDrawerControls } from "@/components/map/BoundaryDrawer";
 import EinrichtungForm from "@/components/map/EinrichtungForm";
 import WindLayer from "@/components/map/layers/WindLayer";
+import LandcoverLayer from "@/components/map/layers/LandcoverLayer";
 import { Building2, Eye, Map as MapIcon, Plus, Pencil, Zap } from "lucide-react";
 
 const LAYERS = [
@@ -37,6 +38,7 @@ export default function Karte() {
   const [analyzeResults, setAnalyzeResults] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [windData, setWindData] = useState(null);
+  const [landcoverFeatures, setLandcoverFeatures] = useState([]);
 
   const { data: reviere = [] } = useQuery({
     queryKey: ["reviere", tenant?.id],
@@ -172,8 +174,11 @@ export default function Karte() {
       });
       console.log('Analyse Response:', response.data);
       const results = response.data?.analyzeResults || [];
+      const landcover = response.data?.landcoverFeatures || [];
       console.log('Analyse Ergebnisse:', results);
+      console.log('Landcover Features:', landcover);
       setAnalyzeResults(results);
+      setLandcoverFeatures(landcover);
     } catch (error) {
       console.error('Analyse fehlgeschlagen:', error);
       alert('Analyse fehlgeschlagen: ' + error.message);
@@ -282,6 +287,7 @@ export default function Karte() {
             onMapClick={handleMapClick}
             onWeatherButtonClick={() => {}}
           >
+              {landcoverFeatures.length > 0 && <LandcoverLayer features={landcoverFeatures} />}
               {activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} analyzeResults={analyzeResults} />}
               {activeLayers.has("sichtungen") && <WildmanagementLayer items={wildmanagement} />}
               {windData && <WindLayer windDeg={windData.deg} windSpeed={windData.speed} />}

@@ -17,7 +17,7 @@ Deno.serve(async (req) => {
     // Einrichtungen für dieses Revier abrufen
     const einrichtungen = await base44.entities.Jagdeinrichtung.filter({ revier_id });
     if (einrichtungen.length === 0) {
-      return Response.json({ analyzeResults: [] });
+      return Response.json({ analyzeResults: [], landcoverFeatures: [] });
     }
 
     // Historische Sichtungen/Strecken für dieses Revier (letzte 30 Tage)
@@ -53,26 +53,39 @@ Deno.serve(async (req) => {
       condition: e.condition || 'gut',
     }));
 
-    // KI-Analyse mit Wetterdaten aufrufen
+    // Berechne Reviergrenze aus Standorten für KI-Kontext
+    const lats = einrichtungen.filter(e => e.latitude).map(e => e.latitude);
+    const lngs = einrichtungen.filter(e => e.longitude).map(e => e.longitude);
+    const revierBounds = lats.length > 0 ? {
+      north: Math.max(...lats) + 0.02,
+      south: Math.min(...lats) - 0.02,
+      east: Math.max(...lngs) + 0.02,
+      west: Math.min(...lngs) - 0.02,
+    } : null;
+
+    // KI-Analyse mit Flächenerkennung
     const analysisPrompt = `
-Du bist ein erfahrener Jagdberater. Analysiere folgende Jagdstände für heute und bewerte ihre Eignung.
+Du bist ein erfahrener Jagdberater und Kartenanalyst. Analysiere die Jagdstände UND erkenne Waldfiächen im Revier.
 
 REVIER-INFORMATIONEN:
 Jagdstände: ${JSON.stringify(einrichtungenForAnalysis, null, 2)}
 
+${revierBounds ? `REVIER-GRENZEN (ungefähr):
+- Nord: ${revierBounds.north}
+- Süd: ${revierBounds.south}
+- Ost: ${revierBounds.east}
+- West: ${revierBounds.west}` : ''}
+
 WILDAKTIVITÄT (letzte 30 Tage):
 ${Object.entries(wildActivity).map(([wild, count]) => `- ${wild}: ${count} Sichtungen/Strecken`).join('\n')}
 
-Basierend auf:
-1. Der aktuellen Windrichtung heute (bitte recherchieren für die Region Deutschland)
-2. Der historischen Wildaktivität
-3. Den Standorttypen und Ausrichtungen
+AUFGABEN:
+1. Bewerte jeden Stand basierend auf aktueller Windrichtung (recherchieren für Deutschland heute), Wildaktivität und Standorttyp.
+2. Erkenne Waldfiächen und Wiesenflächen im Revier anhand von Satellitenbildern und gib sie als GeoJSON-Polygone zurück.
+   - Waldfiächen (forest): dicht bewaldete Gebiete (grün markieren)
+   - Wiesenflächen (meadow): offene Acker- und Grünlandflächen (gelb markieren)
 
-Gib für JEDEN Stand folgende Bewertung ab:
-- Suitability: "green" (sehr geeignet), "yellow" (bedingt geeignet), oder "red" (ungeeignet)
-- Reason: Kurze Begründung (max 2 Sätze)
-
-Antworte NUR als JSON Objekt mit "results" Array (kein zusätzlicher Text):
+Antworte NUR als JSON (kein zusätzlicher Text):
 {
   "results": [
     {
@@ -80,13 +93,25 @@ Antworte NUR als JSON Objekt mit "results" Array (kein zusätzlicher Text):
       "suitability": "green|yellow|red",
       "reason": "..."
     }
+  ],
+  "landcover": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[lng, lat], [lng, lat], ...]]
+      },
+      "properties": {
+        "category": "forest|meadow"
+      }
+    }
   ]
-}
-`;
+}`;
 
     const aiResponse = await base44.integrations.Core.InvokeLLM({
       prompt: analysisPrompt,
       add_context_from_internet: true,
+      model: 'gemini_3_pro',
       response_json_schema: {
         type: 'object',
         properties: {
@@ -102,6 +127,28 @@ Antworte NUR als JSON Objekt mit "results" Array (kein zusätzlicher Text):
               required: ['einrichtung_id', 'suitability', 'reason'],
             },
           },
+          landcover: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                type: { type: 'string' },
+                geometry: {
+                  type: 'object',
+                  properties: {
+                    type: { type: 'string' },
+                    coordinates: { type: 'array' },
+                  },
+                },
+                properties: {
+                  type: 'object',
+                  properties: {
+                    category: { type: 'string', enum: ['forest', 'meadow'] },
+                  },
+                },
+              },
+            },
+          },
         },
         required: ['results'],
       },
@@ -109,6 +156,7 @@ Antworte NUR als JSON Objekt mit "results" Array (kein zusätzlicher Text):
 
     return Response.json({
       analyzeResults: aiResponse?.results || [],
+      landcoverFeatures: aiResponse?.landcover || [],
       einrichtungenCount: einrichtungen.length,
       wildActivitySummary: wildActivity,
     });
