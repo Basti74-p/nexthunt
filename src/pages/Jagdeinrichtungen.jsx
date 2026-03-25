@@ -59,7 +59,7 @@ export default function Jagdeinrichtungen() {
   });
 
   const { data: einrichtungen = [], isLoading } = useQuery({
-    queryKey: ["einrichtungen", tenant?.id, tenantMember?.id],
+    queryKey: ["einrichtungen", tenant?.id, tenantMember?.allowed_reviere],
     queryFn: async () => {
       const allEinrichtungen = await base44.entities.Jagdeinrichtung.filter({ tenant_id: tenant?.id });
       // If user has allowed_reviere restrictions, filter by those
