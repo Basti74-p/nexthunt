@@ -30,15 +30,16 @@ export default function MobileEinrichtungen() {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const { data: einrichtungen = [], isLoading } = useQuery({
-    queryKey: ["einrichtungen-mobile", tenant?.id],
+    queryKey: ["einrichtungen-mobile", tenant?.id, tenantMember?.id],
     queryFn: async () => {
       const allEinrichtungen = await base44.entities.Jagdeinrichtung.filter({ tenant_id: tenant?.id });
+      // Filtere nach allowed_reviere wenn vorhanden und nicht owner (owner hat allowed_reviere=[])
       if (tenantMember?.allowed_reviere?.length > 0) {
         return allEinrichtungen.filter(e => tenantMember.allowed_reviere.includes(e.revier_id));
       }
       return allEinrichtungen;
     },
-    enabled: !!tenant?.id,
+    enabled: !!tenant?.id && !!tenantMember?.id,
   });
 
   const { data: reviere = [] } = useQuery({
