@@ -72,35 +72,43 @@ Gib für JEDEN Stand folgende Bewertung ab:
 - Suitability: "green" (sehr geeignet), "yellow" (bedingt geeignet), oder "red" (ungeeignet)
 - Reason: Kurze Begründung (max 2 Sätze)
 
-Antworte NUR als JSON Array (kein zusätzlicher Text):
-[
-  {
-    "einrichtung_id": "...",
-    "suitability": "green|yellow|red",
-    "reason": "..."
-  }
-]
+Antworte NUR als JSON Objekt mit "results" Array (kein zusätzlicher Text):
+{
+  "results": [
+    {
+      "einrichtung_id": "...",
+      "suitability": "green|yellow|red",
+      "reason": "..."
+    }
+  ]
+}
 `;
 
     const aiResponse = await base44.integrations.Core.InvokeLLM({
       prompt: analysisPrompt,
       add_context_from_internet: true,
       response_json_schema: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            einrichtung_id: { type: 'string' },
-            suitability: { type: 'string', enum: ['green', 'yellow', 'red'] },
-            reason: { type: 'string' },
+        type: 'object',
+        properties: {
+          results: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                einrichtung_id: { type: 'string' },
+                suitability: { type: 'string', enum: ['green', 'yellow', 'red'] },
+                reason: { type: 'string' },
+              },
+              required: ['einrichtung_id', 'suitability', 'reason'],
+            },
           },
-          required: ['einrichtung_id', 'suitability', 'reason'],
         },
+        required: ['results'],
       },
     });
 
     return Response.json({
-      analyzeResults: aiResponse || [],
+      analyzeResults: aiResponse?.results || [],
       einrichtungenCount: einrichtungen.length,
       wildActivitySummary: wildActivity,
     });
