@@ -30,9 +30,10 @@ function LayoutInner({ children, currentPageName }) {
   }, []);
 
   // Initialize trial for new users on first login
+  // DISABLED: Auto-trial creation removed to prevent duplicate tenants
   useEffect(() => {
     if (user && !loading && !initializingTrial) {
-      const initTrial = async () => {
+      const checkUser = async () => {
         try {
           setInitializingTrial(true);
           
@@ -40,67 +41,17 @@ function LayoutInner({ children, currentPageName }) {
           const hasTenantId = !!user.tenant_id;
           const members = await base44.entities.TenantMember.filter({ user_email: user.email });
           
-          if (!hasTenantId && members.length === 0) {
-            console.log('Initializing trial for new user:', user.email);
-            
-            const now = new Date();
-            const trialEndDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
-            
-            const newTenant = await base44.entities.Tenant.create({
-              name: `${user.full_name}'s Revier`,
-              contact_person: user.full_name,
-              contact_email: user.email,
-              status: 'trial',
-              plan: 'free_trial',
-              trial_start_date: now.toISOString(),
-              trial_end_date: trialEndDate.toISOString(),
-              trial_days_remaining: 30,
-              feature_map: true,
-              feature_sightings: true,
-              feature_strecke: true,
-              feature_wildkammer: true,
-              feature_tasks: true,
-              feature_driven_hunt: true,
-              feature_public_portal: true,
-              feature_wildmarken: true,
-              feature_dashboard: true,
-              feature_reviere: true,
-              feature_kalender: true,
-              feature_personen: true,
-              feature_einrichtungen: true
-            });
-
-            console.log('Tenant created:', newTenant.id);
-
-            const tmResult = await base44.entities.TenantMember.create({
-              tenant_id: newTenant.id,
-              user_email: user.email,
-              first_name: user.full_name.split(' ')[0],
-              last_name: user.full_name.split(' ').slice(1).join(' ') || 'User',
-              role: 'tenant_owner',
-              status: 'active',
-              perm_wildmanagement: true,
-              perm_strecke: true,
-              perm_wildkammer: true,
-              perm_kalender: true,
-              perm_aufgaben: true,
-              perm_personen: true,
-              perm_oeffentlichkeit: true,
-              perm_einrichtungen: true
-            });
-
-            console.log('TenantMember created:', tmResult.id, 'Trial initialized, reloading...');
-            setTimeout(() => window.location.reload(), 1000);
-          } else {
-            console.log('User already has tenant, skipping trial init');
-            setInitializingTrial(false);
+          if (hasTenantId || members.length > 0) {
+            console.log('User has existing tenant(s), skipping trial init');
           }
+          // If no tenant found, user must be invited/assigned by admin
+          setInitializingTrial(false);
         } catch (error) {
-          console.error('Error initializing trial:', error);
+          console.error('Error checking user tenant:', error);
           setInitializingTrial(false);
         }
       };
-      initTrial();
+      checkUser();
     }
   }, [user, loading]);
 
