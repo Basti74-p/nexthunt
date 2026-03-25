@@ -7,7 +7,7 @@ import EinrichtungenLayer from "@/components/map/layers/EinrichtungenLayer";
 import WildmanagementLayer from "@/components/map/layers/WildmanagementLayer";
 import BoundaryDrawer, { BoundaryDrawerControls } from "@/components/map/BoundaryDrawer";
 import EinrichtungForm from "@/components/map/EinrichtungForm";
-import { Building2, Eye, Map as MapIcon, Plus, Pencil } from "lucide-react";
+import { Building2, Eye, Map as MapIcon, Plus, Pencil, Zap } from "lucide-react";
 
 const LAYERS = [
   { id: "einrichtungen", label: "Jagdeinrichtungen", icon: Building2 },
@@ -33,6 +33,8 @@ export default function Karte() {
   const [formCoords, setFormCoords] = useState({ lat: null, lng: null });
   const [highlightedRevierId, setHighlightedRevierId] = useState(null);
   const [placingEinrichtung, setPlacingEinrichtung] = useState(false);
+  const [analyzeResults, setAnalyzeResults] = useState(null);
+  const [analyzing, setAnalyzing] = useState(false);
 
   const { data: reviere = [] } = useQuery({
     queryKey: ["reviere", tenant?.id],
@@ -159,6 +161,21 @@ export default function Karte() {
     if (el) el.style.cursor = 'crosshair';
   };
 
+  const handleAnalyzeStands = async () => {
+    if (!selectedRevier?.id) return;
+    setAnalyzing(true);
+    try {
+      const response = await base44.functions.invoke('analyzeJagdstaende', { 
+        revier_id: selectedRevier.id 
+      });
+      setAnalyzeResults(response.data.analyzeResults || []);
+    } catch (error) {
+      console.error('Analyse fehlgeschlagen:', error);
+    } finally {
+      setAnalyzing(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between flex-wrap gap-3">
@@ -208,12 +225,20 @@ export default function Karte() {
                {placingEinrichtung ? "Klick auf Karte..." : "Einrichtung"}
              </button>
              <button
-               onClick={handleStart}
-               className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl bg-[#22c55e] text-black font-medium hover:bg-[#16a34a] transition-all"
-             >
-               <Pencil className="w-3.5 h-3.5" />
-               Reviergrenze
-             </button>
+                onClick={handleStart}
+                className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl bg-[#22c55e] text-black font-medium hover:bg-[#16a34a] transition-all"
+              >
+                <Pencil className="w-3.5 h-3.5" />
+                Reviergrenze
+              </button>
+              <button
+                onClick={handleAnalyzeStands}
+                disabled={analyzing || !selectedRevier}
+                className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl bg-purple-600 text-white font-medium hover:bg-purple-700 transition-all disabled:opacity-50"
+              >
+                <Zap className="w-3.5 h-3.5" />
+                {analyzing ? "Analysiere..." : "KI Analyse"}
+              </button>
           </div>
         </div>
       </div>
@@ -222,7 +247,7 @@ export default function Karte() {
         <>
           <div className="relative">
             <RevierMapCore revier={selectedRevier} height="calc(100vh - 180px)" onMapClick={handleMapClick}>
-              {activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} />}
+              {activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} analyzeResults={analyzeResults} />}
               {activeLayers.has("sichtungen") && <WildmanagementLayer items={wildmanagement} />}
               <BoundaryDrawer
                 reviere={reviere}

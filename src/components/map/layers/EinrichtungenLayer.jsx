@@ -2,7 +2,7 @@
  * EinrichtungenLayer – Zeigt Jagdeinrichtungen als Marker auf der Karte.
  * Wird als Layer in RevierMapCore eingebettet.
  */
-import React from "react";
+import React, { useEffect } from "react";
 import { Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 
@@ -20,13 +20,22 @@ const TYPE_COLORS = {
   fanganlage: "#be123c",
 };
 
-function makeIcon(type) {
-  const color = TYPE_COLORS[type] || "#0F2F23";
+function makeIcon(type, suitability) {
+  let color = TYPE_COLORS[type] || "#0F2F23";
+  
+  // Override color based on KI-Analyse
+  if (suitability === 'green') color = '#22c55e';
+  else if (suitability === 'red') color = '#dc2626';
+  else if (suitability === 'yellow') color = '#eab308';
+  
+  const blink = suitability ? `animation: blink 1s infinite;` : '';
+  const html = `<div style="width:14px;height:14px;background:${color};border:2.5px solid white;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.3);${blink}"></div>`;
+  
   return L.divIcon({
     className: "",
-    html: `<div style="width:12px;height:12px;background:${color};border:2.5px solid white;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.3)"></div>`,
-    iconSize: [12, 12],
-    iconAnchor: [6, 6],
+    html,
+    iconSize: [14, 14],
+    iconAnchor: [7, 7],
   });
 }
 
@@ -58,11 +67,21 @@ const CONDITION_COLORS = {
   neu: "#3b82f6",
 };
 
-export default function EinrichtungenLayer({ items = [], onDelete, onEdit }) {
+export default function EinrichtungenLayer({ items = [], onDelete, onEdit, analyzeResults = [] }) {
+  // CSS für Blinking Animation
+  React.useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }`;
+    document.head.appendChild(style);
+    return () => document.head.removeChild(style);
+  }, []);
+
   return items
     .filter(i => i.latitude && i.longitude)
-    .map(i => (
-      <Marker key={i.id} position={[i.latitude, i.longitude]} icon={makeIcon(i.type)}>
+    .map(i => {
+      const result = analyzeResults.find(r => r.einrichtung_id === i.id);
+      return (
+      <Marker key={i.id} position={[i.latitude, i.longitude]} icon={makeIcon(i.type, result?.suitability)}>
         <Popup>
           <div style={{ minWidth: 220, maxWidth: 280 }}>
             {/* Header mit Name und Typ */}
@@ -138,5 +157,6 @@ export default function EinrichtungenLayer({ items = [], onDelete, onEdit }) {
           </div>
         </Popup>
       </Marker>
-    ));
+    );
+    });
 }
