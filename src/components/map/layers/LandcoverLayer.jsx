@@ -18,10 +18,40 @@ const LANDCOVER_STYLES = {
   },
 };
 
-export default function LandcoverLayer({ features = [] }) {
-  if (!features || features.length === 0) return null;
+// Validiert ob GeoJSON-Koordinaten valide sind
+function isValidCoordinates(coords) {
+  if (!coords || !Array.isArray(coords)) return false;
+  
+  if (coords[0]?.length > 0) {
+    // Polygon/MultiPolygon
+    return coords.every(ring =>
+      ring.every(coord =>
+        Array.isArray(coord) && coord.length >= 2 &&
+        typeof coord[0] === 'number' && typeof coord[1] === 'number' &&
+        isFinite(coord[0]) && isFinite(coord[1])
+      )
+    );
+  }
+  // Point/LineString
+  return coords.length >= 2 &&
+    typeof coords[0] === 'number' && typeof coords[1] === 'number' &&
+    isFinite(coords[0]) && isFinite(coords[1]);
+}
 
-  return features.map((feature, idx) => {
+// Filtert invalide Features
+function filterValidFeatures(features) {
+  return features.filter(feature => {
+    if (!feature?.geometry?.coordinates) return false;
+    return isValidCoordinates(feature.geometry.coordinates);
+  });
+}
+
+export default function LandcoverLayer({ features = [] }) {
+  const validFeatures = filterValidFeatures(features || []);
+  
+  if (!validFeatures || validFeatures.length === 0) return null;
+
+  return validFeatures.map((feature, idx) => {
     const category = feature.properties?.category || 'forest';
     const style = LANDCOVER_STYLES[category] || LANDCOVER_STYLES.forest;
 
