@@ -42,9 +42,10 @@ Deno.serve(async (req) => {
       }
     });
 
-    // Einrichtungen mit Standort und Typ formatieren
-    const einrichtungenForAnalysis = einrichtungen.map(e => ({
+    // Einrichtungen mit Standort und Typ formatieren (mit Index für KI-Referenz)
+    const einrichtungenForAnalysis = einrichtungen.map((e, idx) => ({
       id: e.id,
+      index: idx + 1,
       name: e.name,
       type: e.type,
       latitude: e.latitude,
@@ -67,10 +68,9 @@ Deno.serve(async (req) => {
     const analysisPrompt = `
 Du bist ein erfahrener Jagdberater mit 20+ Jahren Erfahrung. Analysiere die Jagdstände präzise basierend auf mehreren Faktoren.
 
-JAGDSTÄNDE (mit Positionen):
-${einrichtungenForAnalysis.map((e, idx) => {
-  const idx_num = idx + 1;
-  return `Stand ${idx_num}: ${e.name} (${e.type}) - Lat: ${e.latitude}, Lng: ${e.longitude}, Ausrichtung: ${e.orientation}, Zustand: ${e.condition}`;
+JAGDSTÄNDE (mit Positionen und IDs für Zuordnung):
+${einrichtungenForAnalysis.map((e) => {
+  return `Stand ${e.index}: "${e.name}" (${e.type}) [ID: ${e.id}] - Lat: ${e.latitude}, Lng: ${e.longitude}, Ausrichtung: ${e.orientation}, Zustand: ${e.condition}`;
 }).join('\n')}
 
 ${revierBounds ? `REVIER-GRENZEN:
@@ -167,8 +167,27 @@ Antworte NUR als JSON (kein zusätzlicher Text):
       },
     });
 
+    // Map KI-Ergebnisse: KI gibt Stand-Nummern zurück, wir mappen zu echten IDs
+    const mappedResults = aiResponse?.results?.map(result => {
+      // Wenn KI "Stand X" oder eine Nummer zurückgibt, zur echten ID mappen
+      const numMatch = result.einrichtung_id.match(/\d+/);
+      let actualId = result.einrichtung_id;
+      
+      if (numMatch) {
+        const idx = parseInt(numMatch[0]) - 1; // Stand 1 = Index 0
+        if (einrichtungen[idx]) {
+          actualId = einrichtungen[idx].id;
+        }
+      }
+      
+      return {
+        ...result,
+        einrichtung_id: actualId
+      };
+    }) || [];
+
     return Response.json({
-      analyzeResults: aiResponse?.results || [],
+      analyzeResults: mappedResults,
       landcoverFeatures: aiResponse?.landcover || [],
       einrichtungenCount: einrichtungen.length,
       wildActivitySummary: wildActivity,
