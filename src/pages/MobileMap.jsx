@@ -12,7 +12,7 @@ import JagdWetterWidget from "@/components/map/JagdWetterWidget";
 import EinrichtungForm from "@/components/map/EinrichtungForm";
 import SichtungForm from "@/components/map/SichtungForm";
 import MapActionSheet from "@/components/map/MapActionSheet";
-import { Plus, X, QrCode } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function MobileMap() {
@@ -352,27 +352,15 @@ export default function MobileMap() {
         )}
       </div>
 
-      {/* FABs – verstecken wenn Drawing-Modus aktiv */}
+      {/* FAB – verstecken wenn Drawing-Modus aktiv */}
       {!drawingBoundary && !showAssignBoundary && !einrichtungMode && !sichtungMode && (
-        <>
-          {/* QR Scanner FAB */}
-          <button
-            style={{ zIndex: 9999 }}
-            className="fixed bottom-24 right-20 w-12 h-12 bg-[#1e1e1e] border border-[#3a3a3a] rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform"
-            onClick={() => navigate("/MobileQRScanner")}
-          >
-            <QrCode className="w-5 h-5 text-[#22c55e]" />
-          </button>
-
-          {/* Plus FAB */}
-          <button
-            style={{ zIndex: 9999 }}
-            className="fixed bottom-24 right-4 w-14 h-14 bg-[#22c55e] rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform"
-            onClick={() => setShowActionSheet(true)}
-          >
-            <Plus className="w-7 h-7 text-black stroke-[2.5]" />
-          </button>
-        </>
+        <button
+          style={{ zIndex: 9999 }}
+          className="fixed bottom-24 right-4 w-14 h-14 bg-[#22c55e] rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform"
+          onClick={() => setShowActionSheet(true)}
+        >
+          <Plus className="w-7 h-7 text-black stroke-[2.5]" />
+        </button>
       )}
 
       {showActionSheet && (
