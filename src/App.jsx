@@ -73,7 +73,11 @@ const AuthenticatedApp = () => {
           <MobileWildkammer />
         </LayoutWrapper>
       } />
-      <Route path="/MobileQRScanner" element={<MobileQRScanner />} />
+      <Route path="/MobileQRScanner" element={
+        <LayoutWrapper currentPageName="MobileQRScanner">
+          <MobileQRScanner />
+        </LayoutWrapper>
+      } />
       <Route path="/MobileEinrichtungsDetail" element={
         <LayoutWrapper currentPageName="MobileEinrichtungsDetail">
           <MobileEinrichtungsDetail />
