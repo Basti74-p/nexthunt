@@ -39,7 +39,7 @@ export default function MobileEinrichtungen() {
       }
       return allEinrichtungen;
     },
-    enabled: !!tenant?.id && !!tenantMember?.id,
+    enabled: !!tenant?.id,
   });
 
   const { data: reviere = [] } = useQuery({
