@@ -69,7 +69,7 @@ export default function SystemAdminTenants() {
     enabled: isPlatformAdmin,
   });
 
-  const { data: members = [] } = useQuery({
+  const { data: members = [], refetch: refetchMembers } = useQuery({
     queryKey: ["sa-members"],
     queryFn: () => base44.entities.TenantMember.list("-created_date", 500),
     enabled: isPlatformAdmin,
@@ -169,7 +169,7 @@ export default function SystemAdminTenants() {
         {activeTab === "users" && (
           <div className="space-y-3">
             <div className="flex justify-end">
-              <Button size="sm" variant="outline" onClick={() => refetchUsers()} className="border-slate-700 text-slate-300 hover:bg-slate-800">
+              <Button size="sm" variant="outline" onClick={() => { refetchUsers(); refetchMembers(); }} className="border-slate-700 text-slate-300 hover:bg-slate-800">
                 Aktualisieren
               </Button>
             </div>
