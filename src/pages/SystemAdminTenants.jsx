@@ -90,10 +90,33 @@ export default function SystemAdminTenants() {
   });
 
   const saveMutation = useMutation({
-    mutationFn: (data) =>
-      editing?.id
-        ? base44.entities.Tenant.update(editing.id, data)
-        : base44.entities.Tenant.create(data),
+    mutationFn: async (data) => {
+      if (editing?.id) {
+        return base44.entities.Tenant.update(editing.id, data);
+      } else {
+        const newTenant = await base44.entities.Tenant.create(data);
+        // Auto-create TenantMember for the contact_email owner
+        if (data.contact_email) {
+          await base44.entities.TenantMember.create({
+            tenant_id: newTenant.id,
+            user_email: data.contact_email,
+            first_name: data.contact_person || data.name || "",
+            last_name: "",
+            role: "tenant_owner",
+            status: "active",
+            perm_wildmanagement: true,
+            perm_strecke: true,
+            perm_wildkammer: true,
+            perm_kalender: true,
+            perm_aufgaben: true,
+            perm_personen: true,
+            perm_oeffentlichkeit: true,
+            perm_einrichtungen: true,
+          });
+        }
+        return newTenant;
+      }
+    },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["sa-tenants"] });
       qc.invalidateQueries({ queryKey: ["sa-members"] });
