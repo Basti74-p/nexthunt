@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Map, Crosshair, ListTodo, Calendar, Warehouse, Refrigerator, MoreHorizontal, X, QrCode } from "lucide-react";
+import { Map, Crosshair, ListTodo, Calendar, Warehouse, Refrigerator, MoreHorizontal, X } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import MobileTopBar from "./MobileTopBar";
 import { useI18n } from "@/lib/i18n";
@@ -151,19 +151,6 @@ export default function MobileNav({ currentPage }) {
             </button>
           );
         })}
-
-        {/* QR Scanner button — center prominent */}
-        <button
-          onClick={() => navigate("/MobileQRScanner")}
-          className="flex flex-col items-center gap-1 -mt-4 select-none"
-        >
-          <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-all active:scale-95 ${
-            currentPage === "MobileQRScanner" ? "bg-[#16a34a]" : "bg-[#22c55e]"
-          }`}>
-            <QrCode className="w-7 h-7 text-black stroke-[2]" />
-          </div>
-          <span className="text-[10px] font-medium text-[#22c55e]">Scan</span>
-        </button>
 
         {/* "Mehr" button */}
         {hasOverflow && (

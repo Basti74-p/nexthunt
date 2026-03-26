@@ -1,7 +1,8 @@
 import React from "react";
-import { X, PenLine, Warehouse, Eye } from "lucide-react";
+import { X, PenLine, Warehouse, Eye, QrCode } from "lucide-react";
 
 const actions = [
+  { icon: QrCode, label: "QR-Code scannen", key: "qrscan" },
   { icon: PenLine, label: "Reviergrenze einzeichnen", key: "boundary" },
   { icon: Warehouse, label: "Einrichtung hinzufügen", key: "einrichtung" },
   { icon: Eye, label: "Sichtung erfassen", key: "sichtung" },

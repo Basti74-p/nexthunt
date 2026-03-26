@@ -13,9 +13,11 @@ import EinrichtungForm from "@/components/map/EinrichtungForm";
 import SichtungForm from "@/components/map/SichtungForm";
 import MapActionSheet from "@/components/map/MapActionSheet";
 import { Plus, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function MobileMap() {
   const { tenant } = useAuth();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [activeLayers] = useState(new Set(["einrichtungen", "sichtungen"]));
   const [selectedRevierId, setSelectedRevierId] = useState(null);
@@ -99,7 +101,9 @@ export default function MobileMap() {
   }, []);
 
   const handleAction = (key) => {
-    if (key === "einrichtung") {
+    if (key === "qrscan") {
+      navigate("/MobileQRScanner");
+    } else if (key === "einrichtung") {
       einrichtungModeRef.current = true;
       setEinrichtungMode(true);
     } else if (key === "boundary") {
