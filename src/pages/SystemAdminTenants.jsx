@@ -75,7 +75,7 @@ export default function SystemAdminTenants() {
     enabled: isPlatformAdmin,
   });
 
-  const { data: allUsers = [] } = useQuery({
+  const { data: allUsers = [], refetch: refetchUsers } = useQuery({
     queryKey: ["sa-all-users"],
     queryFn: () => base44.entities.User.list("-created_date", 500),
     enabled: isPlatformAdmin,
@@ -104,11 +104,9 @@ export default function SystemAdminTenants() {
   if (!isPlatformAdmin) return <AccessDenied />;
 
   // Users without any tenant association
-  const tenantEmails = new Set([
-    ...tenants.map(t => t.contact_email).filter(Boolean),
-    ...members.map(m => m.user_email).filter(Boolean),
-  ]);
-  const usersWithoutTenant = allUsers.filter(u => !tenantEmails.has(u.email) && u.role !== "admin" && u.role !== "platform_admin");
+  // Only check members (not contact_email) - a user may have registered with the same email as a tenant owner
+  const memberEmails = new Set(members.map(m => m.user_email).filter(Boolean));
+  const usersWithoutTenant = allUsers.filter(u => !memberEmails.has(u.email) && u.role !== "admin" && u.role !== "platform_admin");
 
   const filtered = tenants.filter(
     (t) =>
@@ -170,6 +168,11 @@ export default function SystemAdminTenants() {
 
         {activeTab === "users" && (
           <div className="space-y-3">
+            <div className="flex justify-end">
+              <Button size="sm" variant="outline" onClick={() => refetchUsers()} className="border-slate-700 text-slate-300 hover:bg-slate-800">
+                Aktualisieren
+              </Button>
+            </div>
             {usersWithoutTenant.length === 0 && (
               <div className="text-center py-16 text-slate-500">Keine neuen Registrierungen ohne Tenant.</div>
             )}
