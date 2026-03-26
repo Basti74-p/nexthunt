@@ -19,7 +19,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, ZoomContr
 
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { Locate, Layers, Search, X, Loader2, Map as MapIcon, Wind } from "lucide-react";
+import { Locate, Layers, Search, X, Loader2, Map as MapIcon, Wind, Satellite, Mountain } from "lucide-react";
 import { useMobile } from "@/components/hooks/useMobile";
 
 // Fix Leaflet default icon path issue with bundlers
@@ -34,18 +34,21 @@ const MAP_STYLES = [
   {
     id: "osm",
     label: "OpenStreetMap",
+    icon: MapIcon,
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   },
   {
     id: "satellite",
     label: "Satellit",
+    icon: Satellite,
     url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     attribution: "Tiles &copy; Esri",
   },
   {
     id: "topo",
     label: "Jagdkarte (OpenTopo)",
+    icon: Mountain,
     url: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
     attribution: '&copy; <a href="https://opentopomap.org">OpenTopoMap</a>',
   },
@@ -232,29 +235,38 @@ function StyleControl({ currentStyle, onStyleChange }) {
   return (
     <div className={`absolute z-[1000] ${isMobile ? "top-4 right-4" : "top-3 right-3"}`}>
       {open ? (
-        <div className="bg-[#2d2d2d] rounded-xl shadow-lg border border-[#444] overflow-hidden min-w-[140px]">
-          <div className={`border-b border-gray-50 flex items-center justify-between ${isMobile ? "px-4 py-3" : "px-3 py-2"}`}>
-            <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Kartenstil</span>
-            <button onClick={() => setOpen(false)}><X className={`text-gray-400 ${isMobile ? "w-5 h-5" : "w-3.5 h-3.5"}`} /></button>
+        <div className="bg-[#2d2d2d] rounded-xl shadow-lg border border-[#3a3a3a] overflow-hidden min-w-[200px]">
+          <div className={`border-b border-[#3a3a3a] flex items-center justify-between ${isMobile ? "px-4 py-3" : "px-3 py-2.5"}`}>
+            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Kartenstil</span>
+            <button onClick={() => setOpen(false)}><X className={`text-gray-400 hover:text-gray-200 ${isMobile ? "w-5 h-5" : "w-3.5 h-3.5"}`} /></button>
           </div>
-          {MAP_STYLES.map((s) => (
-            <button
-              key={s.id}
-              onClick={() => { onStyleChange(s); setOpen(false); }}
-              className={`w-full text-left transition-colors ${
-                isMobile 
-                  ? `px-4 py-3 text-base ${currentStyle.id === s.id ? "text-[#22c55e] font-medium bg-[#22c55e]/10" : "text-gray-300 hover:bg-[#3a3a3a]"}` 
-                  : `px-3 py-2 text-sm ${currentStyle.id === s.id ? "text-[#22c55e] font-medium bg-[#22c55e]/10" : "text-gray-300 hover:bg-[#3a3a3a]"}`
-              }`}
-            >
-              {s.label}
-            </button>
-          ))}
+          <div className={isMobile ? "space-y-1 p-2" : "space-y-1 p-1.5"}>
+            {MAP_STYLES.map((s) => {
+              const Icon = s.icon;
+              return (
+                <button
+                  key={s.id}
+                  onClick={() => { onStyleChange(s); setOpen(false); }}
+                  className={`w-full flex items-center gap-3 transition-all rounded-lg ${
+                    isMobile 
+                      ? `px-3 py-2.5 text-base ${currentStyle.id === s.id ? "bg-[#22c55e]/15 border border-[#22c55e]/40 text-[#22c55e]" : "text-gray-300 hover:bg-[#3a3a3a]"}` 
+                      : `px-2.5 py-2 text-sm ${currentStyle.id === s.id ? "bg-[#22c55e]/15 border border-[#22c55e]/40 text-[#22c55e]" : "text-gray-300 hover:bg-[#3a3a3a]"}`
+                  }`}
+                >
+                  <Icon className={`flex-shrink-0 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />
+                  <span className="font-medium">{s.label}</span>
+                  {currentStyle.id === s.id && (
+                    <div className="ml-auto w-2 h-2 rounded-full bg-[#22c55e]" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </div>
       ) : (
         <button
           onClick={() => setOpen(true)}
-          className={`bg-[#2d2d2d] rounded-xl shadow-md flex items-center justify-center hover:bg-[#3a3a3a] transition-colors border border-[#444] ${
+          className={`bg-[#2d2d2d] rounded-xl shadow-md flex items-center justify-center hover:bg-[#3a3a3a] active:bg-[#404040] transition-colors border border-[#3a3a3a] ${
             isMobile ? "w-12 h-12" : "w-10 h-10"
           }`}
           title="Kartenstil wechseln"
