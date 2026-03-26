@@ -96,6 +96,8 @@ export default function SystemAdminTenants() {
         : base44.entities.Tenant.create(data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["sa-tenants"] });
+      qc.invalidateQueries({ queryKey: ["sa-members"] });
+      qc.invalidateQueries({ queryKey: ["sa-all-users"] });
       setDialogOpen(false);
       setEditing(null);
     },
