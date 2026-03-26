@@ -238,10 +238,10 @@ export default function MobileWildkammer() {
         onClose={() => setSelectedItem(null)}
         onUpdated={() => {
           queryClient.invalidateQueries({ queryKey: ["wildkammer-mobile", tenant?.id] });
-          setSelectedItem(null);
         }}
         onDeleted={() => {
           queryClient.invalidateQueries({ queryKey: ["wildkammer-mobile", tenant?.id] });
+          setSelectedItem(null);
         }}
       />
 

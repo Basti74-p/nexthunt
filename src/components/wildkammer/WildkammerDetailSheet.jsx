@@ -60,7 +60,9 @@ export default function WildkammerDetailSheet({ item, revierName, onClose, onUpd
   };
 
   const handleDelete = async () => {
+    setSaving(true);
     await base44.entities.Wildkammer.delete(item.id);
+    setSaving(false);
     onDeleted();
     onClose();
   };
