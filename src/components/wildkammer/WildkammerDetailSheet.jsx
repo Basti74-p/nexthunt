@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CheckCircle, Weight, Thermometer, Calendar, Clock, MapPin, Tag, FileText, Trash2, ChevronRight } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { CheckCircle, Weight, Thermometer, Calendar, Clock, MapPin, Tag, FileText, Trash2, ChevronRight, AlertCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const SPECIES_LABEL = {
@@ -106,15 +107,66 @@ export default function WildkammerDetailSheet({ item, revierName, onClose, onUpd
             </Select>
           </div>
 
+          {/* Trichinen-Probe */}
+          <div className="bg-[#1a1a1a] rounded-2xl p-4 mb-4 border border-[#333]">
+            <p className="text-xs text-gray-500 uppercase tracking-wide mb-3">Trichinen-Probe</p>
+            <div className="space-y-3">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={item.trichinenprobe || false}
+                  onChange={(e) => base44.entities.Wildkammer.update(item.id, { trichinenprobe: e.target.checked }).then(() => onUpdated())}
+                  className="w-4 h-4 rounded accent-[#22c55e]"
+                />
+                <span className="text-sm text-gray-300">Probe entnommen</span>
+              </label>
+
+              {item.trichinenprobe && (
+                <>
+                  <div>
+                    <label className="text-xs text-gray-500 uppercase tracking-wide block mb-1">Probedatum</label>
+                    <input
+                      type="date"
+                      value={item.trichinenprobe_datum || ""}
+                      onChange={(e) => base44.entities.Wildkammer.update(item.id, { trichinenprobe_datum: e.target.value }).then(() => onUpdated())}
+                      className="w-full bg-[#252525] border border-[#3a3a3a] rounded-lg px-3 py-2 text-sm text-gray-100 focus:outline-none focus:border-[#22c55e]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs text-gray-500 uppercase tracking-wide block mb-1">Ergebnis</label>
+                    <Select value={item.trichinenprobe_ergebnis || "ausstehend"} onValueChange={(v) => base44.entities.Wildkammer.update(item.id, { trichinenprobe_ergebnis: v }).then(() => onUpdated())}>
+                      <SelectTrigger className="bg-[#252525] border-[#3a3a3a] text-gray-100">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-[#2d2d2d] border-[#3a3a3a]">
+                        <SelectItem value="ausstehend">⏳ Ausstehend</SelectItem>
+                        <SelectItem value="negativ">✓ Negativ (freigegeben)</SelectItem>
+                        <SelectItem value="positiv">⚠️ Positiv (gesperrt)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {item.trichinenprobe_ergebnis === "positiv" && (
+                    <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 flex items-start gap-2">
+                      <AlertCircle className="w-4 h-4 text-red-400 mt-0.5 shrink-0" />
+                      <p className="text-xs text-red-300">Positives Trichinen-Ergebnis – Tier darf nicht freigegeben werden</p>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+
           {/* Freigabe Toggle */}
           <button
             onClick={handleToggleFreigabe}
-            disabled={saving}
+            disabled={saving || (item.trichinenprobe && item.trichinenprobe_ergebnis === "positiv")}
             className={`w-full flex items-center justify-between p-4 rounded-2xl mb-4 border transition-all active:scale-95 ${
               item.freigabe
                 ? "bg-green-500/15 border-green-500/30"
                 : "bg-[#1a1a1a] border-[#333]"
-            }`}
+            } ${item.trichinenprobe && item.trichinenprobe_ergebnis === "positiv" ? "opacity-50 cursor-not-allowed" : ""}`}
           >
             <div className="flex items-center gap-3">
               <CheckCircle className={`w-5 h-5 ${item.freigabe ? "text-green-400" : "text-gray-600"}`} />
