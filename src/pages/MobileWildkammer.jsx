@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { useAuth } from "@/components/hooks/useAuth";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Package, CheckCircle, Thermometer, Weight, Plus, Archive, ShoppingCart, Layers } from "lucide-react";
+import { Package, CheckCircle, Thermometer, Weight, Plus, Archive, ShoppingCart, Layers, ChevronRight } from "lucide-react";
 import PageTransition from "@/components/ui/PageTransition";
 import WildkammerEingangDialog from "@/components/wildkammer/WildkammerEingangDialog";
+import WildkammerDetailSheet from "@/components/wildkammer/WildkammerDetailSheet";
 
 const SPECIES_LABEL = {
   rotwild: "Rotwild", schwarzwild: "Schwarzwild", rehwild: "Rehwild",
@@ -36,6 +37,7 @@ export default function MobileWildkammer() {
   const queryClient = useQueryClient();
   const [showEingang, setShowEingang] = useState(false);
   const [filterStatus, setFilterStatus] = useState("alle");
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const { data: wildkammer = [], isLoading } = useQuery({
     queryKey: ["wildkammer-mobile", tenant?.id],
@@ -170,7 +172,8 @@ export default function MobileWildkammer() {
               return (
                 <div
                   key={w.id}
-                  className="bg-[#252525] rounded-2xl border border-[#333] p-4 active:bg-[#2a2a2a] transition-colors"
+                  onClick={() => setSelectedItem(w)}
+                  className="bg-[#252525] rounded-2xl border border-[#333] p-4 active:bg-[#2a2a2a] transition-colors cursor-pointer"
                 >
                   <div className="flex items-start gap-3">
                     {/* Species icon */}
@@ -221,12 +224,26 @@ export default function MobileWildkammer() {
                       )}
                     </div>
                   </div>
+                  <ChevronRight className="w-4 h-4 text-gray-600 shrink-0 self-center ml-1" />
                 </div>
               );
             })}
           </div>
         )}
       </div>
+
+      <WildkammerDetailSheet
+        item={selectedItem}
+        revierName={selectedItem ? revierName(selectedItem.revier_id) : ""}
+        onClose={() => setSelectedItem(null)}
+        onUpdated={() => {
+          queryClient.invalidateQueries({ queryKey: ["wildkammer-mobile", tenant?.id] });
+          setSelectedItem(null);
+        }}
+        onDeleted={() => {
+          queryClient.invalidateQueries({ queryKey: ["wildkammer-mobile", tenant?.id] });
+        }}
+      />
 
       <WildkammerEingangDialog
         isOpen={showEingang}
