@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Map, Crosshair, ListTodo, Calendar, Warehouse } from "lucide-react";
+import { Map, Crosshair, ListTodo, Calendar, Warehouse, Refrigerator } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import MobileTopBar from "./MobileTopBar";
 import { useI18n } from "@/lib/i18n";
 
 // Root (tab) pages — navigating to these resets to the tab root
-const TAB_ROOT_PAGES = ["MobileMap", "MobileStrecke", "MobileTasks", "MobileKalender", "MobileEinrichtungen"];
+const TAB_ROOT_PAGES = ["MobileMap", "MobileStrecke", "MobileTasks", "MobileKalender", "MobileEinrichtungen", "MobileWildkammer"];
 
 const TAB_NAMES = {
   MobileMap: "Karte",
@@ -18,6 +18,7 @@ const TAB_NAMES = {
   JagdkalenderMain: "Kalender",
   JagdDetail: "Jagd",
   MobileEinrichtungen: "Einrichtungen",
+  MobileWildkammer: "Wildkammer",
   MobileEinrichtungsDetail: "Einrichtung",
   MobileAufgabenDetail: "Aufgabe",
 };
@@ -44,6 +45,7 @@ export default function MobileNav({ currentPage }) {
     { nameKey: "tab_aufgaben", icon: ListTodo, page: "MobileTasks", feature: "feature_tasks" },
     { nameKey: "tab_kalender", icon: Calendar, page: "MobileKalender", feature: "feature_kalender" },
     { nameKey: "tab_einrichtungen", icon: Warehouse, page: "MobileEinrichtungen", feature: "feature_einrichtungen" },
+    { nameKey: "tab_wildkammer", icon: Refrigerator, page: "MobileWildkammer", feature: "feature_wildkammer" },
   ].filter(tab => tab.feature === null || tenantFeatures[tab.feature] !== false);
 
   // Track current page in its tab's history slot

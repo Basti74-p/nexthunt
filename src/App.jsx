@@ -16,6 +16,7 @@ import SystemAdminDashboard from './pages/SystemAdminDashboard';
 import SystemAdminBilling from './pages/SystemAdminBilling';
 import MobileAufgabenDetail from './pages/MobileAufgabenDetail';
 import MobileEinrichtungen from './pages/MobileEinrichtungen';
+import MobileWildkammer from './pages/MobileWildkammer';
 import MobileEinrichtungsDetail from './pages/MobileEinrichtungsDetail';
 import MobileKalender from './pages/MobileKalender';
 import JagdkalenderKalender from './pages/JagdkalenderKalender';
@@ -64,6 +65,11 @@ const AuthenticatedApp = () => {
       <Route path="/MobileEinrichtungen" element={
         <LayoutWrapper currentPageName="MobileEinrichtungen">
           <MobileEinrichtungen />
+        </LayoutWrapper>
+      } />
+      <Route path="/MobileWildkammer" element={
+        <LayoutWrapper currentPageName="MobileWildkammer">
+          <MobileWildkammer />
         </LayoutWrapper>
       } />
       <Route path="/MobileEinrichtungsDetail" element={

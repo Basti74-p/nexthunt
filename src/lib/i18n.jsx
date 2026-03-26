@@ -44,6 +44,7 @@ export const translations = {
     tab_aufgaben: "Aufgaben",
     tab_kalender: "Kalender",
     tab_einrichtungen: "Einrichtungen",
+    tab_wildkammer: "Wildkammer",
 
     // Dashboard
     welcome: "Willkommen",
@@ -304,6 +305,7 @@ export const translations = {
     tab_aufgaben: "Tasks",
     tab_kalender: "Calendar",
     tab_einrichtungen: "Facilities",
+    tab_wildkammer: "Game Chamber",
 
     // Dashboard
     welcome: "Welcome",
@@ -564,6 +566,7 @@ export const translations = {
     tab_aufgaben: "Užduotys",
     tab_kalender: "Kalendorius",
     tab_einrichtungen: "Įrenginiai",
+    tab_wildkammer: "Žvėrienos kamera",
 
     // Dashboard
     welcome: "Sveiki",
