@@ -149,8 +149,8 @@ export default function WildkammerDetailSheet({ item, revierName, onClose, onUpd
                         setCurrentItem({ ...currentItem, trichinenprobe_datum: newVal });
                         onUpdated();
                       }}
-                      placeholder="dd.mm.yyyy"
-                      className="w-full bg-[#252525] border border-[#3a3a3a] rounded-lg px-3 py-2 text-sm text-gray-100 focus:outline-none focus:border-[#22c55e] cursor-pointer"
+                      className="w-full bg-[#3a3a3a] border border-[#4a4a4a] rounded-lg px-3 py-2.5 pr-10 text-sm text-gray-100 cursor-pointer focus:outline-none focus:border-[#22c55e] focus:bg-[#3f3f3f]"
+                      style={{colorScheme: "dark"}}
                     />
                   </div>
 
