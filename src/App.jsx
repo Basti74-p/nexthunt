@@ -17,6 +17,7 @@ import SystemAdminBilling from './pages/SystemAdminBilling';
 import MobileAufgabenDetail from './pages/MobileAufgabenDetail';
 import MobileEinrichtungen from './pages/MobileEinrichtungen';
 import MobileWildkammer from './pages/MobileWildkammer';
+import MobileQRScanner from './pages/MobileQRScanner';
 import MobileEinrichtungsDetail from './pages/MobileEinrichtungsDetail';
 import MobileKalender from './pages/MobileKalender';
 import JagdkalenderKalender from './pages/JagdkalenderKalender';
@@ -72,6 +73,7 @@ const AuthenticatedApp = () => {
           <MobileWildkammer />
         </LayoutWrapper>
       } />
+      <Route path="/MobileQRScanner" element={<MobileQRScanner />} />
       <Route path="/MobileEinrichtungsDetail" element={
         <LayoutWrapper currentPageName="MobileEinrichtungsDetail">
           <MobileEinrichtungsDetail />
