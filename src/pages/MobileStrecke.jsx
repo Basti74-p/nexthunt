@@ -17,6 +17,7 @@ const SPECIES = [
 { value: "rehwild", label: "Rehwild" },
 { value: "damwild", label: "Damwild" },
 { value: "sikawild", label: "Sikawild" },
+{ value: "niederwild", label: "Niederwild" },
 { value: "wolf", label: "Wolf" }];
 
 
@@ -32,6 +33,7 @@ const AGE_CLASSES = {
   rehwild: ["Bock Klasse I", "Bock Klasse II", "Bock Klasse III", "Schmalreh (m)", "Schmalreh (w)", "Ricke", "Kitz (m)", "Kitz (w)"],
   damwild: ["Schaufler Klasse I", "Schaufler Klasse II", "Schaufler Klasse III", "Damtier", "Schmaltier"],
   sikawild: ["Hirsch Klasse I", "Hirsch Klasse II", "Hirsch Klasse III", "Tier", "Schmaltier"],
+  niederwild: ["Hase", "Kaninchen", "Fasan (Hahn)", "Fasan (Henne)", "Rebhuhn", "Wildente", "Wildgans", "Birkhuhn", "Schnepfe", "Sonstiges"],
   wolf: ["Rüde", "Fähe", "Welpe"]
 };
 

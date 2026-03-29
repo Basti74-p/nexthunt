@@ -1,0 +1,142 @@
+{
+  "name": "Wildkammer",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "revier_id": {
+      "type": "string"
+    },
+    "strecke_id": {
+      "type": "string",
+      "description": "Verkn\u00fcpfte Strecke"
+    },
+    "species": {
+      "type": "string",
+      "enum": [
+        "rotwild",
+        "schwarzwild",
+        "rehwild",
+        "damwild",
+        "sikawild",
+        "niederwild",
+        "wolf"
+      ]
+    },
+    "age_class": {
+      "type": "string"
+    },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "maennlich",
+        "weiblich",
+        "unbekannt"
+      ]
+    },
+    "eingang_datum": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum des Eingangs"
+    },
+    "eingang_zeit": {
+      "type": "string",
+      "description": "Uhrzeit des Eingangs"
+    },
+    "aufbruch_ok": {
+      "type": "boolean",
+      "default": false
+    },
+    "decke_ab": {
+      "type": "boolean",
+      "default": false
+    },
+    "kuehlraum_eingang": {
+      "type": "string",
+      "description": "Zeitpunkt K\u00fchlraum"
+    },
+    "kuehltemperatur": {
+      "type": "number",
+      "description": "\u00b0C"
+    },
+    "gewicht_aufgebrochen": {
+      "type": "number",
+      "description": "Aufgebrochenes Gewicht kg"
+    },
+    "gewicht_kalt": {
+      "type": "number",
+      "description": "Kaltgewicht kg"
+    },
+    "trichinenprobe": {
+      "type": "boolean",
+      "default": false
+    },
+    "trichinenprobe_datum": {
+      "type": "string",
+      "format": "date"
+    },
+    "trichinenprobe_ergebnis": {
+      "type": "string",
+      "enum": [
+        "ausstehend",
+        "negativ",
+        "positiv"
+      ],
+      "default": "ausstehend"
+    },
+    "fleischbeschau": {
+      "type": "boolean",
+      "default": false
+    },
+    "freigabe": {
+      "type": "boolean",
+      "default": false
+    },
+    "freigabe_datum": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "eingang",
+        "verarbeitung",
+        "lager",
+        "ausgabe",
+        "verkauft"
+      ],
+      "default": "eingang"
+    },
+    "ausgabe_datum": {
+      "type": "string",
+      "format": "date"
+    },
+    "ausgabe_an": {
+      "type": "string",
+      "description": "Empf\u00e4nger Name/Firma"
+    },
+    "ausgabe_typ": {
+      "type": "string",
+      "enum": [
+        "eigenverbrauch",
+        "verkauf",
+        "spende",
+        "entsorgung"
+      ],
+      "default": "verkauf"
+    },
+    "verkaufspreis": {
+      "type": "number"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "revier_id",
+    "species",
+    "eingang_datum"
+  ]
+}

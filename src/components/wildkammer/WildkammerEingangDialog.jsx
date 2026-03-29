@@ -10,7 +10,7 @@ import { useMobile } from "@/components/hooks/useMobile";
 
 const SPECIES_LABELS = {
   rotwild: "Rotwild", schwarzwild: "Schwarzwild", rehwild: "Rehwild",
-  damwild: "Damwild", sikawild: "Sikawild", wolf: "Wolf",
+  damwild: "Damwild", sikawild: "Sikawild", niederwild: "Niederwild", wolf: "Wolf",
 };
 const GENDER_LABELS = { maennlich: "Männlich", weiblich: "Weiblich", unbekannt: "Unbekannt" };
 

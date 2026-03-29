@@ -7,11 +7,11 @@ import { base44 } from "@/api/base44Client";
 
 const SPECIES_LABEL = {
   rotwild: "Rotwild", schwarzwild: "Schwarzwild", rehwild: "Rehwild",
-  damwild: "Damwild", sikawild: "Sikawild", wolf: "Wolf",
+  damwild: "Damwild", sikawild: "Sikawild", niederwild: "Niederwild", wolf: "Wolf",
 };
 
 const SPECIES_EMOJI = {
-  rotwild: "🦌", schwarzwild: "🐗", rehwild: "🦌", damwild: "🦌", sikawild: "🦌", wolf: "🐺",
+  rotwild: "🦌", schwarzwild: "🐗", rehwild: "🦌", damwild: "🦌", sikawild: "🦌", niederwild: "🐇", wolf: "🐺",
 };
 
 const GENDER_LABEL = { maennlich: "Männlich", weiblich: "Weiblich", unbekannt: "Unbekannt" };

@@ -1,0 +1,79 @@
+{
+  "name": "Strecke",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "revier_id": {
+      "type": "string"
+    },
+    "species": {
+      "type": "string",
+      "enum": [
+        "rotwild",
+        "schwarzwild",
+        "rehwild",
+        "damwild",
+        "sikawild",
+        "niederwild",
+        "wolf"
+      ]
+    },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "maennlich",
+        "weiblich",
+        "unbekannt"
+      ]
+    },
+    "age_class": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "shooter_email": {
+      "type": "string",
+      "description": "Email of the shooter (user)"
+    },
+    "shooter_person_id": {
+      "type": "string",
+      "description": "Person ID if shooter is a guest"
+    },
+    "latitude": {
+      "type": "number"
+    },
+    "longitude": {
+      "type": "number"
+    },
+    "wildmark_id": {
+      "type": "string"
+    },
+    "weight_kg": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "erfasst",
+        "bestaetigt",
+        "wildkammer",
+        "verkauft",
+        "archiviert"
+      ],
+      "default": "erfasst"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "revier_id",
+    "species",
+    "date"
+  ]
+}
