@@ -1,5 +1,11 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
+};
+
 // Hilfsfunktion: anzahl aus nachricht extrahieren
 function extractAnzahl(nachricht) {
   if (!nachricht) return null;
@@ -14,11 +20,14 @@ function buildNachricht(anzahl, notizen) {
 }
 
 Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { status: 200, headers: corsHeaders });
+  }
+
   try {
-    // API-Key Auth
     const apiKey = req.headers.get('x-api-key');
     if (apiKey !== Deno.env.get('NextHuntmobile')) {
-      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+      return Response.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
     }
 
     const base44 = createClientFromRequest(req);
@@ -26,11 +35,10 @@ Deno.serve(async (req) => {
     const method = req.method;
 
     if (method === 'GET' || body.action === 'list') {
-      // GET: Liste Sichtungen (JagdMeldungen vom Typ "sichtung")
       const { tenant_id, revier_id, jagd_id, updated_since } = body;
 
       if (!tenant_id) {
-        return Response.json({ error: 'tenant_id required' }, { status: 400 });
+        return Response.json({ error: 'tenant_id required' }, { status: 400, headers: corsHeaders });
       }
 
       const filter = { tenant_id, typ: 'sichtung' };
@@ -38,13 +46,11 @@ Deno.serve(async (req) => {
 
       let meldungen = await base44.asServiceRole.entities.JagdMeldung.filter(filter);
 
-      // Optional: nach revier filtern über verknüpfte Jagd (wird clientseitig gefiltert wenn nötig)
       if (updated_since) {
         const since = new Date(updated_since);
         meldungen = meldungen.filter(m => new Date(m.updated_date) > since);
       }
 
-      // Anzahl aus nachricht extrahieren und als separates Feld zurückgeben
       const data = meldungen.map(m => ({
         ...m,
         anzahl: extractAnzahl(m.nachricht),
@@ -56,10 +62,9 @@ Deno.serve(async (req) => {
         count: data.length,
         data,
         sync_timestamp: new Date().toISOString()
-      });
+      }, { headers: corsHeaders });
 
     } else if (method === 'POST' || body.action === 'create') {
-      // POST: Neue Sichtung anlegen
       const {
         tenant_id, jagd_id,
         wildart, geschlecht, altersklasse,
@@ -69,7 +74,7 @@ Deno.serve(async (req) => {
       } = body;
 
       if (!tenant_id || !jagd_id || !zeitstempel) {
-        return Response.json({ error: 'tenant_id, jagd_id und zeitstempel sind Pflichtfelder' }, { status: 400 });
+        return Response.json({ error: 'tenant_id, jagd_id und zeitstempel sind Pflichtfelder' }, { status: 400, headers: corsHeaders });
       }
 
       const nachricht = buildNachricht(anzahl, notizen);
@@ -98,13 +103,13 @@ Deno.serve(async (req) => {
           notizen: newMeldung.nachricht ? newMeldung.nachricht.replace(/^Anzahl:\s*\d+\s*\|\s*/, '') : null
         },
         sync_timestamp: new Date().toISOString()
-      }, { status: 201 });
+      }, { status: 201, headers: corsHeaders });
 
     } else {
-      return Response.json({ error: 'Method not supported. Use action: "list" or "create"' }, { status: 405 });
+      return Response.json({ error: 'Method not supported. Use action: "list" or "create"' }, { status: 405, headers: corsHeaders });
     }
 
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    return Response.json({ error: error.message }, { status: 500, headers: corsHeaders });
   }
 });

@@ -1,11 +1,20 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
+};
+
 Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { status: 200, headers: corsHeaders });
+  }
+
   try {
-    // API-Key Auth
     const apiKey = req.headers.get('x-api-key');
     if (apiKey !== Deno.env.get('NextHuntmobile')) {
-      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+      return Response.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
     }
 
     const base44 = createClientFromRequest(req);
@@ -13,11 +22,10 @@ Deno.serve(async (req) => {
     const method = req.method;
 
     if (method === 'GET' || body.action === 'list') {
-      // GET: Liste Abschüsse
       const { tenant_id, revier_id, updated_since } = body;
 
       if (!tenant_id) {
-        return Response.json({ error: 'tenant_id required' }, { status: 400 });
+        return Response.json({ error: 'tenant_id required' }, { status: 400, headers: corsHeaders });
       }
 
       const filter = { tenant_id };
@@ -30,16 +38,14 @@ Deno.serve(async (req) => {
         strecken = strecken.filter(s => new Date(s.updated_date) > since);
       }
 
-      // Rückgabe ohne einrichtung_id — GPS-Koordinaten sind direkt im Datensatz
       return Response.json({
         success: true,
         count: strecken.length,
         data: strecken,
         sync_timestamp: new Date().toISOString()
-      });
+      }, { headers: corsHeaders });
 
     } else if (method === 'POST' || body.action === 'create') {
-      // POST: Neuen Abschuss anlegen
       const {
         tenant_id, revier_id, species, gender, age_class,
         date, shooter_email, shooter_person_id,
@@ -48,7 +54,7 @@ Deno.serve(async (req) => {
       } = body;
 
       if (!tenant_id || !revier_id || !species || !date) {
-        return Response.json({ error: 'tenant_id, revier_id, species und date sind Pflichtfelder' }, { status: 400 });
+        return Response.json({ error: 'tenant_id, revier_id, species und date sind Pflichtfelder' }, { status: 400, headers: corsHeaders });
       }
 
       const newStrecke = await base44.asServiceRole.entities.Strecke.create({
@@ -72,13 +78,13 @@ Deno.serve(async (req) => {
         success: true,
         data: newStrecke,
         sync_timestamp: new Date().toISOString()
-      }, { status: 201 });
+      }, { status: 201, headers: corsHeaders });
 
     } else {
-      return Response.json({ error: 'Method not supported. Use action: "list" or "create"' }, { status: 405 });
+      return Response.json({ error: 'Method not supported. Use action: "list" or "create"' }, { status: 405, headers: corsHeaders });
     }
 
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    return Response.json({ error: error.message }, { status: 500, headers: corsHeaders });
   }
 });
