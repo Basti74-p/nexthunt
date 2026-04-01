@@ -1,0 +1,52 @@
+{
+  "name": "WolfContact",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "org_name": {
+      "type": "string"
+    },
+    "org_type": {
+      "type": "string",
+      "enum": [
+        "Landesjagdverband",
+        "Untere Jagdbeh\u00f6rde",
+        "Obere Jagdbeh\u00f6rde",
+        "Wolfsbeauftragter",
+        "Rissgutachter",
+        "Forschungsinstitut",
+        "DBBW",
+        "Senckenberg Labor",
+        "Naturschutzbeh\u00f6rde"
+      ]
+    },
+    "federal_state": {
+      "type": "string"
+    },
+    "contact_person": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "is_primary": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "org_name",
+    "org_type"
+  ]
+}

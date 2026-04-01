@@ -1,0 +1,71 @@
+{
+  "name": "WolfCamera",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "camera_name": {
+      "type": "string"
+    },
+    "camera_model": {
+      "type": "string"
+    },
+    "location_lat": {
+      "type": "number"
+    },
+    "location_lng": {
+      "type": "number"
+    },
+    "location_name": {
+      "type": "string"
+    },
+    "location_description": {
+      "type": "string"
+    },
+    "installation_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "battery_status": {
+      "type": "string",
+      "enum": [
+        "Voll",
+        "Gut",
+        "Mittel",
+        "Leer",
+        "Unbekannt"
+      ],
+      "default": "Unbekannt"
+    },
+    "last_checked": {
+      "type": "string",
+      "format": "date"
+    },
+    "last_trigger_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "wolf_detections_count": {
+      "type": "number",
+      "default": 0
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "notes": {
+      "type": "string"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "tenant_id",
+    "camera_name"
+  ]
+}

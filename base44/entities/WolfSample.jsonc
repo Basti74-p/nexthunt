@@ -1,0 +1,157 @@
+{
+  "name": "WolfSample",
+  "type": "object",
+  "properties": {
+    "sample_id": {
+      "type": "string",
+      "description": "Auto-ID: WP-YYYY-NNNN"
+    },
+    "tenant_id": {
+      "type": "string"
+    },
+    "sample_type": {
+      "type": "string",
+      "enum": [
+        "Kotprobe/Losung",
+        "Haarprobe",
+        "Blutprobe",
+        "Speichelprobe Riss",
+        "Urinprobe",
+        "Gewebeprobe Totfund",
+        "Knochenprobe",
+        "Sonstiges"
+      ]
+    },
+    "collection_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "collector_name": {
+      "type": "string"
+    },
+    "collector_role": {
+      "type": "string",
+      "enum": [
+        "J\u00e4ger",
+        "Wolfsberater",
+        "Beh\u00f6rdenmitarbeiter",
+        "Wissenschaftler"
+      ]
+    },
+    "location_lat": {
+      "type": "number"
+    },
+    "location_lng": {
+      "type": "number"
+    },
+    "location_name": {
+      "type": "string"
+    },
+    "location_description": {
+      "type": "string"
+    },
+    "sample_condition": {
+      "type": "string",
+      "enum": [
+        "Frisch unter 24h",
+        "Gut 1-3 Tage",
+        "Mittel 3-7 Tage",
+        "Alt \u00fcber 7 Tage"
+      ]
+    },
+    "storage_method": {
+      "type": "string",
+      "enum": [
+        "Trocken in Papier",
+        "Gefrostet",
+        "In Ethanol 96%",
+        "In DMSO-Puffer"
+      ]
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "linked_sighting_id": {
+      "type": "string"
+    },
+    "linked_riss_id": {
+      "type": "string"
+    },
+    "sent_to_lab": {
+      "type": "boolean",
+      "default": false
+    },
+    "lab_name": {
+      "type": "string",
+      "default": "Senckenberg Zentrum f\u00fcr Wildtiergenetik Gelnhausen"
+    },
+    "sent_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "tracking_number": {
+      "type": "string"
+    },
+    "result_received": {
+      "type": "boolean",
+      "default": false
+    },
+    "result_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "result_individual_id": {
+      "type": "string",
+      "description": "z.B. GW1234m"
+    },
+    "result_species_confirmed": {
+      "type": "boolean"
+    },
+    "result_hybrid": {
+      "type": "boolean"
+    },
+    "result_sex": {
+      "type": "string",
+      "enum": [
+        "M\u00e4nnlich",
+        "Weiblich",
+        "Unbekannt"
+      ]
+    },
+    "result_haplotype": {
+      "type": "string",
+      "description": "z.B. HW01"
+    },
+    "result_notes": {
+      "type": "string"
+    },
+    "authority_submitted": {
+      "type": "boolean",
+      "default": false
+    },
+    "authority_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Gesammelt",
+        "Verpackt",
+        "An Labor gesendet",
+        "Im Labor",
+        "Ergebnis erhalten",
+        "An Beh\u00f6rde \u00fcbermittelt",
+        "Abgeschlossen"
+      ],
+      "default": "Gesammelt"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "sample_type",
+    "collection_date"
+  ]
+}

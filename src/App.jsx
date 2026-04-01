@@ -24,6 +24,7 @@ import JagdkalenderKalender from './pages/JagdkalenderKalender';
 import SystemAdminDebug from './pages/SystemAdminDebug';
 import DebugUserAccess from './pages/DebugUserAccess';
 import WolfTrack from './pages/WolfTrack';
+import WolfContacts from './pages/WolfContacts';
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
@@ -107,6 +108,11 @@ const AuthenticatedApp = () => {
       <Route path="/wolftrack" element={
         <LayoutWrapper currentPageName="WolfTrack">
           <WolfTrack />
+        </LayoutWrapper>
+      } />
+      <Route path="/wolftrack/contacts" element={
+        <LayoutWrapper currentPageName="WolfContacts">
+          <WolfContacts />
         </LayoutWrapper>
       } />
       <Route path="/AdminNewRegistrations" element={

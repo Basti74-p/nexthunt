@@ -1,0 +1,84 @@
+{
+  "name": "WolfReport",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "report_type": {
+      "type": "string",
+      "enum": [
+        "Monatsbericht",
+        "Quartalsbericht",
+        "Jahresbericht"
+      ],
+      "default": "Monatsbericht"
+    },
+    "period_from": {
+      "type": "string",
+      "format": "date"
+    },
+    "period_to": {
+      "type": "string",
+      "format": "date"
+    },
+    "revier_name": {
+      "type": "string"
+    },
+    "author_name": {
+      "type": "string"
+    },
+    "sightings_count": {
+      "type": "number",
+      "default": 0
+    },
+    "riss_count": {
+      "type": "number",
+      "default": 0
+    },
+    "samples_count": {
+      "type": "number",
+      "default": 0
+    },
+    "samples_sent_count": {
+      "type": "number",
+      "default": 0
+    },
+    "hunt_entries_count": {
+      "type": "number",
+      "default": 0
+    },
+    "summary": {
+      "type": "string"
+    },
+    "recommendations": {
+      "type": "string"
+    },
+    "submitted_to": {
+      "type": "string"
+    },
+    "submitted_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "pdf_url": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Entwurf",
+        "Fertig",
+        "Eingereicht",
+        "Best\u00e4tigt"
+      ],
+      "default": "Entwurf"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "report_type",
+    "period_from",
+    "period_to"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "name": "WolfMap",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "point_type": {
+      "type": "string",
+      "enum": [
+        "Sichtung",
+        "Riss",
+        "Probe",
+        "Totfund",
+        "Jagdeintrag",
+        "Wildkamera",
+        "F\u00e4hrte",
+        "Heulpunkt"
+      ]
+    },
+    "ref_id": {
+      "type": "string"
+    },
+    "lat": {
+      "type": "number"
+    },
+    "lng": {
+      "type": "number"
+    },
+    "label": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "scalp_category": {
+      "type": "string"
+    },
+    "color_code": {
+      "type": "string"
+    },
+    "visible": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "tenant_id",
+    "point_type",
+    "lat",
+    "lng"
+  ]
+}
