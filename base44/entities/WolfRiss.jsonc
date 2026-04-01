@@ -1,0 +1,95 @@
+{
+  "name": "WolfRiss",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "revier_id": {
+      "type": "string"
+    },
+    "incident_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "location_lat": {
+      "type": "number"
+    },
+    "location_lng": {
+      "type": "number"
+    },
+    "location_name": {
+      "type": "string"
+    },
+    "animal_species": {
+      "type": "string",
+      "enum": [
+        "Schaf",
+        "Ziege",
+        "Rind",
+        "Pferd",
+        "Wildschwein",
+        "Reh",
+        "Hirsch",
+        "Sonstiges"
+      ]
+    },
+    "animal_count_dead": {
+      "type": "number",
+      "default": 0
+    },
+    "animal_count_injured": {
+      "type": "number",
+      "default": 0
+    },
+    "owner_name": {
+      "type": "string"
+    },
+    "owner_contact": {
+      "type": "string"
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "wolf_confirmed": {
+      "type": "boolean",
+      "default": false
+    },
+    "gutachter_notified": {
+      "type": "boolean",
+      "default": false
+    },
+    "gutachter_name": {
+      "type": "string"
+    },
+    "compensation_applied": {
+      "type": "boolean",
+      "default": false
+    },
+    "compensation_amount": {
+      "type": "number"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Neu",
+        "Gutachter angefordert",
+        "Best\u00e4tigt",
+        "Entsch\u00e4digung beantragt",
+        "Abgeschlossen"
+      ],
+      "default": "Neu"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "incident_date",
+    "animal_species"
+  ]
+}

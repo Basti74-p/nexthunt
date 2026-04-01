@@ -1,0 +1,84 @@
+{
+  "name": "WolfSighting",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "revier_id": {
+      "type": "string"
+    },
+    "location_lat": {
+      "type": "number"
+    },
+    "location_lng": {
+      "type": "number"
+    },
+    "location_name": {
+      "type": "string"
+    },
+    "sighting_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sighting_type": {
+      "type": "string",
+      "enum": [
+        "Lebendsichtung",
+        "Totfund",
+        "Spur",
+        "Riss",
+        "Kot",
+        "Kamerafalle",
+        "Sonstiges"
+      ]
+    },
+    "scalp_category": {
+      "type": "string",
+      "enum": [
+        "C1 Eindeutiger Nachweis",
+        "C2 Best\u00e4tigter Hinweis",
+        "C3a Wahrscheinlich",
+        "C3c Unwahrscheinlich"
+      ]
+    },
+    "wolf_count": {
+      "type": "number"
+    },
+    "description": {
+      "type": "string"
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reported_to_authority": {
+      "type": "boolean",
+      "default": false
+    },
+    "authority_name": {
+      "type": "string"
+    },
+    "report_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Neu",
+        "In Bearbeitung",
+        "Best\u00e4tigt",
+        "Abgeschlossen"
+      ],
+      "default": "Neu"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "sighting_date",
+    "sighting_type"
+  ]
+}

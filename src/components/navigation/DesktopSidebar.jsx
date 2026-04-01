@@ -5,7 +5,7 @@ import {
   LayoutDashboard, TreePine, Shield,
   LogOut, ChevronDown, ChevronRight, Users,
   Crosshair, Calendar, ListTodo, Globe, Eye,
-  Truck, Archive, Radio, UserCheck, UserCog, LifeBuoy, Tag, ChevronsUpDown, Map, Building, Settings } from
+  Truck, Archive, Radio, UserCheck, UserCog, LifeBuoy, Tag, ChevronsUpDown, Map, Building, Settings, PawPrint } from
 "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { base44 } from "@/api/base44Client";
@@ -59,6 +59,7 @@ const NAV_CONFIG = [
   ]
 },
 { key: "nav_oeffentlichkeit", page: "Oeffentlichkeit", icon: Globe, module: "oeffentlichkeit" },
+{ key: "nav_wolftrack", page: "WolfTrack", icon: PawPrint, label: "🐺 WolfTrack" },
 { key: "nav_support", page: "SupportTickets", icon: LifeBuoy },
 { key: "nav_einstellungen", page: "TenantSettings", icon: Settings },
 ];
@@ -67,7 +68,7 @@ const NAV_CONFIG = [
 function NavItem({ item, currentPage, depth = 0 }) {
   const { canAccess, isPlatformAdmin } = useAuth();
   const { t } = useI18n();
-  const label = item.key ? t(item.key) : item.label;
+  const label = item.label || (item.key ? t(item.key) : item.page);
   const isActive = item.page && currentPage === item.page;
   const hasChildren = item.children && item.children.length > 0;
   const childIsActive = hasChildren && item.children.some((c) => c.page === currentPage);

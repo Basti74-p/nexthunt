@@ -1,0 +1,57 @@
+{
+  "name": "WolfTerritory",
+  "type": "object",
+  "properties": {
+    "territory_name": {
+      "type": "string"
+    },
+    "federal_state": {
+      "type": "string",
+      "enum": [
+        "Baden-W\u00fcrttemberg",
+        "Bayern",
+        "Berlin",
+        "Brandenburg",
+        "Bremen",
+        "Hamburg",
+        "Hessen",
+        "Mecklenburg-Vorpommern",
+        "Niedersachsen",
+        "Nordrhein-Westfalen",
+        "Rheinland-Pfalz",
+        "Saarland",
+        "Sachsen",
+        "Sachsen-Anhalt",
+        "Schleswig-Holstein",
+        "Th\u00fcringen"
+      ]
+    },
+    "wolf_count_estimated": {
+      "type": "number"
+    },
+    "last_confirmed": {
+      "type": "string",
+      "format": "date"
+    },
+    "territory_status": {
+      "type": "string",
+      "enum": [
+        "Aktives Rudel",
+        "Paar",
+        "Einzeltier",
+        "Inaktiv"
+      ],
+      "default": "Aktives Rudel"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "territory_name",
+    "federal_state"
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "name": "WolfHunt",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "revier_id": {
+      "type": "string"
+    },
+    "hunt_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "location_lat": {
+      "type": "number"
+    },
+    "location_lng": {
+      "type": "number"
+    },
+    "location_name": {
+      "type": "string"
+    },
+    "hunt_type": {
+      "type": "string",
+      "enum": [
+        "Regul\u00e4re Jagd 1.Juli-31.Oktober",
+        "Entnahme nach Nutztierriss",
+        "Entnahme auff\u00e4lliger Wolf"
+      ]
+    },
+    "result": {
+      "type": "string",
+      "enum": [
+        "Kein Kontakt",
+        "Gesichtet",
+        "Erlegt",
+        "Angeschossen"
+      ],
+      "default": "Kein Kontakt"
+    },
+    "wolf_sex": {
+      "type": "string",
+      "enum": [
+        "M\u00e4nnlich",
+        "Weiblich",
+        "Unbekannt"
+      ]
+    },
+    "wolf_age": {
+      "type": "string"
+    },
+    "weapon_used": {
+      "type": "string"
+    },
+    "distance_meters": {
+      "type": "number"
+    },
+    "authority_notified": {
+      "type": "boolean",
+      "default": false
+    },
+    "notification_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "sample_taken": {
+      "type": "boolean",
+      "default": false
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "hunt_date",
+    "hunt_type",
+    "result"
+  ]
+}
