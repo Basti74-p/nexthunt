@@ -25,6 +25,7 @@ import SystemAdminDebug from './pages/SystemAdminDebug';
 import DebugUserAccess from './pages/DebugUserAccess';
 import WolfTrack from './pages/WolfTrack';
 import WolfContacts from './pages/WolfContacts';
+import MobileTokenCallback from './pages/MobileTokenCallback';
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
@@ -60,6 +61,7 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/Demo" element={<Demo />} />
+      <Route path="/mobile-token-callback" element={<MobileTokenCallback />} />
       <Route path="/MobileAufgabenDetail" element={
         <LayoutWrapper currentPageName="MobileAufgabenDetail">
           <MobileAufgabenDetail />
