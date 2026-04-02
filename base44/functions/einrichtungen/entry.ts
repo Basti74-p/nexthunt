@@ -1,10 +1,5 @@
 import * as djwt from 'https://deno.land/x/djwt@v2.9.1/mod.ts';
-import { createClient } from 'npm:@base44/sdk@0.8.23';
-
-const base44 = createClient({
-  appId: Deno.env.get('BASE44_APP_ID'),
-  apiKey: Deno.env.get('NEXTHUNT_API_KEY'),
-});
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
 
 async function verifyToken(req) {
   const authHeader = req.headers.get('Authorization');
@@ -24,11 +19,12 @@ Deno.serve(async (req) => {
   if (!payload) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
   try {
+    const base44 = createClientFromRequest(req);
     const body = await req.json().catch(() => ({}));
     const filter = { tenant_id: payload.tenant_id };
     if (body.revier_id) filter.revier_id = body.revier_id;
 
-    const data = await base44.entities.Jagdeinrichtung.filter(filter);
+    const data = await base44.asServiceRole.entities.Jagdeinrichtung.filter(filter);
     return Response.json({ data, sync_timestamp: new Date().toISOString() });
   } catch (e) {
     return Response.json({ error: e.message }, { status: 500 });
