@@ -1,7 +1,10 @@
 import * as djwt from 'https://deno.land/x/djwt@v2.9.1/mod.ts';
+import { createClient } from 'npm:@base44/sdk@0.8.23';
 
-const APP_ID = Deno.env.get('BASE44_APP_ID');
-const API_KEY = Deno.env.get('NEXTHUNT_API_KEY');
+const base44 = createClient({
+  appId: Deno.env.get('BASE44_APP_ID'),
+  apiKey: Deno.env.get('NEXTHUNT_API_KEY'),
+});
 
 async function verifyToken(req) {
   const authHeader = req.headers.get('Authorization');
@@ -14,26 +17,6 @@ async function verifyToken(req) {
     );
     return await djwt.verify(token, key);
   } catch { return null; }
-}
-
-async function dbFilter(entity, filter) {
-  const res = await fetch(`https://api.base44.com/api/apps/${APP_ID}/entities/${entity}/filter`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'ApiKey': API_KEY },
-    body: JSON.stringify(filter)
-  });
-  if (!res.ok) throw new Error(`DB error: ${res.status}`);
-  return res.json();
-}
-
-async function dbCreate(entity, record) {
-  const res = await fetch(`https://api.base44.com/api/apps/${APP_ID}/entities/${entity}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'ApiKey': API_KEY },
-    body: JSON.stringify(record)
-  });
-  if (!res.ok) throw new Error(`DB error: ${res.status}`);
-  return res.json();
 }
 
 Deno.serve(async (req) => {
@@ -49,13 +32,13 @@ Deno.serve(async (req) => {
         return Response.json({ error: 'Pflichtfelder fehlen: titel, datum' }, { status: 400 });
       }
       const { action, ...rest } = body;
-      const data = await dbCreate('Termin', { ...rest, tenant_id: payload.tenant_id });
+      const data = await base44.entities.Termin.create({ ...rest, tenant_id: payload.tenant_id });
       return Response.json({ data, sync_timestamp: new Date().toISOString() });
     }
 
     const filter = { tenant_id: payload.tenant_id };
     if (body.revier_id) filter.revier_id = body.revier_id;
-    const data = await dbFilter('Termin', filter);
+    const data = await base44.entities.Termin.filter(filter);
     return Response.json({ data, sync_timestamp: new Date().toISOString() });
   } catch (e) {
     return Response.json({ error: e.message }, { status: 500 });
