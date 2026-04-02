@@ -20,6 +20,17 @@ Deno.serve(async (req) => {
 
   try {
     const base44 = createClientFromRequest(req);
+    const body = await req.json().catch(() => ({}));
+
+    if (body.action === 'update_boundary') {
+      const { revier_id, boundary_geojson } = body;
+      if (!revier_id || !boundary_geojson) {
+        return Response.json({ error: 'revier_id und boundary_geojson erforderlich' }, { status: 400 });
+      }
+      const data = await base44.asServiceRole.entities.Revier.update(revier_id, { boundary_geojson });
+      return Response.json({ data, sync_timestamp: new Date().toISOString() });
+    }
+
     const data = await base44.asServiceRole.entities.Revier.filter({ tenant_id: payload.tenant_id });
     return Response.json({ data, sync_timestamp: new Date().toISOString() });
   } catch (e) {
