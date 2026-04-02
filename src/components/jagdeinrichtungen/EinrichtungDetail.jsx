@@ -51,7 +51,7 @@ export default function EinrichtungDetail({ einrichtung, tenantId, onBack, onEdi
 
   const { data: aufgaben = [] } = useQuery({
     queryKey: ["aufgaben_einrichtung", einrichtung.id],
-    queryFn: () => base44.entities.Aufgabe.filter({ revier_id: einrichtung.revier_id }),
+    queryFn: () => base44.entities.Aufgabe.filter({ einrichtung_id: einrichtung.id }),
     enabled: tab === "aufgaben",
   });
 
