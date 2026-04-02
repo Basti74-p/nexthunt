@@ -799,7 +799,7 @@ export const translations = {
 const I18nContext = createContext(null);
 
 export function I18nProvider({ children }) {
-  const [lang, setLang] = useState(() => localStorage.getItem(LANG_KEY) || null);
+  const [lang, setLang] = useState(() => localStorage.getItem(LANG_KEY) || 'de');
 
   const setLanguage = (l) => {
     localStorage.setItem(LANG_KEY, l);
