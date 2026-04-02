@@ -22,6 +22,22 @@ Deno.serve(async (req) => {
     const base44 = createClientFromRequest(req);
     const body = await req.json().catch(() => ({}));
 
+    if (body.action === 'create') {
+      const { name } = body;
+      if (!name) return Response.json({ error: 'name erforderlich' }, { status: 400 });
+      const { action, ...rest } = body;
+      const data = await base44.asServiceRole.entities.Revier.create({ ...rest, tenant_id: payload.tenant_id, status: rest.status || 'active' });
+      return Response.json({ data, sync_timestamp: new Date().toISOString() }, { status: 201 });
+    }
+
+    if (body.action === 'update') {
+      const { revier_id, ...updateFields } = body;
+      if (!revier_id) return Response.json({ error: 'revier_id erforderlich' }, { status: 400 });
+      delete updateFields.action;
+      const data = await base44.asServiceRole.entities.Revier.update(revier_id, updateFields);
+      return Response.json({ data, sync_timestamp: new Date().toISOString() });
+    }
+
     if (body.action === 'update_boundary') {
       const { revier_id, boundary_geojson } = body;
       if (!revier_id || !boundary_geojson) {
@@ -29,6 +45,13 @@ Deno.serve(async (req) => {
       }
       const data = await base44.asServiceRole.entities.Revier.update(revier_id, { boundary_geojson });
       return Response.json({ data, sync_timestamp: new Date().toISOString() });
+    }
+
+    if (body.action === 'delete') {
+      const { revier_id } = body;
+      if (!revier_id) return Response.json({ error: 'revier_id erforderlich' }, { status: 400 });
+      await base44.asServiceRole.entities.Revier.delete(revier_id);
+      return Response.json({ success: true, sync_timestamp: new Date().toISOString() });
     }
 
     const data = await base44.asServiceRole.entities.Revier.filter({ tenant_id: payload.tenant_id });
