@@ -256,7 +256,7 @@ export default function EinrichtungDetail({ einrichtung, tenantId, onBack, onEdi
               <div className="text-center py-10 text-gray-500 text-sm">Keine Aufgaben vorhanden</div>
             ) : (
               aufgaben.map((a) => (
-                <div key={a.id} className="bg-[#1a1a1a] rounded-xl p-3">
+                <div key={a.id} className="bg-[#1a1a1a] rounded-xl p-3 cursor-pointer" onDoubleClick={() => setAufgabeDialog({ open: true, aufgabe: a })}>
                   <div className="flex items-start gap-2">
                     <button
                       onClick={() => toggleAufgabe.mutate({ id: a.id, status: a.status === "erledigt" ? "offen" : "erledigt" })}
