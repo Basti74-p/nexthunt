@@ -129,11 +129,18 @@ export default function AufgabeDialog({ isOpen, onClose, aufgabe, einrichtung, t
   const isMobile = useMobile();
   const isEdit = !!aufgabe;
 
-  const { data: members = [] } = useQuery({
+  const { data: allMembers = [] } = useQuery({
     queryKey: ["members", tenant?.id],
     queryFn: () => base44.entities.TenantMember.filter({ tenant_id: tenant?.id }),
     enabled: !!tenant?.id && isOpen,
   });
+
+  // Nur Mitglieder, die Zugriff auf dieses Revier haben (allowed_reviere leer = alle, sonst nur wenn revier enthalten)
+  const revierMembers = allMembers.filter((m) => {
+    if (!m.allowed_reviere || m.allowed_reviere.length === 0) return true;
+    return m.allowed_reviere.includes(einrichtung?.revier_id);
+  });
+  const members = revierMembers;
 
   const { data: schaeden = [] } = useQuery({
     queryKey: ["schadensprotokolle", einrichtung?.id],
