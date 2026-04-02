@@ -1,28 +1,30 @@
-import * as djwt from 'https://deno.land/x/djwt@v2.9.1/mod.ts';
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
 
-async function verifyToken(req) {
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
-    const token = authHeader.slice(7);
-    try {
-        const key = await crypto.subtle.importKey(
-            'raw', new TextEncoder().encode(Deno.env.get('JWT_SECRET')),
-            { name: 'HMAC', hash: 'SHA-256' }, false, ['sign', 'verify']
-        );
-        return await djwt.verify(token, key);
-    } catch { return null; }
-}
-
 Deno.serve(async (req) => {
-    try {
-        const user = await verifyToken(req);
-        if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
+  try {
+    const base44 = createClientFromRequest(req);
+    const user = await base44.auth.me();
+    if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
-        const base44 = createClientFromRequest(req);
-        const termine = await base44.asServiceRole.entities.Termin.filter({ tenant_id: user.tenant_id });
-        return Response.json(termine);
-    } catch (error) {
-        return Response.json({ error: error.message }, { status: 500 });
+    const body = await req.json().catch(() => ({}));
+    const tenant_id = user.tenant_id || body.tenant_id;
+    const action = body.action;
+
+    if (action === 'create') {
+      const { titel, datum } = body;
+      if (!titel || !datum) {
+        return Response.json({ error: 'Pflichtfelder fehlen: titel, datum' }, { status: 400 });
+      }
+      const created = await base44.entities.Termin.create({ ...body, tenant_id });
+      return Response.json({ data: created, sync_timestamp: new Date().toISOString() });
     }
+
+    const filter = { tenant_id };
+    if (body.revier_id) filter.revier_id = body.revier_id;
+    if (body.updated_since) filter.updated_date = { $gte: body.updated_since };
+    const data = await base44.entities.Termin.filter(filter);
+    return Response.json({ data, sync_timestamp: new Date().toISOString() });
+  } catch (e) {
+    return Response.json({ error: e.message }, { status: 500 });
+  }
 });
