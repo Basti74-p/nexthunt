@@ -21,9 +21,37 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const body = await req.json().catch(() => ({}));
+
+    if (body.action === 'create') {
+      const { revier_id, type, name, latitude, longitude } = body;
+      if (!revier_id || !type || !name) {
+        return Response.json({ error: 'Pflichtfelder fehlen: revier_id, type, name' }, { status: 400 });
+      }
+      const { action, ...rest } = body;
+      const data = await base44.asServiceRole.entities.Jagdeinrichtung.create({
+        ...rest,
+        tenant_id: payload.tenant_id,
+      });
+      return Response.json({ data, sync_timestamp: new Date().toISOString() }, { status: 201 });
+    }
+
+    if (body.action === 'update') {
+      const { id, ...updateFields } = body;
+      if (!id) return Response.json({ error: 'id erforderlich' }, { status: 400 });
+      delete updateFields.action;
+      const data = await base44.asServiceRole.entities.Jagdeinrichtung.update(id, updateFields);
+      return Response.json({ data, sync_timestamp: new Date().toISOString() });
+    }
+
+    if (body.action === 'delete') {
+      const { id } = body;
+      if (!id) return Response.json({ error: 'id erforderlich' }, { status: 400 });
+      await base44.asServiceRole.entities.Jagdeinrichtung.delete(id);
+      return Response.json({ success: true, sync_timestamp: new Date().toISOString() });
+    }
+
     const filter = { tenant_id: payload.tenant_id };
     if (body.revier_id) filter.revier_id = body.revier_id;
-
     const data = await base44.asServiceRole.entities.Jagdeinrichtung.filter(filter);
     return Response.json({ data, sync_timestamp: new Date().toISOString() });
   } catch (e) {
