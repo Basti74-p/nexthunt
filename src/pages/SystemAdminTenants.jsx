@@ -596,20 +596,32 @@ export default function SystemAdminTenants() {
                   </Select>
                 </div>
                 <div>
-                  <Label className="text-slate-300">Paket</Label>
-                  <Select
-                    value={editing.plan}
-                    onValueChange={(v) => setEditing(applyPlanConfig(v, editing))}
-                  >
-                    <SelectTrigger className="bg-slate-800 border-slate-700 text-white"><SelectValue /></SelectTrigger>
-                    <SelectContent className="bg-slate-800 border-slate-700">
-                      <SelectItem value="solo" className="text-white">Solo</SelectItem>
-                      <SelectItem value="pro" className="text-white">Pro</SelectItem>
-                      <SelectItem value="enterprise" className="text-white">Enterprise</SelectItem>
-                      <SelectItem value="free_trial" className="text-white">Free Trial</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                   <Label className="text-slate-300">Paket</Label>
+                   <div className="flex gap-2">
+                     <Select
+                       value={editing.plan}
+                       onValueChange={(v) => setEditing(applyPlanConfig(v, editing))}
+                     >
+                       <SelectTrigger className="bg-slate-800 border-slate-700 text-white flex-1"><SelectValue /></SelectTrigger>
+                       <SelectContent className="bg-slate-800 border-slate-700">
+                         <SelectItem value="solo" className="text-white">Solo</SelectItem>
+                         <SelectItem value="pro" className="text-white">Pro</SelectItem>
+                         <SelectItem value="enterprise" className="text-white">Enterprise</SelectItem>
+                         <SelectItem value="free_trial" className="text-white">Free Trial</SelectItem>
+                       </SelectContent>
+                     </Select>
+                     <Button
+                       type="button"
+                       size="sm"
+                       variant="outline"
+                       onClick={() => setEditing(applyPlanConfig(editing.plan, editing))}
+                       title="Plan-Features jetzt anwenden"
+                       className="border-amber-500/50 text-amber-400 hover:bg-amber-500/10 px-2 shrink-0"
+                     >
+                       <RefreshCw className="w-4 h-4" />
+                     </Button>
+                   </div>
+                 </div>
               </div>
 
               {/* Flächenlimit Info */}
