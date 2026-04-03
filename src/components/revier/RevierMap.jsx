@@ -11,8 +11,10 @@ import WildmanagementLayer from "@/components/map/layers/WildmanagementLayer";
 import BoundaryLayer, { REVIER_COLORS } from "@/components/map/layers/BoundaryLayer";
 import EinrichtungForm from "@/components/map/EinrichtungForm";
 import AddMapFeatureButton from "@/components/revier/AddMapFeatureButton";
+import { BoundaryEditorLayer, BoundaryEditorControls } from "@/components/map/BoundaryEditor";
 import { useMobile } from "@/components/hooks/useMobile";
-import { Building2, Eye, Map as MapIcon } from "lucide-react";
+import { Building2, Eye, Map as MapIcon, Pencil } from "lucide-react";
+import { calcFlaecheHa } from "@/lib/revierArea";
 
 const LAYERS = [
   { id: "einrichtungen", label: "Jagdeinrichtungen", icon: Building2 },
@@ -24,6 +26,9 @@ export default function RevierMap({ revier }) {
   const [showEinrichtungForm, setShowEinrichtungForm] = useState(false);
   const [clickedCoords, setClickedCoords] = useState(null);
   const [selectedEinrichtung, setSelectedEinrichtung] = useState(null);
+  const [editingBoundary, setEditingBoundary] = useState(false);
+  const [editCoords, setEditCoords] = useState([]);
+  const [savingBoundary, setSavingBoundary] = useState(false);
   const isMobile = useMobile();
   const queryClient = useQueryClient();
 
@@ -67,6 +72,68 @@ export default function RevierMap({ revier }) {
     setSelectedEinrichtung(einrichtung);
     setClickedCoords(null);
     setShowEinrichtungForm(true);
+  };
+
+  // Parse existing boundary coords from GeoJSON
+  const startEditBoundary = () => {
+    if (!revier.boundary_geojson) return;
+    try {
+      const gj = typeof revier.boundary_geojson === "string"
+        ? JSON.parse(revier.boundary_geojson)
+        : revier.boundary_geojson;
+      let rawCoords;
+      if (gj.type === "FeatureCollection") rawCoords = gj.features?.[0]?.geometry?.coordinates?.[0];
+      else if (gj.type === "Feature") rawCoords = gj.geometry?.coordinates?.[0];
+      else rawCoords = gj.coordinates?.[0];
+      if (!rawCoords?.length) return;
+      // GeoJSON is [lng, lat], convert to [lat, lng]
+      const coords = rawCoords.map(([lng, lat]) => [lat, lng]);
+      // Remove closing point if it's the same as the first
+      const last = coords[coords.length - 1];
+      const first = coords[0];
+      const cleaned = (last[0] === first[0] && last[1] === first[1]) ? coords.slice(0, -1) : coords;
+      setEditCoords(cleaned);
+      setEditingBoundary(true);
+    } catch (e) {
+      console.error("Boundary parse error", e);
+    }
+  };
+
+  const saveBoundary = async () => {
+    setSavingBoundary(true);
+    try {
+      // Convert [lat, lng] back to GeoJSON [lng, lat]
+      const geoCoords = [...editCoords, editCoords[0]].map(([lat, lng]) => [lng, lat]);
+      const existingGj = revier.boundary_geojson
+        ? (typeof revier.boundary_geojson === "string" ? JSON.parse(revier.boundary_geojson) : revier.boundary_geojson)
+        : {};
+      const color = existingGj.color || "#22c55e";
+      const geojson = {
+        type: "Feature",
+        color,
+        geometry: { type: "Polygon", coordinates: [geoCoords] },
+      };
+      // Calculate area
+      let flaeche_ha = null;
+      try { flaeche_ha = await calcFlaecheHa(JSON.stringify(geojson)); } catch {}
+      await base44.entities.Revier.update(revier.id, {
+        boundary_geojson: JSON.stringify(geojson),
+        ...(flaeche_ha !== null ? { flaeche_ha } : {}),
+      });
+      queryClient.invalidateQueries(["revier", revier.id]);
+      queryClient.invalidateQueries(["reviere"]);
+      setEditingBoundary(false);
+    } finally {
+      setSavingBoundary(false);
+    }
+  };
+
+  const deleteBoundary = async () => {
+    if (!window.confirm("Reviergrenze wirklich löschen?")) return;
+    await base44.entities.Revier.update(revier.id, { boundary_geojson: null, flaeche_ha: null });
+    queryClient.invalidateQueries(["revier", revier.id]);
+    queryClient.invalidateQueries(["reviere"]);
+    setEditingBoundary(false);
   };
 
   return (
@@ -116,21 +183,54 @@ export default function RevierMap({ revier }) {
 
       {/* Central map */}
       <div className={isMobile ? "flex-1 overflow-hidden relative" : "relative"}>
-        <RevierMapCore 
-          revier={revier} 
+        <RevierMapCore
+          revier={revier}
           height={isMobile ? "100%" : "520px"}
-          onMapClick={handleMapClick}
+          onMapClick={editingBoundary ? undefined : handleMapClick}
         >
-          <BoundaryLayer revier={revier} color={REVIER_COLORS[0]} />
-          {activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} onDelete={(id) => deleteEinrichtung.mutate(id)} onEdit={handleEditEinrichtung} />}
-          {activeLayers.has("sichtungen") && <WildmanagementLayer items={wildmanagement} />}
+          {editingBoundary ? (
+            <BoundaryEditorLayer
+              coords={editCoords}
+              color="#22c55e"
+              onChange={setEditCoords}
+            />
+          ) : (
+            <BoundaryLayer revier={revier} color={REVIER_COLORS[0]} />
+          )}
+          {!editingBoundary && activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} onDelete={(id) => deleteEinrichtung.mutate(id)} onEdit={handleEditEinrichtung} />}
+          {!editingBoundary && activeLayers.has("sichtungen") && <WildmanagementLayer items={wildmanagement} />}
         </RevierMapCore>
-        
+
+        {/* Edit boundary button */}
+        {!editingBoundary && revier.boundary_geojson && (
+          <button
+            onClick={startEditBoundary}
+            className="absolute top-3 left-1/2 -translate-x-1/2 z-[1000] flex items-center gap-1.5 px-3 py-1.5 bg-[#1e1e1e]/90 border border-[#444] text-gray-200 text-xs font-semibold rounded-xl shadow-lg hover:border-[#22c55e] hover:text-[#22c55e] transition-colors"
+          >
+            <Pencil className="w-3.5 h-3.5" />
+            Grenze bearbeiten
+          </button>
+        )}
+
+        {/* Boundary editor controls */}
+        {editingBoundary && (
+          <BoundaryEditorControls
+            coords={editCoords}
+            color="#22c55e"
+            onSave={saveBoundary}
+            onDelete={deleteBoundary}
+            onCancel={() => setEditingBoundary(false)}
+            saving={savingBoundary}
+          />
+        )}
+
         {/* FAB Button */}
-        <AddMapFeatureButton 
-          onAddEinrichtung={handleAddEinrichtung}
-          onAddBoundary={() => {}} // TODO: Implement boundary drawing
-        />
+        {!editingBoundary && (
+          <AddMapFeatureButton
+            onAddEinrichtung={handleAddEinrichtung}
+            onAddBoundary={() => {}}
+          />
+        )}
       </div>
 
       {/* Einrichtung Form Dialog */}
