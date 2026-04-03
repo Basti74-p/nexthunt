@@ -168,12 +168,21 @@ export function AuthProvider({ children }) {
   };
 
   /**
-   * Combined check: license enabled (from Tenant feature flags) AND user has permission.
-   * Important: undefined feature flags default to true (opt-out model) except
-   * for features that are explicitly opt-in (wildkammer, driven_hunt, public_portal, wildmarken).
+   * Combined check: nav_* flag on Tenant (direct per-menu control).
+   * nav_* flags are boolean fields on the Tenant entity.
+   * If the flag doesn't exist yet (old tenants), default to true.
+   * Platform admins always have full access.
    */
   const canAccess = (module) => {
     if (isPlatformAdmin) return true;
+    // nav_* flags: direct per-menu-item control
+    if (module.startsWith("nav_")) {
+      const t = activeTenant || tenant;
+      if (!t) return false;
+      const val = t[module];
+      return val !== false; // default true if not set
+    }
+    // Legacy feature_* fallback for any old code still using old module names
     const tf = tenantFeatures;
     const licenseMap = {
       dashboard: tf.feature_dashboard !== false,

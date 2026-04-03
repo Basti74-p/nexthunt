@@ -72,6 +72,116 @@
     "trial_days_remaining": {
       "type": "number"
     },
+    "nav_dashboard": {
+      "type": "boolean",
+      "default": true,
+      "description": "Men\u00fc: Dashboard"
+    },
+    "nav_reviere": {
+      "type": "boolean",
+      "default": true,
+      "description": "Men\u00fc: Reviere"
+    },
+    "nav_karte": {
+      "type": "boolean",
+      "default": true,
+      "description": "Men\u00fc: Karte"
+    },
+    "nav_jagdeinrichtungen": {
+      "type": "boolean",
+      "default": true,
+      "description": "Untermen\u00fc: Jagdeinrichtungen (unter Karte)"
+    },
+    "nav_wildmanagement": {
+      "type": "boolean",
+      "default": true,
+      "description": "Men\u00fc: Wildmanagement / Sichtungen"
+    },
+    "nav_strecke": {
+      "type": "boolean",
+      "default": true,
+      "description": "Men\u00fc: Strecke"
+    },
+    "nav_abschussplan": {
+      "type": "boolean",
+      "default": true,
+      "description": "Untermen\u00fc: Abschussplan (unter Strecke)"
+    },
+    "nav_wildkammer": {
+      "type": "boolean",
+      "default": false,
+      "description": "Untermen\u00fc: Wildkammer (unter Strecke)"
+    },
+    "nav_wildprodukte": {
+      "type": "boolean",
+      "default": false,
+      "description": "Untermen\u00fc: Lager/Wildprodukte (unter Strecke)"
+    },
+    "nav_wildverkauf": {
+      "type": "boolean",
+      "default": false,
+      "description": "Untermen\u00fc: Wildverkauf (unter Strecke)"
+    },
+    "nav_strecke_archiv": {
+      "type": "boolean",
+      "default": true,
+      "description": "Untermen\u00fc: Archiv (unter Strecke)"
+    },
+    "nav_jagdkalender": {
+      "type": "boolean",
+      "default": true,
+      "description": "Men\u00fc: Jagdkalender"
+    },
+    "nav_alle_jagden": {
+      "type": "boolean",
+      "default": true,
+      "description": "Untermen\u00fc: Alle Jagden (unter Jagdkalender)"
+    },
+    "nav_live_monitor": {
+      "type": "boolean",
+      "default": true,
+      "description": "Untermen\u00fc: Live Monitor (unter Jagdkalender)"
+    },
+    "nav_jagdgaeste": {
+      "type": "boolean",
+      "default": false,
+      "description": "Untermen\u00fc: Jagdg\u00e4ste (unter Jagdkalender)"
+    },
+    "nav_personal": {
+      "type": "boolean",
+      "default": false,
+      "description": "Untermen\u00fc: Personal (unter Jagdkalender)"
+    },
+    "nav_aufgaben": {
+      "type": "boolean",
+      "default": true,
+      "description": "Men\u00fc: Aufgaben"
+    },
+    "nav_personen": {
+      "type": "boolean",
+      "default": false,
+      "description": "Men\u00fc: Personen"
+    },
+    "nav_berechtigungen": {
+      "type": "boolean",
+      "default": false,
+      "description": "Untermen\u00fc: Berechtigungen (unter Personen)"
+    },
+    "nav_oeffentlichkeit": {
+      "type": "boolean",
+      "default": false,
+      "description": "Men\u00fc: \u00d6ffentlichkeit"
+    },
+    "nav_gesellschaftsjagd": {
+      "type": "boolean",
+      "default": false,
+      "description": "Men\u00fc: Gesellschaftsjagd"
+    },
+    "nav_wolftrack": {
+      "type": "boolean",
+      "default": false,
+      "description": "Men\u00fc: WolfTrack"
+    },
     "feature_map": {
       "type": "boolean",
       "default": true
