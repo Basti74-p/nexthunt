@@ -5,7 +5,7 @@ import {
   LayoutDashboard, TreePine, Shield,
   LogOut, ChevronDown, ChevronRight, Users,
   Crosshair, Calendar, ListTodo, Globe, Eye,
-  Truck, Archive, Radio, UserCheck, UserCog, LifeBuoy, Tag, ChevronsUpDown, Map, Building, Settings, PawPrint } from
+  Truck, Archive, Radio, UserCheck, UserCog, LifeBuoy, Tag, ChevronsUpDown, Map, Building, Settings } from
 "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { base44 } from "@/api/base44Client";
@@ -59,7 +59,6 @@ const NAV_CONFIG = [
   ]
 },
 { key: "nav_oeffentlichkeit", page: "Oeffentlichkeit", icon: Globe, module: "oeffentlichkeit" },
-{ key: "nav_wolftrack", page: "WolfTrack", icon: PawPrint, label: "🐺 WolfTrack" },
 { key: "nav_support", page: "SupportTickets", icon: LifeBuoy },
 { key: "nav_einstellungen", page: "TenantSettings", icon: Settings },
 ];
