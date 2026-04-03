@@ -614,8 +614,14 @@ export default function SystemAdminTenants() {
                        type="button"
                        size="sm"
                        variant="outline"
-                       onClick={() => setEditing(applyPlanConfig(editing.plan, editing))}
-                       title="Plan-Features jetzt anwenden"
+                       onClick={async () => {
+                         const config = PLAN_CONFIGS[editing.plan];
+                         if (!config || !editing.id) return;
+                         await base44.entities.Tenant.update(editing.id, { ...config, plan: editing.plan });
+                         qc.invalidateQueries({ queryKey: ["sa-tenants"] });
+                         setEditing(applyPlanConfig(editing.plan, editing));
+                       }}
+                       title="Plan-Features jetzt in DB anwenden"
                        className="border-amber-500/50 text-amber-400 hover:bg-amber-500/10 px-2 shrink-0"
                      >
                        <RefreshCw className="w-4 h-4" />
