@@ -1,0 +1,189 @@
+{
+  "name": "Tenant",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Tenant/organization name"
+    },
+    "contact_person": {
+      "type": "string",
+      "description": "Primary contact person"
+    },
+    "contact_email": {
+      "type": "string",
+      "description": "Contact email address"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Phone number"
+    },
+    "address": {
+      "type": "string",
+      "description": "Address"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "trial",
+        "suspended",
+        "expired"
+      ],
+      "default": "trial",
+      "description": "Tenant status"
+    },
+    "plan": {
+      "type": "string",
+      "enum": [
+        "solo",
+        "pro",
+        "enterprise",
+        "free_trial"
+      ],
+      "default": "free_trial",
+      "description": "Subscription plan"
+    },
+    "max_reviere": {
+      "type": "number",
+      "description": "Maximum number of Reviere allowed"
+    },
+    "max_mitglieder": {
+      "type": "number",
+      "description": "Maximum number of members allowed"
+    },
+    "trial_start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the trial period started"
+    },
+    "trial_end_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the trial period ends"
+    },
+    "trial_days_remaining": {
+      "type": "number",
+      "description": "Calculated field for remaining trial days"
+    },
+    "feature_map": {
+      "type": "boolean",
+      "default": true,
+      "description": "Map feature enabled"
+    },
+    "feature_sightings": {
+      "type": "boolean",
+      "default": true,
+      "description": "Sightings/Wildmanagement feature enabled"
+    },
+    "feature_strecke": {
+      "type": "boolean",
+      "default": true,
+      "description": "Strecke feature enabled"
+    },
+    "feature_wildkammer": {
+      "type": "boolean",
+      "default": false,
+      "description": "Wildkammer feature enabled"
+    },
+    "feature_tasks": {
+      "type": "boolean",
+      "default": true,
+      "description": "Tasks/Aufgaben feature enabled"
+    },
+    "feature_driven_hunt": {
+      "type": "boolean",
+      "default": false,
+      "description": "Driven hunt / Gesellschaftsjagd feature enabled"
+    },
+    "feature_public_portal": {
+      "type": "boolean",
+      "default": false,
+      "description": "Public portal feature enabled"
+    },
+    "feature_wildmarken": {
+      "type": "boolean",
+      "default": false,
+      "description": "Wildmarken feature enabled"
+    },
+    "feature_dashboard": {
+      "type": "boolean",
+      "default": true,
+      "description": "Dashboard module enabled"
+    },
+    "feature_reviere": {
+      "type": "boolean",
+      "default": true,
+      "description": "Reviere module enabled"
+    },
+    "feature_kalender": {
+      "type": "boolean",
+      "default": true,
+      "description": "Jagdkalender module enabled"
+    },
+    "feature_personen": {
+      "type": "boolean",
+      "default": false,
+      "description": "Personen module enabled"
+    },
+    "feature_einrichtungen": {
+      "type": "boolean",
+      "default": true,
+      "description": "Jagdeinrichtungen module enabled"
+    },
+    "feature_wolftrack": {
+      "type": "boolean",
+      "default": false,
+      "description": "WolfTrack module enabled"
+    },
+    "feature_gesellschaftsjagd": {
+      "type": "boolean",
+      "default": false,
+      "description": "Gesellschaftsjagd module enabled"
+    },
+    "feature_schadensprotokoll": {
+      "type": "boolean",
+      "default": false,
+      "description": "Schadensprotokoll module enabled"
+    },
+    "feature_wildmanagement": {
+      "type": "boolean",
+      "default": false,
+      "description": "Wildmanagement extended module enabled"
+    },
+    "feature_oeffentlichkeit": {
+      "type": "boolean",
+      "default": false,
+      "description": "Oeffentlichkeit module enabled"
+    },
+    "feature_kameras": {
+      "type": "boolean",
+      "default": false,
+      "description": "Wildkameras module enabled"
+    },
+    "addon_wildmanagement": {
+      "type": "boolean",
+      "default": false,
+      "description": "Add-on: extended Wildmanagement"
+    },
+    "addon_oeffentlichkeit": {
+      "type": "boolean",
+      "default": false,
+      "description": "Add-on: Oeffentlichkeit portal"
+    },
+    "addon_kameras": {
+      "type": "boolean",
+      "default": false,
+      "description": "Add-on: Wildkameras"
+    },
+    "addon_wildkammer": {
+      "type": "boolean",
+      "default": false,
+      "description": "Add-on: Wildkammer"
+    }
+  },
+  "required": [
+    "name",
+    "contact_email"
+  ]
+}
