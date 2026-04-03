@@ -42,7 +42,7 @@ export default function RevierOverview({ revier }) {
             <span className="text-gray-500">Größe</span>
             <p className="font-medium text-gray-900 mt-1 flex items-center gap-1">
               <Ruler className="w-3.5 h-3.5 text-gray-400" />
-              {revier.size_ha ? `${revier.size_ha} ha` : "—"}
+              {revier.flaeche_ha ? `${revier.flaeche_ha.toFixed(1)} ha` : revier.size_ha ? `${revier.size_ha} ha` : "—"}
             </p>
           </div>
           <div className="col-span-2">
