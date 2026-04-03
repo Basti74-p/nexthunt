@@ -167,7 +167,7 @@ function LockedFeature({ label, tooltip }) {
 }
 
 // ─── Plan Card ────────────────────────────────────────────────────────────────
-function PlanCard({ plan, currentPlan, billing, enterpriseRef }) {
+function PlanCard({ plan, currentPlan, billing, enterpriseRef, fittingPlanKey }) {
   const isCurrentPlan = currentPlan === plan.key;
   const isEnterprise = !!plan.isEnterprise;
   const price = billing === "monthly" ? plan.price_monthly : plan.price_yearly;
@@ -187,6 +187,7 @@ function PlanCard({ plan, currentPlan, billing, enterpriseRef }) {
         ${plan.accent}
         ${isEnterprise ? "bg-gradient-to-b from-amber-950/30 to-[#1a1a1a]" : "bg-[#1a1a1a]"}
         ${isCurrentPlan ? "ring-2 ring-[#22c55e]/40" : ""}
+        ${fittingPlanKey && plan.key === fittingPlanKey && !isCurrentPlan ? "ring-2 ring-blue-500/40" : ""}
       `}
     >
       {/* Tag & current badge */}
@@ -202,6 +203,11 @@ function PlanCard({ plan, currentPlan, billing, enterpriseRef }) {
         {isCurrentPlan && (
           <span className="text-[10px] font-semibold uppercase tracking-wider bg-[#22c55e]/20 text-[#22c55e] px-2 py-0.5 rounded-full shrink-0">
             Ihr Plan
+          </span>
+        )}
+        {fittingPlanKey && plan.key === fittingPlanKey && !isCurrentPlan && (
+          <span className="text-[10px] font-semibold uppercase tracking-wider bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full shrink-0">
+            Passend für dich
           </span>
         )}
       </div>
@@ -269,6 +275,15 @@ export default function PaketePreise() {
   const gesamtflaeche = tenant?.gesamtflaeche_ha || 0;
   const maxFlaeche = tenant?.max_flaeche_ha || 2000;
 
+  // Determine which plan would fit the current usage
+  const fittingPlanKey = (() => {
+    if (gesamtflaeche <= 600) return "solo";
+    if (gesamtflaeche <= 2000) return "pro";
+    if (gesamtflaeche <= 5000) return "enterprise_s";
+    if (gesamtflaeche <= 10000) return "enterprise_m";
+    return "enterprise_l";
+  })();
+
   const scrollToEnterprise = () => {
     enterpriseRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -330,6 +345,7 @@ export default function PaketePreise() {
             currentPlan={currentPlan}
             billing={billing}
             enterpriseRef={null}
+            fittingPlanKey={fittingPlanKey}
           />
         ))}
       </div>
@@ -342,6 +358,7 @@ export default function PaketePreise() {
             currentPlan={currentPlan}
             billing={billing}
             enterpriseRef={i === 0 ? enterpriseRef : null}
+            fittingPlanKey={fittingPlanKey}
           />
         ))}
       </div>
@@ -384,7 +401,7 @@ export default function PaketePreise() {
           <div className="flex items-center gap-2 min-w-0">
             <Lock className="w-4 h-4 text-amber-400 shrink-0" />
             <p className="text-sm text-gray-200 truncate">
-              Du nutzt bereits <strong className="text-[#22c55e]">{gesamtflaeche.toFixed(0)} von {maxFlaeche.toLocaleString("de-DE")} ha</strong> — entdecke was Enterprise dir noch bietet
+              Du nutzt aktuell <strong className="text-[#22c55e]">{gesamtflaeche.toFixed(1)} ha</strong> von <strong className="text-[#22c55e]">{maxFlaeche.toLocaleString("de-DE")} ha</strong> — entdecke was Enterprise dir noch bietet
             </p>
           </div>
           <button

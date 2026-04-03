@@ -5,7 +5,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Map, Crosshair, ListTodo, Users, Calendar, TreePine, ArrowRight, Pencil } from "lucide-react";
+import { Map, Crosshair, ListTodo, Users, Calendar, TreePine, ArrowRight, Pencil, AlertTriangle, X, TrendingUp } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -17,6 +17,13 @@ export default function Dashboard() {
   const [showBoundaryHelp, setShowBoundaryHelp] = useState(false);
   const [trialDaysRemaining, setTrialDaysRemaining] = useState(null);
   const [showTrialModal, setShowTrialModal] = useState(false);
+  const [capacityBannerDismissed, setCapacityBannerDismissed] = useState(() => {
+    try {
+      const d = localStorage.getItem("nh_capacity_banner_dismissed");
+      if (!d) return false;
+      return new Date(d).toDateString() === new Date().toDateString();
+    } catch { return false; }
+  });
 
   const { data: reviere = [] } = useQuery({
     queryKey: ["reviere", tenant?.id],
@@ -75,6 +82,22 @@ export default function Dashboard() {
     );
   }
 
+  // Capacity calculations
+  const gesamtflaeche = tenant?.gesamtflaeche_ha || 0;
+  const maxFlaeche = tenant?.max_flaeche_ha;
+  const capacityPct = maxFlaeche ? (gesamtflaeche / maxFlaeche) * 100 : 0;
+  const isNearLimit = maxFlaeche && gesamtflaeche >= maxFlaeche * 0.8;
+  const isOverLimit = maxFlaeche && gesamtflaeche > maxFlaeche;
+  const gracePeriodActive = tenant?.grace_period_until && new Date(tenant.grace_period_until) > new Date();
+  const graceDaysLeft = gracePeriodActive
+    ? Math.ceil((new Date(tenant.grace_period_until) - new Date()) / (1000 * 60 * 60 * 24))
+    : null;
+
+  const dismissCapacityBanner = () => {
+    setCapacityBannerDismissed(true);
+    try { localStorage.setItem("nh_capacity_banner_dismissed", new Date().toISOString()); } catch {}
+  };
+
   const stats = [
     { label: t("stat_reviere"), value: reviere.length, icon: Map, color: "bg-emerald-50 text-emerald-600" },
     { label: t("stat_offene_aufgaben"), value: aufgaben.length, icon: ListTodo, color: "bg-amber-50 text-amber-600" },
@@ -114,6 +137,33 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* Grace Period / Over Limit Banner (red) */}
+      {(isOverLimit || gracePeriodActive) && (
+        <div className="mb-4 flex items-start gap-3 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/30">
+          <AlertTriangle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+          <p className="text-sm text-red-300 flex-1">
+            {gracePeriodActive
+              ? `Deine bewirtschaftete Fläche überschreitet dein Paketlimit. Du hast noch ${graceDaysLeft} Tage um dein Paket zu upgraden bevor Funktionen eingeschränkt werden.`
+              : "Deine bewirtschaftete Fläche überschreitet dein Paketlimit. Bitte upgrade dein Paket."}
+          </p>
+          <Link to="/PaketePreise" className="text-xs text-red-400 hover:underline font-semibold shrink-0 whitespace-nowrap">Jetzt upgraden →</Link>
+        </div>
+      )}
+
+      {/* Near Limit Banner (yellow, dismissable) */}
+      {isNearLimit && !isOverLimit && !capacityBannerDismissed && (
+        <div className="mb-4 flex items-start gap-3 px-4 py-3 rounded-xl bg-amber-500/10 border border-amber-500/30">
+          <TrendingUp className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+          <p className="text-sm text-amber-300 flex-1">
+            Du nutzt bereits <strong>{gesamtflaeche.toFixed(1)} ha</strong> von <strong>{maxFlaeche?.toLocaleString("de-DE")} ha</strong> — bald wird ein Upgrade nötig.{" "}
+            <Link to="/PaketePreise" className="underline font-semibold">Jetzt Pakete ansehen →</Link>
+          </p>
+          <button onClick={dismissCapacityBanner} className="text-amber-400 hover:text-amber-200 shrink-0">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {stats.map(({ label, value, icon: Icon, color }) => (
@@ -127,6 +177,31 @@ export default function Dashboard() {
             <p className="text-xs text-gray-400 mt-1">{label}</p>
           </div>
         ))}
+
+        {/* Bewirtschaftete Fläche Card */}
+        {maxFlaeche && (
+          <div className="bg-[#3a3a3a] rounded-2xl p-5 border border-[#4a4a4a] shadow-sm">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-emerald-900/20">
+                <TrendingUp className="w-5 h-5 text-emerald-500" />
+              </div>
+              <span className="text-xs font-medium" style={{ color: capacityPct >= 100 ? "#ef4444" : capacityPct >= 80 ? "#f59e0b" : "#22c55e" }}>
+                {Math.round(capacityPct)}%
+              </span>
+            </div>
+            <p className="text-2xl font-bold text-gray-100">{gesamtflaeche.toFixed(0)} ha</p>
+            <p className="text-xs text-gray-400 mt-1">von {maxFlaeche.toLocaleString("de-DE")} ha</p>
+            <div className="mt-2 h-1.5 bg-[#2a2a2a] rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all"
+                style={{
+                  width: `${Math.min(capacityPct, 100)}%`,
+                  backgroundColor: capacityPct >= 100 ? "#ef4444" : capacityPct >= 80 ? "#f59e0b" : "#22c55e"
+                }}
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Reviere Quick Access */}
@@ -164,7 +239,9 @@ export default function Dashboard() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-100 truncate group-hover:text-[#22c55e]">{r.name}</p>
-                  <p className="text-xs text-gray-400">{r.size_ha ? `${r.size_ha} ha` : r.region || "—"}</p>
+                  <p className="text-xs text-gray-400">
+                    {r.flaeche_ha ? `${r.flaeche_ha.toFixed(1)} ha` : r.boundary_geojson ? `${r.size_ha || 0} ha` : "Fläche nicht berechnet"}
+                  </p>
                 </div>
                 <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-[#22c55e] transition-colors" />
               </Link>

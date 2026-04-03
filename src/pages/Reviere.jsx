@@ -114,7 +114,12 @@ export default function Reviere() {
               <h3 className="text-lg font-semibold text-gray-900 group-hover:text-[#0F2F23] transition-colors">{r.name}</h3>
               <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
                 {r.region && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{r.region}</span>}
-                {r.size_ha && <span>{r.size_ha} ha</span>}
+                {r.flaeche_ha
+                  ? <span className="text-[#22c55e] font-medium">{r.flaeche_ha.toFixed(1)} ha</span>
+                  : r.boundary_geojson
+                    ? <span>{r.size_ha || 0} ha</span>
+                    : <span className="text-amber-500 flex items-center gap-1"><AlertTriangle className="w-3 h-3" />Grenzen noch nicht eingezeichnet</span>
+                }
               </div>
               <div className="mt-4 flex items-center gap-1 text-xs text-[#0F2F23] font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                 {t("reviere_oeffnen")} <ArrowRight className="w-3 h-3" />

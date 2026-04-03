@@ -54,6 +54,11 @@
       "type": "number",
       "description": "Current total area of all Reviere in hectares (auto-calculated)"
     },
+    "grace_period_until": {
+      "type": "string",
+      "format": "date-time",
+      "description": "If set, tenant exceeded area limit \u2014 grace period ends at this date"
+    },
     "max_mitglieder": {
       "type": "number",
       "description": "Maximum number of members allowed"
@@ -74,118 +79,95 @@
     },
     "feature_map": {
       "type": "boolean",
-      "default": true,
-      "description": "Map feature enabled"
+      "default": true
     },
     "feature_sightings": {
       "type": "boolean",
-      "default": true,
-      "description": "Sightings/Wildmanagement feature enabled"
+      "default": true
     },
     "feature_strecke": {
       "type": "boolean",
-      "default": true,
-      "description": "Strecke feature enabled"
+      "default": true
     },
     "feature_wildkammer": {
       "type": "boolean",
-      "default": false,
-      "description": "Wildkammer feature enabled"
+      "default": false
     },
     "feature_tasks": {
       "type": "boolean",
-      "default": true,
-      "description": "Tasks/Aufgaben feature enabled"
+      "default": true
     },
     "feature_driven_hunt": {
       "type": "boolean",
-      "default": false,
-      "description": "Driven hunt / Gesellschaftsjagd feature enabled"
+      "default": false
     },
     "feature_public_portal": {
       "type": "boolean",
-      "default": false,
-      "description": "Public portal feature enabled"
+      "default": false
     },
     "feature_wildmarken": {
       "type": "boolean",
-      "default": false,
-      "description": "Wildmarken feature enabled"
+      "default": false
     },
     "feature_dashboard": {
       "type": "boolean",
-      "default": true,
-      "description": "Dashboard module enabled"
+      "default": true
     },
     "feature_reviere": {
       "type": "boolean",
-      "default": true,
-      "description": "Reviere module enabled"
+      "default": true
     },
     "feature_kalender": {
       "type": "boolean",
-      "default": true,
-      "description": "Jagdkalender module enabled"
+      "default": true
     },
     "feature_personen": {
       "type": "boolean",
-      "default": false,
-      "description": "Personen module enabled"
+      "default": false
     },
     "feature_einrichtungen": {
       "type": "boolean",
-      "default": true,
-      "description": "Jagdeinrichtungen module enabled"
+      "default": true
     },
     "feature_wolftrack": {
       "type": "boolean",
-      "default": false,
-      "description": "WolfTrack module enabled"
+      "default": false
     },
     "feature_gesellschaftsjagd": {
       "type": "boolean",
-      "default": false,
-      "description": "Gesellschaftsjagd module enabled"
+      "default": false
     },
     "feature_schadensprotokoll": {
       "type": "boolean",
-      "default": false,
-      "description": "Schadensprotokoll module enabled"
+      "default": false
     },
     "feature_wildmanagement": {
       "type": "boolean",
-      "default": false,
-      "description": "Wildmanagement extended module enabled"
+      "default": false
     },
     "feature_oeffentlichkeit": {
       "type": "boolean",
-      "default": false,
-      "description": "Oeffentlichkeit module enabled"
+      "default": false
     },
     "feature_kameras": {
       "type": "boolean",
-      "default": false,
-      "description": "Wildkameras module enabled"
+      "default": false
     },
     "addon_wildmanagement": {
       "type": "boolean",
-      "default": false,
-      "description": "Add-on: extended Wildmanagement"
+      "default": false
     },
     "addon_oeffentlichkeit": {
       "type": "boolean",
-      "default": false,
-      "description": "Add-on: Oeffentlichkeit portal"
+      "default": false
     },
     "addon_kameras": {
       "type": "boolean",
-      "default": false,
-      "description": "Add-on: Wildkameras"
+      "default": false
     },
     "addon_wildkammer": {
       "type": "boolean",
-      "default": false,
-      "description": "Add-on: Wildkammer Basic"
+      "default": false
     }
   },
   "required": [

@@ -136,11 +136,22 @@ export default function Karte() {
     const flaecheHa = await calcFlaecheHa(geojson);
     await base44.entities.Revier.update(assignRevierId, { boundary_geojson: geojson, flaeche_ha: flaecheHa });
 
-    // Update gesamtflaeche_ha on tenant
+    // Update gesamtflaeche_ha on tenant and handle grace period
     if (tenant?.id) {
       const allReviere = await base44.entities.Revier.filter({ tenant_id: tenant.id });
       const gesamt = allReviere.reduce((sum, r) => sum + (r.id === assignRevierId ? flaecheHa : (r.flaeche_ha || r.size_ha || 0)), 0);
-      await base44.entities.Tenant.update(tenant.id, { gesamtflaeche_ha: Math.round(gesamt * 100) / 100 });
+      const gesamtRounded = Math.round(gesamt * 100) / 100;
+      const updateData = { gesamtflaeche_ha: gesamtRounded };
+      // If newly over limit and no grace period active yet, set 30-day grace
+      if (tenant.max_flaeche_ha && gesamtRounded > tenant.max_flaeche_ha) {
+        const existingGrace = tenant.grace_period_until && new Date(tenant.grace_period_until) > new Date();
+        if (!existingGrace) {
+          const graceDate = new Date();
+          graceDate.setDate(graceDate.getDate() + 30);
+          updateData.grace_period_until = graceDate.toISOString();
+        }
+      }
+      await base44.entities.Tenant.update(tenant.id, updateData);
     }
 
     setSaving(false);
