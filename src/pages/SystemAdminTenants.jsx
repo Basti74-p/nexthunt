@@ -42,6 +42,7 @@ const FEATURES = [
 const PLAN_CONFIGS = {
   solo: {
     max_flaeche_ha: 800,
+    max_mitglieder: 1,
     nav_dashboard:        true,
     nav_karte:            true,
     nav_reviere:          true,

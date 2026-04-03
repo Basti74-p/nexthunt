@@ -19,7 +19,7 @@ const NAV_ALL_ON = {
 export const PLAN_CONFIGS = {
   solo: {
     max_flaeche_ha: 800,
-    max_mitglieder: 5,
+    max_mitglieder: 1,
     // nav_* flags — Solo: Karte, Einrichtungen, Sichtungen, Strecke Basic, Jagdkalender, Aufgaben
     nav_dashboard:        true,
     nav_karte:            true,
