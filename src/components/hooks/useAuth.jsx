@@ -6,11 +6,17 @@ const AuthContext = createContext(null);
 // Persist selected tenant for platform admins across navigation
 const ADMIN_TENANT_KEY = "nh_admin_selected_tenant";
 
+const USER_TENANT_KEY = "nh_user_selected_tenant";
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [tenant, setTenant] = useState(null);
+  const [availableTenants, setAvailableTenants] = useState([]);
   const [adminSelectedTenant, setAdminSelectedTenant] = useState(() => {
     try { return JSON.parse(localStorage.getItem(ADMIN_TENANT_KEY)) || null; } catch { return null; }
+  });
+  const [userSelectedTenantId, setUserSelectedTenantId] = useState(() => {
+    try { return localStorage.getItem(USER_TENANT_KEY) || null; } catch { return null; }
   });
   const [tenantMember, setTenantMember] = useState(null);
   const [tenantFeatures, setTenantFeatures] = useState({});
@@ -32,90 +38,81 @@ export function AuthProvider({ children }) {
         return;
       }
 
-      // Primary: tenant_id on user object
-      // Fallback 1: look up tenant via TenantMember email match
-      // Fallback 2: look up tenant where user is the contact_email (owner)
-      let tid = me.tenant_id;
-      let isContactEmailOwner = false;
-      
-      if (!tid) {
-        const memberRecords = await base44.entities.TenantMember.filter({ user_email: me.email });
-        if (memberRecords.length > 0) {
-          tid = memberRecords[0].tenant_id;
-        } else {
-          // Check if user email matches a tenant's contact_email (owner scenario)
-          const ownerTenants = await base44.entities.Tenant.filter({ contact_email: me.email });
-          if (ownerTenants.length > 0) {
-            tid = ownerTenants[0].id;
-            isContactEmailOwner = true;
-          }
-        }
+      // Collect all tenants this user belongs to
+      const [memberRecords, ownerTenants] = await Promise.all([
+        base44.entities.TenantMember.filter({ user_email: me.email }),
+        base44.entities.Tenant.filter({ contact_email: me.email }),
+      ]);
+
+      // Build list of all tenant IDs
+      const memberTenantIds = memberRecords.map(m => m.tenant_id);
+      const ownerTenantIds = ownerTenants.map(t => t.id).filter(id => !memberTenantIds.includes(id));
+      const allTenantIds = [...new Set([
+        ...(me.tenant_id ? [me.tenant_id] : []),
+        ...memberTenantIds,
+        ...ownerTenantIds,
+      ])];
+
+      if (allTenantIds.length === 0) {
+        setLoading(false);
+        return;
       }
 
-      if (tid) {
-        const [tenants, members] = await Promise.all([
-          base44.entities.Tenant.filter({ id: tid }),
-          base44.entities.TenantMember.filter({ tenant_id: tid, user_email: me.email }),
-        ]);
+      // Load all tenant objects
+      const allTenantObjects = await Promise.all(
+        allTenantIds.map(id => base44.entities.Tenant.filter({ id }))
+      );
+      const allTenants = allTenantObjects.flat().filter(Boolean);
+      setAvailableTenants(allTenants);
 
-        if (tenants.length > 0) {
-          const t = tenants[0];
-          setTenant(t);
-          setTenantFeatures({
-            feature_map: t.feature_map !== false,
-            feature_sightings: t.feature_sightings !== false,
-            feature_strecke: t.feature_strecke !== false,
-            feature_wildkammer: t.feature_wildkammer === true,
-            feature_tasks: t.feature_tasks !== false,
-            feature_driven_hunt: t.feature_driven_hunt === true,
-            feature_public_portal: t.feature_public_portal === true,
-            feature_wildmarken: t.feature_wildmarken === true,
+      // Pick active tenant: user-selected > first in list
+      let activeTid = userSelectedTenantId && allTenantIds.includes(userSelectedTenantId)
+        ? userSelectedTenantId
+        : allTenantIds[0];
+
+      const applyTenant = (tid) => {
+        const t = allTenants.find(t => t.id === tid);
+        if (!t) return;
+        setTenant(t);
+        setTenantFeatures({
+          feature_map: t.feature_map !== false,
+          feature_sightings: t.feature_sightings !== false,
+          feature_strecke: t.feature_strecke !== false,
+          feature_wildkammer: t.feature_wildkammer === true,
+          feature_tasks: t.feature_tasks !== false,
+          feature_driven_hunt: t.feature_driven_hunt === true,
+          feature_public_portal: t.feature_public_portal === true,
+          feature_wildmarken: t.feature_wildmarken === true,
+        });
+
+        const m = memberRecords.find(m => m.tenant_id === tid);
+        const isOwner = !m || m.role === "tenant_owner" || ownerTenantIds.includes(tid);
+
+        if (m) {
+          setTenantMember(m);
+          setUserPermissions({
+            perm_wildmanagement: isOwner || m.perm_wildmanagement !== false,
+            perm_strecke: isOwner || m.perm_strecke !== false,
+            perm_wildkammer: isOwner || m.perm_wildkammer === true,
+            perm_kalender: isOwner || m.perm_kalender !== false,
+            perm_aufgaben: isOwner || m.perm_aufgaben !== false,
+            perm_personen: isOwner || m.perm_personen === true,
+            perm_oeffentlichkeit: isOwner || m.perm_oeffentlichkeit === true,
+            perm_einrichtungen: isOwner || m.perm_einrichtungen !== false,
+            allowed_reviere: isOwner ? [] : (m.allowed_reviere || []),
+          });
+        } else {
+          // Owner via contact_email without TenantMember record
+          setTenantMember({ role: "tenant_owner" });
+          setUserPermissions({
+            perm_wildmanagement: true, perm_strecke: true, perm_wildkammer: true,
+            perm_kalender: true, perm_aufgaben: true, perm_personen: true,
+            perm_oeffentlichkeit: true, perm_einrichtungen: true, allowed_reviere: [],
           });
         }
+      };
 
-        if (members.length > 0) {
-                  const m = members[0];
-                  setTenantMember(m);
-                  // tenant_owner gets all permissions by default
-                  const isOwner = m.role === "tenant_owner";
-                  setUserPermissions({
-                    perm_wildmanagement: isOwner || m.perm_wildmanagement !== false,
-                    perm_strecke: isOwner || m.perm_strecke !== false,
-                    perm_wildkammer: isOwner || m.perm_wildkammer === true,
-                    perm_kalender: isOwner || m.perm_kalender !== false,
-                    perm_aufgaben: isOwner || m.perm_aufgaben !== false,
-                    perm_personen: isOwner || m.perm_personen === true,
-                    perm_oeffentlichkeit: isOwner || m.perm_oeffentlichkeit === true,
-                    perm_einrichtungen: isOwner || m.perm_einrichtungen !== false,
-                    allowed_reviere: isOwner ? [] : (m.allowed_reviere || []), // empty = all
-                  });
-                } else if (isContactEmailOwner) {
-                  // User is tenant owner via contact_email but no TenantMember exists yet
-                  // Create a virtual tenant_member object to indicate ownership
-                  setTenantMember({
-                    role: "tenant_owner",
-                    perm_wildmanagement: true,
-                    perm_strecke: true,
-                    perm_wildkammer: true,
-                    perm_kalender: true,
-                    perm_aufgaben: true,
-                    perm_personen: true,
-                    perm_oeffentlichkeit: true,
-                    perm_einrichtungen: true,
-                  });
-                  setUserPermissions({
-                    perm_wildmanagement: true,
-                    perm_strecke: true,
-                    perm_wildkammer: true,
-                    perm_kalender: true,
-                    perm_aufgaben: true,
-                    perm_personen: true,
-                    perm_oeffentlichkeit: true,
-                    perm_einrichtungen: true,
-                    allowed_reviere: [],
-                  });
-                }
-      }
+      applyTenant(activeTid);
     } catch (e) {
       console.error("Auth error", e);
     } finally {
@@ -134,6 +131,13 @@ export function AuthProvider({ children }) {
   const switchTenant = async (tenantObj) => {
     setAdminSelectedTenant(tenantObj);
     try { localStorage.setItem(ADMIN_TENANT_KEY, JSON.stringify(tenantObj)); } catch {}
+  };
+
+  // For regular users: switch between their available tenants
+  const switchUserTenant = (tenantObj) => {
+    try { localStorage.setItem(USER_TENANT_KEY, tenantObj.id); } catch {}
+    setUserSelectedTenantId(tenantObj.id);
+    loadUser();
   };
 
   /**
@@ -202,7 +206,9 @@ export function AuthProvider({ children }) {
         hasPermission,
         reload: loadUser,
         switchTenant,
+        switchUserTenant,
         adminSelectedTenant,
+        availableTenants,
       }}
     >
       {children}

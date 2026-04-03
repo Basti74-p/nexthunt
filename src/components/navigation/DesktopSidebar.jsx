@@ -145,25 +145,53 @@ function TenantSwitcher() {
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg bg-[#2d2d2d] hover:bg-[#3a3a3a] text-xs text-gray-300 transition-colors">
-
         <span className="flex-1 text-left truncate">{tenant?.name || t("nav_tenant_waehlen")}</span>
         <ChevronsUpDown className="w-3 h-3 text-gray-500 shrink-0" />
       </button>
       {open &&
       <div className="absolute left-0 right-0 top-full mt-1 bg-[#1e1e1e] border border-[#3a3a3a] rounded-xl shadow-xl z-50 max-h-60 overflow-y-auto">
-          {tenants.map((t) =>
+          {tenants.map((ten) =>
         <button
-          key={t.id}
-          onClick={() => {switchTenant(t);setOpen(false);}}
-          className={`w-full text-left px-3 py-2 text-xs hover:bg-[#2d2d2d] transition-colors ${tenant?.id === t.id ? "text-[#22c55e] font-semibold" : "text-gray-300"}`}>
-
-              {t.name}
+          key={ten.id}
+          onClick={() => {switchTenant(ten);setOpen(false);}}
+          className={`w-full text-left px-3 py-2 text-xs hover:bg-[#2d2d2d] transition-colors ${tenant?.id === ten.id ? "text-[#22c55e] font-semibold" : "text-gray-300"}`}>
+              {ten.name}
             </button>
         )}
         </div>
       }
     </div>);
+}
 
+function UserTenantSwitcher() {
+  const { tenant, availableTenants, switchUserTenant } = useAuth();
+  const [open, setOpen] = useState(false);
+
+  if (!availableTenants || availableTenants.length <= 1) return null;
+
+  return (
+    <div className="relative px-3 mb-2">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg bg-[#2d2d2d] hover:bg-[#3a3a3a] text-xs text-gray-300 transition-colors">
+        <span className="flex-1 text-left truncate font-medium text-[#22c55e]">{tenant?.name}</span>
+        <ChevronsUpDown className="w-3 h-3 text-gray-500 shrink-0" />
+      </button>
+      {open && (
+        <div className="absolute left-3 right-3 top-full mt-1 bg-[#1e1e1e] border border-[#3a3a3a] rounded-xl shadow-xl z-50 overflow-hidden">
+          <p className="px-3 pt-2 pb-1 text-[10px] text-gray-500 uppercase tracking-wider font-semibold">Revier wechseln</p>
+          {availableTenants.map((ten) => (
+            <button
+              key={ten.id}
+              onClick={() => { switchUserTenant(ten); setOpen(false); }}
+              className={`w-full text-left px-3 py-2 text-xs hover:bg-[#2d2d2d] transition-colors ${tenant?.id === ten.id ? "text-[#22c55e] font-semibold" : "text-gray-300"}`}>
+              {ten.name}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 
@@ -211,6 +239,8 @@ export default function DesktopSidebar({ currentPage }) {
             <div className="my-3 border-t border-[#2d3a4f]" />
           </div>
         }
+
+        {!isPlatformAdmin && <UserTenantSwitcher />}
 
         {NAV_CONFIG.map((item) =>
         <NavItem key={item.key} item={item} currentPage={currentPage} />

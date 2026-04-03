@@ -34,7 +34,7 @@ const CHILD_TO_TAB = {
 };
 
 export default function MobileNav({ currentPage }) {
-  const { tenantFeatures } = useAuth();
+  const { tenantFeatures, availableTenants, tenant, switchUserTenant } = useAuth();
   const { t } = useI18n();
   const navigate = useNavigate();
   const tabLastPage = useRef({});
@@ -103,6 +103,26 @@ export default function MobileNav({ currentPage }) {
                 <X className="w-4 h-4" />
               </button>
             </div>
+
+            {availableTenants && availableTenants.length > 1 && (
+              <div className="mb-4 p-3 bg-[#1e1e1e] rounded-xl border border-[#333]">
+                <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-2 font-semibold">Revier wechseln</p>
+                <div className="flex flex-col gap-1">
+                  {availableTenants.map((ten) => (
+                    <button
+                      key={ten.id}
+                      onClick={() => { switchUserTenant(ten); setMoreOpen(false); }}
+                      className={`text-left px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+                        tenant?.id === ten.id
+                          ? "bg-[#22c55e]/15 text-[#22c55e] border border-[#22c55e]/30"
+                          : "text-gray-300 hover:bg-[#2a2a2a]"
+                      }`}>
+                      {ten.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div className="grid grid-cols-3 gap-3">
               {overflowTabs.map(({ nameKey, icon: TabIcon, page }) => {
