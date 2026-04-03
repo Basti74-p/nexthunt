@@ -12,7 +12,8 @@ import DeleteAccountDialog from "@/components/wildverkauf/DeleteAccountDialog";
 import BackupSection from "@/components/settings/BackupSection";
 import { base44 } from "@/api/base44Client";
 import { useI18n } from "@/lib/i18n";
-import { Globe } from "lucide-react";
+import { Globe, Package } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const DEFAULT_ETIKETT_SETTINGS = {
   betriebsname: "",
@@ -197,6 +198,22 @@ export default function TenantSettings() {
             </button>
           ))}
         </div>
+      </div>
+
+      {/* Pakete & Preise Link */}
+      <div className="bg-[#1a2e1a] rounded-2xl border border-[#22c55e]/30 p-5 mb-6 flex items-center justify-between">
+        <div>
+          <h2 className="text-base font-semibold text-gray-100 flex items-center gap-2">
+            <Package className="w-4 h-4 text-[#22c55e]" /> Pakete & Preise
+          </h2>
+          <p className="text-xs text-gray-400 mt-0.5">Aktueller Plan: <span className="text-[#22c55e] font-medium">{tenant?.plan || "—"}</span></p>
+        </div>
+        <Link
+          to="/PaketePreise"
+          className="px-4 py-2 bg-[#22c55e] text-black text-sm font-semibold rounded-xl hover:bg-[#16a34a] transition-colors"
+        >
+          Pakete ansehen
+        </Link>
       </div>
 
       <BackupSection />

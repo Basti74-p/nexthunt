@@ -26,6 +26,7 @@ import DebugUserAccess from './pages/DebugUserAccess';
 import WolfTrack from './pages/WolfTrack';
 import WolfContacts from './pages/WolfContacts';
 import MobileTokenCallback from './pages/MobileTokenCallback';
+import PaketePreise from './pages/PaketePreise';
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
@@ -135,6 +136,11 @@ const AuthenticatedApp = () => {
       <Route path="/SystemAdminBilling" element={
         <LayoutWrapper currentPageName="SystemAdminBilling">
           <SystemAdminBilling />
+        </LayoutWrapper>
+      } />
+      <Route path="/PaketePreise" element={
+        <LayoutWrapper currentPageName="PaketePreise">
+          <PaketePreise />
         </LayoutWrapper>
       } />
       <Route path="/" element={
