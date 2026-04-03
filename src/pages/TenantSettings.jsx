@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/components/hooks/useAuth";
-import { Check, X } from "lucide-react";
-import PageHeader from "@/components/ui/PageHeader";
+import { Check, X, ChevronDown, ChevronRight, Globe, Package, User, Tag, FileText, Shield, HardDrive, Trash2, Zap } from "lucide-react";
 import StatusBadge from "@/components/ui/StatusBadge";
 import { Button } from "@/components/ui/button";
 import EtikettSettings from "@/components/wildprodukte/EtikettSettings";
@@ -12,7 +11,6 @@ import DeleteAccountDialog from "@/components/wildverkauf/DeleteAccountDialog";
 import BackupSection from "@/components/settings/BackupSection";
 import { base44 } from "@/api/base44Client";
 import { useI18n } from "@/lib/i18n";
-import { Globe, Package } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const DEFAULT_ETIKETT_SETTINGS = {
@@ -47,6 +45,36 @@ const LANGUAGES = [
   { code: "lt", label: "Lietuvių", flag: "🇱🇹" },
 ];
 
+function AccordionSection({ icon: Icon, title, subtitle, defaultOpen = false, children, accentColor = "#22c55e" }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden mb-3">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between px-5 py-4 hover:bg-[#222] transition-colors"
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${accentColor}18` }}>
+            <Icon className="w-4 h-4" style={{ color: accentColor }} />
+          </div>
+          <div className="text-left">
+            <p className="text-sm font-semibold text-gray-100">{title}</p>
+            {subtitle && <p className="text-xs text-gray-500 mt-0.5">{subtitle}</p>}
+          </div>
+        </div>
+        {open
+          ? <ChevronDown className="w-4 h-4 text-gray-500" />
+          : <ChevronRight className="w-4 h-4 text-gray-500" />}
+      </button>
+      {open && (
+        <div className="px-5 pb-5 border-t border-[#2a2a2a]">
+          <div className="pt-4">{children}</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function TenantSettings() {
   const { tenant, user } = useAuth();
   const { lang, setLanguage, t } = useI18n();
@@ -60,12 +88,7 @@ export default function TenantSettings() {
         setEtikettSettings({ ...DEFAULT_ETIKETT_SETTINGS, ...u.etikett_settings });
       }
     });
-    
-    // Force refresh: stale data detection
-    const interval = setInterval(() => {
-      base44.auth.me();
-    }, 1000);
-    
+    const interval = setInterval(() => { base44.auth.me(); }, 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -78,26 +101,94 @@ export default function TenantSettings() {
   if (!tenant) return null;
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <PageHeader title={t("einstellungen_titel")} subtitle={t("einstellungen_subtitle")} />
+    <div className="max-w-3xl mx-auto pb-10">
+      {/* Header */}
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-100">Einstellungen</h1>
+        <p className="text-sm text-gray-500 mt-1">Mandanten-Informationen und Features</p>
+      </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
-         <h2 className="text-lg font-semibold text-gray-900 mb-4">{t("einstellungen_allgemein")}</h2>
-         <div className="grid grid-cols-2 gap-y-4 gap-x-8 text-sm">
-           <div><span className="text-gray-500">{t("einstellungen_name")}</span><p className="font-medium text-gray-900 mt-0.5">{tenant.name}</p></div>
-           <div><span className="text-gray-500">{t("einstellungen_kontakt")}</span><p className="font-medium text-gray-900 mt-0.5">{tenant.contact_person || "—"}</p></div>
-           <div><span className="text-gray-500">{t("einstellungen_email")}</span><p className="font-medium text-gray-900 mt-0.5">{tenant.contact_email}</p></div>
-           <div><span className="text-gray-500">{t("einstellungen_telefon")}</span><p className="font-medium text-gray-900 mt-0.5">{tenant.phone || "—"}</p></div>
-           <div><span className="text-gray-500">{t("einstellungen_plan")}</span><div className="mt-1"><StatusBadge status={tenant.plan} /></div></div>
-           <div><span className="text-gray-500">{t("einstellungen_status")}</span><div className="mt-1"><StatusBadge status={tenant.status} /></div></div>
-           <div><span className="text-gray-500">{t("einstellungen_mandant_id")}</span><p className="font-medium text-gray-900 mt-0.5 font-mono text-xs">{tenant.id}</p></div>
-           <div><span className="text-gray-500">{t("einstellungen_benutzer_id")}</span><p className="font-medium text-gray-900 mt-0.5 font-mono text-xs">{user?.id}</p></div>
-         </div>
-       </div>
+      {/* Pakete Banner */}
+      <div className="flex items-center justify-between bg-[#1a2e1a] border border-[#22c55e]/30 rounded-2xl px-5 py-4 mb-5">
+        <div className="flex items-center gap-3">
+          <Zap className="w-5 h-5 text-[#22c55e]" />
+          <div>
+            <p className="text-sm font-semibold text-gray-100">Aktueller Plan: <span className="text-[#22c55e]">{tenant.plan || "—"}</span></p>
+            {tenant.max_flaeche_ha && (
+              <p className="text-xs text-gray-400 mt-0.5">{(tenant.gesamtflaeche_ha || 0).toFixed(1)} ha von {tenant.max_flaeche_ha.toLocaleString("de-DE")} ha genutzt</p>
+            )}
+          </div>
+        </div>
+        <Link to="/PaketePreise" className="px-4 py-2 bg-[#22c55e] text-black text-sm font-semibold rounded-xl hover:bg-[#16a34a] transition-colors shrink-0">
+          Pakete ansehen
+        </Link>
+      </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">{t("einstellungen_etikett")}</h2>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      {/* Accordion Sections */}
+      <AccordionSection
+        icon={User}
+        title="Allgemeine Informationen"
+        subtitle={tenant.name}
+        defaultOpen={true}
+      >
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          {[
+            { label: "Name", value: tenant.name },
+            { label: "Kontakt", value: tenant.contact_person || "—" },
+            { label: "E-Mail", value: tenant.contact_email },
+            { label: "Telefon", value: tenant.phone || "—" },
+          ].map(({ label, value }) => (
+            <div key={label} className="bg-[#111] rounded-xl px-3 py-2.5">
+              <p className="text-xs text-gray-500 mb-0.5">{label}</p>
+              <p className="font-medium text-gray-100">{value}</p>
+            </div>
+          ))}
+          <div className="bg-[#111] rounded-xl px-3 py-2.5">
+            <p className="text-xs text-gray-500 mb-1">Plan</p>
+            <StatusBadge status={tenant.plan} />
+          </div>
+          <div className="bg-[#111] rounded-xl px-3 py-2.5">
+            <p className="text-xs text-gray-500 mb-1">Status</p>
+            <StatusBadge status={tenant.status} />
+          </div>
+          <div className="bg-[#111] rounded-xl px-3 py-2.5 col-span-2">
+            <p className="text-xs text-gray-500 mb-0.5">Mandanten-ID</p>
+            <p className="font-mono text-xs text-gray-300">{tenant.id}</p>
+          </div>
+        </div>
+      </AccordionSection>
+
+      <AccordionSection
+        icon={Shield}
+        title="Freigeschaltete Features"
+        subtitle="Übersicht der aktiven Module"
+        accentColor="#6366f1"
+      >
+        <div className="grid grid-cols-2 gap-2">
+          {Object.entries(FEATURE_LABELS).map(([key, label]) => (
+            <div key={key} className="flex items-center justify-between bg-[#111] rounded-xl px-3 py-2.5">
+              <span className="text-sm text-gray-300">{label}</span>
+              {tenant[key] ? (
+                <span className="flex items-center gap-1 text-xs text-[#22c55e] font-medium">
+                  <Check className="w-3.5 h-3.5" /> Aktiv
+                </span>
+              ) : (
+                <span className="flex items-center gap-1 text-xs text-gray-600 font-medium">
+                  <X className="w-3.5 h-3.5" /> Inaktiv
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      </AccordionSection>
+
+      <AccordionSection
+        icon={Tag}
+        title="Etikett-Einstellungen"
+        subtitle="Drucklayout für Wildprodukte"
+        accentColor="#f59e0b"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <EtikettSettings
             settings={etikettSettings}
             onChange={setEtikettSettings}
@@ -105,7 +196,7 @@ export default function TenantSettings() {
             saving={saving}
           />
           <div>
-            <p className="text-xs text-gray-500 mb-3 font-medium uppercase tracking-wider">{t("einstellungen_vorschau")}</p>
+            <p className="text-xs text-gray-500 mb-3 font-medium uppercase tracking-wider">Vorschau</p>
             <div className="scale-90 origin-top-left">
               <EtikettPrintView
                 product={{
@@ -123,11 +214,15 @@ export default function TenantSettings() {
             </div>
           </div>
         </div>
-      </div>
+      </AccordionSection>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-6">{t("einstellungen_rechnung")}</h2>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <AccordionSection
+        icon={FileText}
+        title="Rechnungs-Einstellungen"
+        subtitle="Firmenangaben für Rechnungen"
+        accentColor="#3b82f6"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <RechnungSettings
             settings={etikettSettings}
             onChange={setEtikettSettings}
@@ -135,7 +230,7 @@ export default function TenantSettings() {
             saving={saving}
           />
           <div>
-            <p className="text-xs text-gray-500 mb-3 font-medium uppercase tracking-wider">{t("einstellungen_live_vorschau")}</p>
+            <p className="text-xs text-gray-500 mb-3 font-medium uppercase tracking-wider">Live-Vorschau</p>
             <div style={{ transform: "scale(0.45)", transformOrigin: "top left", width: "222%", pointerEvents: "none" }}>
               <RechnungPrint
                 tenantSettings={etikettSettings}
@@ -160,28 +255,14 @@ export default function TenantSettings() {
             </div>
           </div>
         </div>
-      </div>
+      </AccordionSection>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">{t("einstellungen_features")}</h2>
-        <div className="space-y-3">
-          {Object.entries(FEATURE_LABELS).map(([key, label]) => (
-            <div key={key} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
-              <span className="text-sm text-gray-700">{label}</span>
-              {tenant[key] ? (
-                <span className="flex items-center gap-1 text-xs text-emerald-600 font-medium"><Check className="w-3.5 h-3.5" /> {t("einstellungen_aktiviert")}</span>
-              ) : (
-                <span className="flex items-center gap-1 text-xs text-gray-400 font-medium"><X className="w-3.5 h-3.5" /> {t("einstellungen_deaktiviert")}</span>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-          <Globe className="w-5 h-5 text-gray-500" /> {t("einstellungen_sprache")}
-        </h2>
+      <AccordionSection
+        icon={Globe}
+        title="Sprache"
+        subtitle="Anzeigesprache der App"
+        accentColor="#06b6d4"
+      >
         <div className="flex gap-3 flex-wrap">
           {LANGUAGES.map((l) => (
             <button
@@ -190,7 +271,7 @@ export default function TenantSettings() {
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 text-sm font-medium transition-all ${
                 lang === l.code
                   ? "border-[#22c55e] bg-[#22c55e]/10 text-[#22c55e]"
-                  : "border-gray-200 text-gray-700 hover:border-gray-300"
+                  : "border-[#2a2a2a] text-gray-400 hover:border-[#3a3a3a] hover:text-gray-200"
               }`}
             >
               <span className="text-lg">{l.flag}</span>
@@ -198,33 +279,28 @@ export default function TenantSettings() {
             </button>
           ))}
         </div>
-      </div>
+      </AccordionSection>
 
-      {/* Pakete & Preise Link */}
-      <div className="bg-[#1a2e1a] rounded-2xl border border-[#22c55e]/30 p-5 mb-6 flex items-center justify-between">
-        <div>
-          <h2 className="text-base font-semibold text-gray-100 flex items-center gap-2">
-            <Package className="w-4 h-4 text-[#22c55e]" /> Pakete & Preise
-          </h2>
-          <p className="text-xs text-gray-400 mt-0.5">Aktueller Plan: <span className="text-[#22c55e] font-medium">{tenant?.plan || "—"}</span></p>
-        </div>
-        <Link
-          to="/PaketePreise"
-          className="px-4 py-2 bg-[#22c55e] text-black text-sm font-semibold rounded-xl hover:bg-[#16a34a] transition-colors"
-        >
-          Pakete ansehen
-        </Link>
-      </div>
+      <AccordionSection
+        icon={HardDrive}
+        title="Backup & Datensicherung"
+        subtitle="Reviere sichern und wiederherstellen"
+        accentColor="#8b5cf6"
+      >
+        <BackupSection />
+      </AccordionSection>
 
-      <BackupSection />
-
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mt-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">{t("einstellungen_konto")}</h2>
-        <p className="text-sm text-gray-600 mb-4">{t("einstellungen_konto_desc")}</p>
+      <AccordionSection
+        icon={Trash2}
+        title="Konto löschen"
+        subtitle="Unwiderrufliche Löschung aller Daten"
+        accentColor="#ef4444"
+      >
+        <p className="text-sm text-gray-400 mb-4">Diese Aktion kann nicht rückgängig gemacht werden. Alle Daten werden dauerhaft gelöscht.</p>
         <Button variant="destructive" onClick={() => setDeleteDialogOpen(true)}>
-          {t("einstellungen_konto_loeschen")}
+          Konto unwiderruflich löschen
         </Button>
-      </div>
+      </AccordionSection>
 
       <DeleteAccountDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen} />
     </div>
