@@ -127,6 +127,39 @@ function LayoutInner({ children, currentPageName }) {
     );
   }
 
+  // Solo plan: Desktop gesperrt — nur Mobile erlaubt
+  if (!isMobile && tenant?.plan === "solo") {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#2d2d2d]">
+        <div className="text-center space-y-5 max-w-sm px-6">
+          <div className="w-16 h-16 bg-gray-700 rounded-2xl flex items-center justify-center mx-auto">
+            <svg className="w-8 h-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-gray-100">Nur Mobile verfügbar</h2>
+            <p className="text-sm text-gray-400 mt-2">
+              Dein <span className="text-[#22c55e] font-semibold">Solo-Paket</span> beinhaltet nur den Zugang über die NextHunt Mobile-App. Für die Desktop-Version benötigst du das Pro- oder Enterprise-Paket.
+            </p>
+          </div>
+          <a
+            href="https://app.nexthunt-portal.de/PaketePreise"
+            className="inline-block px-6 py-2.5 bg-[#22c55e] text-black rounded-xl text-sm font-semibold hover:bg-[#16a34a] transition-colors"
+          >
+            Upgrade auf Pro
+          </a>
+          <button
+            onClick={() => base44.auth.logout()}
+            className="block mx-auto text-sm text-gray-500 hover:text-gray-300 transition-colors"
+          >
+            Abmelden
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   // Mobile mode: All pages render with mobile layout
   if (isMobile) {
     return (
