@@ -53,8 +53,8 @@ export const PLAN_CONFIGS = {
     feature_wildmarken: true,
     feature_tasks: true,
     feature_personen: true,
-    feature_gesellschaftsjagd: true,
-    feature_schadensprotokoll: true,
+    feature_gesellschaftsjagd: false,
+    feature_schadensprotokoll: false,
     // Still off by default (add-ons)
     feature_wildkammer: false,
     feature_driven_hunt: false,
