@@ -13,7 +13,7 @@ Deno.serve(async (req) => {
 
   try {
     const apiKey = req.headers.get('x-api-key');
-    if (apiKey !== Deno.env.get('NextHuntmobile')) {
+    if (apiKey !== Deno.env.get('NEXTHUNT_MOBILE_KEY')) {
       return Response.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
     }
 
