@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "@/components/hooks/useAuth";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -136,16 +136,30 @@ function getTrialDaysRemaining(tenant) {
 
 function AreaBar({ used, max }) {
   if (!max || max === 0) return null;
-  const pct = Math.min(100, (used / max) * 100);
-  const color = pct >= 100 ? "bg-red-500" : pct >= 80 ? "bg-amber-400" : "bg-emerald-500";
+  const usedVal = used || 0;
+  if (usedVal === 0) {
+    return (
+      <p className="text-[10px] text-slate-500 mt-1.5">Noch keine Flächen eingezeichnet</p>
+    );
+  }
+  const pct = Math.min(100, (usedVal / max) * 100);
+  const isRed = pct >= 100;
+  const isYellow = pct >= 80 && pct < 100;
+  const barColor = isRed ? "bg-red-500" : isYellow ? "bg-amber-400" : "bg-emerald-500";
   return (
     <div className="mt-1.5">
-      <div className="flex justify-between text-[10px] text-slate-500 mb-1">
-        <span>{(used || 0).toFixed(0)} ha / {max.toLocaleString("de-DE")} ha</span>
-        <span>{pct.toFixed(0)}%</span>
+      <div className="flex justify-between text-[10px] mb-1">
+        {isRed ? (
+          <span className="text-red-400 font-medium">🔴 Limit erreicht — {usedVal.toFixed(0)} ha / {max.toLocaleString("de-DE")} ha</span>
+        ) : isYellow ? (
+          <span className="text-amber-400">⚠️ {usedVal.toFixed(0)} ha von {max.toLocaleString("de-DE")} ha</span>
+        ) : (
+          <span className="text-slate-500">{usedVal.toFixed(0)} ha / {max.toLocaleString("de-DE")} ha</span>
+        )}
+        <span className={isRed ? "text-red-400" : isYellow ? "text-amber-400" : "text-slate-500"}>{pct.toFixed(0)}%</span>
       </div>
       <div className="w-full h-1.5 bg-slate-700 rounded-full overflow-hidden">
-        <div className={`h-full rounded-full transition-all ${color}`} style={{ width: `${pct}%` }} />
+        <div className={`h-full rounded-full transition-all ${barColor}`} style={{ width: `${pct}%` }} />
       </div>
     </div>
   );
@@ -187,6 +201,24 @@ export default function SystemAdminTenants() {
     queryFn: () => base44.entities.User.list("-created_date", 500),
     enabled: isPlatformAdmin,
   });
+
+  // Auto-downgrade expired trials
+  const expiredTrials = tenants.filter(t =>
+    t.status === "trial" && t.trial_end_date && new Date(t.trial_end_date) < new Date()
+  );
+  useEffect(() => {
+    if (expiredTrials.length === 0) return;
+    const SOLO_CONFIG = PLAN_CONFIGS["solo"];
+    expiredTrials.forEach(async (t) => {
+      await base44.entities.Tenant.update(t.id, { ...SOLO_CONFIG, plan: "solo", status: "active" });
+      base44.integrations.Core.SendEmail({
+        to: t.contact_email,
+        subject: "Dein NextHunt-Testzeitraum ist abgelaufen",
+        body: `Hallo ${t.contact_person || t.name},\n\nDein 7-tägiger Testzeitraum ist abgelaufen. Wähle jetzt dein Paket um NextHunt weiter zu nutzen:\nhttps://app.nexthunt-portal.de/PaketePreise\n\nDas NextHunt-Team`,
+      }).catch(() => {});
+    });
+    qc.invalidateQueries({ queryKey: ["sa-tenants"] });
+  }, [expiredTrials.map(t => t.id).join(",")]);
 
   const deleteMutation = useMutation({
     mutationFn: (id) => base44.entities.Tenant.delete(id),
@@ -303,7 +335,7 @@ export default function SystemAdminTenants() {
       await base44.integrations.Core.SendEmail({
         to: u.email,
         subject: "Willkommen bei NextHunt – Dein Zugang ist aktiviert!",
-        body: `Hallo ${u.full_name || ""},\n\ndein NextHunt-Zugang wurde aktiviert (Paket: ${activatePlan}).\n\nDu kannst dich jetzt anmelden und loslegen.\n\nViel Erfolg auf der Jagd!\nDas NextHunt-Team`,
+        body: `Hallo ${u.full_name || ""},\n\nWillkommen bei NextHunt! Dein Paket ${activatePlan.charAt(0).toUpperCase() + activatePlan.slice(1).replace("_", " ")} ist jetzt aktiv.\n\nDu kannst dich jetzt anmelden und loslegen: https://app.nexthunt-portal.de\n\nViel Erfolg auf der Jagd!\nDas NextHunt-Team`,
       });
 
       qc.invalidateQueries({ queryKey: ["sa-tenants"] });
@@ -322,7 +354,7 @@ export default function SystemAdminTenants() {
       await base44.integrations.Core.SendEmail({
         to: u.email,
         subject: "Deine NextHunt-Registrierung",
-        body: `Hallo ${u.full_name || ""},\n\nleider wurde deine Registrierung bei NextHunt nicht genehmigt.\n\nBei Fragen wende dich bitte an unser Support-Team.\n\nDas NextHunt-Team`,
+        body: `Hallo ${u.full_name || ""},\n\nDeine Registrierung wurde leider nicht genehmigt. Bei Fragen melde dich unter info@nexthunt-portal.de\n\nDas NextHunt-Team`,
       });
       setActivateConfirm(null);
     } finally {
@@ -567,9 +599,14 @@ export default function SystemAdminTenants() {
 
               {/* Flächenlimit Info */}
               {editing.max_flaeche_ha && (
-                <div className="flex items-center gap-2 text-xs text-slate-400 bg-slate-800 rounded-lg px-3 py-2 border border-slate-700">
-                  <Info className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                  Flächenlimit: <span className="text-emerald-400 font-semibold">{editing.max_flaeche_ha.toLocaleString("de-DE")} ha</span>
+                <div className="flex items-center justify-between text-xs bg-slate-800 rounded-lg px-3 py-2 border border-slate-700">
+                  <span className="flex items-center gap-1.5 text-slate-400">
+                    <Info className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                    Flächenlimit: <span className="text-emerald-400 font-semibold">{editing.max_flaeche_ha.toLocaleString("de-DE")} ha</span>
+                  </span>
+                  <span className="text-slate-500">
+                    Aktuell genutzt: <span className="text-slate-300 font-medium">{(editing.gesamtflaeche_ha || 0).toFixed(1)} ha</span>
+                  </span>
                 </div>
               )}
 
