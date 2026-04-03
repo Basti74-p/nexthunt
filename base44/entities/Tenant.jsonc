@@ -38,15 +38,21 @@
       "enum": [
         "solo",
         "pro",
-        "enterprise",
+        "enterprise_s",
+        "enterprise_m",
+        "enterprise_l",
         "free_trial"
       ],
       "default": "free_trial",
       "description": "Subscription plan"
     },
-    "max_reviere": {
+    "max_flaeche_ha": {
       "type": "number",
-      "description": "Maximum number of Reviere allowed"
+      "description": "Maximum total hunting area in hectares allowed by the plan"
+    },
+    "gesamtflaeche_ha": {
+      "type": "number",
+      "description": "Current total area of all Reviere in hectares (auto-calculated)"
     },
     "max_mitglieder": {
       "type": "number",
@@ -179,7 +185,7 @@
     "addon_wildkammer": {
       "type": "boolean",
       "default": false,
-      "description": "Add-on: Wildkammer"
+      "description": "Add-on: Wildkammer Basic"
     }
   },
   "required": [

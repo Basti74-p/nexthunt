@@ -10,6 +10,7 @@ import EinrichtungForm from "@/components/map/EinrichtungForm";
 import WindLayer from "@/components/map/layers/WindLayer";
 import LandcoverLayer from "@/components/map/layers/LandcoverLayer";
 import { Building2, Eye, Map as MapIcon, Plus, Pencil, Zap } from "lucide-react";
+import { calcFlaecheHa } from "@/lib/revierArea";
 
 const LAYERS = [
   { id: "einrichtungen", label: "Jagdeinrichtungen", icon: Building2 },
@@ -130,7 +131,18 @@ export default function Karte() {
     setSaving(true);
     const coords = [...drawnPoints, drawnPoints[0]].map(([lat, lng]) => [lng, lat]);
     const geojson = JSON.stringify({ type: "Polygon", coordinates: [coords], color: boundaryColor });
-    await base44.entities.Revier.update(assignRevierId, { boundary_geojson: geojson });
+
+    // Calculate area from GeoJSON
+    const flaecheHa = await calcFlaecheHa(geojson);
+    await base44.entities.Revier.update(assignRevierId, { boundary_geojson: geojson, flaeche_ha: flaecheHa });
+
+    // Update gesamtflaeche_ha on tenant
+    if (tenant?.id) {
+      const allReviere = await base44.entities.Revier.filter({ tenant_id: tenant.id });
+      const gesamt = allReviere.reduce((sum, r) => sum + (r.id === assignRevierId ? flaecheHa : (r.flaeche_ha || r.size_ha || 0)), 0);
+      await base44.entities.Tenant.update(tenant.id, { gesamtflaeche_ha: Math.round(gesamt * 100) / 100 });
+    }
+
     setSaving(false);
     setShowAssign(false);
     setDrawnPoints([]);

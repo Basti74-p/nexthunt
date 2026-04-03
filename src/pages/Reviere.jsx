@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Plus, TreePine, ArrowRight, MapPin, Trash2 } from "lucide-react";
+import { Plus, TreePine, ArrowRight, MapPin, Trash2, AlertTriangle } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import StatusBadge from "@/components/ui/StatusBadge";
 import EmptyState from "@/components/ui/EmptyState";
@@ -20,7 +20,12 @@ export default function Reviere() {
   const { t } = useI18n();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [form, setForm] = useState({ name: "", region: "", size_ha: "", notes: "" });
+  const [limitError, setLimitError] = useState(null);
   const queryClient = useQueryClient();
+
+  const gesamtflaeche = tenant?.gesamtflaeche_ha || 0;
+  const maxFlaeche = tenant?.max_flaeche_ha;
+  const isNearLimit = maxFlaeche && gesamtflaeche >= maxFlaeche * 0.9;
 
   const { data: reviere = [], isLoading } = useQuery({
     queryKey: ["reviere", tenant?.id],
@@ -29,12 +34,25 @@ export default function Reviere() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (data) => base44.entities.Revier.create({ ...data, tenant_id: tenant.id, status: "active" }),
+    mutationFn: async (data) => {
+      // Limit check: use manually entered size_ha as estimate
+      if (maxFlaeche && data.size_ha) {
+        const newTotal = gesamtflaeche + Number(data.size_ha);
+        if (newTotal > maxFlaeche) {
+          throw new Error(`Dein aktuelles Paket unterstützt maximal ${maxFlaeche.toLocaleString("de-DE")} ha. Bitte upgrade dein Paket.`);
+        }
+      }
+      return base44.entities.Revier.create({ ...data, tenant_id: tenant.id, status: "active" });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reviere"] });
       setDialogOpen(false);
+      setLimitError(null);
       setForm({ name: "", region: "", size_ha: "", notes: "" });
-    }
+    },
+    onError: (err) => {
+      setLimitError(err.message);
+    },
   });
 
   const deleteMutation = useMutation({
@@ -107,8 +125,20 @@ export default function Reviere() {
         </div>
       }
 
+      {/* Limit warning banner */}
+      {isNearLimit && (
+        <div className="mb-4 flex items-start gap-3 bg-amber-950/30 border border-amber-500/40 rounded-xl px-4 py-3">
+          <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+          <div className="flex-1 text-sm">
+            <span className="text-amber-300 font-medium">Flächenlimit fast erreicht: </span>
+            <span className="text-gray-300">{gesamtflaeche.toFixed(1)} / {maxFlaeche?.toLocaleString("de-DE")} ha</span>
+          </div>
+          <Link to="/PaketePreise" className="text-xs text-amber-400 hover:underline shrink-0 font-medium">Upgrade →</Link>
+        </div>
+      )}
+
       {/* Create Dialog */}
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      <Dialog open={dialogOpen} onOpenChange={(v) => { setDialogOpen(v); if (!v) setLimitError(null); }}>
         <DialogContent>
           <DialogHeader><DialogTitle>{t("reviere_neues_dialog")}</DialogTitle></DialogHeader>
           <div className="space-y-4 mt-4">
@@ -130,8 +160,14 @@ export default function Reviere() {
               <Label>{t("reviere_notizen")}</Label>
               <Textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder={t("reviere_notizen_placeholder")} />
             </div>
+            {limitError && (
+              <div className="flex items-start gap-2 bg-red-950/30 border border-red-500/40 rounded-xl px-3 py-2.5 text-sm text-red-300">
+                <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-red-400" />
+                <span>{limitError} <Link to="/PaketePreise" className="underline font-medium">Pakete ansehen →</Link></span>
+              </div>
+            )}
             <Button
-              onClick={() => createMutation.mutate({ ...form, size_ha: form.size_ha ? Number(form.size_ha) : undefined })}
+              onClick={() => { setLimitError(null); createMutation.mutate({ ...form, size_ha: form.size_ha ? Number(form.size_ha) : undefined }); }}
               disabled={!form.name || createMutation.isPending}
               className="w-full bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-xl">
               {createMutation.isPending ? t("reviere_erstellen_loading") : t("reviere_erstellen")}

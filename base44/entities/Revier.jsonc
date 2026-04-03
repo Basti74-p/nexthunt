@@ -1,0 +1,44 @@
+{
+  "name": "Revier",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string",
+      "description": "Reference to tenant"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the Revier"
+    },
+    "region": {
+      "type": "string"
+    },
+    "size_ha": {
+      "type": "number",
+      "description": "Manually entered size in hectares (fallback)"
+    },
+    "flaeche_ha": {
+      "type": "number",
+      "description": "Auto-calculated area from boundary GeoJSON in hectares"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "archived"
+      ],
+      "default": "active"
+    },
+    "boundary_geojson": {
+      "type": "string",
+      "description": "GeoJSON boundary data"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "name"
+  ]
+}
