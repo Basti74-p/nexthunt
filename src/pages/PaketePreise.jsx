@@ -1,22 +1,17 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { useAuth } from "@/components/hooks/useAuth";
 import { Check, X, Lock, Star, Zap, Mail, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
 
-// ─── Plan Definitions ────────────────────────────────────────────────────────
-
-const ENTERPRISE_PLANS = ["enterprise_s", "enterprise_m", "enterprise_l"];
-
-const isEnterprisePlan = (plan) => ENTERPRISE_PLANS.includes(plan);
+// ─── Plan Definitions ─────────────────────────────────────────────────────────
 
 const PLAN_LABELS = {
   solo: "Solo",
   pro: "Pro",
-  enterprise_s: "Enterprise S",
-  enterprise_m: "Enterprise M",
-  enterprise_l: "Enterprise L",
+  enterprise: "Enterprise",
+  enterprise_s: "Enterprise",
+  enterprise_m: "Enterprise",
+  enterprise_l: "Enterprise",
   free_trial: "Free Trial",
 };
 
@@ -27,22 +22,21 @@ const PLANS = [
     price_monthly: "7,99",
     price_yearly: "59,99",
     accent: "border-[#3a3a3a]",
-    tagColor: null,
     tag: null,
-    limits: "bis 600 ha · max. 5 Mitglieder",
+    tagColor: null,
+    limits: "bis 800 ha · max. 5 Mitglieder",
     features: [
       { label: "Revierkarte & Einrichtungen", ok: true },
-      { label: "Einchecken & Kanzel-Reservierung", ok: true },
-      { label: "Jagdwetter & Wildaktivität", ok: true },
-      { label: "Sichtungen Basic", ok: true },
-      { label: "Streckenliste Basic", ok: true },
+      { label: "Sichtungen & Strecke Basic", ok: true },
       { label: "Jagdkalender", ok: true },
-      { label: "1 Revier / max. 5 Mitglieder", ok: true },
+      { label: "Einchecken & Kanzel-Reservierung", ok: true },
       { label: "PC Dashboard", ok: false },
+      { label: "Wildmarken & Aufgaben", ok: false },
       { label: "Wildkammer", ok: false },
       { label: "WolfTrack", ok: false },
     ],
     addons: null,
+    enterpriseExclusive: null,
     ctaLabel: "Paket anfragen",
     ctaStyle: "border border-[#3a3a3a] text-gray-300 hover:border-[#22c55e] hover:text-[#22c55e]",
   },
@@ -52,111 +46,99 @@ const PLANS = [
     price_monthly: "14,99",
     price_yearly: "119,99",
     accent: "border-[#22c55e]",
-    tagColor: "bg-[#22c55e]/20 text-[#22c55e]",
     tag: "Beliebt",
-    limits: "bis 2.000 ha · max. 15 Mitglieder",
+    tagColor: "bg-[#22c55e]/20 text-[#22c55e]",
+    limits: "bis 3.000 ha · max. 15 Mitglieder",
     features: [
       { label: "Alles aus Solo", ok: true },
       { label: "PC Dashboard", ok: true },
-      { label: "Einrichtungs- & Mitgliederverwaltung", ok: true },
+      { label: "Wildmarken & Aufgaben", ok: true },
       { label: "Vollständige Streckenliste & Abschussplan", ok: true },
-      { label: "Wildmarken", ok: true },
-      { label: "Aufgabenverwaltung", ok: true },
-      { label: "Personen", ok: true },
-      { label: "3 Reviere / max. 15 Mitglieder", ok: true },
-    ],
-    enterpriseExclusive: [
-      { label: "Wildkammer mit Verkauf & Rechnungen", tooltip: "Verwalte deine gesamte Wildkammer, erstelle Rechnungen und verkaufe Wildfleisch direkt über die App." },
-      { label: "Gesellschaftsjagd & Drückjagd Planung", tooltip: "Plane und koordiniere Drückjagden mit automatischer Streckenerfassung und Gästeverwaltung." },
-      { label: "WolfTrack — Wolfsmonitoring", tooltip: "Dokumentiere Wolfssichtungen und Risse nach DBBW-Standard und melde direkt an Behörden." },
-      { label: "Kundenverwaltung & Direktverkauf", tooltip: "Verwalte Kunden und verkaufe Wildprodukte direkt mit integrierter Abrechnung." },
-      { label: "API-Zugang für externe Anbindungen", tooltip: "Verbinde NextHunt mit externen Systemen wie Buchhaltung, Behördenportalen oder eigenen Tools." },
+      { label: "Mitgliederverwaltung", ok: true },
     ],
     addons: [
-      { label: "Wildmanagement", price: "3,99" },
-      { label: "Öffentlichkeit & Umfragen", price: "2,99" },
-      { label: "Kamera & Fallenmelder", price: "4,99" },
-      { label: "Wildkammer Basic", price: "4,99" },
+      { label: "Wildkammer", price: "4,99", tooltip: "Verwalte deine gesamte Wildkammer, erstelle Rechnungen und verkaufe Wildfleisch direkt über die App." },
+      { label: "Wildmanagement", price: "3,99", tooltip: null },
+      { label: "Öffentlichkeit & Umfragen", price: "2,99", tooltip: null },
+      { label: "Kamera & Fallenmelder", price: "4,99", tooltip: null },
+    ],
+    enterpriseExclusive: [
+      { label: "Gesellschaftsjagd & Drückjagd", tooltip: "Plane und koordiniere Drückjagden mit automatischer Streckenerfassung und Gästeverwaltung." },
+      { label: "WolfTrack", tooltip: "Dokumentiere Wolfssichtungen und Risse nach DBBW-Standard und melde direkt an Behörden." },
+      { label: "API-Zugang", tooltip: "Verbinde NextHunt mit externen Systemen wie Buchhaltung, Behördenportalen oder eigenen Tools." },
     ],
     ctaLabel: "Paket anfragen",
     ctaStyle: "bg-[#22c55e] text-black hover:bg-[#16a34a]",
   },
   {
-    key: "enterprise_s",
-    name: "Enterprise S",
-    price_monthly: "149",
-    price_yearly: "1.499",
+    key: "enterprise",
+    name: "Enterprise",
+    price_monthly: "249",
+    price_yearly: "2.499",
     accent: "border-amber-500/50",
-    tagColor: "bg-amber-500/20 text-amber-400",
     tag: "Enterprise",
+    tagColor: "bg-amber-500/20 text-amber-400",
     limits: "bis 5.000 ha · max. 50 Mitglieder",
     features: [
-      { label: "Alles aus Pro", ok: true },
+      { label: "Alles aus Pro inkl. aller Add-ons", ok: true },
       { label: "Wildkammer komplett mit Verkauf & Rechnungen", ok: true },
-      { label: "Gesellschaftsjagd & Drückjagd Planung", ok: true },
-      { label: "WolfTrack komplett", ok: true },
-      { label: "Kundenverwaltung & Direktverkauf", ok: true },
+      { label: "Gesellschaftsjagd & Drückjagd", ok: true },
+      { label: "Schadensprotokoll", ok: true },
+      { label: "WolfTrack", ok: true },
+      { label: "Lager & Wildprodukte", ok: true },
+      { label: "Kundenverwaltung", ok: true },
       { label: "API-Zugang", ok: true },
-      { label: "Backup & Datensicherheit", ok: true },
-      { label: "bis 5.000 ha · max. 50 Mitglieder", ok: true },
-    ],
-    addons: null,
-    ctaLabel: "Kontakt aufnehmen",
-    ctaStyle: "border border-amber-500/50 text-amber-400 hover:bg-amber-500/10",
-    isEnterprise: true,
-  },
-  {
-    key: "enterprise_m",
-    name: "Enterprise M",
-    price_monthly: "299",
-    price_yearly: "2.999",
-    accent: "border-amber-500/50",
-    tagColor: "bg-amber-500/20 text-amber-400",
-    tag: "Enterprise",
-    limits: "bis 10.000 ha · max. 150 Mitglieder",
-    features: [
-      { label: "Alles aus Enterprise S", ok: true },
-      { label: "bis 10.000 ha · max. 150 Mitglieder", ok: true },
       { label: "Dedizierter Support", ok: true },
+      { label: "Unbegrenzte Reviere bis 5.000 ha", ok: true },
     ],
     addons: null,
-    ctaLabel: "Kontakt aufnehmen",
-    ctaStyle: "border border-amber-500/50 text-amber-400 hover:bg-amber-500/10",
-    isEnterprise: true,
-  },
-  {
-    key: "enterprise_l",
-    name: "Enterprise L",
-    price_monthly: "499",
-    price_yearly: "4.999",
-    accent: "border-amber-500/50",
-    tagColor: "bg-amber-500/20 text-amber-400",
-    tag: "Enterprise",
-    limits: "bis 20.000 ha · unbegrenzte Mitglieder",
-    features: [
-      { label: "Alles aus Enterprise M", ok: true },
-      { label: "bis 20.000 ha · unbegrenzte Mitglieder", ok: true },
-      { label: "SLA & Priority Support", ok: true },
-    ],
-    addons: null,
+    enterpriseExclusive: null,
     ctaLabel: "Kontakt aufnehmen",
     ctaStyle: "border border-amber-500/50 text-amber-400 hover:bg-amber-500/10",
     isEnterprise: true,
   },
 ];
 
-// ─── LockedFeature with tooltip ───────────────────────────────────────────────
+// ─── Addon row with optional tooltip ─────────────────────────────────────────
+function AddonRow({ label, price, tooltip }) {
+  const [show, setShow] = useState(false);
+  return (
+    <li
+      className="relative flex items-center justify-between text-xs gap-2"
+      onMouseEnter={() => setShow(true)}
+      onMouseLeave={() => setShow(false)}
+    >
+      <span className="flex items-center gap-1.5 text-gray-300 cursor-default">
+        <Lock className="w-3 h-3 text-[#22c55e] shrink-0" />
+        {label}
+        {tooltip && (
+          <span className="text-[10px] text-gray-500">ℹ</span>
+        )}
+      </span>
+      <span className="text-[#22c55e] font-medium shrink-0">+{price}€/Mo.</span>
+      {show && tooltip && (
+        <div className="absolute bottom-full left-0 mb-2 z-50 w-64 bg-[#111] border border-[#22c55e]/30 text-gray-200 text-xs rounded-xl p-3 shadow-2xl pointer-events-none">
+          {tooltip}
+        </div>
+      )}
+    </li>
+  );
+}
+
+// ─── Locked enterprise feature ────────────────────────────────────────────────
 function LockedFeature({ label, tooltip }) {
   const [show, setShow] = useState(false);
   return (
     <li
-      className="relative flex items-start gap-2 text-sm cursor-help group"
+      className="relative flex items-start gap-2 text-sm cursor-help"
       onMouseEnter={() => setShow(true)}
       onMouseLeave={() => setShow(false)}
     >
       <Lock className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
       <span className="text-amber-300 font-medium">{label}</span>
-      <span className="ml-1 text-[10px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded-full shrink-0 self-center">Nur Enterprise</span>
+      <span className="ml-1 text-[10px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded-full shrink-0 self-center">
+        Nur Enterprise
+      </span>
       {show && tooltip && (
         <div className="absolute bottom-full left-0 mb-2 z-50 w-64 bg-[#111] border border-amber-500/30 text-gray-200 text-xs rounded-xl p-3 shadow-2xl pointer-events-none">
           {tooltip}
@@ -167,27 +149,27 @@ function LockedFeature({ label, tooltip }) {
 }
 
 // ─── Plan Card ────────────────────────────────────────────────────────────────
-function PlanCard({ plan, currentPlan, billing, enterpriseRef, fittingPlanKey }) {
-  const isCurrentPlan = currentPlan === plan.key;
+function PlanCard({ plan, currentPlan, billing, enterpriseRef }) {
+  const isCurrentPlan = currentPlan === plan.key ||
+    (plan.key === "enterprise" && ["enterprise_s", "enterprise_m", "enterprise_l"].includes(currentPlan));
   const isEnterprise = !!plan.isEnterprise;
   const price = billing === "monthly" ? plan.price_monthly : plan.price_yearly;
   const period = billing === "monthly" ? "/Monat" : "/Jahr";
 
   const handleCta = () => {
     const subject = isEnterprise
-      ? `Enterprise Anfrage — ${plan.name}`
+      ? "Upgrade Anfrage — Enterprise"
       : `Upgrade Anfrage — ${plan.name}`;
     window.location.href = `mailto:info@nexthunt-portal.de?subject=${encodeURIComponent(subject)}`;
   };
 
   return (
     <div
-      ref={isEnterprise && plan.key === "enterprise_s" ? enterpriseRef : null}
+      ref={isEnterprise ? enterpriseRef : null}
       className={`relative flex flex-col rounded-2xl border-2 p-5 transition-all
         ${plan.accent}
         ${isEnterprise ? "bg-gradient-to-b from-amber-950/30 to-[#1a1a1a]" : "bg-[#1a1a1a]"}
         ${isCurrentPlan ? "ring-2 ring-[#22c55e]/40" : ""}
-        ${fittingPlanKey && plan.key === fittingPlanKey && !isCurrentPlan ? "ring-2 ring-blue-500/40" : ""}
       `}
     >
       {/* Tag & current badge */}
@@ -203,11 +185,6 @@ function PlanCard({ plan, currentPlan, billing, enterpriseRef, fittingPlanKey })
         {isCurrentPlan && (
           <span className="text-[10px] font-semibold uppercase tracking-wider bg-[#22c55e]/20 text-[#22c55e] px-2 py-0.5 rounded-full shrink-0">
             Ihr Plan
-          </span>
-        )}
-        {fittingPlanKey && plan.key === fittingPlanKey && !isCurrentPlan && (
-          <span className="text-[10px] font-semibold uppercase tracking-wider bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full shrink-0">
-            Passend für dich
           </span>
         )}
       </div>
@@ -229,7 +206,8 @@ function PlanCard({ plan, currentPlan, billing, enterpriseRef, fittingPlanKey })
             <span className={f.ok ? "text-gray-200" : "text-gray-500"}>{f.label}</span>
           </li>
         ))}
-        {/* Enterprise-exclusive locked features (only shown on Pro card) */}
+
+        {/* Enterprise-exclusive locked features */}
         {plan.enterpriseExclusive?.map((f, i) => (
           <LockedFeature key={i} label={f.label} tooltip={f.tooltip} />
         ))}
@@ -239,12 +217,9 @@ function PlanCard({ plan, currentPlan, billing, enterpriseRef, fittingPlanKey })
       {plan.addons && (
         <div className="mb-4 border-t border-[#2a2a2a] pt-3">
           <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2">Add-ons zubuchbar</p>
-          <ul className="space-y-1.5">
+          <ul className="space-y-2">
             {plan.addons.map((a, i) => (
-              <li key={i} className="flex items-center justify-between text-xs">
-                <span className="text-gray-300">{a.label}</span>
-                <span className="text-[#22c55e] font-medium">+{a.price}€/Monat</span>
-              </li>
+              <AddonRow key={i} label={a.label} price={a.price} tooltip={a.tooltip} />
             ))}
           </ul>
         </div>
@@ -273,23 +248,16 @@ export default function PaketePreise() {
   const currentPlan = tenant?.plan || "free_trial";
   const isPro = currentPlan === "pro";
   const gesamtflaeche = tenant?.gesamtflaeche_ha || 0;
-  const maxFlaeche = tenant?.max_flaeche_ha || 2000;
-
-  // Determine which plan would fit the current usage
-  const fittingPlanKey = (() => {
-    if (gesamtflaeche <= 600) return "solo";
-    if (gesamtflaeche <= 2000) return "pro";
-    if (gesamtflaeche <= 5000) return "enterprise_s";
-    if (gesamtflaeche <= 10000) return "enterprise_m";
-    return "enterprise_l";
-  })();
+  const maxFlaeche = tenant?.max_flaeche_ha || 3000;
 
   const scrollToEnterprise = () => {
     enterpriseRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  const displayPlanLabel = PLAN_LABELS[currentPlan] || currentPlan;
+
   return (
-    <div className="max-w-6xl mx-auto pb-24">
+    <div className="max-w-5xl mx-auto pb-28">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-100 mb-1">Pakete & Preise</h1>
@@ -302,7 +270,7 @@ export default function PaketePreise() {
         <div>
           <span className="text-sm text-gray-200">
             Ihr aktuelles Paket:{" "}
-            <span className="font-bold text-[#22c55e]">{PLAN_LABELS[currentPlan] || currentPlan}</span>
+            <span className="font-bold text-[#22c55e]">{displayPlanLabel}</span>
           </span>
           {tenant?.max_flaeche_ha && (
             <p className="text-xs text-gray-400 mt-0.5">
@@ -336,41 +304,27 @@ export default function PaketePreise() {
         </button>
       </div>
 
-      {/* Plan cards — 2 rows: Solo+Pro | Enterprise S/M/L */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-        {PLANS.filter(p => !p.isEnterprise).map(plan => (
+      {/* Plan cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        {PLANS.map((plan) => (
           <PlanCard
             key={plan.key}
             plan={plan}
             currentPlan={currentPlan}
             billing={billing}
-            enterpriseRef={null}
-            fittingPlanKey={fittingPlanKey}
+            enterpriseRef={plan.isEnterprise ? enterpriseRef : null}
           />
         ))}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-        {PLANS.filter(p => p.isEnterprise).map((plan, i) => (
-          <PlanCard
-            key={plan.key}
-            plan={plan}
-            currentPlan={currentPlan}
-            billing={billing}
-            enterpriseRef={i === 0 ? enterpriseRef : null}
-            fittingPlanKey={fittingPlanKey}
-          />
-        ))}
-      </div>
-
-      {/* Over 20k ha CTA */}
+      {/* Over 5k ha CTA */}
       <div className="flex items-center justify-between bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl px-6 py-4 mb-6">
         <div>
-          <p className="text-sm font-semibold text-gray-100">Über 20.000 ha?</p>
+          <p className="text-sm font-semibold text-gray-100">Über 5.000 ha?</p>
           <p className="text-xs text-gray-400 mt-0.5">Wir erstellen dir ein individuelles Angebot.</p>
         </div>
         <button
-          onClick={() => window.location.href = "mailto:info@nexthunt-portal.de?subject=" + encodeURIComponent("Individuelles Angebot — über 20.000 ha")}
+          onClick={() => window.location.href = "mailto:info@nexthunt-portal.de?subject=" + encodeURIComponent("Anfrage Enterprise Plus")}
           className="flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 rounded-xl text-sm font-semibold hover:bg-amber-500/20 transition-colors"
         >
           <Mail className="w-4 h-4" />
@@ -401,7 +355,7 @@ export default function PaketePreise() {
           <div className="flex items-center gap-2 min-w-0">
             <Lock className="w-4 h-4 text-amber-400 shrink-0" />
             <p className="text-sm text-gray-200 truncate">
-              Du nutzt aktuell <strong className="text-[#22c55e]">{gesamtflaeche.toFixed(1)} ha</strong> von <strong className="text-[#22c55e]">{maxFlaeche.toLocaleString("de-DE")} ha</strong> — entdecke was Enterprise dir noch bietet
+              Du nutzt bereits <strong className="text-[#22c55e]">{gesamtflaeche.toFixed(1)} von {maxFlaeche.toLocaleString("de-DE")} ha</strong> — entdecke was Enterprise dir noch bietet
             </p>
           </div>
           <button

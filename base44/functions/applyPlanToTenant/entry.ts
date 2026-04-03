@@ -34,7 +34,7 @@ const ENTERPRISE_FEATURES = {
 
 export const PLAN_CONFIGS = {
   solo: {
-    max_flaeche_ha: 600,
+    max_flaeche_ha: 800,
     max_mitglieder: 5,
     feature_map: true,
     feature_einrichtungen: true,
@@ -61,7 +61,7 @@ export const PLAN_CONFIGS = {
     addon_wildkammer: false,
   },
   pro: {
-    max_flaeche_ha: 2000,
+    max_flaeche_ha: 3000,
     max_mitglieder: 15,
     feature_map: true,
     feature_einrichtungen: true,
@@ -87,24 +87,14 @@ export const PLAN_CONFIGS = {
     addon_kameras: false,
     addon_wildkammer: false,
   },
-  enterprise_s: {
+  enterprise: {
     max_flaeche_ha: 5000,
     max_mitglieder: 50,
     ...ENTERPRISE_FEATURES,
   },
-  enterprise_m: {
-    max_flaeche_ha: 10000,
-    max_mitglieder: 150,
-    ...ENTERPRISE_FEATURES,
-  },
-  enterprise_l: {
-    max_flaeche_ha: 20000,
-    max_mitglieder: 999999,
-    ...ENTERPRISE_FEATURES,
-  },
   free_trial: {
-    max_flaeche_ha: 20000,
-    max_mitglieder: 999999,
+    max_flaeche_ha: 5000,
+    max_mitglieder: 50,
     ...ENTERPRISE_FEATURES,
   },
 };
