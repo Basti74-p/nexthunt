@@ -6,6 +6,7 @@ import RevierMapCore from "@/components/map/RevierMapCore";
 import EinrichtungenLayer from "@/components/map/layers/EinrichtungenLayer";
 import WildmanagementLayer from "@/components/map/layers/WildmanagementLayer";
 import BoundaryDrawer, { BoundaryDrawerControls } from "@/components/map/BoundaryDrawer";
+import { BoundaryEditorLayer, BoundaryEditorControls } from "@/components/map/BoundaryEditor";
 import EinrichtungForm from "@/components/map/EinrichtungForm";
 import WindLayer from "@/components/map/layers/WindLayer";
 import LandcoverLayer from "@/components/map/layers/LandcoverLayer";
@@ -40,6 +41,11 @@ export default function Karte() {
   const [analyzing, setAnalyzing] = useState(false);
   const [windData, setWindData] = useState(null);
   const [landcoverFeatures, setLandcoverFeatures] = useState([]);
+
+  // Boundary editor state
+  const [editingBoundary, setEditingBoundary] = useState(false);
+  const [editCoords, setEditCoords] = useState([]);
+  const [savingBoundary, setSavingBoundary] = useState(false);
 
   const { data: reviere = [] } = useQuery({
     queryKey: ["reviere", tenant?.id],
@@ -165,6 +171,57 @@ export default function Karte() {
     queryClient.invalidateQueries(["reviere", tenant?.id]);
   };
 
+  // Boundary editor handlers
+  const startEditBoundary = () => {
+    if (!selectedRevier?.boundary_geojson) return;
+    try {
+      const gj = typeof selectedRevier.boundary_geojson === "string"
+        ? JSON.parse(selectedRevier.boundary_geojson)
+        : selectedRevier.boundary_geojson;
+      let rawCoords;
+      if (gj.type === "FeatureCollection") rawCoords = gj.features?.[0]?.geometry?.coordinates?.[0];
+      else if (gj.type === "Feature") rawCoords = gj.geometry?.coordinates?.[0];
+      else rawCoords = gj.coordinates?.[0];
+      if (!rawCoords?.length) return;
+      const coords = rawCoords.map(([lng, lat]) => [lat, lng]);
+      const last = coords[coords.length - 1];
+      const first = coords[0];
+      const cleaned = (last[0] === first[0] && last[1] === first[1]) ? coords.slice(0, -1) : coords;
+      setEditCoords(cleaned);
+      setEditingBoundary(true);
+    } catch (e) {
+      console.error("Boundary parse error", e);
+    }
+  };
+
+  const saveEditedBoundary = async () => {
+    setSavingBoundary(true);
+    try {
+      const geoCoords = [...editCoords, editCoords[0]].map(([lat, lng]) => [lng, lat]);
+      const existingGj = selectedRevier.boundary_geojson
+        ? (typeof selectedRevier.boundary_geojson === "string" ? JSON.parse(selectedRevier.boundary_geojson) : selectedRevier.boundary_geojson)
+        : {};
+      const color = existingGj.color || "#22c55e";
+      const geojson = { type: "Feature", color, geometry: { type: "Polygon", coordinates: [geoCoords] } };
+      const flaecheHa = await calcFlaecheHa(JSON.stringify(geojson));
+      await base44.entities.Revier.update(selectedRevier.id, {
+        boundary_geojson: JSON.stringify(geojson),
+        flaeche_ha: flaecheHa,
+      });
+      queryClient.invalidateQueries(["reviere", tenant?.id]);
+      setEditingBoundary(false);
+    } finally {
+      setSavingBoundary(false);
+    }
+  };
+
+  const deleteEditedBoundary = async () => {
+    if (!window.confirm("Reviergrenze wirklich löschen?")) return;
+    await base44.entities.Revier.update(selectedRevier.id, { boundary_geojson: null, flaeche_ha: null });
+    queryClient.invalidateQueries(["reviere", tenant?.id]);
+    setEditingBoundary(false);
+  };
+
   const handleCreateNewRevier = async (name) => {
     const newRevier = await base44.entities.Revier.create({ tenant_id: tenant.id, name, status: "active" });
     queryClient.invalidateQueries(["reviere", tenant?.id]);
@@ -259,12 +316,21 @@ export default function Karte() {
                {placingEinrichtung ? "Klick auf Karte..." : "Einrichtung"}
              </button>
              <button
-                onClick={handleStart}
-                className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl bg-[#22c55e] text-black font-medium hover:bg-[#16a34a] transition-all"
-              >
-                <Pencil className="w-3.5 h-3.5" />
-                Reviergrenze
-              </button>
+                 onClick={handleStart}
+                 className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl bg-[#22c55e] text-black font-medium hover:bg-[#16a34a] transition-all"
+               >
+                 <Pencil className="w-3.5 h-3.5" />
+                 Reviergrenze
+               </button>
+               {selectedRevier?.boundary_geojson && (
+                 <button
+                   onClick={startEditBoundary}
+                   className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl bg-[#2d2d2d] text-[#22c55e] border border-[#22c55e]/40 font-medium hover:bg-[#22c55e]/10 transition-all"
+                 >
+                   <Pencil className="w-3.5 h-3.5" />
+                   Grenze bearbeiten
+                 </button>
+               )}
               <button
                 onClick={handleAnalyzeStands}
                 disabled={analyzing || !selectedRevier}
@@ -304,48 +370,63 @@ export default function Karte() {
       {selectedRevier ? (
         <>
           <div className="relative">
-            <RevierMapCore 
-            revier={selectedRevier} 
-            height="calc(100vh - 180px)" 
-            onMapClick={handleMapClick}
-            onWeatherButtonClick={() => {}}
-          >
+            <RevierMapCore
+              revier={selectedRevier}
+              height="calc(100vh - 180px)"
+              onMapClick={editingBoundary ? undefined : handleMapClick}
+              onWeatherButtonClick={() => {}}
+            >
               {landcoverFeatures.length > 0 && <LandcoverLayer features={landcoverFeatures} />}
-              {activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} analyzeResults={analyzeResults} />}
-              {activeLayers.has("sichtungen") && <WildmanagementLayer items={wildmanagement} />}
+              {!editingBoundary && activeLayers.has("einrichtungen") && <EinrichtungenLayer items={einrichtungen} analyzeResults={analyzeResults} />}
+              {!editingBoundary && activeLayers.has("sichtungen") && <WildmanagementLayer items={wildmanagement} />}
               {windData && <WindLayer windDeg={windData.deg} windSpeed={windData.speed} />}
-              <BoundaryDrawer
-                reviere={reviere}
-                drawing={drawing}
-                points={drawnPoints}
-                onPoint={(p) => setDrawnPoints(prev => [...prev, p])}
-                boundaries={boundaries}
-                previewColor={boundaryColor}
-                highlightedRevierId={highlightedRevierId}
-              />
+              {editingBoundary ? (
+                <BoundaryEditorLayer coords={editCoords} color="#22c55e" onChange={setEditCoords} />
+              ) : (
+                <BoundaryDrawer
+                  reviere={reviere}
+                  drawing={drawing}
+                  points={drawnPoints}
+                  onPoint={(p) => setDrawnPoints(prev => [...prev, p])}
+                  boundaries={boundaries}
+                  previewColor={boundaryColor}
+                  highlightedRevierId={highlightedRevierId}
+                />
+              )}
             </RevierMapCore>
 
-            <BoundaryDrawerControls
-              drawing={drawing}
-              points={drawnPoints}
-              onStart={handleStart}
-              onFinish={handleFinish}
-              onUndo={handleUndo}
-              onCancel={handleCancel}
-              showAssign={showAssign}
-              reviere={reviere}
-              selectedRevierId={assignRevierId}
-              onSelectRevier={setAssignRevierId}
-              onSave={handleSave}
-              saving={saving}
-              boundaries={boundaries}
-              onDeleteBoundary={handleDeleteBoundary}
-              boundaryColor={boundaryColor}
-              onColorChange={setBoundaryColor}
-              onCreateNewRevier={handleCreateNewRevier}
-              highlightedRevierId={highlightedRevierId}
-              onHighlightRevier={setHighlightedRevierId}
-            />
+            {editingBoundary ? (
+              <BoundaryEditorControls
+                coords={editCoords}
+                color="#22c55e"
+                onSave={saveEditedBoundary}
+                onDelete={deleteEditedBoundary}
+                onCancel={() => setEditingBoundary(false)}
+                saving={savingBoundary}
+              />
+            ) : (
+              <BoundaryDrawerControls
+                drawing={drawing}
+                points={drawnPoints}
+                onStart={handleStart}
+                onFinish={handleFinish}
+                onUndo={handleUndo}
+                onCancel={handleCancel}
+                showAssign={showAssign}
+                reviere={reviere}
+                selectedRevierId={assignRevierId}
+                onSelectRevier={setAssignRevierId}
+                onSave={handleSave}
+                saving={saving}
+                boundaries={boundaries}
+                onDeleteBoundary={handleDeleteBoundary}
+                boundaryColor={boundaryColor}
+                onColorChange={setBoundaryColor}
+                onCreateNewRevier={handleCreateNewRevier}
+                highlightedRevierId={highlightedRevierId}
+                onHighlightRevier={setHighlightedRevierId}
+              />
+            )}
           </div>
           <p className="text-xs text-gray-500 text-center">
             {einrichtungen.filter(e => e.latitude).length} Einrichtungen · {wildmanagement.filter(w => w.latitude).length} Sichtungen · {selectedRevier.name}
