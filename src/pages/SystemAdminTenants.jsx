@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/components/hooks/useAuth";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Building2, Plus, Pencil, Search, Users, LifeBuoy, UserPlus, Clock, Trash2, AlertTriangle, CheckCircle, XCircle, Info } from "lucide-react";
+import { Building2, Plus, Pencil, Search, Users, LifeBuoy, UserPlus, Clock, Trash2, AlertTriangle, CheckCircle, XCircle, Info, RefreshCw } from "lucide-react";
 
 const FEATURES = [
   { key: "feature_dashboard", label: "Dashboard" },
@@ -202,23 +202,33 @@ export default function SystemAdminTenants() {
     enabled: isPlatformAdmin,
   });
 
-  // Auto-downgrade expired trials
+  // Auto-downgrade expired trials (run once per tenant ID, not on every render)
+  const processedTrials = useRef(new Set());
   const expiredTrials = tenants.filter(t =>
     t.status === "trial" && t.trial_end_date && new Date(t.trial_end_date) < new Date()
   );
   useEffect(() => {
-    if (expiredTrials.length === 0) return;
-    const SOLO_CONFIG = PLAN_CONFIGS["solo"];
-    expiredTrials.forEach(async (t) => {
-      await base44.entities.Tenant.update(t.id, { ...SOLO_CONFIG, plan: "solo", status: "active" });
+    const unprocessed = expiredTrials.filter(t => !processedTrials.current.has(t.id));
+    if (unprocessed.length === 0) return;
+    unprocessed.forEach(t => processedTrials.current.add(t.id));
+    const soloConfig = { ...PLAN_CONFIGS["solo"], plan: "solo", status: "active" };
+    Promise.all(unprocessed.map(async (t) => {
+      await base44.entities.Tenant.update(t.id, soloConfig);
       base44.integrations.Core.SendEmail({
         to: t.contact_email,
         subject: "Dein NextHunt-Testzeitraum ist abgelaufen",
         body: `Hallo ${t.contact_person || t.name},\n\nDein 7-tägiger Testzeitraum ist abgelaufen. Wähle jetzt dein Paket um NextHunt weiter zu nutzen:\nhttps://app.nexthunt-portal.de/PaketePreise\n\nDas NextHunt-Team`,
       }).catch(() => {});
-    });
-    qc.invalidateQueries({ queryKey: ["sa-tenants"] });
+    })).then(() => qc.invalidateQueries({ queryKey: ["sa-tenants"] }));
   }, [expiredTrials.map(t => t.id).join(",")]);
+
+  // Manual plan re-sync: fix a tenant whose features don't match their plan
+  const handleResyncPlan = async (t) => {
+    const config = PLAN_CONFIGS[t.plan];
+    if (!config) return;
+    await base44.entities.Tenant.update(t.id, { ...config, plan: t.plan });
+    qc.invalidateQueries({ queryKey: ["sa-tenants"] });
+  };
 
   const deleteMutation = useMutation({
     mutationFn: (id) => base44.entities.Tenant.delete(id),
@@ -511,6 +521,11 @@ export default function SystemAdminTenants() {
                         <span className="flex items-center gap-1"><Users className="w-3.5 h-3.5" />{memberCount}</span>
                         {openTickets > 0 && (
                           <span className="flex items-center gap-1 text-amber-400"><LifeBuoy className="w-3.5 h-3.5" />{openTickets}</span>
+                        )}
+                        {PLAN_CONFIGS[t.plan] && FEATURES.some(f => PLAN_CONFIGS[t.plan][f.key] !== undefined && t[f.key] !== PLAN_CONFIGS[t.plan][f.key]) && (
+                          <Button variant="ghost" size="icon" onClick={() => handleResyncPlan(t)} title="Features mit Plan synchronisieren" className="text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 rounded-xl">
+                            <RefreshCw className="w-4 h-4" />
+                          </Button>
                         )}
                         <Button variant="ghost" size="icon" onClick={() => { setEditing({ ...t }); setDialogOpen(true); }} className="text-slate-400 hover:text-white hover:bg-slate-700 rounded-xl">
                           <Pencil className="w-4 h-4" />
