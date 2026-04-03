@@ -25,6 +25,9 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     loadUser();
+    // Reload tenant data every 60 seconds so admin feature changes take effect without full page reload
+    const interval = setInterval(loadUser, 60_000);
+    return () => clearInterval(interval);
   }, []);
 
   const loadUser = async () => {
