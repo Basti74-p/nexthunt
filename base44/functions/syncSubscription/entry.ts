@@ -67,6 +67,19 @@ Deno.serve(async (req) => {
     const tenants = await base44.asServiceRole.entities.Tenant.filter({ contact_email: email });
     const tenant = tenants[0];
 
+    // --- GET PLAN CONFIG (für Replit-Abgleich) ---
+    if (action === 'get_plan_config') {
+      const requestedPlan = plan || 'all';
+      if (requestedPlan === 'all') {
+        return Response.json({ success: true, plan_configs: PLAN_CONFIGS }, { headers: corsHeaders });
+      }
+      const config = PLAN_CONFIGS[requestedPlan];
+      if (!config) {
+        return Response.json({ error: `Unknown plan: ${requestedPlan}` }, { status: 400, headers: corsHeaders });
+      }
+      return Response.json({ success: true, plan: requestedPlan, config }, { headers: corsHeaders });
+    }
+
     // --- GET STATUS ---
     if (action === 'get_status') {
       if (!tenant) {
