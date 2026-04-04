@@ -72,6 +72,56 @@
     "trial_days_remaining": {
       "type": "number"
     },
+    "plan_status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "cancelled",
+        "expired",
+        "billing_issue"
+      ],
+      "default": "active",
+      "description": "Abo-Status"
+    },
+    "plan_expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Ablaufdatum des Abos"
+    },
+    "plan_product_id": {
+      "type": "string",
+      "description": "Produkt-ID aus App Store / Play Store"
+    },
+    "plan_store": {
+      "type": "string",
+      "enum": [
+        "APP_STORE",
+        "PLAY_STORE",
+        "manual"
+      ],
+      "default": "manual",
+      "description": "Herkunft des Abos"
+    },
+    "plan_price": {
+      "type": "number",
+      "description": "Preis in EUR"
+    },
+    "plan_currency": {
+      "type": "string",
+      "default": "EUR"
+    },
+    "plan_updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Letztes Update des Abos"
+    },
+    "addons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Aktive Add-ons z.B. ['addon_wildkammer', 'addon_kameras']"
+    },
     "nav_dashboard": {
       "type": "boolean",
       "default": true,
