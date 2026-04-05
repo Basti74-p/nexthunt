@@ -1,4 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
+import * as djwt from 'https://deno.land/x/djwt@v2.9.1/mod.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -6,8 +7,26 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-api-key',
 };
 
-const NEXTHUNT_API_KEY = Deno.env.get("NEXTHUNT_API_KEY");
 const ALLOWED_ACTIONS = ["get_all", "get_by_id", "create_batch", "assign_to_abschuss", "mark_nfc_written"];
+
+async function authenticate(req) {
+  const authHeader = req.headers.get('Authorization');
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    try {
+      const key = await crypto.subtle.importKey(
+        'raw', new TextEncoder().encode(Deno.env.get('JWT_SECRET')),
+        { name: 'HMAC', hash: 'SHA-256' }, false, ['sign', 'verify']
+      );
+      const payload = await djwt.verify(authHeader.slice(7), key);
+      return { ok: true };
+    } catch { /* fall through */ }
+  }
+  const apiKey = req.headers.get('x-api-key');
+  if (apiKey && (apiKey === Deno.env.get('NEXTHUNT_MOBILE_KEY') || apiKey === Deno.env.get('NEXTHUNT_API_KEY'))) {
+    return { ok: true };
+  }
+  return { ok: false };
+}
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -15,9 +34,8 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // API-Key Validierung
-    const apiKey = req.headers.get('x-api-key');
-    if (NEXTHUNT_API_KEY && apiKey !== NEXTHUNT_API_KEY) {
+    const auth = await authenticate(req);
+    if (!auth.ok) {
       return Response.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
     }
 
