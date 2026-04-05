@@ -19,7 +19,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, ZoomContr
 
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { Locate, Layers, Search, X, Loader2, Map as MapIcon, Wind, Satellite, Mountain } from "lucide-react";
+import { Locate, Layers, Search, X, Loader2, Map as MapIcon, Wind, Satellite, Mountain, GitBranch } from "lucide-react";
 import { useMobile } from "@/components/hooks/useMobile";
 
 // Fix Leaflet default icon path issue with bundlers
@@ -227,8 +227,8 @@ function SearchControl({ onResult }) {
   );
 }
 
-// Style switcher
-function StyleControl({ currentStyle, onStyleChange }) {
+// Style switcher + Gemeindegrenzen toggle
+function StyleControl({ currentStyle, onStyleChange, showGemeindegrenzen, onToggleGemeindegrenzen }) {
   const [open, setOpen] = useState(false);
   const isMobile = useMobile();
   
@@ -261,6 +261,19 @@ function StyleControl({ currentStyle, onStyleChange }) {
                 </button>
               );
             })}
+          </div>
+          {/* Gemeindegrenzen Toggle */}
+          <div className="border-t border-[#3a3a3a] px-1.5 py-1.5">
+            <button
+              onClick={onToggleGemeindegrenzen}
+              className={`w-full flex items-center gap-3 transition-all rounded-lg ${
+                isMobile ? "px-3 py-2.5 text-base" : "px-2.5 py-2 text-sm"
+              } ${showGemeindegrenzen ? "bg-[#f59e0b]/15 border border-[#f59e0b]/40 text-[#f59e0b]" : "text-gray-300 hover:bg-[#3a3a3a]"}`}
+            >
+              <GitBranch className={`flex-shrink-0 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />
+              <span className="font-medium">Gemeindegrenzen</span>
+              {showGemeindegrenzen && <div className="ml-auto w-2 h-2 rounded-full bg-[#f59e0b]" />}
+            </button>
           </div>
         </div>
       ) : (
@@ -381,6 +394,9 @@ export default function RevierMapCore({
     const saved = localStorage.getItem("nh_map_style");
     return MAP_STYLES.find(s => s.id === saved) || MAP_STYLES[0];
   });
+  const [showGemeindegrenzen, setShowGemeindegrenzen] = useState(() => {
+    return localStorage.getItem("nh_gemeindegrenzen") === "true";
+  });
   const [mapInstance, setMapInstance] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
   const [userHeading, setUserHeading] = useState(null);
@@ -423,6 +439,14 @@ export default function RevierMapCore({
     localStorage.setItem("nh_map_style", style.id);
   };
 
+  const handleToggleGemeindegrenzen = () => {
+    setShowGemeindegrenzen(prev => {
+      const next = !prev;
+      localStorage.setItem("nh_gemeindegrenzen", String(next));
+      return next;
+    });
+  };
+
   const handleLocate = (latlng, heading) => {
     setUserLocation(latlng);
     setUserHeading(heading ?? null);
@@ -445,6 +469,16 @@ export default function RevierMapCore({
         attributionControl={false}
       >
         <TileLayer key={mapStyle.id} url={mapStyle.url} attribution={mapStyle.attribution} maxZoom={19} />
+
+        {/* Gemeindegrenzen WMS Layer (BKG – Verwaltungsgebiete VG250) */}
+        {showGemeindegrenzen && (
+          <TileLayer
+            url="https://sgx.geodatenzentrum.de/wms_vg250?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&BBOX={bbox-epsg-3857}&CRS=EPSG:3857&WIDTH=256&HEIGHT=256&LAYERS=vg250_gem&STYLES=&FORMAT=image/png&DPI=96&MAP_RESOLUTION=96&FORMAT_OPTIONS=dpi:96&TRANSPARENT=TRUE"
+            attribution='&copy; <a href="https://www.bkg.bund.de">BKG</a>'
+            opacity={0.7}
+            maxZoom={19}
+          />
+        )}
 
         <MapController onMapReady={setMapInstance} onMapClick={onMapClick} />
 
@@ -469,7 +503,7 @@ export default function RevierMapCore({
 
       {/* Controls (outside MapContainer to avoid Leaflet DOM conflicts with React portals) */}
       <SearchControl onResult={handleSearchResult} />
-      <StyleControl currentStyle={mapStyle} onStyleChange={handleStyleChange} />
+      <StyleControl currentStyle={mapStyle} onStyleChange={handleStyleChange} showGemeindegrenzen={showGemeindegrenzen} onToggleGemeindegrenzen={handleToggleGemeindegrenzen} />
       <GeolocationControl onLocate={handleLocate} />
       <WeatherControl onWeatherClick={onWeatherButtonClick} />
     </div>
