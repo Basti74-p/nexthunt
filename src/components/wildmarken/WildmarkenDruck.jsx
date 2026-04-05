@@ -27,82 +27,93 @@ async function generateLabel(nummer, logo) {
   canvas.height = H;
   const ctx = canvas.getContext("2d");
 
+  // Weißer Hintergrund
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, W, H);
 
-  // ── QR-Code: max 14×14mm, zentriert vertikal, 1mm vom linken Rand ──
-  const qrS = px(14);
-  const qrX = px(1);
-  const qrY = (H - qrS) / 2;
+  // ── Bemaßung ─────────────────────────────────────────────
+  // 0–10mm:      frei
+  // 10–11.3mm:   Falzlinie #1 (Mitte bei 10.65mm)
+  // 11.3–31mm:   QR-Code (19.7mm breit)
+  // 31–32.3mm:   Falzlinie #2 (Mitte bei 31.65mm)
+  // 32.3–50mm:   Text-Bereich (17.7mm breit)
 
+  const fold1Center = px(10.65);
+  const fold2Center = px(31.65);
+  const qrLeft = px(11.3);
+  const qrSize = px(19.7);
+  const textLeft = px(32.3);
+  const textWidth = px(17.7);
+
+  // ── Falzlinien ────────────────────────────────────────────
+  const drawFold = (xCenter) => {
+    ctx.save();
+    ctx.strokeStyle = "#bbbbbb";
+    ctx.lineWidth = px(0.15);
+    ctx.setLineDash([px(1.2), px(0.8)]);
+    ctx.beginPath();
+    ctx.moveTo(xCenter, 0);
+    ctx.lineTo(xCenter, H);
+    ctx.stroke();
+    ctx.restore();
+  };
+  drawFold(fold1Center);
+  drawFold(fold2Center);
+
+  // ── QR-Code: 19.7×19.7mm, vertikal zentriert ─────────────
+  const qrY = (H - qrSize) / 2;
   const qrTmp = document.createElement("canvas");
   await QRCode.toCanvas(qrTmp, `https://nexthunt-portal.de/wm/${nummer}`, {
     errorCorrectionLevel: "H",
-    width: qrS * 3, // 3× oversample für Schärfe
+    width: qrSize * 3,
     margin: 0,
     color: { dark: "#000000", light: "#ffffff" },
   });
   ctx.imageSmoothingEnabled = false;
-  ctx.drawImage(qrTmp, qrX, qrY, qrS, qrS);
+  ctx.drawImage(qrTmp, qrLeft, qrY, qrSize, qrSize);
   ctx.imageSmoothingEnabled = true;
 
-  // Logo-Overlay im QR (3.5mm)
-  const olS = px(3.5);
-  const olPad = px(0.4);
-  const olX = qrX + (qrS - olS) / 2;
-  const olY = qrY + (qrS - olS) / 2;
+  // Logo-Overlay im QR-Mittelpunkt (4mm)
+  const olS = px(4);
+  const olPad = px(0.5);
+  const olX = qrLeft + (qrSize - olS) / 2;
+  const olY = qrY + (qrSize - olS) / 2;
   ctx.fillStyle = "#ffffff";
   ctx.beginPath();
   ctx.roundRect(olX - olPad, olY - olPad, olS + olPad * 2, olS + olPad * 2, px(0.4));
   ctx.fill();
   ctx.drawImage(logo, olX, olY, olS, olS);
 
-  // ── Falzlinien bei 16mm und 18mm ─────────────────────────
-  ctx.save();
-  ctx.strokeStyle = "#cccccc";
-  ctx.lineWidth = px(0.15);
-  ctx.setLineDash([px(1), px(0.7)]);
-  [16, 18].forEach((xmm) => {
-    ctx.beginPath();
-    ctx.moveTo(px(xmm), px(0.5));
-    ctx.lineTo(px(xmm), H - px(0.5));
-    ctx.stroke();
-  });
-  ctx.restore();
-
-  // ── Info-Seite: 18–50mm (32mm breit) — Text 90° gedreht ──
-  // Die Info-Seite wird von unten nach oben gelesen.
-  // Wir drehen um den Mittelpunkt der Info-Seite.
-  const infoLeft = px(18);
-  const infoW = px(32);      // 32mm breit
-  const infoCX = infoLeft + infoW / 2;
-  const infoCY = H / 2;
+  // ── Text-Bereich: 32.3–50mm, 90° gedreht (von unten nach oben) ──
+  // Mitte des Text-Bereichs:
+  const textCX = textLeft + textWidth / 2;
+  const textCY = H / 2;
 
   ctx.save();
-  ctx.translate(infoCX, infoCY);
+  ctx.translate(textCX, textCY);
   ctx.rotate(-Math.PI / 2);
-  // Nach Rotation: die "neue x-Achse" ist die alte y-Achse
-  // Verfügbare Breite = H = 30mm, Verfügbare Höhe = infoW = 32mm
-  const virtualW = H;      // 30mm (wird zur Breite nach Rotation)
-  const virtualH = infoW;  // 32mm (wird zur Höhe nach Rotation)
+  // Nach Rotation: virtuelle Breite = H (30mm), virtuelle Höhe = textWidth (17.7mm)
+  const vW = H;           // 30mm → horizontale Ausdehnung
+  const vH = textWidth;   // 17.7mm → vertikale Ausdehnung
 
-  // Logo: 20mm breit (groß), oben zentriert
-  const logoW = px(20);
+  // Logo: 18mm breit
+  const logoW = px(18);
   const logoH = logoW * (logo.naturalHeight / logo.naturalWidth);
-  ctx.drawImage(logo, -logoW / 2, -virtualH / 2 + px(2), logoW, logoH);
+  const logoDrawY = -vH / 2 + px(2);
+  ctx.drawImage(logo, -logoW / 2, logoDrawY, logoW, logoH);
 
-  // Nummer: 5mm Schrift, darunter
-  const numSize = px(5);
+  // Nummer
+  const numSize = px(4.5);
   ctx.font = `bold ${numSize}px "Arial Black", Arial, sans-serif`;
   ctx.fillStyle = "#111111";
   ctx.textAlign = "center";
   ctx.textBaseline = "top";
-  const numY = -virtualH / 2 + px(2) + logoH + px(2);
+  const numY = logoDrawY + logoH + px(1.5);
   ctx.fillText(nummer, 0, numY);
 
-  // URL: 2mm Schrift
+  // URL
   ctx.font = `${px(2)}px Arial, sans-serif`;
-  ctx.fillStyle = "#999999";
+  ctx.fillStyle = "#888888";
   ctx.fillText("nexthunt-portal.de", 0, numY + numSize + px(1));
 
   ctx.restore();
