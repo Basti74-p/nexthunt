@@ -1,51 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
-import { X, Wind, Loader2 } from "lucide-react";
+import React from "react";
+import { X, Wind } from "lucide-react";
 
 const WINDY_API_KEY = "Zey4x3XZZ3xcMdrEboNkqSPbxe6qTI0L";
 
 export default function WindyOverlay({ center, onClose }) {
-  const containerRef = useRef(null);
-  const [loading, setLoading] = useState(true);
-
   const lat = center ? center[0] : 51.1657;
   const lon = center ? center[1] : 10.4515;
 
-  useEffect(() => {
-    // Load Windy API script
-    if (window.windyInit) {
-      initWindy();
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.src = "https://api.windy.com/assets/map-forecast/libBoot.js";
-    script.async = true;
-    script.onload = initWindy;
-    document.head.appendChild(script);
-
-    return () => {
-      // cleanup
-    };
-  }, []);
-
-  const initWindy = () => {
-    if (!containerRef.current) return;
-
-    const options = {
-      key: WINDY_API_KEY,
-      verbose: false,
-      lat,
-      lon,
-      zoom: 8,
-    };
-
-    window.windyInit(options, (windyAPI) => {
-      setLoading(false);
-    });
-  };
+  const src = `https://embed.windy.com/embed2.html?lat=${lat}&lon=${lon}&detailLat=${lat}&detailLon=${lon}&width=650&height=450&zoom=8&level=surface&overlay=wind&product=ecmwf&menu=&message=true&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1`;
 
   return (
-    <div className="absolute inset-0 z-[2000] flex flex-col" style={{ background: "#1e1e1e" }}>
+    <div className="absolute inset-0 z-[2000] flex flex-col bg-[#1e1e1e]">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 bg-[#1e1e1e] border-b border-[#3a3a3a] shrink-0">
         <div className="flex items-center gap-2">
@@ -61,22 +26,13 @@ export default function WindyOverlay({ center, onClose }) {
         </button>
       </div>
 
-      {/* Windy Map */}
-      <div className="relative flex-1">
-        {loading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-[#1e1e1e] z-10">
-            <div className="flex flex-col items-center gap-3">
-              <Loader2 className="w-8 h-8 text-[#22c55e] animate-spin" />
-              <p className="text-sm text-gray-400">Wetterdaten werden geladen...</p>
-            </div>
-          </div>
-        )}
-        <div
-          id="windy"
-          ref={containerRef}
-          style={{ width: "100%", height: "100%" }}
-        />
-      </div>
+      {/* Windy Embed */}
+      <iframe
+        src={src}
+        title="Windy Wetterkarte"
+        className="flex-1 w-full border-0"
+        allowFullScreen
+      />
     </div>
   );
 }
