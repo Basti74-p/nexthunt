@@ -1,0 +1,40 @@
+{
+  "name": "Wildmarke",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string",
+      "description": "Mandanten-ID"
+    },
+    "nummer": {
+      "type": "string",
+      "description": "Wildmarken-Nummer im Format NH-XXXXX"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "frei",
+        "vergeben"
+      ],
+      "default": "frei",
+      "description": "Status der Wildmarke"
+    },
+    "abschuss_id": {
+      "type": "string",
+      "description": "ID des zugeordneten Abschusses"
+    },
+    "abschuss_info": {
+      "type": "string",
+      "description": "Kurztext zum Abschuss, z.B. 'Rehbock - 15.03.2025'"
+    },
+    "nfc_written": {
+      "type": "boolean",
+      "default": false,
+      "description": "true wenn auf NFC-Tag geschrieben"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "nummer"
+  ]
+}
