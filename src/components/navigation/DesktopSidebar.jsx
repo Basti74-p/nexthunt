@@ -39,7 +39,8 @@ const NAV_CONFIG = [
     { key: "nav_wildkammer", page: "StreckeWildkammer", icon: Archive, module: "nav_wildkammer" },
     { key: "nav_lager", page: "WildProdukte", icon: Archive, module: "nav_wildprodukte" },
     { key: "nav_wildverkauf", page: "Wildverkauf", icon: Truck, module: "nav_wildverkauf" },
-    { key: "nav_archiv", page: "StreckeArchiv", icon: Archive, module: "nav_strecke_archiv" }
+    { key: "nav_archiv", page: "StreckeArchiv", icon: Archive, module: "nav_strecke_archiv" },
+    { key: "nav_wildmarken", page: "Wildmarken", icon: Tag, label: "Wildmarken", module: "nav_strecke" }
   ]
 },
 {
