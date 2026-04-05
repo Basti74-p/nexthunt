@@ -40,8 +40,8 @@ async function generateLabel(nummer, logo) {
 
   const fold1Center = px(10.65);
   const fold2Center = px(31.65);
-  const qrLeft = px(11.3);
-  const qrSize = px(19.7);
+  const qrLeft = px(13);
+  const qrSize = px(15);
   const textLeft = px(32.3);
   const textWidth = px(17.7);
 
