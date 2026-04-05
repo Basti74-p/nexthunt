@@ -4,7 +4,7 @@ import QRCode from "qrcode";
 const LOGO_URL =
   "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c370741b119950032ab62/7a1f75278_NextHunt_logo_transparent.png";
 
-// Intern sehr hoch auflösen: 20px pro mm → 50mm×30mm = 1000×600px
+// 20px/mm → 50×30mm = 1000×600px
 const DPI = 20;
 const W = 50 * DPI; // 1000px
 const H = 30 * DPI; // 600px
@@ -27,21 +27,18 @@ async function generateLabel(nummer, logo) {
   canvas.height = H;
   const ctx = canvas.getContext("2d");
 
-  // Weißer Hintergrund
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, W, H);
 
-  // ── QR-Code: links, 27mm × 27mm, 1.5mm Rand ──────────────
-  const qrMM = 27;
-  const qrS = px(qrMM);
-  const qrX = px(1.5);
+  // ── QR-Code: max 14×14mm, zentriert vertikal, 1mm vom linken Rand ──
+  const qrS = px(14);
+  const qrX = px(1);
   const qrY = (H - qrS) / 2;
 
-  // QR: intern 2× größer rendern, dann crisp skalieren
   const qrTmp = document.createElement("canvas");
   await QRCode.toCanvas(qrTmp, `https://nexthunt-portal.de/wm/${nummer}`, {
     errorCorrectionLevel: "H",
-    width: qrS * 2,
+    width: qrS * 3, // 3× oversample für Schärfe
     margin: 0,
     color: { dark: "#000000", light: "#ffffff" },
   });
@@ -49,23 +46,23 @@ async function generateLabel(nummer, logo) {
   ctx.drawImage(qrTmp, qrX, qrY, qrS, qrS);
   ctx.imageSmoothingEnabled = true;
 
-  // Logo-Overlay im QR-Code (5mm zentriert)
-  const olS = px(5);
-  const olPad = px(0.6);
+  // Logo-Overlay im QR (3.5mm)
+  const olS = px(3.5);
+  const olPad = px(0.4);
   const olX = qrX + (qrS - olS) / 2;
   const olY = qrY + (qrS - olS) / 2;
   ctx.fillStyle = "#ffffff";
   ctx.beginPath();
-  ctx.roundRect(olX - olPad, olY - olPad, olS + olPad * 2, olS + olPad * 2, px(0.5));
+  ctx.roundRect(olX - olPad, olY - olPad, olS + olPad * 2, olS + olPad * 2, px(0.4));
   ctx.fill();
   ctx.drawImage(logo, olX, olY, olS, olS);
 
-  // ── Falzlinien bei 29mm und 31mm ─────────────────────────
+  // ── Falzlinien bei 16mm und 18mm ─────────────────────────
   ctx.save();
   ctx.strokeStyle = "#cccccc";
   ctx.lineWidth = px(0.15);
   ctx.setLineDash([px(1), px(0.7)]);
-  [29, 31].forEach((xmm) => {
+  [16, 18].forEach((xmm) => {
     ctx.beginPath();
     ctx.moveTo(px(xmm), px(0.5));
     ctx.lineTo(px(xmm), H - px(0.5));
@@ -73,37 +70,42 @@ async function generateLabel(nummer, logo) {
   });
   ctx.restore();
 
-  // ── Info-Seite: 31–50mm (19mm breit) ─────────────────────
-  const infoLeft = px(31);
-  const infoW = px(19);
-  const cx = infoLeft + infoW / 2;
+  // ── Info-Seite: 18–50mm (32mm breit) — Text 90° gedreht ──
+  // Die Info-Seite wird von unten nach oben gelesen.
+  // Wir drehen um den Mittelpunkt der Info-Seite.
+  const infoLeft = px(18);
+  const infoW = px(32);      // 32mm breit
+  const infoCX = infoLeft + infoW / 2;
+  const infoCY = H / 2;
 
-  // Logo: 11mm breit, 2.5mm vom oberen Rand
-  const logoW = px(11);
+  ctx.save();
+  ctx.translate(infoCX, infoCY);
+  ctx.rotate(-Math.PI / 2);
+  // Nach Rotation: die "neue x-Achse" ist die alte y-Achse
+  // Verfügbare Breite = H = 30mm, Verfügbare Höhe = infoW = 32mm
+  const virtualW = H;      // 30mm (wird zur Breite nach Rotation)
+  const virtualH = infoW;  // 32mm (wird zur Höhe nach Rotation)
+
+  // Logo: 20mm breit (groß), oben zentriert
+  const logoW = px(20);
   const logoH = logoW * (logo.naturalHeight / logo.naturalWidth);
-  const logoY = px(2.5);
-  ctx.drawImage(logo, cx - logoW / 2, logoY, logoW, logoH);
+  ctx.drawImage(logo, -logoW / 2, -virtualH / 2 + px(2), logoW, logoH);
 
-  // Nummer: 3.8mm Schrift (passt auch für NH-00001)
-  const numSize = px(3.8);
+  // Nummer: 5mm Schrift, darunter
+  const numSize = px(5);
   ctx.font = `bold ${numSize}px "Arial Black", Arial, sans-serif`;
   ctx.fillStyle = "#111111";
   ctx.textAlign = "center";
   ctx.textBaseline = "top";
-  // Skalierung prüfen: falls Nummer zu breit, kleiner machen
-  const maxTextW = infoW - px(1);
-  let actualSize = numSize;
-  while (ctx.measureText(nummer).width > maxTextW && actualSize > px(2)) {
-    actualSize -= 2;
-    ctx.font = `bold ${actualSize}px "Arial Black", Arial, sans-serif`;
-  }
-  const numY = logoY + logoH + px(2);
-  ctx.fillText(nummer, cx, numY);
+  const numY = -virtualH / 2 + px(2) + logoH + px(2);
+  ctx.fillText(nummer, 0, numY);
 
-  // URL: 1.8mm Schrift
-  ctx.font = `${px(1.8)}px Arial, sans-serif`;
+  // URL: 2mm Schrift
+  ctx.font = `${px(2)}px Arial, sans-serif`;
   ctx.fillStyle = "#999999";
-  ctx.fillText("nexthunt-portal.de", cx, numY + actualSize + px(1));
+  ctx.fillText("nexthunt-portal.de", 0, numY + numSize + px(1));
+
+  ctx.restore();
 
   return canvas;
 }
@@ -175,7 +177,7 @@ ${canvases.map((c) => `<div class="label"><img src="${c.dataUrl}" /></div>`).joi
                   className="border border-[#444] rounded overflow-hidden bg-white"
                   style={{ width: 250, height: 150 }}>
                   <img src={c.dataUrl} alt={c.nummer}
-                    style={{ width: "100%", height: "100%", objectFit: "fill", imageRendering: "crisp-edges" }} />
+                    style={{ width: "100%", height: "100%", objectFit: "fill" }} />
                 </div>
               ))}
             </div>
