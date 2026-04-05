@@ -15,7 +15,7 @@
  */
 
 import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, ZoomControl } from "react-leaflet";
+import { MapContainer, TileLayer, WMSTileLayer, Marker, Popup, useMap, useMapEvents, ZoomControl } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -472,11 +472,14 @@ export default function RevierMapCore({
 
         {/* Gemeindegrenzen WMS Layer (BKG – Verwaltungsgebiete VG250) */}
         {showGemeindegrenzen && (
-          <TileLayer
-            url="https://sgx.geodatenzentrum.de/wms_vg250?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&BBOX={bbox-epsg-3857}&CRS=EPSG:3857&WIDTH=256&HEIGHT=256&LAYERS=vg250_gem&STYLES=&FORMAT=image/png&DPI=96&MAP_RESOLUTION=96&FORMAT_OPTIONS=dpi:96&TRANSPARENT=TRUE"
-            attribution='&copy; <a href="https://www.bkg.bund.de">BKG</a>'
+          <WMSTileLayer
+            url="https://sgx.geodatenzentrum.de/wms_vg250"
+            layers="vg250_gem"
+            format="image/png"
+            transparent={true}
+            version="1.3.0"
             opacity={0.7}
-            maxZoom={19}
+            attribution='&copy; <a href="https://www.bkg.bund.de">BKG</a>'
           />
         )}
 
