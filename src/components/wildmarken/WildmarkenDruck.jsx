@@ -21,7 +21,7 @@ async function loadImage(src) {
   });
 }
 
-async function generateLabel(nummer, logo) {
+async function generateLabel(nummer) {
   const canvas = document.createElement("canvas");
   canvas.width = W;
   canvas.height = H;
@@ -73,54 +73,41 @@ async function generateLabel(nummer, logo) {
   ctx.drawImage(qrTmp, qrLeft, qrY, qrSize, qrSize);
   ctx.imageSmoothingEnabled = true;
 
-  // Logo-Overlay im QR-Mittelpunkt (4mm)
-  const olS = px(4);
-  const olPad = px(0.5);
-  const olX = qrLeft + (qrSize - olS) / 2;
-  const olY = qrY + (qrSize - olS) / 2;
-  ctx.fillStyle = "#ffffff";
-  ctx.beginPath();
-  ctx.roundRect(olX - olPad, olY - olPad, olS + olPad * 2, olS + olPad * 2, px(0.4));
-  ctx.fill();
-  ctx.drawImage(logo, olX, olY, olS, olS);
-
-  // ── Text-Bereich: 32.3–50mm, 90° gedreht (von unten nach oben) ──
-  // Mitte des Text-Bereichs:
+  // ── Text-Bereich: 90° gedreht (von unten nach oben) ──
   const textCX = textLeft + textWidth / 2;
   const textCY = H / 2;
+
+  // WM-Nummer: NH-XXXXX → WM-XXXXX
+  const wmNummer = nummer.replace("NH-", "WM-");
 
   ctx.save();
   ctx.translate(textCX, textCY);
   ctx.rotate(-Math.PI / 2);
-  // Nach Rotation: virtuelle Breite = H (30mm), virtuelle Höhe = textWidth (17.7mm)
-  const vW = H;           // 30mm → horizontale Ausdehnung
-  const vH = textWidth;   // 17.7mm → vertikale Ausdehnung
 
-  // Gesamthöhe der Inhalte berechnen und zentrieren
-  const logoW = px(16);
-  const logoH = logoW * (logo.naturalHeight / logo.naturalWidth);
-  const numSize = px(4.5);
+  const brandSize = px(3.5);
   const urlSize = px(2);
-  const gap1 = px(0.5);
+  const numSize = px(5);
+  const gap1 = px(1);
   const gap2 = px(1);
-  const totalH = logoH + gap1 + numSize + gap2 + urlSize;
+  const totalH = brandSize + gap1 + urlSize + gap2 + numSize;
   const startY = -totalH / 2;
 
-  // Logo
-  ctx.drawImage(logo, -logoW / 2, startY, logoW, logoH);
-
-  // Nummer
-  ctx.font = `bold ${numSize}px "Arial Black", Arial, sans-serif`;
+  // "NextHunt" groß
+  ctx.font = `bold ${brandSize}px Arial, sans-serif`;
   ctx.fillStyle = "#111111";
   ctx.textAlign = "center";
   ctx.textBaseline = "top";
-  const numY = startY + logoH + gap1;
-  ctx.fillText(nummer, 0, numY);
+  ctx.fillText("NextHunt", 0, startY);
 
-  // URL
+  // Website klein
   ctx.font = `${urlSize}px Arial, sans-serif`;
   ctx.fillStyle = "#888888";
-  ctx.fillText("nexthunt-portal.de", 0, numY + numSize + gap2);
+  ctx.fillText("nexthunt-portal.de", 0, startY + brandSize + gap1);
+
+  // WM-Nummer groß
+  ctx.font = `bold ${numSize}px "Arial Black", Arial, sans-serif`;
+  ctx.fillStyle = "#111111";
+  ctx.fillText(wmNummer, 0, startY + brandSize + gap1 + urlSize + gap2);
 
   ctx.restore();
 
@@ -135,10 +122,9 @@ export default function WildmarkenDruck({ marken, onClose }) {
   useEffect(() => {
     (async () => {
       setStatus("generating");
-      const logo = await loadImage(LOGO_URL);
       const results = [];
       for (const m of marken) {
-        const c = await generateLabel(m.nummer, logo);
+        const c = await generateLabel(m.nummer);
         results.push({ nummer: m.nummer, dataUrl: c.toDataURL("image/png") });
       }
       setCanvases(results);
