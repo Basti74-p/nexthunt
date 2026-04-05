@@ -20,7 +20,7 @@ import { MapContainer, TileLayer, WMSTileLayer, Marker, Popup, useMap, useMapEve
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { Locate, Layers, Search, X, Loader2, Map as MapIcon, Wind, Satellite, Mountain, GitBranch } from "lucide-react";
-import WindyOverlay from "./WindyOverlay";
+import { WindyMapLayer, WindyControl } from "./WindyOverlay";
 import { useMobile } from "@/components/hooks/useMobile";
 
 // Fix Leaflet default icon path issue with bundlers
@@ -392,6 +392,8 @@ export default function RevierMapCore({
   onWeatherButtonClick,
 }) {
   const [showWindy, setShowWindy] = useState(false);
+  const [windyLayer, setWindyLayer] = useState("wind");
+  const [windyOpacity, setWindyOpacity] = useState(0.7);
   const [mapStyle, setMapStyle] = useState(() => {
     const saved = localStorage.getItem("nh_map_style");
     return MAP_STYLES.find(s => s.id === saved) || MAP_STYLES[0];
@@ -501,6 +503,9 @@ export default function RevierMapCore({
           </Marker>
         )}
 
+        {/* Windy TileLayer – direkt in Leaflet eingebunden, bewegt sich mit der Karte */}
+        {showWindy && <WindyMapLayer layer={windyLayer} opacity={windyOpacity} />}
+
         {/* Render external layer children */}
         {typeof children === "function" && mapInstance && children({ map: mapInstance })}
         {typeof children !== "function" && children}
@@ -510,12 +515,15 @@ export default function RevierMapCore({
       <SearchControl onResult={handleSearchResult} />
       <StyleControl currentStyle={mapStyle} onStyleChange={handleStyleChange} showGemeindegrenzen={showGemeindegrenzen} onToggleGemeindegrenzen={handleToggleGemeindegrenzen} />
       <GeolocationControl onLocate={handleLocate} />
-      <WeatherControl onWeatherClick={() => setShowWindy(true)} />
+      <WeatherControl onWeatherClick={() => setShowWindy(prev => !prev)} />
 
-      {/* Windy Overlay */}
+      {/* Windy Control Panel */}
       {showWindy && (
-        <WindyOverlay
-          center={userLocation || reviercenter}
+        <WindyControl
+          layer={windyLayer}
+          onLayerChange={setWindyLayer}
+          opacity={windyOpacity}
+          onOpacityChange={setWindyOpacity}
           onClose={() => setShowWindy(false)}
         />
       )}

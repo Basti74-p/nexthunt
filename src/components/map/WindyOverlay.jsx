@@ -1,58 +1,105 @@
+/**
+ * WindyOverlay – rendert Windy-Wetterlayer direkt in die Leaflet-Karte via TileLayer.
+ * Muss innerhalb von <MapContainer> gerendert werden.
+ */
 import React, { useState } from "react";
-import { X, Wind, Eye } from "lucide-react";
+import { TileLayer } from "react-leaflet";
+import { Wind, X, ChevronDown } from "lucide-react";
 
-export default function WindyOverlay({ center, onClose }) {
-  const [opacity, setOpacity] = useState(0.85);
+const WINDY_API_KEY = "Zey4x3XZZ3xcMdrEboNkqSPbxe6qTI0L";
 
-  const lat = center ? center[0] : 51.1657;
-  const lon = center ? center[1] : 10.4515;
+const WINDY_LAYERS = [
+  { id: "wind", label: "Wind", color: "#22c55e" },
+  { id: "rain", label: "Regen", color: "#60a5fa" },
+  { id: "temp", label: "Temperatur", color: "#f97316" },
+  { id: "clouds", label: "Wolken", color: "#94a3b8" },
+  { id: "snowcover", label: "Schnee", color: "#e2e8f0" },
+];
 
-  const src = `https://embed.windy.com/embed2.html?lat=${lat}&lon=${lon}&detailLat=${lat}&detailLon=${lon}&zoom=8&level=surface&overlay=wind&product=ecmwf&menu=&message=true&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1`;
+// Windy tile URL format
+function getWindyTileUrl(layer) {
+  return `https://tiles.windy.com/tiles/v10.0/${layer}/{z}/{x}/{y}.png?key=${WINDY_API_KEY}`;
+}
+
+/**
+ * WindyMapLayer – wird innerhalb von MapContainer eingebunden.
+ * Zeigt den gewählten Windy-Layer als TileLayer über der Basiskarte.
+ */
+export function WindyMapLayer({ layer, opacity }) {
+  return (
+    <TileLayer
+      key={layer}
+      url={getWindyTileUrl(layer)}
+      opacity={opacity}
+      zIndex={500}
+      attribution='Weather by <a href="https://www.windy.com" target="_blank">Windy</a>'
+    />
+  );
+}
+
+/**
+ * WindyControl – UI-Panel außerhalb der Karte (absolute positioned).
+ * Steuert Layer-Auswahl, Opacity und Schließen.
+ */
+export function WindyControl({ onClose, layer, onLayerChange, opacity, onOpacityChange }) {
+  const [open, setOpen] = useState(false);
+  const current = WINDY_LAYERS.find(l => l.id === layer) || WINDY_LAYERS[0];
 
   return (
-    <div
-      className="absolute inset-0 z-[1500] flex flex-col pointer-events-none"
-      style={{ opacity }}
+    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[1000] flex items-center gap-2 px-3 py-2 rounded-2xl border border-[#444] shadow-xl"
+      style={{ background: "rgba(30,30,30,0.95)" }}
     >
-      {/* Iframe füllt alles – pointer-events nur für iframe an */}
-      <iframe
-        src={src}
-        title="Windy Wetterkarte"
-        className="absolute inset-0 w-full h-full border-0 pointer-events-auto"
-        allowFullScreen
-      />
+      <Wind className="w-4 h-4 shrink-0" style={{ color: current.color }} />
 
-      {/* Control Bar — immer sichtbar & klickbar */}
-      <div
-        className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex items-center gap-3 px-4 py-2.5 rounded-2xl border border-[#444] shadow-xl pointer-events-auto"
-        style={{ background: "rgba(30,30,30,0.92)", opacity: 1 }}
-      >
-        <Wind className="w-4 h-4 text-[#22c55e] shrink-0" />
-        <span className="text-xs text-gray-300 font-medium whitespace-nowrap">Windy Overlay</span>
-
-        {/* Opacity slider */}
-        <div className="flex items-center gap-2">
-          <Eye className="w-3.5 h-3.5 text-gray-500 shrink-0" />
-          <input
-            type="range"
-            min="0.2"
-            max="1"
-            step="0.05"
-            value={opacity}
-            onChange={(e) => setOpacity(parseFloat(e.target.value))}
-            className="w-24 accent-[#22c55e]"
-          />
-          <span className="text-xs text-gray-500 w-8 text-right">{Math.round(opacity * 100)}%</span>
-        </div>
-
+      {/* Layer picker */}
+      <div className="relative">
         <button
-          onClick={onClose}
-          className="p-1 rounded-lg bg-[#3a3a3a] hover:bg-[#4a4a4a] transition-colors border border-[#555]"
-          title="Schließen"
+          onClick={() => setOpen(o => !o)}
+          className="flex items-center gap-1 text-xs text-gray-200 font-medium hover:text-white transition-colors"
         >
-          <X className="w-3.5 h-3.5 text-gray-300" />
+          {current.label}
+          <ChevronDown className={`w-3 h-3 transition-transform ${open ? "rotate-180" : ""}`} />
         </button>
+        {open && (
+          <div className="absolute bottom-8 left-0 bg-[#2d2d2d] border border-[#444] rounded-xl overflow-hidden shadow-xl min-w-[110px]">
+            {WINDY_LAYERS.map(l => (
+              <button
+                key={l.id}
+                onClick={() => { onLayerChange(l.id); setOpen(false); }}
+                className={`w-full text-left px-3 py-2 text-xs flex items-center gap-2 hover:bg-[#3a3a3a] transition-colors ${l.id === layer ? "text-white font-semibold" : "text-gray-400"}`}
+              >
+                <span className="w-2 h-2 rounded-full shrink-0" style={{ background: l.color }} />
+                {l.label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
+
+      <div className="w-px h-4 bg-[#444]" />
+
+      {/* Opacity slider */}
+      <input
+        type="range"
+        min="0.1"
+        max="1"
+        step="0.05"
+        value={opacity}
+        onChange={e => onOpacityChange(parseFloat(e.target.value))}
+        className="w-20 accent-[#22c55e]"
+        title="Transparenz"
+      />
+      <span className="text-[10px] text-gray-500 w-6 text-right">{Math.round(opacity * 100)}%</span>
+
+      <div className="w-px h-4 bg-[#444]" />
+
+      <button
+        onClick={onClose}
+        className="p-1 rounded-lg hover:bg-[#3a3a3a] transition-colors"
+        title="Schließen"
+      >
+        <X className="w-3.5 h-3.5 text-gray-400 hover:text-gray-200" />
+      </button>
     </div>
   );
 }
