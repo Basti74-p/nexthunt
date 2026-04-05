@@ -20,7 +20,7 @@ import { MapContainer, TileLayer, WMSTileLayer, Marker, Popup, useMap, useMapEve
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { Locate, Layers, Search, X, Loader2, Map as MapIcon, Wind, Satellite, Mountain, GitBranch } from "lucide-react";
-import { WindyMapLayer, WindyControl } from "./WindyOverlay";
+import { WindyFullscreenOverlay } from "./WindyOverlay";
 import { useMobile } from "@/components/hooks/useMobile";
 
 // Fix Leaflet default icon path issue with bundlers
@@ -392,8 +392,6 @@ export default function RevierMapCore({
   onWeatherButtonClick,
 }) {
   const [showWindy, setShowWindy] = useState(false);
-  const [windyLayer, setWindyLayer] = useState("wind");
-  const [windyOpacity, setWindyOpacity] = useState(0.7);
 
   const [mapStyle, setMapStyle] = useState(() => {
     const saved = localStorage.getItem("nh_map_style");
@@ -504,8 +502,7 @@ export default function RevierMapCore({
           </Marker>
         )}
 
-        {/* Windy TileLayer – bewegt sich 1:1 mit der Karte */}
-        {showWindy && <WindyMapLayer layer={windyLayer} opacity={windyOpacity} />}
+
 
         {/* Render external layer children */}
         {typeof children === "function" && mapInstance && children({ map: mapInstance })}
@@ -518,14 +515,13 @@ export default function RevierMapCore({
       <GeolocationControl onLocate={handleLocate} />
       <WeatherControl onWeatherClick={() => setShowWindy(prev => !prev)} />
 
-      {/* Windy Control Panel */}
+      {/* Windy Vollbild-Overlay */}
       {showWindy && (
-        <WindyControl
-          layer={windyLayer}
-          onLayerChange={setWindyLayer}
-          opacity={windyOpacity}
-          onOpacityChange={setWindyOpacity}
+        <WindyFullscreenOverlay
           onClose={() => setShowWindy(false)}
+          defaultLat={defaultCenter[0]}
+          defaultLng={defaultCenter[1]}
+          defaultZoom={zoom}
         />
       )}
     </div>
