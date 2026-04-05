@@ -101,7 +101,7 @@ async function generateLabel(nummer) {
 
   // Website klein
   ctx.font = `${urlSize}px Arial, sans-serif`;
-  ctx.fillStyle = "#888888";
+  ctx.fillStyle = "#111111";
   ctx.fillText("nexthunt-portal.de", 0, startY + brandSize + gap1);
 
   // WM-Nummer groß
