@@ -67,7 +67,7 @@ Deno.serve(async (req) => {
         }
         const member = members[0];
 
-        // JWT erstellen (24h gültig)
+        // JWT erstellen (90 Tage gültig)
         const key = await getKey();
         const token = await djwt.create(
             { alg: 'HS256', typ: 'JWT' },
@@ -77,7 +77,8 @@ Deno.serve(async (req) => {
                 full_name: user.full_name,
                 tenant_id: member.tenant_id,
                 role: member.role,
-                exp: djwt.getNumericDate(60 * 60 * 24), // 24 Stunden
+                client: 'mobile',
+                exp: djwt.getNumericDate(60 * 60 * 24 * 90), // 90 Tage
             },
             key
         );
