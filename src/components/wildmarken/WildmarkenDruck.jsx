@@ -43,7 +43,7 @@ async function generateLabel(nummer, logo) {
   const qrLeft = px(13);
   const qrSize = px(15);
   const textLeft = px(32.3);
-  const textWidth = px(17.7);
+  const textWidth = px(14);
 
   // ── Falzlinien ────────────────────────────────────────────
   const drawFold = (xCenter) => {
