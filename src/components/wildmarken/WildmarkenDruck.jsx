@@ -101,7 +101,7 @@ async function generateLabel(nummer, logo) {
   const logoH = logoW * (logo.naturalHeight / logo.naturalWidth);
   const numSize = px(4.5);
   const urlSize = px(2);
-  const gap1 = px(1.5);
+  const gap1 = px(0.5);
   const gap2 = px(1);
   const totalH = logoH + gap1 + numSize + gap2 + urlSize;
   const startY = -totalH / 2;
