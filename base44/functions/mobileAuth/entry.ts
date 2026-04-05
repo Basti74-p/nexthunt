@@ -49,7 +49,7 @@ Deno.serve(async (req) => {
         const tenants = await base44.asServiceRole.entities.Tenant.filter({ id: member.tenant_id });
         const tenant = tenants?.[0] || null;
 
-        // JWT für Mobile-App erstellen (7 Tage gültig)
+        // JWT für Mobile-App erstellen (90 Tage gültig)
         const key = await getKey();
         const token = await djwt.create(
             { alg: 'HS256', typ: 'JWT' },
@@ -59,7 +59,8 @@ Deno.serve(async (req) => {
                 full_name: user.full_name,
                 tenant_id: member.tenant_id,
                 role: member.role,
-                exp: djwt.getNumericDate(60 * 60 * 24 * 7), // 7 Tage
+                client: 'mobile',
+                exp: djwt.getNumericDate(60 * 60 * 24 * 90), // 90 Tage
             },
             key
         );
