@@ -3,10 +3,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/components/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Tag, Plus, QrCode, CheckCircle2, Circle, Wifi } from "lucide-react";
+import { Tag, Plus, QrCode, CheckCircle2, Circle, Wifi, Printer } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import EmptyState from "@/components/ui/EmptyState";
+import WildmarkenDruck from "@/components/wildmarken/WildmarkenDruck";
 
 function StatusChip({ status }) {
   if (status === "vergeben") {
@@ -27,6 +28,7 @@ export default function Wildmarken() {
   const { tenant } = useAuth();
   const qc = useQueryClient();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [druckOpen, setDruckOpen] = useState(false);
   const [count, setCount] = useState("10");
 
   const { data: marken = [], isLoading } = useQuery({
@@ -77,12 +79,23 @@ export default function Wildmarken() {
             {marken.length} gesamt · {frei} frei · {vergeben} vergeben
           </p>
         </div>
-        <Button
-          onClick={() => setDialogOpen(true)}
-          className="bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-xl gap-2 font-semibold"
-        >
-          <Plus className="w-4 h-4" /> Paket erstellen
-        </Button>
+        <div className="flex gap-2">
+          {marken.length > 0 && (
+            <Button
+              onClick={() => setDruckOpen(true)}
+              variant="outline"
+              className="rounded-xl gap-2 border-[#3a3a3a] text-gray-300 hover:bg-[#3a3a3a]"
+            >
+              <Printer className="w-4 h-4" /> Alle drucken
+            </Button>
+          )}
+          <Button
+            onClick={() => setDialogOpen(true)}
+            className="bg-[#22c55e] hover:bg-[#16a34a] text-black rounded-xl gap-2 font-semibold"
+          >
+            <Plus className="w-4 h-4" /> Paket erstellen
+          </Button>
+        </div>
       </div>
 
       {isLoading ? (
@@ -116,6 +129,10 @@ export default function Wildmarken() {
             </div>
           ))}
         </div>
+      )}
+
+      {druckOpen && (
+        <WildmarkenDruck marken={marken} onClose={() => setDruckOpen(false)} />
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
