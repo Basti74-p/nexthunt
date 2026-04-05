@@ -4,14 +4,12 @@ import QRCode from "qrcode";
 const LOGO_URL =
   "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c370741b119950032ab62/7a1f75278_NextHunt_logo_transparent.png";
 
-// 300 DPI: 1mm = 11.811px → wir nutzen 12px/mm für saubere Zahlen
-const DPI = 12; // px per mm
+// Intern sehr hoch auflösen: 20px pro mm → 50mm×30mm = 1000×600px
+const DPI = 20;
+const W = 50 * DPI; // 1000px
+const H = 30 * DPI; // 600px
 
-// Etikett 50×30mm
-const W = 50 * DPI; // 600px
-const H = 30 * DPI; // 360px
-
-function px(mm) { return mm * DPI; }
+function px(mm) { return Math.round(mm * DPI); }
 
 async function loadImage(src) {
   return new Promise((resolve, reject) => {
@@ -33,19 +31,17 @@ async function generateLabel(nummer, logo) {
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, W, H);
 
-  // ── QR-Code Seite: 0–28.5mm ──────────────────────────────
-  // QR-Code: 26mm × 26mm, zentriert vertikal, 1mm Abstand links
-  const qrMM = 26;
+  // ── QR-Code: links, 27mm × 27mm, 1.5mm Rand ──────────────
+  const qrMM = 27;
   const qrS = px(qrMM);
-  const qrX = px(1);
+  const qrX = px(1.5);
   const qrY = (H - qrS) / 2;
 
-  // QR intern 4× übersamplen für maximale Schärfe, dann runterskalieren
-  const qrOver = 4;
+  // QR: intern 2× größer rendern, dann crisp skalieren
   const qrTmp = document.createElement("canvas");
   await QRCode.toCanvas(qrTmp, `https://nexthunt-portal.de/wm/${nummer}`, {
     errorCorrectionLevel: "H",
-    width: qrS * qrOver,
+    width: qrS * 2,
     margin: 0,
     color: { dark: "#000000", light: "#ffffff" },
   });
@@ -53,52 +49,61 @@ async function generateLabel(nummer, logo) {
   ctx.drawImage(qrTmp, qrX, qrY, qrS, qrS);
   ctx.imageSmoothingEnabled = true;
 
-  // Logo-Overlay (5mm × 5mm) zentriert im QR
+  // Logo-Overlay im QR-Code (5mm zentriert)
   const olS = px(5);
-  const olPad = px(0.5);
+  const olPad = px(0.6);
   const olX = qrX + (qrS - olS) / 2;
   const olY = qrY + (qrS - olS) / 2;
   ctx.fillStyle = "#ffffff";
   ctx.beginPath();
-  ctx.roundRect(olX - olPad, olY - olPad, olS + olPad * 2, olS + olPad * 2, px(0.6));
+  ctx.roundRect(olX - olPad, olY - olPad, olS + olPad * 2, olS + olPad * 2, px(0.5));
   ctx.fill();
   ctx.drawImage(logo, olX, olY, olS, olS);
 
-  // ── Falzlinien: bei 28.5mm und 30.5mm ────────────────────
+  // ── Falzlinien bei 29mm und 31mm ─────────────────────────
   ctx.save();
-  ctx.strokeStyle = "#bbbbbb";
-  ctx.lineWidth = px(0.2);
-  ctx.setLineDash([px(1.2), px(0.8)]);
-  [28.5, 30.5].forEach((x) => {
+  ctx.strokeStyle = "#cccccc";
+  ctx.lineWidth = px(0.15);
+  ctx.setLineDash([px(1), px(0.7)]);
+  [29, 31].forEach((xmm) => {
     ctx.beginPath();
-    ctx.moveTo(px(x), px(0.5));
-    ctx.lineTo(px(x), H - px(0.5));
+    ctx.moveTo(px(xmm), px(0.5));
+    ctx.lineTo(px(xmm), H - px(0.5));
     ctx.stroke();
   });
   ctx.restore();
 
-  // ── Info-Seite: 30.5–50mm (19.5mm breit) ─────────────────
-  const infoLeft = px(30.5);
-  const infoW = px(19.5);
-  const cx = infoLeft + infoW / 2; // horizontale Mitte der Info-Seite
+  // ── Info-Seite: 31–50mm (19mm breit) ─────────────────────
+  const infoLeft = px(31);
+  const infoW = px(19);
+  const cx = infoLeft + infoW / 2;
 
-  // Logo: 12mm breit, 2mm vom oberen Rand
-  const logoW = px(12);
+  // Logo: 11mm breit, 2.5mm vom oberen Rand
+  const logoW = px(11);
   const logoH = logoW * (logo.naturalHeight / logo.naturalWidth);
-  ctx.drawImage(logo, cx - logoW / 2, px(2), logoW, logoH);
+  const logoY = px(2.5);
+  ctx.drawImage(logo, cx - logoW / 2, logoY, logoW, logoH);
 
-  // Nummer: bold, 5mm Schrift
-  ctx.font = `bold ${px(5)}px Arial Black, Arial, sans-serif`;
-  ctx.fillStyle = "#000000";
+  // Nummer: 3.8mm Schrift (passt auch für NH-00001)
+  const numSize = px(3.8);
+  ctx.font = `bold ${numSize}px "Arial Black", Arial, sans-serif`;
+  ctx.fillStyle = "#111111";
   ctx.textAlign = "center";
   ctx.textBaseline = "top";
-  const numY = px(2) + logoH + px(1.5);
+  // Skalierung prüfen: falls Nummer zu breit, kleiner machen
+  const maxTextW = infoW - px(1);
+  let actualSize = numSize;
+  while (ctx.measureText(nummer).width > maxTextW && actualSize > px(2)) {
+    actualSize -= 2;
+    ctx.font = `bold ${actualSize}px "Arial Black", Arial, sans-serif`;
+  }
+  const numY = logoY + logoH + px(2);
   ctx.fillText(nummer, cx, numY);
 
-  // URL: 2mm Schrift, grau
-  ctx.font = `${px(2)}px Arial, sans-serif`;
+  // URL: 1.8mm Schrift
+  ctx.font = `${px(1.8)}px Arial, sans-serif`;
   ctx.fillStyle = "#999999";
-  ctx.fillText("nexthunt-portal.de", cx, numY + px(5) + px(1));
+  ctx.fillText("nexthunt-portal.de", cx, numY + actualSize + px(1));
 
   return canvas;
 }
@@ -135,7 +140,7 @@ export default function WildmarkenDruck({ marken, onClose }) {
   body { width: 50mm; background: white; }
   .label { width: 50mm; height: 30mm; page-break-after: always; display: block; }
   .label:last-child { page-break-after: avoid; }
-  img { width: 50mm; height: 30mm; display: block; }
+  img { width: 50mm; height: 30mm; display: block; image-rendering: pixelated; }
 </style>
 </head>
 <body>
@@ -148,7 +153,7 @@ ${canvases.map((c) => `<div class="label"><img src="${c.dataUrl}" /></div>`).joi
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 flex flex-col items-center justify-center p-4">
-      <div className="bg-[#2d2d2d] rounded-2xl border border-[#3a3a3a] w-full max-w-3xl flex flex-col max-h-[90vh]">
+      <div className="bg-[#2d2d2d] rounded-2xl border border-[#3a3a3a] w-full max-w-4xl flex flex-col max-h-[90vh]">
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#3a3a3a]">
           <h2 className="text-white font-bold text-lg">
             Etiketten drucken ({marken.length} Stück)
@@ -164,12 +169,13 @@ ${canvases.map((c) => `<div class="label"><img src="${c.dataUrl}" /></div>`).joi
             </div>
           )}
           {status === "ready" && (
-            <div className="flex flex-wrap gap-4 justify-center">
+            <div className="flex flex-wrap gap-3 justify-center">
               {canvases.map((c) => (
                 <div key={c.nummer}
-                  className="border border-[#3a3a3a] rounded overflow-hidden bg-white"
-                  style={{ width: 300, height: 180 }}>
-                  <img src={c.dataUrl} alt={c.nummer} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                  className="border border-[#444] rounded overflow-hidden bg-white"
+                  style={{ width: 250, height: 150 }}>
+                  <img src={c.dataUrl} alt={c.nummer}
+                    style={{ width: "100%", height: "100%", objectFit: "fill", imageRendering: "crisp-edges" }} />
                 </div>
               ))}
             </div>
