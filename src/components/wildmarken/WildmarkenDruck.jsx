@@ -96,25 +96,31 @@ async function generateLabel(nummer, logo) {
   const vW = H;           // 30mm → horizontale Ausdehnung
   const vH = textWidth;   // 17.7mm → vertikale Ausdehnung
 
-  // Logo: 18mm breit
-  const logoW = px(18);
+  // Gesamthöhe der Inhalte berechnen und zentrieren
+  const logoW = px(16);
   const logoH = logoW * (logo.naturalHeight / logo.naturalWidth);
-  const logoDrawY = -vH / 2 + px(2);
-  ctx.drawImage(logo, -logoW / 2, logoDrawY, logoW, logoH);
+  const numSize = px(4.5);
+  const urlSize = px(2);
+  const gap1 = px(1.5);
+  const gap2 = px(1);
+  const totalH = logoH + gap1 + numSize + gap2 + urlSize;
+  const startY = -totalH / 2;
+
+  // Logo
+  ctx.drawImage(logo, -logoW / 2, startY, logoW, logoH);
 
   // Nummer
-  const numSize = px(4.5);
   ctx.font = `bold ${numSize}px "Arial Black", Arial, sans-serif`;
   ctx.fillStyle = "#111111";
   ctx.textAlign = "center";
   ctx.textBaseline = "top";
-  const numY = logoDrawY + logoH + px(1.5);
+  const numY = startY + logoH + gap1;
   ctx.fillText(nummer, 0, numY);
 
   // URL
-  ctx.font = `${px(2)}px Arial, sans-serif`;
+  ctx.font = `${urlSize}px Arial, sans-serif`;
   ctx.fillStyle = "#888888";
-  ctx.fillText("nexthunt-portal.de", 0, numY + numSize + px(1));
+  ctx.fillText("nexthunt-portal.de", 0, numY + numSize + gap2);
 
   ctx.restore();
 
