@@ -234,7 +234,7 @@ function StyleControl({ currentStyle, onStyleChange, showGemeindegrenzen, onTogg
   const isMobile = useMobile();
   
   return (
-    <div className={`absolute z-[1000] ${isMobile ? "top-4 right-4" : "top-3 right-3"}`}>
+    <div className={`absolute z-[1000] ${isMobile ? "bottom-28 right-4" : "bottom-20 right-3"}`}>
       {open ? (
         <div className="bg-[#2d2d2d] rounded-xl shadow-lg border border-[#3a3a3a] overflow-hidden min-w-[200px]">
           <div className={`border-b border-[#3a3a3a] flex items-center justify-between ${isMobile ? "px-4 py-3" : "px-3 py-2.5"}`}>
