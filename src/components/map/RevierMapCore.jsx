@@ -20,6 +20,7 @@ import { MapContainer, TileLayer, WMSTileLayer, Marker, Popup, useMap, useMapEve
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { Locate, Layers, Search, X, Loader2, Map as MapIcon, Wind, Satellite, Mountain, GitBranch } from "lucide-react";
+import WindyOverlay from "./WindyOverlay";
 import { useMobile } from "@/components/hooks/useMobile";
 
 // Fix Leaflet default icon path issue with bundlers
@@ -350,11 +351,11 @@ function WeatherControl({ onWeatherClick }) {
     <button
       onClick={onWeatherClick}
       className={`absolute z-[1000] rounded-xl shadow-md flex items-center justify-center transition-colors border bg-[#2d2d2d] border-[#444] hover:bg-[#3a3a3a] ${
-        isMobile ? "top-36 right-4 w-12 h-12" : "hidden"
+        isMobile ? "top-36 right-4 w-12 h-12" : "bottom-6 left-3 w-10 h-10"
       }`}
-      title="Jagdwetter"
+      title="Jagdwetter (Windy)"
     >
-      <Wind className={`text-gray-300 ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />
+      <Wind className={`text-[#22c55e] ${isMobile ? "w-5 h-5" : "w-4 h-4"}`} />
     </button>
   );
 }
@@ -390,6 +391,7 @@ export default function RevierMapCore({
   onUserLocation,
   onWeatherButtonClick,
 }) {
+  const [showWindy, setShowWindy] = useState(false);
   const [mapStyle, setMapStyle] = useState(() => {
     const saved = localStorage.getItem("nh_map_style");
     return MAP_STYLES.find(s => s.id === saved) || MAP_STYLES[0];
@@ -508,7 +510,15 @@ export default function RevierMapCore({
       <SearchControl onResult={handleSearchResult} />
       <StyleControl currentStyle={mapStyle} onStyleChange={handleStyleChange} showGemeindegrenzen={showGemeindegrenzen} onToggleGemeindegrenzen={handleToggleGemeindegrenzen} />
       <GeolocationControl onLocate={handleLocate} />
-      <WeatherControl onWeatherClick={onWeatherButtonClick} />
+      <WeatherControl onWeatherClick={() => setShowWindy(true)} />
+
+      {/* Windy Overlay */}
+      {showWindy && (
+        <WindyOverlay
+          center={userLocation || reviercenter}
+          onClose={() => setShowWindy(false)}
+        />
+      )}
     </div>
   );
 }
