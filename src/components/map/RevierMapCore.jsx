@@ -20,7 +20,7 @@ import { MapContainer, TileLayer, WMSTileLayer, Marker, Popup, useMap, useMapEve
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { Locate, Layers, Search, X, Loader2, Map as MapIcon, Wind, Satellite, Mountain, GitBranch } from "lucide-react";
-import { WindyMapLayer, WindyControl } from "./WindyOverlay";
+import { WindySyncLayer, WindyIframe, WindyControl } from "./WindyOverlay";
 import { useMobile } from "@/components/hooks/useMobile";
 
 // Fix Leaflet default icon path issue with bundlers
@@ -394,6 +394,7 @@ export default function RevierMapCore({
   const [showWindy, setShowWindy] = useState(false);
   const [windyLayer, setWindyLayer] = useState("wind");
   const [windyOpacity, setWindyOpacity] = useState(0.7);
+  const [windyView, setWindyView] = useState(null); // { lat, lng, zoom }
   const [mapStyle, setMapStyle] = useState(() => {
     const saved = localStorage.getItem("nh_map_style");
     return MAP_STYLES.find(s => s.id === saved) || MAP_STYLES[0];
@@ -503,8 +504,8 @@ export default function RevierMapCore({
           </Marker>
         )}
 
-        {/* Windy TileLayer – direkt in Leaflet eingebunden, bewegt sich mit der Karte */}
-        {showWindy && <WindyMapLayer layer={windyLayer} opacity={windyOpacity} />}
+        {/* Windy Sync – liest Kartenposition live und gibt sie weiter */}
+        {showWindy && <WindySyncLayer onViewChange={(lat, lng, z) => setWindyView({ lat, lng, zoom: z })} />}
 
         {/* Render external layer children */}
         {typeof children === "function" && mapInstance && children({ map: mapInstance })}
@@ -516,6 +517,17 @@ export default function RevierMapCore({
       <StyleControl currentStyle={mapStyle} onStyleChange={handleStyleChange} showGemeindegrenzen={showGemeindegrenzen} onToggleGemeindegrenzen={handleToggleGemeindegrenzen} />
       <GeolocationControl onLocate={handleLocate} />
       <WeatherControl onWeatherClick={() => setShowWindy(prev => !prev)} />
+
+      {/* Windy iframe – absolut über Leaflet, pointer-events:none damit Karte bedienbar bleibt */}
+      {showWindy && windyView && (
+        <WindyIframe
+          lat={windyView.lat}
+          lng={windyView.lng}
+          zoom={windyView.zoom}
+          layer={windyLayer}
+          opacity={windyOpacity}
+        />
+      )}
 
       {/* Windy Control Panel */}
       {showWindy && (
