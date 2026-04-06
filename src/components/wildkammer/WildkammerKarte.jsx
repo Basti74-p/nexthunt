@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { CheckCircle2, Circle, Clock, Thermometer, Scale, FlaskConical, ShieldCheck, Trash2 } from "lucide-react";
+import { CheckCircle2, Circle, Clock, Thermometer, Scale, FlaskConical, ShieldCheck, Trash2, ExternalLink } from "lucide-react";
+import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 
@@ -108,6 +109,12 @@ export default function WildkammerKarte({ item, onAction, revierName }) {
               className="text-xs px-3 py-1.5 rounded-lg bg-blue-900/30 text-blue-300 hover:bg-blue-800/40 transition-colors">
               Trichinenprobe
             </button>
+            {item.species === "schwarzwild" && item.trichinenprobe_ergebnis === "ausstehend" && (
+              <Link to="/WildSchwarzwild?tab=trichinen"
+                className="text-xs px-3 py-1.5 rounded-lg bg-[#1a1a0a] border border-yellow-700/40 text-yellow-400 hover:bg-yellow-900/20 transition-colors flex items-center gap-1">
+                <ExternalLink className="w-3 h-3" /> Schwarzwild-Protokoll
+              </Link>
+            )}
             <button onClick={() => onAction("lager", item)}
               className="text-xs px-3 py-1.5 rounded-lg bg-purple-900/30 text-purple-300 hover:bg-purple-800/40 transition-colors">
               → Lager

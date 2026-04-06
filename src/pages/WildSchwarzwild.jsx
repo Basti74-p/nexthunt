@@ -21,7 +21,9 @@ const TABS = [
 
 export default function WildSchwarzwild() {
   const { tenant } = useAuth();
-  const [activeTab, setActiveTab] = useState("rotten");
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialTab = urlParams.get("tab") || "rotten";
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [showSichtungForm, setShowSichtungForm] = useState(false);
   const [showSchadenForm, setShowSchadenForm] = useState(false);
   const [showASPForm, setShowASPForm] = useState(false);
