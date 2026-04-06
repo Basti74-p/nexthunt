@@ -143,7 +143,12 @@ export default function SchwarzwildSichtungenTab({ tenant, openForm, onFormClose
       {/* Kartenansicht */}
       {viewMode === "karte" && (
         <div className="mb-4">
-          <SchwarzwildSichtungenKarte sichtungen={sorted} rotten={rotten} reviere={reviere} />
+          <SchwarzwildSichtungenKarte
+            sichtungen={sorted}
+            rotten={rotten}
+            reviere={reviere}
+            onSave={(data) => createMutation.mutate(data)}
+          />
         </div>
       )}
 
