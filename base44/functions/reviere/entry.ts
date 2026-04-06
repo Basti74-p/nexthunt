@@ -70,7 +70,29 @@ Deno.serve(async (req) => {
     }
 
     if (!tenant_id) return Response.json({ error: 'tenant_id erforderlich' }, { status: 400, headers: corsHeaders });
-    const data = await base44.asServiceRole.entities.Revier.filter({ tenant_id });
+
+    // Eigene Reviere des Tenants
+    const ownReviere = await base44.asServiceRole.entities.Revier.filter({ tenant_id });
+
+    // Wenn user_email angegeben: auch Reviere aus anderen Tenants laden, wo der User Mitglied ist
+    let extraReviere = [];
+    const user_email = body.user_email;
+    if (user_email) {
+      const memberships = await base44.asServiceRole.entities.TenantMember.filter({ user_email, status: 'active' });
+      const otherTenantIds = [...new Set(
+        memberships
+          .map(m => m.tenant_id)
+          .filter(tid => tid && tid !== tenant_id)
+      )];
+      if (otherTenantIds.length > 0) {
+        const reviereBatches = await Promise.all(
+          otherTenantIds.map(tid => base44.asServiceRole.entities.Revier.filter({ tenant_id: tid }))
+        );
+        extraReviere = reviereBatches.flat();
+      }
+    }
+
+    const data = [...ownReviere, ...extraReviere];
     return Response.json({ data, sync_timestamp: new Date().toISOString() }, { headers: corsHeaders });
   } catch (e) {
     return Response.json({ error: e.message }, { status: 500, headers: corsHeaders });
