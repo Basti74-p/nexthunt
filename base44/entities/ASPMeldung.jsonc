@@ -1,0 +1,127 @@
+{
+  "name": "ASPMeldung",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "revier_id": {
+      "type": "string"
+    },
+    "datum_fund": {
+      "type": "string",
+      "format": "date"
+    },
+    "uhrzeit_fund": {
+      "type": "string"
+    },
+    "ort_lat": {
+      "type": "number"
+    },
+    "ort_lng": {
+      "type": "number"
+    },
+    "ort_beschreibung": {
+      "type": "string"
+    },
+    "fund_typ": {
+      "type": "string",
+      "enum": [
+        "Fallwild",
+        "Verdachtsfall_lebend",
+        "Kadaver",
+        "Blutspuren"
+      ],
+      "default": "Fallwild"
+    },
+    "wildart": {
+      "type": "string",
+      "enum": [
+        "Wildschwein",
+        "Hausschwein"
+      ],
+      "default": "Wildschwein"
+    },
+    "anzahl_stueck": {
+      "type": "number",
+      "default": 1
+    },
+    "zustand": {
+      "type": "string",
+      "enum": [
+        "frisch",
+        "verwest",
+        "skelettiert"
+      ],
+      "default": "frisch"
+    },
+    "foto_gemacht": {
+      "type": "boolean",
+      "default": false
+    },
+    "fotos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "veterinaeramt_gemeldet": {
+      "type": "boolean",
+      "default": false
+    },
+    "veterinaeramt_meldedatum": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "aktenzeichen": {
+      "type": "string"
+    },
+    "probe_entnommen": {
+      "type": "boolean",
+      "default": false
+    },
+    "probe_labor": {
+      "type": "string"
+    },
+    "ergebnis": {
+      "type": "string",
+      "enum": [
+        "ausstehend",
+        "negativ",
+        "positiv",
+        "nicht_beprobt"
+      ],
+      "default": "ausstehend"
+    },
+    "ergebnis_datum": {
+      "type": "string",
+      "format": "date"
+    },
+    "hygieneprotokoll_eingehalten": {
+      "type": "boolean",
+      "default": false
+    },
+    "massnahmen": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "offen",
+        "gemeldet",
+        "beprobt",
+        "abgeschlossen"
+      ],
+      "default": "offen"
+    },
+    "erfasst_von": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "revier_id",
+    "datum_fund",
+    "fund_typ"
+  ]
+}

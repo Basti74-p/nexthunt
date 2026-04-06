@@ -1,0 +1,69 @@
+{
+  "name": "Kirrung",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "revier_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "ort_lat": {
+      "type": "number"
+    },
+    "ort_lng": {
+      "type": "number"
+    },
+    "kirrmittel": {
+      "type": "string",
+      "enum": [
+        "Mais",
+        "Kartoffeln",
+        "R\u00fcben",
+        "Getreide",
+        "Sonstiges"
+      ],
+      "default": "Mais"
+    },
+    "letztes_befuellen_datum": {
+      "type": "string",
+      "format": "date"
+    },
+    "letztes_befuellen_menge_kg": {
+      "type": "number"
+    },
+    "naechstes_befuellen_faellig": {
+      "type": "string",
+      "format": "date"
+    },
+    "hochsitz_vorhanden": {
+      "type": "boolean",
+      "default": false
+    },
+    "hochsitz_entfernung_m": {
+      "type": "number"
+    },
+    "aktiv": {
+      "type": "boolean",
+      "default": true
+    },
+    "letzte_bejagung_datum": {
+      "type": "string",
+      "format": "date"
+    },
+    "bejagungserfolg": {
+      "type": "boolean"
+    },
+    "notizen": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "revier_id",
+    "name"
+  ]
+}

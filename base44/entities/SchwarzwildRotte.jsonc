@@ -1,0 +1,71 @@
+{
+  "name": "SchwarzwildRotte",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "revier_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "geschaetzte_stueckzahl": {
+      "type": "number"
+    },
+    "leitbache_bekannt": {
+      "type": "boolean",
+      "default": false
+    },
+    "leitbache_beschreibung": {
+      "type": "string"
+    },
+    "habitatbereich_geojson": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "aktiv",
+        "abgewandert",
+        "unbekannt"
+      ],
+      "default": "aktiv"
+    },
+    "letzte_sichtung_datum": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "letzte_sichtung_ort_lat": {
+      "type": "number"
+    },
+    "letzte_sichtung_ort_lng": {
+      "type": "number"
+    },
+    "aktivitaet_morgens": {
+      "type": "boolean",
+      "default": false
+    },
+    "aktivitaet_mittags": {
+      "type": "boolean",
+      "default": false
+    },
+    "aktivitaet_abends": {
+      "type": "boolean",
+      "default": false
+    },
+    "aktivitaet_nachts": {
+      "type": "boolean",
+      "default": true
+    },
+    "notizen": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "revier_id",
+    "name"
+  ]
+}

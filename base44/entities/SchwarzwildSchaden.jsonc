@@ -1,0 +1,101 @@
+{
+  "name": "SchwarzwildSchaden",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "revier_id": {
+      "type": "string"
+    },
+    "datum": {
+      "type": "string",
+      "format": "date"
+    },
+    "ort_lat": {
+      "type": "number"
+    },
+    "ort_lng": {
+      "type": "number"
+    },
+    "ort_beschreibung": {
+      "type": "string"
+    },
+    "schadensart": {
+      "type": "string",
+      "enum": [
+        "Umbruch",
+        "Mais",
+        "Getreide",
+        "Wiese/Weide",
+        "Wald",
+        "Garten",
+        "Sonstiges"
+      ],
+      "default": "Umbruch"
+    },
+    "flaeche_qm": {
+      "type": "number"
+    },
+    "flaeche_ha": {
+      "type": "number"
+    },
+    "schadenshoehe_euro": {
+      "type": "number"
+    },
+    "landwirt_name": {
+      "type": "string"
+    },
+    "landwirt_kontakt": {
+      "type": "string"
+    },
+    "landwirt_informiert": {
+      "type": "boolean",
+      "default": false
+    },
+    "landwirt_informiert_datum": {
+      "type": "string",
+      "format": "date"
+    },
+    "schadensersatz_beantragt": {
+      "type": "boolean",
+      "default": false
+    },
+    "schadensersatz_datum": {
+      "type": "string",
+      "format": "date"
+    },
+    "schadensersatz_betrag_euro": {
+      "type": "number"
+    },
+    "fotos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "offen",
+        "gemeldet",
+        "in_bearbeitung",
+        "reguliert",
+        "abgeschlossen"
+      ],
+      "default": "offen"
+    },
+    "notizen": {
+      "type": "string"
+    },
+    "erfasst_von": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "revier_id",
+    "datum",
+    "schadensart"
+  ]
+}

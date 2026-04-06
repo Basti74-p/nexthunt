@@ -1,0 +1,111 @@
+{
+  "name": "Trichinenprotokoll",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "revier_id": {
+      "type": "string"
+    },
+    "abschuss_id": {
+      "type": "string"
+    },
+    "datum_erlegung": {
+      "type": "string",
+      "format": "date"
+    },
+    "uhrzeit_erlegung": {
+      "type": "string"
+    },
+    "ort_lat": {
+      "type": "number"
+    },
+    "ort_lng": {
+      "type": "number"
+    },
+    "wildart": {
+      "type": "string",
+      "enum": [
+        "Wildschwein",
+        "Dachs"
+      ],
+      "default": "Wildschwein"
+    },
+    "altersklasse": {
+      "type": "string",
+      "enum": [
+        "Frischling",
+        "\u00dcberl\u00e4ufer",
+        "2-j\u00e4hrig",
+        "3-j\u00e4hrig",
+        "Angehendes Schwein"
+      ],
+      "default": "Frischling"
+    },
+    "geschlecht": {
+      "type": "string",
+      "enum": [
+        "m\u00e4nnlich",
+        "weiblich",
+        "unbekannt"
+      ],
+      "default": "unbekannt"
+    },
+    "gewicht_kg": {
+      "type": "number"
+    },
+    "wildmarken_nummer": {
+      "type": "string"
+    },
+    "probe_entnommen": {
+      "type": "boolean",
+      "default": false
+    },
+    "probe_datum": {
+      "type": "string",
+      "format": "date"
+    },
+    "untersuchungsstelle": {
+      "type": "string"
+    },
+    "ergebnis": {
+      "type": "string",
+      "enum": [
+        "ausstehend",
+        "negativ",
+        "positiv",
+        "nicht_untersucht"
+      ],
+      "default": "ausstehend"
+    },
+    "ergebnis_datum": {
+      "type": "string",
+      "format": "date"
+    },
+    "sperrfrist_aktiv": {
+      "type": "boolean",
+      "default": false
+    },
+    "wildursprungsschein_nummer": {
+      "type": "string"
+    },
+    "freigabe_erteilt": {
+      "type": "boolean",
+      "default": false
+    },
+    "freigabe_datum": {
+      "type": "string",
+      "format": "date"
+    },
+    "notizen": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "revier_id",
+    "datum_erlegung",
+    "wildart"
+  ]
+}

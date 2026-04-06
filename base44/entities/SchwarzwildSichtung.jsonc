@@ -1,0 +1,100 @@
+{
+  "name": "SchwarzwildSichtung",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "revier_id": {
+      "type": "string"
+    },
+    "rotte_id": {
+      "type": "string"
+    },
+    "datum": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "uhrzeit": {
+      "type": "string"
+    },
+    "ort_lat": {
+      "type": "number"
+    },
+    "ort_lng": {
+      "type": "number"
+    },
+    "anzahl_frischlinge": {
+      "type": "number",
+      "default": 0
+    },
+    "anzahl_ueberlaeufer": {
+      "type": "number",
+      "default": 0
+    },
+    "anzahl_bachen": {
+      "type": "number",
+      "default": 0
+    },
+    "anzahl_keiler": {
+      "type": "number",
+      "default": 0
+    },
+    "anzahl_unbekannt": {
+      "type": "number",
+      "default": 0
+    },
+    "leitbache_gesehen": {
+      "type": "boolean",
+      "default": false
+    },
+    "verhalten": {
+      "type": "string",
+      "enum": [
+        "ruhig",
+        "fluechtig",
+        "aesend",
+        "wuehlend",
+        "aggressiv"
+      ],
+      "default": "ruhig"
+    },
+    "witterung": {
+      "type": "string",
+      "enum": [
+        "klar",
+        "bewoelkt",
+        "regen",
+        "nebel",
+        "schnee"
+      ],
+      "default": "klar"
+    },
+    "wind": {
+      "type": "string",
+      "enum": [
+        "windstill",
+        "leicht",
+        "stark"
+      ],
+      "default": "windstill"
+    },
+    "fotos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "notizen": {
+      "type": "string"
+    },
+    "erfasst_von": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "revier_id",
+    "datum"
+  ]
+}
