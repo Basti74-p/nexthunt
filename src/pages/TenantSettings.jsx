@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/components/hooks/useAuth";
-import { Check, X, ChevronDown, ChevronRight, Globe, Package, User, Tag, FileText, Shield, HardDrive, Trash2, Zap } from "lucide-react";
+import { Check, X, ChevronDown, ChevronRight, Globe, Package, User, Tag, FileText, Shield, HardDrive, Trash2, Zap, ClipboardList } from "lucide-react";
+import OnboardingProfileSection from "@/components/settings/OnboardingProfileSection";
 import StatusBadge from "@/components/ui/StatusBadge";
 import { Button } from "@/components/ui/button";
 import EtikettSettings from "@/components/wildprodukte/EtikettSettings";
@@ -279,6 +280,15 @@ export default function TenantSettings() {
             </button>
           ))}
         </div>
+      </AccordionSection>
+
+      <AccordionSection
+        icon={ClipboardList}
+        title="Profil & Onboarding"
+        subtitle="Persönliche Daten, Jagdschein, Revier, Wildmarken"
+        accentColor="#c8a84b"
+      >
+        <OnboardingProfileSection />
       </AccordionSection>
 
       <AccordionSection
