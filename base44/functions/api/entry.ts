@@ -220,17 +220,204 @@ Deno.serve(async (req) => {
     }
 
     // =====================
+    // SCHWARZWILD SICHTUNGEN
+    // =====================
+    if (resource === "schwarzwild_sichtungen") {
+      if (req.method === "GET") {
+        if (id) {
+          const item = await base44.asServiceRole.entities.SchwarzwildSichtung.get(id);
+          return item ? json(item) : err("Not found", 404);
+        }
+        const items = await base44.asServiceRole.entities.SchwarzwildSichtung.filter(buildFilter());
+        const result = updatedSince
+          ? items.filter(i => new Date(i.updated_date) > new Date(updatedSince))
+          : items;
+        return json(result);
+      }
+      if (req.method === "POST") {
+        if (!body.tenant_id) return err("tenant_id required");
+        if (!body.revier_id) return err("revier_id required");
+        if (!body.datum) body.datum = new Date().toISOString();
+        const created = await base44.asServiceRole.entities.SchwarzwildSichtung.create(body);
+        return json(created, 201);
+      }
+      if (req.method === "PUT") {
+        if (!id) return err("ID required in path");
+        const updated = await base44.asServiceRole.entities.SchwarzwildSichtung.update(id, body);
+        return json(updated);
+      }
+      if (req.method === "DELETE") {
+        if (!id) return err("ID required in path");
+        await base44.asServiceRole.entities.SchwarzwildSichtung.delete(id);
+        return json({ success: true });
+      }
+      return err("Method not allowed", 405);
+    }
+
+    // =====================
+    // SCHWARZWILD ROTTEN
+    // =====================
+    if (resource === "schwarzwild_rotten") {
+      if (req.method === "GET") {
+        if (id) {
+          const item = await base44.asServiceRole.entities.SchwarzwildRotte.get(id);
+          return item ? json(item) : err("Not found", 404);
+        }
+        const items = await base44.asServiceRole.entities.SchwarzwildRotte.filter(buildFilter());
+        const result = updatedSince
+          ? items.filter(i => new Date(i.updated_date) > new Date(updatedSince))
+          : items;
+        return json(result);
+      }
+      if (req.method === "POST") {
+        if (!body.tenant_id) return err("tenant_id required");
+        if (!body.revier_id) return err("revier_id required");
+        if (!body.name) return err("name required");
+        const created = await base44.asServiceRole.entities.SchwarzwildRotte.create(body);
+        return json(created, 201);
+      }
+      if (req.method === "PUT") {
+        if (!id) return err("ID required in path");
+        const updated = await base44.asServiceRole.entities.SchwarzwildRotte.update(id, body);
+        return json(updated);
+      }
+      return err("Method not allowed", 405);
+    }
+
+    // =====================
+    // SCHWARZWILD SCHÄDEN
+    // =====================
+    if (resource === "schwarzwild_schaeden") {
+      if (req.method === "GET") {
+        if (id) {
+          const item = await base44.asServiceRole.entities.SchwarzwildSchaden.get(id);
+          return item ? json(item) : err("Not found", 404);
+        }
+        const items = await base44.asServiceRole.entities.SchwarzwildSchaden.filter(buildFilter());
+        const result = updatedSince
+          ? items.filter(i => new Date(i.updated_date) > new Date(updatedSince))
+          : items;
+        return json(result);
+      }
+      if (req.method === "POST") {
+        if (!body.tenant_id) return err("tenant_id required");
+        if (!body.revier_id) return err("revier_id required");
+        if (!body.datum) return err("datum required");
+        if (!body.schadensart) return err("schadensart required");
+        const created = await base44.asServiceRole.entities.SchwarzwildSchaden.create(body);
+        return json(created, 201);
+      }
+      if (req.method === "PUT") {
+        if (!id) return err("ID required in path");
+        const updated = await base44.asServiceRole.entities.SchwarzwildSchaden.update(id, body);
+        return json(updated);
+      }
+      return err("Method not allowed", 405);
+    }
+
+    // =====================
+    // TRICHINEN
+    // =====================
+    if (resource === "trichinen") {
+      if (req.method === "GET") {
+        if (id) {
+          const item = await base44.asServiceRole.entities.Trichinenprotokoll.get(id);
+          return item ? json(item) : err("Not found", 404);
+        }
+        const items = await base44.asServiceRole.entities.Trichinenprotokoll.filter(buildFilter());
+        const result = updatedSince
+          ? items.filter(i => new Date(i.updated_date) > new Date(updatedSince))
+          : items;
+        return json(result);
+      }
+      if (req.method === "POST") {
+        if (!body.tenant_id) return err("tenant_id required");
+        if (!body.revier_id) return err("revier_id required");
+        if (!body.datum_erlegung) return err("datum_erlegung required");
+        if (!body.wildart) body.wildart = "Wildschwein";
+        const created = await base44.asServiceRole.entities.Trichinenprotokoll.create(body);
+        return json(created, 201);
+      }
+      if (req.method === "PUT") {
+        if (!id) return err("ID required in path");
+        const updated = await base44.asServiceRole.entities.Trichinenprotokoll.update(id, body);
+        return json(updated);
+      }
+      return err("Method not allowed", 405);
+    }
+
+    // =====================
+    // ASP-MELDUNGEN
+    // =====================
+    if (resource === "asp_meldungen") {
+      if (req.method === "GET") {
+        if (id) {
+          const item = await base44.asServiceRole.entities.ASPMeldung.get(id);
+          return item ? json(item) : err("Not found", 404);
+        }
+        const items = await base44.asServiceRole.entities.ASPMeldung.filter(buildFilter());
+        const result = updatedSince
+          ? items.filter(i => new Date(i.updated_date) > new Date(updatedSince))
+          : items;
+        return json(result);
+      }
+      if (req.method === "POST") {
+        if (!body.tenant_id) return err("tenant_id required");
+        if (!body.revier_id) return err("revier_id required");
+        if (!body.datum_fund) return err("datum_fund required");
+        if (!body.fund_typ) return err("fund_typ required");
+        const created = await base44.asServiceRole.entities.ASPMeldung.create(body);
+        return json(created, 201);
+      }
+      if (req.method === "PUT") {
+        if (!id) return err("ID required in path");
+        const updated = await base44.asServiceRole.entities.ASPMeldung.update(id, body);
+        return json(updated);
+      }
+      return err("Method not allowed", 405);
+    }
+
+    // =====================
+    // KIRRUNGEN
+    // =====================
+    if (resource === "kirrungen") {
+      if (req.method === "GET") {
+        if (id) {
+          const item = await base44.asServiceRole.entities.Kirrung.get(id);
+          return item ? json(item) : err("Not found", 404);
+        }
+        const items = await base44.asServiceRole.entities.Kirrung.filter(buildFilter());
+        const result = updatedSince
+          ? items.filter(i => new Date(i.updated_date) > new Date(updatedSince))
+          : items;
+        return json(result);
+      }
+      if (req.method === "POST") {
+        if (!body.tenant_id) return err("tenant_id required");
+        if (!body.revier_id) return err("revier_id required");
+        if (!body.name) return err("name required");
+        const created = await base44.asServiceRole.entities.Kirrung.create(body);
+        return json(created, 201);
+      }
+      if (req.method === "PUT") {
+        if (!id) return err("ID required in path");
+        const updated = await base44.asServiceRole.entities.Kirrung.update(id, body);
+        return json(updated);
+      }
+      return err("Method not allowed", 405);
+    }
+
+    // =====================
     // ROOT: API Info
     // =====================
     if (!resource) {
       return json({
         name: "NextHunt External REST API",
-        version: "1.0",
+        version: "2.0",
         endpoints: [
           "GET  ?path=/reviere",
           "GET  ?path=/reviere/{id}",
           "GET  ?path=/einrichtungen",
-          "GET  ?path=/einrichtungen/{id}",
           "POST ?path=/einrichtungen",
           "PUT  ?path=/einrichtungen/{id}",
           "GET  ?path=/abschuesse",
@@ -241,6 +428,26 @@ Deno.serve(async (req) => {
           "PUT  ?path=/aufgaben/{id}",
           "GET  ?path=/termine",
           "GET  ?path=/jagdtermine",
+          "--- SCHWARZWILD MODULE ---",
+          "GET  ?path=/schwarzwild_sichtungen",
+          "POST ?path=/schwarzwild_sichtungen",
+          "PUT  ?path=/schwarzwild_sichtungen/{id}",
+          "DELETE ?path=/schwarzwild_sichtungen/{id}",
+          "GET  ?path=/schwarzwild_rotten",
+          "POST ?path=/schwarzwild_rotten",
+          "PUT  ?path=/schwarzwild_rotten/{id}",
+          "GET  ?path=/schwarzwild_schaeden",
+          "POST ?path=/schwarzwild_schaeden",
+          "PUT  ?path=/schwarzwild_schaeden/{id}",
+          "GET  ?path=/trichinen",
+          "POST ?path=/trichinen",
+          "PUT  ?path=/trichinen/{id}",
+          "GET  ?path=/asp_meldungen",
+          "POST ?path=/asp_meldungen",
+          "PUT  ?path=/asp_meldungen/{id}",
+          "GET  ?path=/kirrungen",
+          "POST ?path=/kirrungen",
+          "PUT  ?path=/kirrungen/{id}",
         ],
         query_params: ["tenant_id (required)", "revier_id (optional)", "updated_since (ISO date, optional)"],
         auth: "Header: x-api-key: <your_key>",
