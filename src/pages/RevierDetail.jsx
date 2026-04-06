@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { ChevronLeft, TreePine, Loader2 } from "lucide-react";
+import RevierExportButton from "@/components/revier/RevierExportButton";
 import RevierOverview from "@/components/revier/RevierOverview";
 import RevierMap from "@/components/revier/RevierMap";
 import RevierEinrichtungen from "@/components/revier/RevierEinrichtungen";
@@ -104,6 +105,9 @@ export default function RevierDetail() {
             <h1 className="text-xl font-bold text-gray-100">{revier.name}</h1>
             <p className="text-xs text-gray-500">{revier.region ? `${revier.region} • ` : ""}{revier.size_ha ? `${revier.size_ha} ha` : ""}</p>
           </div>
+        </div>
+        <div className="ml-auto">
+          <RevierExportButton revier={revier} />
         </div>
       </div>
 
