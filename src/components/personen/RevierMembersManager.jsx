@@ -35,20 +35,38 @@ export default function RevierMembersManager({ revierId }) {
     mutationFn: async (data) => {
       setInviteLoading(true);
       try {
-        await base44.users.inviteUser(data.email, data.role);
-        // Create TenantMember record
-        await base44.entities.TenantMember.create({
-          tenant_id: tenant?.id,
-          user_email: data.email,
-          first_name: data.email.split("@")[0],
-          last_name: "",
-          role: data.role === "admin" ? "tenant_owner" : "tenant_member",
-          status: "active",
-          allowed_reviere: [revierId],
-        });
-        
+        // Check if TenantMember already exists for this email+tenant
+        const existing = await base44.entities.TenantMember.filter({ tenant_id: tenant?.id, user_email: data.email });
 
-        
+        if (existing.length > 0) {
+          // Already a member — just ensure revierId is in allowed_reviere
+          const member = existing[0];
+          const currentReviere = member.allowed_reviere || [];
+          if (!currentReviere.includes(revierId)) {
+            await base44.entities.TenantMember.update(member.id, {
+              allowed_reviere: [...currentReviere, revierId],
+            });
+          }
+        } else {
+          // Create TenantMember record first (works even if user has own account)
+          await base44.entities.TenantMember.create({
+            tenant_id: tenant?.id,
+            user_email: data.email,
+            first_name: data.email.split("@")[0],
+            last_name: "",
+            role: data.role === "admin" ? "tenant_owner" : "tenant_member",
+            status: "active",
+            allowed_reviere: [revierId],
+          });
+
+          // Try to invite — silently ignore if user already has an account
+          try {
+            await base44.users.inviteUser(data.email, data.role);
+          } catch (e) {
+            console.log("Invite email skipped (user may already have account):", e.message);
+          }
+        }
+
         return { success: true };
       } finally {
         setInviteLoading(false);
@@ -197,6 +215,9 @@ export default function RevierMembersManager({ revierId }) {
         <DialogContent>
           <DialogHeader><DialogTitle>Reviermitglied einladen</DialogTitle></DialogHeader>
           <div className="space-y-4 mt-4">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg px-3 py-2.5 text-xs text-blue-700">
+              💡 Funktioniert auch wenn die Person bereits ein eigenes NextHunt-Konto hat. Sie können dann zwischen ihrem eigenen Revier und diesem hier wechseln.
+            </div>
             <div>
               <Label>E-Mail *</Label>
               <Input
