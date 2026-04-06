@@ -28,6 +28,7 @@ import WolfContacts from './pages/WolfContacts';
 import MobileTokenCallback from './pages/MobileTokenCallback';
 import PaketePreise from './pages/PaketePreise';
 import Wildmarken from './pages/Wildmarken.jsx';
+import OnboardingWizard from './pages/OnboardingWizard';
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
@@ -63,6 +64,7 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/Demo" element={<Demo />} />
+      <Route path="/onboarding" element={<OnboardingWizard />} />
       <Route path="/mobile-token-callback" element={<MobileTokenCallback />} />
       <Route path="/MobileAufgabenDetail" element={
         <LayoutWrapper currentPageName="MobileAufgabenDetail">

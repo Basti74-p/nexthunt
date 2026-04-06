@@ -1,0 +1,94 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "user"
+      ],
+      "default": "user"
+    },
+    "onboarding_completed": {
+      "type": "boolean",
+      "default": false
+    },
+    "onboarding_step": {
+      "type": "number",
+      "default": 0
+    },
+    "onboarding_skipped_steps": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "default": []
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "birth_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "jagdschein_nummer": {
+      "type": "string"
+    },
+    "jagdschein_ausstellendes_amt": {
+      "type": "string"
+    },
+    "jagdschein_gueltig_bis": {
+      "type": "string",
+      "format": "date"
+    },
+    "street": {
+      "type": "string"
+    },
+    "house_number": {
+      "type": "string"
+    },
+    "zip_code": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "bundesland": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string",
+      "default": "Deutschland"
+    },
+    "revier_name": {
+      "type": "string"
+    },
+    "revier_groesse_ha": {
+      "type": "number"
+    },
+    "revier_bundesland": {
+      "type": "string"
+    },
+    "revier_art": {
+      "type": "string"
+    },
+    "plan": {
+      "type": "string",
+      "default": "trial"
+    },
+    "trial_ends_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "wildmarken_system": {
+      "type": "string"
+    }
+  }
+}
