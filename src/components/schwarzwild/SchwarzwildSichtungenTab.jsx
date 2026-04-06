@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
-import { Plus, MapPin } from "lucide-react";
+import { Plus, MapPin, List, Map } from "lucide-react";
+import SchwarzwildSichtungenKarte from "./SchwarzwildSichtungenKarte";
 
 const INPUT = "w-full bg-[#111] border border-[#2a2a2a] text-gray-100 rounded-xl px-3 py-2.5 focus:outline-none focus:border-[#22c55e] text-sm";
 const LABEL = "block text-xs text-gray-500 mb-1";
@@ -33,6 +34,7 @@ export default function SchwarzwildSichtungenTab({ tenant, openForm, onFormClose
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(emptyForm());
   const [filterRotte, setFilterRotte] = useState("");
+  const [viewMode, setViewMode] = useState("karte"); // "karte" | "liste"
 
   useEffect(() => { if (openForm) { setShowForm(true); onFormClose(); } }, [openForm]);
 
@@ -56,11 +58,28 @@ export default function SchwarzwildSichtungenTab({ tenant, openForm, onFormClose
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
-        <select className="bg-[#111] border border-[#2a2a2a] text-gray-300 rounded-xl px-3 py-2 text-sm" value={filterRotte} onChange={e => setFilterRotte(e.target.value)}>
-          <option value="">Alle Rotten</option>
-          {rotten.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
-        </select>
+      <div className="flex items-center justify-between mb-4 gap-2 flex-wrap">
+        <div className="flex items-center gap-2">
+          <select className="bg-[#111] border border-[#2a2a2a] text-gray-300 rounded-xl px-3 py-2 text-sm" value={filterRotte} onChange={e => setFilterRotte(e.target.value)}>
+            <option value="">Alle Rotten</option>
+            {rotten.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
+          </select>
+          {/* Karte / Liste Toggle */}
+          <div className="flex bg-[#111] border border-[#2a2a2a] rounded-xl overflow-hidden">
+            <button
+              onClick={() => setViewMode("karte")}
+              className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium transition-colors ${viewMode === "karte" ? "bg-[#22c55e] text-black" : "text-gray-400 hover:text-gray-200"}`}
+            >
+              <Map className="w-3.5 h-3.5" /> Karte
+            </button>
+            <button
+              onClick={() => setViewMode("liste")}
+              className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium transition-colors ${viewMode === "liste" ? "bg-[#22c55e] text-black" : "text-gray-400 hover:text-gray-200"}`}
+            >
+              <List className="w-3.5 h-3.5" /> Liste
+            </button>
+          </div>
+        </div>
         <button onClick={() => setShowForm(true)} className="flex items-center gap-2 px-3 py-2 bg-[#22c55e] text-black font-semibold rounded-xl text-sm hover:bg-[#16a34a]">
           <Plus className="w-4 h-4" /> Sichtung
         </button>
@@ -121,9 +140,16 @@ export default function SchwarzwildSichtungenTab({ tenant, openForm, onFormClose
         </div>
       )}
 
+      {/* Kartenansicht */}
+      {viewMode === "karte" && (
+        <div className="mb-4">
+          <SchwarzwildSichtungenKarte sichtungen={sorted} rotten={rotten} reviere={reviere} />
+        </div>
+      )}
+
       <div className="space-y-2">
         {sorted.length === 0 && <div className="text-center py-12 text-gray-600 text-sm">Noch keine Sichtungen erfasst.</div>}
-        {sorted.map(s => {
+        {viewMode === "liste" && sorted.map(s => {
           const rotte = rotten.find(r => r.id === s.rotte_id);
           return (
             <div key={s.id} className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl px-4 py-3">
@@ -146,6 +172,9 @@ export default function SchwarzwildSichtungenTab({ tenant, openForm, onFormClose
             </div>
           );
         })}
+        {viewMode === "karte" && sorted.length > 0 && (
+          <p className="text-xs text-gray-600 text-center pt-2">{sorted.filter(s => s.ort_lat && s.ort_lng).length} von {sorted.length} Sichtungen mit GPS-Koordinaten</p>
+        )}
       </div>
     </div>
   );
