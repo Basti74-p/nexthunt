@@ -1,0 +1,89 @@
+{
+  "name": "WildProdukt",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "revier_id": {
+      "type": "string"
+    },
+    "wildkammer_id": {
+      "type": "string",
+      "description": "Verweis zur Wildkammer (Ursprungs-Wild)"
+    },
+    "wildnummer": {
+      "type": "string",
+      "description": "Eindeutige Wildnummer f\u00fcr Etikette"
+    },
+    "produkttyp": {
+      "type": "string",
+      "enum": [
+        "filet",
+        "keule",
+        "rind",
+        "schnitzel",
+        "wurst",
+        "schinken",
+        "sonstiges"
+      ],
+      "description": "Art des Wildprodukts"
+    },
+    "gewicht_kg": {
+      "type": "number",
+      "description": "Gewicht in kg"
+    },
+    "einfrierungs_datum": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum des Einfrierens"
+    },
+    "einfrierungs_zeit": {
+      "type": "string",
+      "description": "Uhrzeit des Einfrierens"
+    },
+    "lager_temperatur": {
+      "type": "number",
+      "description": "Lagertemperatur in \u00b0C"
+    },
+    "lager_location": {
+      "type": "string",
+      "description": "Lagerlocation/Fach (z.B. A1, B2, etc.)"
+    },
+    "beschreibung": {
+      "type": "string",
+      "description": "Beschreibung des Produkts"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "lager",
+        "ausgegeben",
+        "verkauft",
+        "verbraucht"
+      ],
+      "default": "lager",
+      "description": "Lagerstatus"
+    },
+    "ausgabe_datum": {
+      "type": "string",
+      "format": "date"
+    },
+    "ausgabe_an": {
+      "type": "string",
+      "description": "Wer/Wohin ausgegeben"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "revier_id",
+    "wildkammer_id",
+    "wildnummer",
+    "produkttyp",
+    "gewicht_kg",
+    "einfrierungs_datum"
+  ]
+}

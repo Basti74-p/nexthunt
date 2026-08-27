@@ -1,0 +1,96 @@
+{
+  "name": "TenantMember",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string",
+      "description": "Reference to tenant"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Email of the user"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "callsign": {
+      "type": "string",
+      "description": "Optional callsign"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "tenant_owner",
+        "tenant_member"
+      ],
+      "default": "tenant_member"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive"
+      ],
+      "default": "active"
+    },
+    "allowed_reviere": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of Revier IDs this user can access. Empty = all reviere."
+    },
+    "perm_wildmanagement": {
+      "type": "boolean",
+      "default": true,
+      "description": "Access to Wildmanagement module"
+    },
+    "perm_strecke": {
+      "type": "boolean",
+      "default": true,
+      "description": "Access to Strecke module"
+    },
+    "perm_wildkammer": {
+      "type": "boolean",
+      "default": false,
+      "description": "Access to Wildkammer module"
+    },
+    "perm_kalender": {
+      "type": "boolean",
+      "default": true,
+      "description": "Access to Jagdkalender module"
+    },
+    "perm_aufgaben": {
+      "type": "boolean",
+      "default": true,
+      "description": "Access to Aufgaben module"
+    },
+    "perm_personen": {
+      "type": "boolean",
+      "default": false,
+      "description": "Access to Personen/TenantMembers management"
+    },
+    "perm_oeffentlichkeit": {
+      "type": "boolean",
+      "default": false,
+      "description": "Access to Oeffentlichkeit module"
+    },
+    "perm_einrichtungen": {
+      "type": "boolean",
+      "default": true,
+      "description": "Access to Jagdeinrichtungen module"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "user_email",
+    "first_name",
+    "last_name"
+  ]
+}

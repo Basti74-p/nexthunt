@@ -1,0 +1,60 @@
+{
+  "name": "Termin",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "revier_id": {
+      "type": "string",
+      "description": "Referenz zum Revier"
+    },
+    "titel": {
+      "type": "string"
+    },
+    "beschreibung": {
+      "type": "string"
+    },
+    "datum": {
+      "type": "string",
+      "format": "date"
+    },
+    "uhrzeit_start": {
+      "type": "string",
+      "description": "HH:MM"
+    },
+    "uhrzeit_ende": {
+      "type": "string",
+      "description": "HH:MM"
+    },
+    "ort": {
+      "type": "string"
+    },
+    "erstellt_von": {
+      "type": "string",
+      "description": "Email des Erstellers"
+    },
+    "gast_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array von eingeladenen Person IDs"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "geplant",
+        "aktiv",
+        "abgeschlossen",
+        "abgesagt"
+      ],
+      "default": "geplant"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "titel",
+    "datum"
+  ]
+}

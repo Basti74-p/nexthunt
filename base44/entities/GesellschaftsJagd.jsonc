@@ -1,0 +1,92 @@
+{
+  "name": "GesellschaftsJagd",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "revier_id": {
+      "type": "string"
+    },
+    "titel": {
+      "type": "string"
+    },
+    "jagdform": {
+      "type": "string",
+      "enum": [
+        "drueckjagd",
+        "treibjagd",
+        "stoeberjagd",
+        "feldtreibjagd",
+        "bewegungsjagd",
+        "gemeinschaftsansitz",
+        "niederwildjagd"
+      ],
+      "description": "Art der Gesellschaftsjagd"
+    },
+    "datum": {
+      "type": "string",
+      "format": "date"
+    },
+    "uhrzeit_start": {
+      "type": "string",
+      "description": "Startzeit HH:MM"
+    },
+    "uhrzeit_ende": {
+      "type": "string",
+      "description": "Geplante Endzeit HH:MM"
+    },
+    "treffpunkt": {
+      "type": "string",
+      "description": "Treffpunkt / Sammelplatz"
+    },
+    "treffpunkt_lat": {
+      "type": "number"
+    },
+    "treffpunkt_lng": {
+      "type": "number"
+    },
+    "beschreibung": {
+      "type": "string"
+    },
+    "jagdleiter_email": {
+      "type": "string"
+    },
+    "jagdleiter_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "planung",
+        "bereit",
+        "aktiv",
+        "abgeschlossen"
+      ],
+      "default": "planung"
+    },
+    "max_teilnehmer": {
+      "type": "number"
+    },
+    "zielwild": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Geplantes Zielwild"
+    },
+    "sicherheitshinweise": {
+      "type": "string"
+    },
+    "notizen": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "revier_id",
+    "titel",
+    "jagdform",
+    "datum"
+  ]
+}

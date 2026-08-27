@@ -1,0 +1,52 @@
+{
+  "name": "JagdKalender",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "revier_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "termin",
+        "revierarbeit",
+        "jagd"
+      ],
+      "default": "termin"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "time": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "assigned_to": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "geplant",
+        "erledigt",
+        "abgesagt"
+      ],
+      "default": "geplant"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "revier_id",
+    "title",
+    "date"
+  ]
+}

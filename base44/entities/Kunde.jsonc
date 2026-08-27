@@ -1,0 +1,44 @@
+{
+  "name": "Kunde",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "description": "Kundenname"
+    },
+    "contact_person": {
+      "type": "string",
+      "description": "Ansprechperson"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string",
+      "description": "Adresse"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "privat",
+        "gewerbe",
+        "gastronomie"
+      ],
+      "default": "privat",
+      "description": "Kundentyp"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "name"
+  ]
+}

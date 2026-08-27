@@ -1,0 +1,123 @@
+{
+  "name": "Schadensprotokoll",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "revier_id": {
+      "type": "string"
+    },
+    "einrichtung_id": {
+      "type": "string",
+      "description": "Referenz zur Jagdeinrichtung"
+    },
+    "einrichtung_name": {
+      "type": "string"
+    },
+    "datum": {
+      "type": "string",
+      "format": "date"
+    },
+    "titel": {
+      "type": "string"
+    },
+    "protokoll_typ": {
+      "type": "string",
+      "enum": [
+        "kontrolle",
+        "schadensmeldung",
+        "reparatur",
+        "jahresinspektion"
+      ],
+      "default": "kontrolle",
+      "description": "Art des Protokolls"
+    },
+    "zustand_gesamt": {
+      "type": "string",
+      "enum": [
+        "gut",
+        "maessig",
+        "schlecht",
+        "total"
+      ],
+      "default": "gut",
+      "description": "Gesamtzustand der Einrichtung bei Kontrolle"
+    },
+    "kontrolleur": {
+      "type": "string",
+      "description": "Name des Kontrolleurs"
+    },
+    "beschreibung": {
+      "type": "string"
+    },
+    "hat_schaden": {
+      "type": "boolean",
+      "default": false
+    },
+    "schadensart": {
+      "type": "string",
+      "enum": [
+        "vandalismus",
+        "sturm",
+        "schnee",
+        "alterung",
+        "wildschaden",
+        "sonstiges"
+      ]
+    },
+    "schwere": {
+      "type": "string",
+      "enum": [
+        "gering",
+        "mittel",
+        "schwer",
+        "total"
+      ]
+    },
+    "massnahmen": {
+      "type": "string",
+      "description": "Eingeleitete oder geplante Ma\u00dfnahmen"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "offen",
+        "in_bearbeitung",
+        "abgeschlossen"
+      ],
+      "default": "offen"
+    },
+    "kosten_geschaetzt": {
+      "type": "number"
+    },
+    "kosten_tatsaechlich": {
+      "type": "number"
+    },
+    "fotos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Foto-URLs"
+    },
+    "erledigt_am": {
+      "type": "string",
+      "format": "date"
+    },
+    "erledigt_durch": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "revier_id",
+    "einrichtung_id",
+    "datum",
+    "titel",
+    "protokoll_typ"
+  ]
+}

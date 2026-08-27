@@ -1,0 +1,77 @@
+{
+  "name": "Jagdeinrichtung",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "revier_id": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "hochsitz",
+        "leiter",
+        "erdsitz",
+        "kirrung",
+        "salzlecke",
+        "suhle",
+        "drueckjagdbock",
+        "ansitzdrueckjagdleiter",
+        "wildacker",
+        "fuetterung",
+        "fanganlage"
+      ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "latitude": {
+      "type": "number"
+    },
+    "longitude": {
+      "type": "number"
+    },
+    "condition": {
+      "type": "string",
+      "enum": [
+        "gut",
+        "maessig",
+        "schlecht",
+        "neu"
+      ],
+      "default": "gut"
+    },
+    "orientation": {
+      "type": "string",
+      "enum": [
+        "n",
+        "ne",
+        "e",
+        "se",
+        "s",
+        "sw",
+        "w",
+        "nw"
+      ],
+      "description": "Ausrichtung der Einrichtung (Nord, Nordost, etc.)"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of photo URLs"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "revier_id",
+    "type",
+    "name"
+  ]
+}

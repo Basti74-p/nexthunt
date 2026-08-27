@@ -1,0 +1,49 @@
+{
+  "name": "Person",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string",
+      "description": "Reference to tenant"
+    },
+    "name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "guest",
+        "service",
+        "member",
+        "other"
+      ],
+      "default": "other"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "latitude": {
+      "type": "number",
+      "description": "Current GPS latitude"
+    },
+    "longitude": {
+      "type": "number",
+      "description": "Current GPS longitude"
+    },
+    "last_location_update": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of last location update"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "name"
+  ]
+}

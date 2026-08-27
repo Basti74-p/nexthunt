@@ -1,0 +1,37 @@
+{
+  "name": "JagdEvent",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "revier_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "description": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "planned",
+        "active",
+        "finished"
+      ],
+      "default": "planned"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "revier_id",
+    "title",
+    "date"
+  ]
+}

@@ -90,5 +90,25 @@
     "wildmarken_system": {
       "type": "string"
     }
-  }
+  },
+  "required": [
+    "first_name",
+    "last_name",
+    "phone",
+    "birth_date",
+    "jagdschein_nummer",
+    "jagdschein_ausstellendes_amt",
+    "jagdschein_gueltig_bis",
+    "street",
+    "house_number",
+    "zip_code",
+    "city",
+    "bundesland",
+    "revier_name",
+    "revier_groesse_ha",
+    "revier_bundesland",
+    "revier_art",
+    "trial_ends_at",
+    "wildmarken_system"
+  ]
 }

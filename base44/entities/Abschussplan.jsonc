@@ -1,0 +1,45 @@
+{
+  "name": "Abschussplan",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "revier_id": {
+      "type": "string"
+    },
+    "jagdjahr": {
+      "type": "string",
+      "description": "z.B. 2025/2026"
+    },
+    "species": {
+      "type": "string",
+      "enum": [
+        "rotwild",
+        "schwarzwild",
+        "rehwild",
+        "damwild",
+        "sikawild"
+      ]
+    },
+    "kategorie": {
+      "type": "string",
+      "description": "Altersklasse/Kategorie z.B. 'Bock Klasse I', 'Ricke', 'Kitz'"
+    },
+    "soll": {
+      "type": "number",
+      "description": "Planm\u00e4\u00dfiger Abschuss"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "revier_id",
+    "jagdjahr",
+    "species",
+    "kategorie",
+    "soll"
+  ]
+}

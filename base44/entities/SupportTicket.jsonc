@@ -1,0 +1,92 @@
+{
+  "name": "SupportTicket",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string",
+      "description": "Reference to tenant"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "general",
+        "billing",
+        "technical",
+        "feature",
+        "bug"
+      ],
+      "default": "general"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "default": "medium"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "offen",
+        "in_bearbeitung",
+        "wartet_auf_kunde",
+        "geloest",
+        "geschlossen"
+      ],
+      "default": "offen"
+    },
+    "created_by_email": {
+      "type": "string"
+    },
+    "created_by_name": {
+      "type": "string"
+    },
+    "assigned_to": {
+      "type": "string",
+      "description": "Admin email"
+    },
+    "revier_id": {
+      "type": "string"
+    },
+    "module": {
+      "type": "string"
+    },
+    "comments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "author": {
+            "type": "string"
+          },
+          "author_email": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "is_admin": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "tenant_id",
+    "title",
+    "description"
+  ]
+}

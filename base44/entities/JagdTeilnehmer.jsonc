@@ -1,0 +1,80 @@
+{
+  "name": "JagdTeilnehmer",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "jagd_id": {
+      "type": "string",
+      "description": "Referenz zur GesellschaftsJagd"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "telefon": {
+      "type": "string"
+    },
+    "rolle": {
+      "type": "string",
+      "enum": [
+        "jagdleiter",
+        "schuetze",
+        "ansteller",
+        "treiber",
+        "hundefuehrer",
+        "nachsuchetrupp",
+        "bergetrupp",
+        "wildkammer",
+        "strassensicherung",
+        "sicherheit",
+        "gast"
+      ],
+      "default": "schuetze"
+    },
+    "stand_id": {
+      "type": "string",
+      "description": "Zugewiesene Jagdeinrichtung (ID)"
+    },
+    "stand_name": {
+      "type": "string",
+      "description": "Name/Bezeichnung des Standes"
+    },
+    "stand_nummer": {
+      "type": "string",
+      "description": "Standnummer z.B. '4'"
+    },
+    "ansteller_id": {
+      "type": "string",
+      "description": "Zugeordneter Ansteller (JagdTeilnehmer ID)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "zugewiesen",
+        "bestaetigt",
+        "anwesend",
+        "stand_bezogen",
+        "aktiv",
+        "fertig"
+      ],
+      "default": "zugewiesen"
+    },
+    "stand_besetzt_um": {
+      "type": "string",
+      "description": "Zeitstempel Stand bezogen"
+    },
+    "notizen": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "jagd_id",
+    "name",
+    "rolle"
+  ]
+}

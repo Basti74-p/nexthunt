@@ -1,0 +1,46 @@
+{
+  "name": "JagdEventAssignment",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "jagd_event_id": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "schuetze",
+        "ansteller",
+        "bergetrupp",
+        "nachsuchetrupp"
+      ]
+    },
+    "stand_label": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "zugewiesen",
+        "stand_bezogen",
+        "aktiv",
+        "fertig"
+      ],
+      "default": "zugewiesen"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "jagd_event_id",
+    "user_email",
+    "role"
+  ]
+}

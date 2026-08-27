@@ -1,0 +1,106 @@
+{
+  "name": "Verkauf",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string"
+    },
+    "rechnungsnummer": {
+      "type": "string",
+      "description": "Eindeutige Rechnungsnummer"
+    },
+    "datum": {
+      "type": "string",
+      "format": "date"
+    },
+    "kunde_id": {
+      "type": "string",
+      "description": "Referenz zu Kunde"
+    },
+    "kunde_name": {
+      "type": "string",
+      "description": "Snapshot des Kundennamens"
+    },
+    "positionen": {
+      "type": "array",
+      "description": "Verkaufte Positionen",
+      "items": {
+        "type": "object",
+        "properties": {
+          "typ": {
+            "type": "string",
+            "enum": [
+              "wildkammer",
+              "wildprodukt"
+            ]
+          },
+          "ref_id": {
+            "type": "string"
+          },
+          "bezeichnung": {
+            "type": "string"
+          },
+          "gewicht_kg": {
+            "type": "number"
+          },
+          "preis_pro_kg": {
+            "type": "number"
+          },
+          "gesamtpreis": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "gesamtbetrag": {
+      "type": "number"
+    },
+    "mwst_prozent": {
+      "type": "number",
+      "default": 7
+    },
+    "mwst_betrag": {
+      "type": "number"
+    },
+    "brutto_betrag": {
+      "type": "number"
+    },
+    "zahlungsstatus": {
+      "type": "string",
+      "enum": [
+        "offen",
+        "bezahlt",
+        "teilbezahlt",
+        "storniert"
+      ],
+      "default": "offen"
+    },
+    "zahlungsart": {
+      "type": "string",
+      "enum": [
+        "bar",
+        "ueberweisung",
+        "ec",
+        "sonstiges"
+      ],
+      "default": "ueberweisung"
+    },
+    "faelligkeitsdatum": {
+      "type": "string",
+      "format": "date"
+    },
+    "bezahlt_am": {
+      "type": "string",
+      "format": "date"
+    },
+    "notizen": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "datum",
+    "kunde_id",
+    "positionen"
+  ]
+}
