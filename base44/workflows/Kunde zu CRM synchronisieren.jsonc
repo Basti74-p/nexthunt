@@ -1,0 +1,39 @@
+{
+  "name": "Kunde zu CRM synchronisieren",
+  "description": "Synchronisiert Kunden zum CRM bei Erstellung, \u00c4nderung oder L\u00f6schung",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "entity_name": "Kunde"
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "kunde_zu_crm_synchronisieren",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "run_function": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "syncKundeToCrm",
+            "args": {}
+          },
+          "then": "end"
+        }
+      }
+    ]
+  },
+  "x-base44-migrated-from-automation": {
+    "legacy_payload_function": "syncKundeToCrm"
+  }
+}
